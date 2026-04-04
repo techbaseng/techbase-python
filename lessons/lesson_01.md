@@ -3,8 +3,6 @@ title: "Lesson 01 – Introduction to Python"
 nav_order: 1
 ---
 
-# Lesson 01 — Introduction to Python
-
 **Course:** Python Programming · Techbase STEM Academy  
 **Instructor:** Babatunde Awolaja — [Techbase Consultant Services](https://techbasengr.com.ng)
 
