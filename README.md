@@ -30,27 +30,18 @@ By the end of this course you will be able to:
 
 ---
 
-## Course Lessons
+## Prerequisites
 
-| # | Topic | File |
-|---|-------|------|
-| 01 | Introduction to Python — what it is, setup, your first program | [lesson_01.md](lessons/lesson_01.md) |
-| 02 | Variables & Data Types — strings, integers, floats, booleans | [lesson_02.md](lessons/lesson_02.md) |
-| 03 | User Input & Output — `input()`, `print()`, f-strings, formatting | [lesson_03.md](lessons/lesson_03.md) |
-| 04 | Operators — arithmetic, comparison, logical, assignment operators | [lesson_04.md](lessons/lesson_04.md) |
-| 05 | Conditions — `if`, `elif`, `else` | [lesson_05.md](lessons/lesson_05.md) |
-| 06 | Loops — `for`, `while`, `range()`, `break`, `continue` | [lesson_06.md](lessons/lesson_06.md) |
-| 07 | Functions — defining, calling, parameters, return values | [lesson_07.md](lessons/lesson_07.md) |
-| 08 | Lists & Tuples — creating, indexing, slicing, looping, common methods | [lesson_08.md](lessons/lesson_08.md) |
-| 09 | Dictionaries — key-value pairs, adding, updating, looping | [lesson_09.md](lessons/lesson_09.md) |
-| 10 | Mini Project — Student Grade Calculator | [lesson_10.md](lessons/lesson_10.md) |
+None. Python is designed to be a first programming language.
+
+> If you are also learning web development, pair this course with the **HTML**, **CSS**, and **JavaScript** courses.
 
 ---
 
 ## How to Use This Course
 
 1. **Start here** — read this page to understand the full picture
-2. **Open Lesson 01** — click the link in the table above
+2. **Open Lesson 01** — click the link in the table below
 3. **Read the lesson** — each file explains the concept with examples and code
 4. **Try the exercises** — every lesson ends with hands-on practice tasks
 5. **Move forward** — go to the next lesson whenever you are ready
@@ -70,11 +61,20 @@ By the end of this course you will be able to:
 
 ---
 
-## Prerequisites
+## Course Lessons
 
-None. Python is designed to be a first programming language.
-
-> If you are also learning web development, pair this course with the **HTML**, **CSS**, and **JavaScript** courses.
+| # | Topic | File |
+|---|-------|------|
+| 01 | Introduction to Python — what it is, setup, your first program | [lesson_01.md](lessons/lesson_01.md) |
+| 02 | Variables & Data Types — strings, integers, floats, booleans | [lesson_02.md](lessons/lesson_02.md) |
+| 03 | User Input & Output — `input()`, `print()`, f-strings, formatting | [lesson_03.md](lessons/lesson_03.md) |
+| 04 | Operators — arithmetic, comparison, logical, assignment operators | [lesson_04.md](lessons/lesson_04.md) |
+| 05 | Conditions — `if`, `elif`, `else` | [lesson_05.md](lessons/lesson_05.md) |
+| 06 | Loops — `for`, `while`, `range()`, `break`, `continue` | [lesson_06.md](lessons/lesson_06.md) |
+| 07 | Functions — defining, calling, parameters, return values | [lesson_07.md](lessons/lesson_07.md) |
+| 08 | Lists & Tuples — creating, indexing, slicing, looping, common methods | [lesson_08.md](lessons/lesson_08.md) |
+| 09 | Dictionaries — key-value pairs, adding, updating, looping | [lesson_09.md](lessons/lesson_09.md) |
+| 10 | Mini Project — Student Grade Calculator | [lesson_10.md](lessons/lesson_10.md) |
 
 ---
 
