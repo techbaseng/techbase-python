@@ -1,959 +1,1359 @@
 ---
 render_with_liquid: false
-title: "Python Syntax and Statements"
+title: "Lesson 02 – Python Comments and Variables"
 nav_order: 2
 ---
 
-# Lesson 02 — Python Syntax and Statements
+# Lesson 02 – Python Comments and Variables
 
 ---
 
 ## Lesson Introduction
 
-Welcome to Lesson 02! In Lesson 01 you installed Python and ran your very first program. Now it is time to go deeper and understand the **rules** that Python uses to read and run your code.
+Welcome to Lesson 02! In Lesson 01 you learned how Python works and how to print things on the screen. Now we are going to learn two of the most important building blocks of every Python program:
 
-Every programming language has a **syntax** — a set of rules that tells the computer how to understand what you write. If you break those rules, the computer cannot understand you and will give you an error. Think of it like grammar in a spoken language: if you say "Cat the sat mat on the", no one understands you. But if you say "The cat sat on the mat", everyone does. Python is the same.
+1. **Comments** – notes you write inside your code that Python completely ignores. They are for *you* (the programmer), not for the computer.
+2. **Variables** – labelled boxes that store information so your program can remember and reuse it later.
 
-In this lesson you will learn:
+By the end of this lesson you will be able to:
 
-- What Python syntax is and how it works
-- Why **indentation** (spaces at the start of a line) is a critical rule in Python
-- How to create and use **variables** to store information
-- How to write **comments** to leave notes in your code
-- What a **statement** is and how Python runs statements one by one
-- How to correctly write multiple statements
-- The optional use of semicolons and when they appear
+- Write single-line and multi-line comments in Python.
+- Create variables and store different kinds of data in them.
+- Name variables correctly following Python's rules.
+- Assign one value to many variables at the same time.
+- Print variables to the screen in different ways.
+- Understand the difference between local and global variables.
 
-By the end of this lesson you will be able to write clean, correctly structured Python code and understand exactly why each rule exists.
+Take your time, try every example, and read every explanation. There are no silly questions here — we start from zero.
 
 ---
 
 ## Prerequisite Concepts
 
-Before diving in, let's make sure you understand a few simple ideas. You do not need any prior programming experience — we will build everything from scratch.
+Before we dive in, make sure you are comfortable with one thing from Lesson 01:
 
-### What is a Program?
-
-A computer program is a list of instructions that you give to a computer. The computer reads each instruction one at a time and carries it out. Think of it like a recipe: you list the steps in order, and the cook (the computer) follows each step exactly.
-
-### What is `print()`?
-
-`print()` is a built-in Python instruction that tells the computer to display something on the screen. You will see it constantly in this lesson. Here is its simplest form:
-
-```python
-print("Hello!")
-```
-
-**Expected Output:**
-```
-Hello!
-```
-
-- `print` — the instruction name (called a **function**)
-- `(` and `)` — parentheses that wrap what you want to print
-- `"Hello!"` — the text to display, wrapped in quotation marks
-
-### What is a File vs the Command Line?
-
-You can run Python code in two ways:
-
-1. **Directly in the terminal (Command Line):** Type one line at a time and see the result immediately.
-2. **In a `.py` file:** Write your full program in a file called something like `myfile.py`, save it, then run it with: `python myfile.py`
-
-Both ways work. In this lesson, all examples can be used either way.
-
----
-
-## Part 1 — Python Syntax
-
-### What Is Syntax?
-
-**Syntax** means the set of rules that define how you must write code so that Python can understand it. Every programming language has its own syntax.
-
-Python was designed to be easy to read. Its syntax is clean and minimal — meaning you don't need a lot of extra characters to make things work.
-
-Let's look at a simple example of Python syntax in action:
+**The `print()` function** — this is how we display output on the screen.
 
 ```python
 print("Hello, World!")
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
 Hello, World!
 ```
 
-You can run this directly in the Command Line by typing it after `>>>`, or you can put it in a file and run the file.
+`print(...)` simply shows whatever is inside the parentheses on your screen. We will use it constantly in this lesson to check our work.
 
 ---
 
-## Part 2 — Python Indentation
-
-### What Is Indentation?
-
-**Indentation** means the blank spaces at the very beginning of a line of code.
-
-Look at this line of text: notice the spaces before the words in a bullet list? That is indentation. In Python, indentation is not just for looks — **it is a rule**.
-
-In most other programming languages (like Java or C), you use curly braces `{}` to group blocks of code together. Python does NOT use curly braces. Instead, Python uses indentation to know which lines of code belong together.
-
-> 🧠 **Analogy:** Think of a recipe. When you write "If the water is boiling:" and then indent the next line "Add the pasta", the indent shows that adding pasta is part of the "if boiling" step. Python works exactly this way.
+## PART 1 — Python Comments
 
 ---
 
-### Why Does Indentation Exist?
+### What Is a Comment?
 
-Without some way to group lines together, Python cannot tell which instructions belong together and which are separate. Indentation is Python's way of grouping related lines into a **block of code**.
+Think of a comment like a sticky note on your code. Imagine you are writing a recipe. Sometimes you jot little notes to yourself: *"Use ripe tomatoes here!"* Those notes are for you — not part of the cooking instructions. Comments in Python work exactly the same way.
+
+A **comment** is a line (or part of a line) in your Python file that Python completely skips when running your program. It does **not** execute, it does **not** produce output, and it does **not** affect anything. It is purely a human-readable note.
+
+### Why Do Comments Exist?
+
+Comments solve several real problems:
+
+- **Explaining what code does** — When you or a teammate reads the code three months later, comments remind everyone *why* a decision was made.
+- **Making code readable** — Long programs become confusing. Comments break them into understandable sections.
+- **Temporarily disabling code** — During testing, you can "turn off" a line of code by making it a comment instead of deleting it.
+
+Professional programmers in software companies, data science labs, research institutions, and engineering firms all use comments daily. Well-commented code is considered a sign of a good programmer.
 
 ---
 
-### Example 1 — Correct Indentation
+### How to Create a Single-Line Comment
+
+In Python, a comment starts with the **hash symbol** `#`. Everything on the line after `#` is ignored by Python.
+
+**Syntax:**
+```python
+# This is a comment
+```
+
+**Example 1 — Comment on its own line:**
 
 ```python
-if 5 > 2:
-    print("Five is greater than two!")
+# This line is a comment. Python ignores it completely.
+print("Hello, World!")
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
-Five is greater than two!
+Hello, World!
 ```
 
-**Line-by-line explanation:**
+Notice that only the `print` line produced output. The comment did nothing — Python skipped it entirely.
 
-- `if 5 > 2:` — This is a **condition**. It checks whether 5 is greater than 2. The colon `:` at the end tells Python "a block of code is coming next."
-- `    print("Five is greater than two!")` — The four spaces at the start of this line tell Python "this line belongs to the `if` block above." Python will only run this line if the condition above is True.
-
-> 💡 **Note:** We will cover `if` statements in full detail in a later lesson. For now, just focus on understanding how indentation visually groups lines together.
+**Breaking it down line by line:**
+- `# This line is a comment.` → Python sees the `#` and skips the whole line.
+- `print("Hello, World!")` → Python runs this and displays `Hello, World!`
 
 ---
 
-### Example 2 — Missing Indentation (Error!)
+**Example 2 — Comment at the end of a line (inline comment):**
+
+You can also place a comment at the end of a working line of code. Python will run the code part and ignore everything after the `#`.
 
 ```python
-if 5 > 2:
-print("Five is greater than two!")
+print("Hello, World!")  # This is an inline comment
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
-IndentationError: expected an indented block
+Hello, World!
 ```
 
-**Why the error?** Python sees the `if 5 > 2:` line and expects the next line to be indented (part of the if-block). But `print(...)` starts at the very beginning of the line with no spaces. Python gets confused and crashes.
+The comment here is just a label explaining what this line does. Python ran `print("Hello, World!")` and completely ignored `# This is an inline comment`.
 
-> ⚠️ **Common Beginner Mistake:** Forgetting to indent after a colon `:`. If you see `IndentationError`, look for a missing indent.
+> **Tip:** Leave two spaces before an inline comment. It keeps your code tidy and readable.
 
 ---
 
-### How Many Spaces?
+**Example 3 — Using a comment to disable code:**
 
-The most common choice is **4 spaces** for one level of indentation. Python only requires at least 1 space, but you must be **consistent** — use the same number of spaces within the same block.
-
-These both work:
+This is very useful when you are testing. Instead of deleting a line, you turn it into a comment:
 
 ```python
-# 1 space — allowed but uncommon
-if 5 > 2:
- print("Five is greater than two!")
-
-# 4 spaces — recommended and most common
-if 5 > 2:
-    print("Five is greater than two!")
+# print("Hello, World!")
+print("Cheers, Mate!")
 ```
 
-**Expected Output (both):**
+**Expected output:**
 ```
-Five is greater than two!
-Five is greater than two!
+Cheers, Mate!
 ```
+
+The first `print` is commented out — Python ignores it. Only the second `print` runs.
+
+> **Why is this useful?** Imagine you wrote a line of code that is causing an error. Instead of deleting it (and losing your work), you comment it out temporarily. Then you uncomment it later when you are ready.
 
 ---
 
-### Example 3 — Mixing Spaces in the Same Block (Error!)
+### How to Create a Multi-Line Comment
+
+Python does **not** have a built-in multi-line comment symbol (unlike some other languages). But there are two easy ways to write comments that span multiple lines.
+
+**Method 1 — Use `#` on every line:**
 
 ```python
-if 5 > 2:
- print("Five is greater than two!")
-        print("Five is greater than two!")
+# This is a comment
+# written across
+# more than one line
+print("Hello, World!")
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
-IndentationError: unexpected indent
+Hello, World!
 ```
 
-**Why the error?** The first `print` uses 1 space. The second `print` uses 8 spaces. Within the same block, you must use the **same** number of spaces every time.
+Each line starts with `#`, so Python skips each one individually.
 
-> ✅ **Fix:** Use exactly 4 spaces for both lines:
+---
+
+**Method 2 — Use a triple-quoted string (not assigned to any variable):**
+
+Python lets you write text inside triple quotes `"""..."""`. If you never assign this text to a variable, Python reads it and immediately throws it away. Programmers take advantage of this trick to write multi-line comments.
 
 ```python
-if 5 > 2:
-    print("Five is greater than two!")
-    print("Five is greater than two!")
+"""
+This is a comment
+written in
+more than just one line
+"""
+print("Hello, World!")
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
-Five is greater than two!
-Five is greater than two!
+Hello, World!
 ```
+
+The triple-quoted block is technically a **string**, but since it is not stored anywhere or used for anything, Python discards it. The `print` still runs normally.
+
+> **Important Note:** This method is *widely used* but is technically a string that gets ignored — not a true comment. The `#` method is the "official" way to write comments in Python.
+
+---
+
+### A Quick Comparison
+
+| Situation | What to use |
+|---|---|
+| Short explanation on one line | `# Your note here` |
+| Note at the end of a code line | `code  # Your note` |
+| Long explanation across many lines | `#` on each line OR `"""..."""` |
+| Temporarily disabling a line | `# print("disabled line")` |
 
 ---
 
 ### Thinking Prompt
 
-> 🤔 What do you think happens if you use **tabs** instead of spaces? (Hint: mixing tabs and spaces can cause errors. It is best to always use spaces.)
+> What happens if you put a `#` in the middle of a word, like `pri#nt("Hello")`? Try it! What do you notice?
 
 ---
 
-### Real-World Connection
-
-In professional software development, consistent indentation is critical. When working in teams, everyone must follow the same indentation style so that the code is readable and understandable. Python forces this habit, which actually makes Python code easier to read than many other languages.
+## PART 2 — Python Variables
 
 ---
-
-## Part 3 — Python Variables
 
 ### What Is a Variable?
 
-A **variable** is like a labelled box in your computer's memory where you can store a piece of information. You give the box a name, and you put a value inside it. Later, you can look inside the box by using its name.
+Imagine you are working at a supermarket. You need to remember the price of tomatoes: ₦500. You write it on a small sticky label and stick it on a jar. Now whenever you look at the jar, you know the price.
 
-> 🧠 **Analogy:** Imagine you have a physical box with a label that says "my_age". You put the number 20 inside it. Any time you need your age, you look in the "my_age" box.
+A **variable** in Python is exactly like that sticky label and jar. The *label* is the variable name. The *jar* holds the value. Whenever your program needs that value, it looks up the label.
 
----
+**In simple terms:** A variable is a named location in your computer's memory where you can store a piece of data.
 
 ### Why Do Variables Exist?
 
-Variables exist so that you can:
-- **Store** information for later use
-- **Change** that information as your program runs
-- **Reuse** the same value many times without rewriting it
+Without variables, every program would have to hardcode every number and every piece of text — and you could never reuse or change data. Variables allow programs to:
+
+- **Remember information** (a user's name, a test score, a temperature reading)
+- **Reuse data** without repeating it
+- **Update data** as the program runs (e.g., a score increasing in a game)
+- **Make calculations** flexible (calculate tax for any salary, not just one fixed amount)
+
+In data science, a variable might store a dataset. In a game, it stores the player's health. In an app, it stores a user's login name. Variables are everywhere.
 
 ---
 
-### How to Create a Variable in Python
+### Creating a Variable
 
-In Python, you create a variable simply by giving it a name and assigning it a value using the `=` symbol.
+Python makes creating variables extremely simple. You do **not** need to declare what type of data goes in it first. You just write the name, an equals sign `=`, and the value.
 
-```python
-x = 5
-y = "Hello, World!"
+**Syntax:**
+```
+variable_name = value
 ```
 
-**What just happened?**
+The `=` sign here is called the **assignment operator**. It means: *"store the value on the right into the name on the left."*
 
-- `x = 5` — A variable named `x` is created and the number `5` is stored inside it.
-- `y = "Hello, World!"` — A variable named `y` is created and the text `"Hello, World!"` is stored inside it.
-- The `=` symbol here does **not** mean "equal to" in the mathematical sense. It means **"assign this value to this variable"**. Think of it as an arrow pointing left: put the value on the right into the box on the left.
-
-> ⚠️ **Common Beginner Mistake:** Confusing `=` (assignment) with `==` (comparison). We will cover `==` in a later lesson.
-
----
-
-### Using Variables
-
-Once a variable is created, you can use its name anywhere:
+**Example 1 — Your first variable:**
 
 ```python
 x = 5
-y = "Hello, World!"
+print(x)
+```
+
+**Expected output:**
+```
+5
+```
+
+- `x = 5` → Create a variable named `x` and store the number `5` in it.
+- `print(x)` → Show the value stored in `x`. Python looks up `x`, finds `5`, and prints it.
+
+---
+
+**Example 2 — A text variable:**
+
+```python
+name = "John"
+print(name)
+```
+
+**Expected output:**
+```
+John
+```
+
+- `name = "John"` → Create a variable called `name` and store the text (called a **string**) `"John"` in it.
+- `print(name)` → Python looks up `name`, finds `"John"`, and prints it.
+
+---
+
+**Example 3 — Multiple variables:**
+
+```python
+x = 5
+y = "John"
 print(x)
 print(y)
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
 5
-Hello, World!
+John
 ```
 
-- `print(x)` — Python looks up the value stored in `x` (which is `5`) and prints it.
-- `print(y)` — Python looks up the value stored in `y` (which is `"Hello, World!"`) and prints it.
+You can create as many variables as you need. Each one stores its own value independently.
 
 ---
 
-### Example — Changing a Variable's Value
+### Variables Can Change Type
 
-Variables can change! That is what makes them "variable" (changeable):
+In many programming languages, once you say a variable holds a number, it can *only* hold numbers. Python is more flexible — a variable can hold different types of data at different times. This is called **dynamic typing**.
 
 ```python
-score = 10
+x = 4        # x is an integer (a whole number)
+x = "Sally"  # Now x is a string (text)
+print(x)
+```
+
+**Expected output:**
+```
+Sally
+```
+
+The variable `x` first held the number `4`. Then we reassigned it to hold the text `"Sally"`. Python updated it without complaint. The old value `4` is gone.
+
+> **Thinking prompt:** What would happen if you added a third line: `x = 3.14`? What would `print(x)` show then?
+
+---
+
+### Casting — Forcing a Specific Data Type
+
+Sometimes you want to make absolutely sure a variable stores a specific type of data. You do this with **casting** — using built-in functions to convert values.
+
+| Function | What it does | Example |
+|---|---|---|
+| `str(...)` | Converts to text (string) | `str(3)` → `'3'` |
+| `int(...)` | Converts to a whole number (integer) | `int(3)` → `3` |
+| `float(...)` | Converts to a decimal number | `float(3)` → `3.0` |
+
+**Example:**
+
+```python
+x = str(3)    # x will be '3' (text)
+y = int(3)    # y will be 3 (whole number)
+z = float(3)  # z will be 3.0 (decimal number)
+
+print(x)
+print(y)
+print(z)
+```
+
+**Expected output:**
+```
+3
+3
+3.0
+```
+
+Notice how `x` printed `3` (looks the same) but it is actually stored as text, not a number. And `z` printed `3.0` — the `.0` shows it is stored as a decimal (float).
+
+---
+
+### Checking the Type of a Variable
+
+Curious what type of data a variable holds? Use the built-in `type()` function. It tells you exactly what kind of value is stored.
+
+```python
+x = 5
+y = "John"
+print(type(x))
+print(type(y))
+```
+
+**Expected output:**
+```
+<class 'int'>
+<class 'str'>
+```
+
+- `int` means **integer** — a whole number (no decimal point).
+- `str` means **string** — text.
+
+You will learn much more about data types in the next lesson. For now, just know that `type()` is a useful tool to check your work.
+
+---
+
+### Single Quotes or Double Quotes?
+
+When storing text in a variable, you can use either single quotes `'...'` or double quotes `"..."`. They work exactly the same way.
+
+```python
+x = "John"
+# is the same as
+x = 'John'
+print(x)
+```
+
+**Expected output:**
+```
+John
+```
+
+Use whichever style you prefer — but try to stay consistent throughout your code.
+
+---
+
+### Case-Sensitivity: Capital Letters Matter!
+
+Python is **case-sensitive**. This means `age`, `Age`, and `AGE` are three completely different variables. A capital letter makes it a different name.
+
+```python
+a = 4
+A = "Sally"
+print(a)
+print(A)
+```
+
+**Expected output:**
+```
+4
+Sally
+```
+
+`a` and `A` are two separate variables. `A = "Sally"` does **not** overwrite `a = 4`. They live independently.
+
+> **Common mistake:** Writing `Print(x)` instead of `print(x)`. Python is case-sensitive about built-in functions too! `Print` with a capital P will cause an error.
+
+---
+
+## PART 3 — Variable Names
+
+---
+
+### Rules for Naming Variables
+
+Variable names are not completely free — Python has rules. If you break these rules, Python will give you an error and your program will not run.
+
+**The rules are:**
+
+1. A variable name must start with a **letter** (a–z, A–Z) or an **underscore** `_`.
+2. A variable name **cannot** start with a number.
+3. A variable name can only contain **letters, numbers, and underscores** — no spaces, no hyphens, no symbols.
+4. Variable names are **case-sensitive** (`age` ≠ `Age` ≠ `AGE`).
+5. Variable names **cannot** be Python **reserved keywords** (special words Python already uses, like `print`, `if`, `for`, `while`, etc.).
+
+**Legal (valid) variable names:**
+
+```python
+myvar = "John"
+my_var = "John"
+_my_var = "John"
+myVar = "John"
+MYVAR = "John"
+myvar2 = "John"
+```
+
+All of the above are perfectly fine variable names.
+
+**Illegal (invalid) variable names — these cause errors:**
+
+```python
+2myvar = "John"    # ERROR: cannot start with a number
+my-var = "John"    # ERROR: hyphens are not allowed
+my var = "John"    # ERROR: spaces are not allowed
+```
+
+If you try running any of these, Python will give you a `SyntaxError`.
+
+---
+
+### Naming Conventions — How Professionals Name Variables
+
+Beyond the strict rules, professional programmers follow certain *styles* to make their code readable. For Python, the three most common styles for multi-word variable names are:
+
+**1. Camel Case** — Start each word (except the first) with a capital letter:
+```python
+myVariableName = "John"
+```
+
+**2. Pascal Case** — Start every word with a capital letter:
+```python
+MyVariableName = "John"
+```
+
+**3. Snake Case** — Use underscores between words (this is the *recommended Python style*):
+```python
+my_variable_name = "John"
+```
+
+> **Best practice for Python:** The official Python style guide (called PEP 8) recommends **snake_case** for variable names. This is what you will see in professional Python code and most tutorials. Examples: `student_name`, `total_score`, `average_temperature`.
+
+---
+
+### Descriptive Names Are Better Than Short Names
+
+A variable named `x` tells you nothing. A variable named `student_age` tells you exactly what it stores. Use descriptive names.
+
+```python
+# Hard to understand:
+x = 18
+y = "Amara"
+
+# Easy to understand:
+student_age = 18
+student_name = "Amara"
+```
+
+Both versions work the same way in Python. But the second version is much easier to read and maintain.
+
+---
+
+## PART 4 — Assigning Multiple Values
+
+---
+
+### Assigning Different Values to Multiple Variables at Once
+
+Python has a shortcut: you can assign values to multiple variables in a single line, separating everything with commas.
+
+**Syntax:**
+```python
+variable1, variable2, variable3 = value1, value2, value3
+```
+
+**Example:**
+
+```python
+x, y, z = "Orange", "Banana", "Cherry"
+print(x)
+print(y)
+print(z)
+```
+
+**Expected output:**
+```
+Orange
+Banana
+Cherry
+```
+
+Python matched them up in order: `x` gets `"Orange"`, `y` gets `"Banana"`, `z` gets `"Cherry"`.
+
+> **Important:** The number of variable names on the left must match the number of values on the right. If they don't match, Python will give you a `ValueError`.
+
+**Example of the error to avoid:**
+```python
+# This causes an error:
+x, y = "Orange", "Banana", "Cherry"  # 2 names, 3 values — mismatch!
+```
+
+---
+
+### Assigning the Same Value to Multiple Variables at Once
+
+If you want several variables to hold the same value, you can chain assignments together.
+
+```python
+x = y = z = "Orange"
+print(x)
+print(y)
+print(z)
+```
+
+**Expected output:**
+```
+Orange
+Orange
+Orange
+```
+
+All three variables (`x`, `y`, `z`) now store the string `"Orange"`. This is very useful when setting up default values.
+
+---
+
+### Unpacking a Collection
+
+If you have a list (a collection of values), you can "unpack" it — assign each item in the list to its own variable, all in one line.
+
+```python
+fruits = ["apple", "banana", "cherry"]
+x, y, z = fruits
+print(x)
+print(y)
+print(z)
+```
+
+**Expected output:**
+```
+apple
+banana
+cherry
+```
+
+- `fruits` is a list containing three items.
+- `x, y, z = fruits` unpacks those three items into three separate variables.
+- `x` gets `"apple"`, `y` gets `"banana"`, `z` gets `"cherry"`.
+
+This technique is used constantly in real Python programs — for example, when reading rows from a spreadsheet or receiving data from a web API.
+
+---
+
+## PART 5 — Output Variables
+
+---
+
+### Printing a Single Variable
+
+The simplest way to display a variable's value is to pass it to `print()`:
+
+```python
+x = "Python is awesome"
+print(x)
+```
+
+**Expected output:**
+```
+Python is awesome
+```
+
+---
+
+### Printing Multiple Variables in One `print()` Statement
+
+You can print several variables together by separating them with commas inside `print()`. Python automatically adds a space between them.
+
+```python
+x = "Python"
+y = "is"
+z = "awesome"
+print(x, y, z)
+```
+
+**Expected output:**
+```
+Python is awesome
+```
+
+Python put a space between each variable for you — that is the default behaviour of `print()` with commas.
+
+---
+
+### Combining Variables with the `+` Operator
+
+You can also join (concatenate) variables using the `+` operator. This works for text (strings):
+
+```python
+x = "Python "
+y = "is "
+z = "awesome"
+print(x + y + z)
+```
+
+**Expected output:**
+```
+Python is awesome
+```
+
+Notice there is a space inside `"Python "` and `"is "` — because `+` does not add spaces automatically (unlike commas).
+
+> **Watch out:** You can only use `+` to join variables of the same type. Adding a number to a text string causes an error.
+
+**This causes an error:**
+```python
+x = 5
+y = "John"
+print(x + y)  # TypeError: cannot mix int and str
+```
+
+**The fix:** Convert the number to a string first using `str()`:
+```python
+x = 5
+y = "John"
+print(str(x) + " " + y)
+```
+
+**Expected output:**
+```
+5 John
+```
+
+---
+
+### The Best Way to Print Variables: f-strings
+
+The cleanest, most professional way to print variables mixed with text is using **f-strings** (formatted strings). An f-string starts with the letter `f` before the quote, and you put variable names inside curly braces `{}`.
+
+```python
+name = "Amara"
+age = 18
+print(f"My name is {name} and I am {age} years old.")
+```
+
+**Expected output:**
+```
+My name is Amara and I am 18 years old.
+```
+
+This approach works with all data types (text, numbers, decimals) without any conversion needed. You will use f-strings constantly in real Python programming.
+
+---
+
+## PART 6 — Global Variables
+
+---
+
+### What Is Scope?
+
+Before understanding global variables, you need to understand **scope** — the idea of *where* a variable can be seen and used in your program.
+
+Think of it like this: imagine you write a note and put it inside a locked box. Only people who have the key to that box can read the note. In Python, **functions** (blocks of reusable code you will learn later) work like locked boxes. Variables created inside a function are only visible *inside* that function.
+
+- A **local variable** is created inside a function. It only exists inside that function.
+- A **global variable** is created outside all functions. It can be seen and used anywhere in the program.
+
+---
+
+### Global Variables
+
+A variable created at the top level of your script (outside any function) is called a **global variable**. It is accessible from everywhere in the program.
+
+```python
+x = "awesome"
+
+def myfunc():
+    print("Python is " + x)
+
+myfunc()
+```
+
+**Expected output:**
+```
+Python is awesome
+```
+
+- `x = "awesome"` is created *outside* `myfunc()` — it is a global variable.
+- Inside `myfunc()`, Python can still see `x` because global variables are visible everywhere.
+- `myfunc()` calls the function to run it.
+
+---
+
+### Local Variables
+
+If you create a variable *inside* a function, it is local — it only exists inside that function.
+
+```python
+def myfunc():
+    x = "fantastic"
+    print("Python is " + x)
+
+myfunc()
+```
+
+**Expected output:**
+```
+Python is fantastic
+```
+
+Here, `x = "fantastic"` is created *inside* `myfunc()`. It is a local variable. It exists only while the function is running and disappears after.
+
+---
+
+### When a Local Variable Has the Same Name as a Global Variable
+
+This is where beginners often get confused. When a function creates a local variable with the same name as a global variable, the local one takes over *inside* the function — but the global one stays unchanged *outside*.
+
+```python
+x = "awesome"
+
+def myfunc():
+    x = "fantastic"
+    print("Python is " + x)
+
+myfunc()
+print("Python is " + x)
+```
+
+**Expected output:**
+```
+Python is fantastic
+Python is awesome
+```
+
+- Inside `myfunc()`, the local `x = "fantastic"` takes priority.
+- Outside `myfunc()`, the global `x = "awesome"` is untouched.
+
+---
+
+### The `global` Keyword — Modifying a Global Variable from Inside a Function
+
+Normally, when you create a variable inside a function, Python treats it as local. But what if you want to create or modify a **global** variable from inside a function? You use the `global` keyword to tell Python to use the global version.
+
+**Example 1 — Creating a global variable inside a function:**
+
+```python
+def myfunc():
+    global x
+    x = "fantastic"
+
+myfunc()
+print("Python is " + x)
+```
+
+**Expected output:**
+```
+Python is fantastic
+```
+
+- `global x` tells Python: "The `x` I am about to create/modify is the global `x`, not a local one."
+- After `myfunc()` runs, the global `x` now holds `"fantastic"`.
+- `print("Python is " + x)` runs outside the function and uses the global `x`.
+
+**Example 2 — Modifying an existing global variable inside a function:**
+
+```python
+x = "awesome"
+
+def myfunc():
+    global x
+    x = "fantastic"
+
+myfunc()
+print("Python is " + x)
+```
+
+**Expected output:**
+```
+Python is fantastic
+```
+
+Without the `global x` keyword, this function would create a local copy instead of modifying the real global variable. The `global` keyword ensures we modify the actual global one.
+
+> **Real-world use case:** In a game program, you might have a global variable called `score = 0`. Every function that gives the player points needs to use `global score` to actually update the shared score — otherwise each function would just create its own local copy.
+
+---
+
+## PART 7 — Guided Practice Exercises
+
+---
+
+### Exercise 1 — Writing Useful Comments
+
+**Objective:** Practice adding meaningful comments to code.
+
+**Scenario:** You are writing a program that calculates a student's final grade.
+
+**Task:** Copy this code and add a comment above each line explaining what it does:
+
+```python
+student_name = "Chidera"
+score = 85
+passing_score = 50
+print(student_name)
 print(score)
-
-score = 25
-print(score)
+print(score >= passing_score)
 ```
 
-**Expected Output:**
-```
-10
-25
-```
-
-The value in `score` was first 10, then it was changed to 25.
-
----
-
-### Important Notes About Variables in Python
-
-- **Python has no command for declaring a variable.** In some other languages you must first say "I want to create a variable" before using it. In Python, the variable is created the moment you assign a value to it.
-- Variable names are **case-sensitive**: `Score` and `score` are two different variables.
-- Variable names cannot start with a number: `1score` is invalid, but `score1` is fine.
-- Variable names cannot have spaces: use underscores instead, like `my_score`.
-
-> 🔗 **Coming up:** You will learn much more about variable naming rules and types in upcoming lessons.
-
----
-
-## Part 4 — Python Comments
-
-### What Is a Comment?
-
-A **comment** is a piece of text in your code that Python completely ignores when running your program. It is only there for humans to read — it is a note you leave for yourself or other programmers to explain what the code does.
-
----
-
-### Why Do Comments Exist?
-
-Imagine writing a long program and coming back to it six months later. Without comments, you might forget what each section does. Comments are like sticky notes inside your code.
-
-They are also important in teams: when someone else reads your code, comments help them understand your thinking quickly.
-
----
-
-### How to Write a Comment
-
-In Python, a comment starts with the `#` symbol. Everything on that line after `#` is a comment:
+**One possible solution:**
 
 ```python
-# This is a comment.
-print("Hello, World!")
-```
+# Store the student's full name
+student_name = "Chidera"
 
-**Expected Output:**
-```
-Hello, World!
-```
-
-Notice that Python printed `Hello, World!` but completely ignored the comment line. The `#This is a comment.` line produced no output.
-
----
-
-### Inline Comments
-
-You can also put a comment at the end of a line of code:
-
-```python
-print("Hello!")  # This prints a greeting
-x = 10           # This stores the number 10 in x
-```
-
-**Expected Output:**
-```
-Hello!
-```
-
-The code still works normally. Python only ignores the part after `#`.
-
----
-
-### Example — Multiple Comments
-
-```python
-# Step 1: Store the student's name
-name = "Amina"
-
-# Step 2: Store the student's score
+# Store the student's exam score out of 100
 score = 85
 
-# Step 3: Print the result
-print(name)
+# Define the minimum score needed to pass
+passing_score = 50
+
+# Print the student's name
+print(student_name)
+
+# Print the student's score
 print(score)
+
+# Print True if the student passed, False if they failed
+print(score >= passing_score)
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
-Amina
+Chidera
 85
+True
 ```
 
-Each comment explains the purpose of the line below it. This makes the code much easier to follow.
+**Self-check questions:**
+- Did your comments explain the *purpose* of each line, not just what Python does mechanically?
+- Are your comments concise and easy to read?
 
 ---
 
-### What If You Comment Out Code?
+### Exercise 2 — Creating and Printing Variables
 
-Comments are also used to temporarily disable a line of code without deleting it:
+**Objective:** Create variables to store information about a person and print them.
 
-```python
-print("This line runs.")
-# print("This line is commented out and will NOT run.")
-print("This line also runs.")
-```
-
-**Expected Output:**
-```
-This line runs.
-This line also runs.
-```
-
-The middle line was commented out, so Python skipped it entirely.
-
----
-
-### Real-World Connection
-
-Professional programmers write comments constantly — especially when the logic is complex. In data science projects, comments explain which column is being processed. In web applications, they explain what each function does. Good commenting habits are a hallmark of a professional coder.
-
----
-
-## Part 5 — Python Statements
-
-### What Is a Statement?
-
-A **statement** is one complete instruction that you give to Python.
-
-Think of it this way: a program is like a to-do list for the computer. Each item on that list is a **statement** — one instruction for the computer to carry out.
-
-```python
-print("Python is fun!")
-```
-
-This single line is one statement. It tells Python: "Print the text Python is fun! to the screen."
-
-**Expected Output:**
-```
-Python is fun!
-```
-
----
-
-### Statements Are Executed One by One, In Order
-
-When Python runs your program, it reads each statement from top to bottom and executes them one at a time, in the exact order they are written.
-
-This is called **sequential execution** — like reading a book from page 1 to the last page, in order.
-
----
-
-### Example — Multiple Statements in Order
-
-```python
-print("Hello World!")
-print("Have a good day.")
-print("Learning Python is fun!")
-```
-
-**Expected Output:**
-```
-Hello World!
-Have a good day.
-Learning Python is fun!
-```
-
-**Step-by-step breakdown:**
-
-1. Python starts at the top and runs `print("Hello World!")` — Output: `Hello World!`
-2. Python moves to the next line and runs `print("Have a good day.")` — Output: `Have a good day.`
-3. Python moves to the final line and runs `print("Learning Python is fun!")` — Output: `Learning Python is fun!`
-
-The order matters! If you rearranged the lines, the output would also rearrange.
-
----
-
-### Try It — What If You Reverse the Order?
-
-```python
-print("Learning Python is fun!")
-print("Have a good day.")
-print("Hello World!")
-```
-
-**Expected Output:**
-```
-Learning Python is fun!
-Have a good day.
-Hello World!
-```
-
-> 🤔 **Thinking Prompt:** What does this tell you about how Python reads your code? Does Python skip around, or does it always go line by line from top to bottom?
-
----
-
-### How Does a Statement End in Python?
-
-In Python, a statement **ends when the line ends**. You simply press Enter to finish a statement. That is all.
-
-This is different from many other programming languages (like Java and C) where you must put a **semicolon** `;` at the end of every statement. Python does not require this.
-
-**Python:**
-```python
-print("Hello")
-```
-
-**Java (just for comparison — you do not need to learn this):**
-```java
-System.out.println("Hello");
-```
-
-Notice the `;` at the end of the Java line. In Python, no semicolon is needed.
-
----
-
-### Semicolons — Optional and Rarely Used
-
-Even though Python does not require semicolons, you are **allowed** to use them to put multiple statements on one line. However, this is strongly discouraged because it makes code harder to read:
-
-```python
-print("Hello"); print("How are you?"); print("Bye bye!")
-```
-
-**Expected Output:**
-```
-Hello
-How are you?
-Bye bye!
-```
-
-This works, but it is messy. Compare it to the cleaner version:
-
-```python
-print("Hello")
-print("How are you?")
-print("Bye bye!")
-```
-
-**Expected Output:**
-```
-Hello
-How are you?
-Bye bye!
-```
-
-Both produce identical results, but the second version is much easier to read at a glance.
-
-> ✅ **Best Practice:** Always put each statement on its own separate line.
-
----
-
-### What Happens Without a Separator?
-
-If you put two statements on the same line without using a semicolon or a newline, Python gives an error:
-
-```python
-print("Python is fun!") print("Really!")
-```
-
-**Expected Output:**
-```
-SyntaxError: invalid syntax
-```
-
-Python sees `print("Python is fun!")` and then immediately sees `print(` right after it on the same line with no separator. It does not know what to do and crashes.
-
-> ✅ **Fix:** Put each statement on its own line:
-
-```python
-print("Python is fun!")
-print("Really!")
-```
-
-**Expected Output:**
-```
-Python is fun!
-Really!
-```
-
----
-
-## Part 6 — Putting It All Together
-
-Now let's combine everything we have learned: indentation, variables, comments, and statements — all in one example.
-
-```python
-# This program greets a student and shows their score
-
-name = "Chidi"         # Store the student's name
-score = 92             # Store the student's score
-
-# Print the greeting and result
-print("Student Name:")
-print(name)
-print("Score:")
-print(score)
-```
-
-**Expected Output:**
-```
-Student Name:
-Chidi
-Score:
-92
-```
-
-**What happened?**
-
-- Comments explain each section of the code.
-- Variables store data that is reused later.
-- Each `print()` is a separate statement, executed top to bottom.
-- No indentation is needed here because we have no blocks yet (no `if`, no loop).
-
----
-
-## Guided Practice Exercises
-
-### Exercise 1 — Fix the Syntax Error
-
-The following code has an error. Find it and fix it.
-
-**Broken Code:**
-```python
-print("Hello")
-print("My name is Tunde") print("Nice to meet you!")
-```
-
-**Hint:** Look at which line has two statements on it without a separator.
-
-**Fixed Code:**
-```python
-print("Hello")
-print("My name is Tunde")
-print("Nice to meet you!")
-```
-
-**Expected Output:**
-```
-Hello
-My name is Tunde
-Nice to meet you!
-```
-
----
-
-### Exercise 2 — Fix the Indentation Error
-
-**Broken Code:**
-```python
-if 10 > 3:
-print("Ten is greater than three!")
-```
-
-**Hint:** The line inside the `if` block needs to be indented.
-
-**Fixed Code:**
-```python
-if 10 > 3:
-    print("Ten is greater than three!")
-```
-
-**Expected Output:**
-```
-Ten is greater than three!
-```
-
----
-
-### Exercise 3 — Write Your Own Program
-
-**Objective:** Write a Python program that stores your name, your city, and your favourite subject in three variables, then prints each one.
+**Scenario:** You are building a simple student record system.
 
 **Steps:**
-1. Create a variable called `my_name` and assign your name to it as a string (text in quotes).
-2. Create a variable called `my_city` and assign your city name.
-3. Create a variable called `my_subject` and assign your favourite subject.
-4. Write a comment above each variable to describe what it stores.
-5. Print each variable using `print()`.
+1. Create a variable `student_name` and store your own name in it.
+2. Create a variable `student_age` and store your age in it.
+3. Create a variable `student_class` and store your class name (e.g., `"SS2"`) in it.
+4. Print all three variables using an f-string in one `print()` statement.
 
-**Example Solution:**
-```python
-# Store the user's name
-my_name = "Funmilayo"
-
-# Store the user's city
-my_city = "Ibadan"
-
-# Store the user's favourite subject
-my_subject = "Mathematics"
-
-# Print everything
-print(my_name)
-print(my_city)
-print(my_subject)
-```
-
-**Expected Output:**
-```
-Funmilayo
-Ibadan
-Mathematics
-```
-
-**Self-check Questions:**
-- Did each variable name clearly describe what it holds?
-- Did you add comments above each variable?
-- Did each `print()` appear on its own line?
-- Did your program run without any errors?
-
-**What-if Challenge:** What happens if you change `my_name = "Funmilayo"` to `my_name = "Amara"`? Run it and check!
-
----
-
-### Exercise 4 — Write a Multi-Statement Story
-
-**Objective:** Write a program with at least 5 `print()` statements that tells a short story about a student's day at school.
-
-**Scenario:** Imagine a student named Emeka arrives at school, attends a maths class, eats lunch, plays football, then goes home.
-
-**Example Solution:**
-```python
-# Emeka's school day story
-
-print("Emeka arrived at school at 8am.")
-print("He attended his Maths class and solved 10 problems.")
-print("At noon, he ate rice and stew for lunch.")
-print("After school, he played football with his friends.")
-print("He went home at 4pm feeling happy and tired.")
-```
-
-**Expected Output:**
-```
-Emeka arrived at school at 8am.
-He attended his Maths class and solved 10 problems.
-At noon, he ate rice and stew for lunch.
-After school, he played football with his friends.
-He went home at 4pm feeling happy and tired.
-```
-
-**Optional Challenge:** Add a variable called `student_name = "Emeka"` at the top. Can you replace the word "Emeka" in the first print statement with that variable? (Hint: you will need to learn about **f-strings** in a later lesson — but try thinking about how you might combine text and variables!)
-
----
-
-## Mini Project — Personal Info Card Generator
-
-In this mini project, you will use everything from this lesson to build a simple program that prints a personal information card to the screen.
-
-### Stage 1 — Setup
-
-Create variables to hold personal information.
+**Expected code:**
 
 ```python
-# --- Personal Info Card ---
+student_name = "Amara"
+student_age = 17
+student_class = "SS2"
 
-# Store personal details
-full_name = "Adaeze Okonkwo"
-age = 17
-city = "Lagos"
-school = "Federal Government College"
-favourite_colour = "Blue"
-favourite_food = "Jollof Rice"
+print(f"Name: {student_name}, Age: {student_age}, Class: {student_class}")
 ```
 
-**Milestone:** Run this. You should see no output yet — you only created variables. That's correct!
+**Expected output:**
+```
+Name: Amara, Age: 17, Class: SS2
+```
+
+**What-if challenge:** What happens if you change `student_age` to a string like `"seventeen"` instead of the number `17`? Try it and observe.
 
 ---
 
-### Stage 2 — Core Logic (Print the Card)
+### Exercise 3 — Multiple Assignment
 
-Now print everything neatly.
+**Objective:** Use both forms of multiple assignment.
+
+**Scenario:** Track the three top scores in a class quiz.
+
+**Task:** Assign `95`, `87`, and `76` to variables `first_place`, `second_place`, and `third_place` in a single line, then print all three.
+
+**Solution:**
 
 ```python
-# --- Personal Info Card ---
+first_place, second_place, third_place = 95, 87, 76
 
-full_name = "Adaeze Okonkwo"
-age = 17
-city = "Lagos"
-school = "Federal Government College"
-favourite_colour = "Blue"
-favourite_food = "Jollof Rice"
-
-# Print the card header
-print("==========================")
-print("   MY PERSONAL INFO CARD  ")
-print("==========================")
-
-# Print personal details
-print("Name:")
-print(full_name)
-print("Age:")
-print(age)
-print("City:")
-print(city)
-print("School:")
-print(school)
-print("Favourite Colour:")
-print(favourite_colour)
-print("Favourite Food:")
-print(favourite_food)
-
-# Print card footer
-print("==========================")
+print(f"1st Place: {first_place}")
+print(f"2nd Place: {second_place}")
+print(f"3rd Place: {third_place}")
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
-==========================
-   MY PERSONAL INFO CARD  
-==========================
-Name:
-Adaeze Okonkwo
-Age:
-17
-City:
-Lagos
-School:
-Federal Government College
-Favourite Colour:
-Blue
-Favourite Food:
-Jollof Rice
-==========================
+1st Place: 95
+2nd Place: 87
+3rd Place: 76
+```
+
+**Bonus:** Now assign the same default score `0` to three variables `player1`, `player2`, `player3` in one line.
+
+```python
+player1 = player2 = player3 = 0
+print(player1, player2, player3)
+```
+
+**Expected output:**
+```
+0 0 0
 ```
 
 ---
 
-### Stage 3 — Reflection Questions
+### Exercise 4 — Global vs Local Variables
 
-After completing the project, ask yourself:
+**Objective:** Understand the difference between global and local scope.
 
-1. Which part of the code are the **variables**?
-2. Which part of the code are the **statements**?
-3. Which lines are **comments**?
-4. Does the indentation matter in this program? (There are no `if` blocks here, so no indentation is needed — can you see why?)
-5. What would happen if you accidentally put two `print()` statements on the same line without a semicolon?
+**Scenario:** A simple game program needs a shared score.
+
+```python
+# Global score starts at zero
+score = 0
+
+def award_bonus():
+    global score
+    score = score + 50   # Add 50 bonus points
+
+def award_points():
+    global score
+    score = score + 10   # Add 10 regular points
+
+award_points()
+award_points()
+award_bonus()
+
+print(f"Final score: {score}")
+```
+
+**Expected output:**
+```
+Final score: 70
+```
+
+**Trace through the logic:**
+- `score` starts at `0`.
+- `award_points()` adds 10 → `score = 10`
+- `award_points()` adds 10 again → `score = 20`
+- `award_bonus()` adds 50 → `score = 70`
+- `print` shows `70`
+
+**Self-check:** What would happen if you removed both `global score` lines? Try it and read the error message.
 
 ---
 
-### Stage 4 — Optional Enhancements
-
-- Add more variables: `hobby`, `favourite_subject`, `dream_job`
-- Print a separator line like `"---"` between each item
-- Change the values in the variables to your own real information and share the output with a friend
+## PART 8 — Mini Project: Student Profile Card
 
 ---
 
-## Common Beginner Mistakes
+### Project Overview
 
-Here is a summary of the most common mistakes beginners make in this lesson, along with how to fix them:
+You will build a simple Python program that creates a complete profile card for a student and prints it in a formatted, readable way. This project combines comments, variables, multiple assignment, output formatting, and global variables.
 
-**Mistake 1 — Forgetting to indent after a colon**
+---
+
+### Stage 1 — Setup the Student Data
+
+```python
+# =============================================
+# STUDENT PROFILE CARD — Mini Project
+# =============================================
+
+# Student personal information
+student_name = "Fatima Bello"
+student_age = 16
+student_gender = "Female"
+student_class = "JSS3"
+student_school = "Unity Secondary School"
+```
+
+**What we did:**
+- Used comments to label the section clearly (the `===` border is a common style trick for section headers in comments).
+- Created five variables to store different kinds of information about the student.
+
+---
+
+### Stage 2 — Add Academic Information
+
+```python
+# Subject scores
+english_score = 78
+mathematics_score = 91
+science_score = 85
+
+# Calculate the average score (sum of all scores divided by number of subjects)
+average_score = (english_score + mathematics_score + science_score) / 3
+
+# Define the passing mark
+passing_mark = 50
+```
+
+**What we did:**
+- Created three score variables for different subjects.
+- Calculated the average by adding all three scores and dividing by 3. Python handles the arithmetic automatically.
+- Stored the minimum passing mark in a variable so it can be changed in one place if needed.
+
+---
+
+### Stage 3 — Global Status Variable
+
+```python
+# Global variable: overall pass/fail status
+status = "Not determined"
+
+def evaluate_student():
+    global status
+    if average_score >= passing_mark:
+        status = "PASSED"
+    else:
+        status = "FAILED"
+
+evaluate_student()
+```
+
+**What we did:**
+- Created a global `status` variable that starts with a placeholder text.
+- Defined a function `evaluate_student()` that uses `global status` to update the real global variable.
+- Called the function to evaluate the student.
+
+---
+
+### Stage 4 — Print the Final Profile Card
+
+```python
+# =============================================
+# PRINTING THE PROFILE CARD
+# =============================================
+
+print("=" * 40)
+print("        STUDENT PROFILE CARD")
+print("=" * 40)
+print(f"Name        : {student_name}")
+print(f"Age         : {student_age}")
+print(f"Gender      : {student_gender}")
+print(f"Class       : {student_class}")
+print(f"School      : {student_school}")
+print("-" * 40)
+print(f"English     : {english_score}")
+print(f"Mathematics : {mathematics_score}")
+print(f"Science     : {science_score}")
+print(f"Average     : {average_score:.1f}")
+print("-" * 40)
+print(f"Result      : {status}")
+print("=" * 40)
+```
+
+**Expected output:**
+```
+========================================
+        STUDENT PROFILE CARD
+========================================
+Name        : Fatima Bello
+Age         : 16
+Gender      : Female
+Class       : JSS3
+School      : Unity Secondary School
+----------------------------------------
+English     : 78
+Mathematics : 91
+Science     : 85
+Average     : 84.7
+----------------------------------------
+Result      : PASSED
+========================================
+```
+
+**Line-by-line explanation:**
+- `"=" * 40` → This repeats the `=` character 40 times, creating a divider line. This is a string multiplication trick in Python.
+- `f"Average     : {average_score:.1f}"` → The `:.1f` inside the curly braces tells Python to format the number to 1 decimal place.
+- The rest uses f-strings to neatly display each piece of information.
+
+---
+
+### Stage 5 — Full Project Code (All Together)
+
+```python
+# =============================================
+# STUDENT PROFILE CARD — Mini Project
+# =============================================
+
+# Student personal information
+student_name = "Fatima Bello"
+student_age = 16
+student_gender = "Female"
+student_class = "JSS3"
+student_school = "Unity Secondary School"
+
+# Subject scores
+english_score = 78
+mathematics_score = 91
+science_score = 85
+
+# Calculate the average score
+average_score = (english_score + mathematics_score + science_score) / 3
+
+# Define the passing mark
+passing_mark = 50
+
+# Global variable: overall pass/fail status
+status = "Not determined"
+
+def evaluate_student():
+    global status
+    if average_score >= passing_mark:
+        status = "PASSED"
+    else:
+        status = "FAILED"
+
+evaluate_student()
+
+# =============================================
+# PRINTING THE PROFILE CARD
+# =============================================
+
+print("=" * 40)
+print("        STUDENT PROFILE CARD")
+print("=" * 40)
+print(f"Name        : {student_name}")
+print(f"Age         : {student_age}")
+print(f"Gender      : {student_gender}")
+print(f"Class       : {student_class}")
+print(f"School      : {student_school}")
+print("-" * 40)
+print(f"English     : {english_score}")
+print(f"Mathematics : {mathematics_score}")
+print(f"Science     : {science_score}")
+print(f"Average     : {average_score:.1f}")
+print("-" * 40)
+print(f"Result      : {status}")
+print("=" * 40)
+```
+
+---
+
+### Reflection Questions
+
+1. What would happen if you changed `mathematics_score = 91` to `mathematics_score = 20`? Would the student still pass?
+2. Why did we use a `global status` keyword inside `evaluate_student()`?
+3. What is the benefit of storing `passing_mark = 50` in a variable instead of writing `50` directly in the `if` condition?
+4. Try adding a fourth subject: `civic_score = 72`. How would you update the average calculation?
+
+### Optional Advanced Extension
+
+- Add a variable `student_id` that stores a unique ID number for the student.
+- Add a subject called `physical_education_score`.
+- Change the program to print `"DISTINCTION"` if the average is 80 or above, `"CREDIT"` if 60–79, `"PASS"` if 50–59, and `"FAIL"` below 50.
+
+---
+
+## PART 9 — Common Beginner Mistakes
+
+---
+
+### Mistake 1: Starting a Variable Name with a Number
 
 ```python
 # WRONG
-if 5 > 2:
-print("Hello")
+2name = "Amara"   # SyntaxError
 
 # CORRECT
-if 5 > 2:
-    print("Hello")
-```
-
-**Mistake 2 — Mixing different numbers of spaces in the same block**
-
-```python
-# WRONG
-if 5 > 2:
- print("Hello")
-    print("World")
-
-# CORRECT
-if 5 > 2:
-    print("Hello")
-    print("World")
-```
-
-**Mistake 3 — Putting two statements on the same line without a separator**
-
-```python
-# WRONG
-print("Hello") print("World")
-
-# CORRECT
-print("Hello")
-print("World")
-```
-
-**Mistake 4 — Using `=` when you mean comparison (we'll cover this fully later)**
-
-```python
-# Creating a variable (correct use of =)
-x = 5
-
-# This assigns 10 to x, not compares (common confusion)
-x = 10
-```
-
-**Mistake 5 — Forgetting quotes around text**
-
-```python
-# WRONG — Python thinks "Hello" is a variable name
-print(Hello)
-
-# CORRECT — Quotes tell Python this is text
-print("Hello")
-```
-
-**Mistake 6 — Starting a variable name with a number**
-
-```python
-# WRONG
-1score = 95
-
-# CORRECT
-score1 = 95
+name2 = "Amara"   # Number at the end is fine
 ```
 
 ---
 
-## Reflection Questions
+### Mistake 2: Using Spaces in Variable Names
 
-Take a moment to think about what you have learned:
+```python
+# WRONG
+student name = "Amara"   # SyntaxError
 
-1. In your own words, what is **syntax**? Why does every programming language have its own syntax?
-2. Why does Python use **indentation** instead of curly braces `{}` like other languages?
-3. What does the `#` symbol do in Python?
-4. What is the difference between a **variable** and a **statement**?
-5. In what order does Python execute statements — random order or top to bottom?
-6. You saw that semicolons are optional in Python. Why is it still better practice to avoid them?
-7. What would you use a **comment** for in a real-world project?
+# CORRECT
+student_name = "Amara"   # Use underscore instead
+```
 
 ---
 
-## Completion Checklist
+### Mistake 3: Forgetting That Python is Case-Sensitive
 
-Before moving on to the next lesson, confirm that you can do each of the following:
+```python
+name = "Amara"
+print(Name)     # NameError: 'Name' is not defined
+print(name)     # This works — lowercase 'n'
+```
 
-- [ ] Explain what Python syntax means in simple words
-- [ ] Write an `if` block with correct indentation
-- [ ] Identify and fix an `IndentationError`
-- [ ] Create a variable and assign a value to it
-- [ ] Print the value stored in a variable
-- [ ] Write a single-line comment using `#`
-- [ ] Write a program with multiple statements in the correct order
-- [ ] Explain why two statements on the same line without a separator causes an error
-- [ ] Identify and fix a `SyntaxError` caused by missing newline between statements
-- [ ] Complete the Personal Info Card mini project
+---
+
+### Mistake 4: Adding a Number and a String with `+`
+
+```python
+age = 18
+message = "I am " + age + " years old."   # TypeError
+
+# CORRECT — convert the number to a string first:
+message = "I am " + str(age) + " years old."
+print(message)
+```
+
+**Expected output:**
+```
+I am 18 years old.
+```
+
+---
+
+### Mistake 5: Mismatched Variables and Values in Multiple Assignment
+
+```python
+# WRONG — 3 values, only 2 variable names
+x, y = 1, 2, 3    # ValueError: too many values to unpack
+
+# CORRECT — equal numbers on both sides
+x, y, z = 1, 2, 3
+```
+
+---
+
+### Mistake 6: Forgetting the `global` Keyword
+
+```python
+score = 0
+
+def add_points():
+    score = score + 10   # UnboundLocalError!
+
+add_points()
+```
+
+Python sees that you're trying to use `score` before assigning it locally. Fix:
+
+```python
+score = 0
+
+def add_points():
+    global score
+    score = score + 10   # Now it works
+
+add_points()
+print(score)
+```
+
+**Expected output:**
+```
+10
+```
+
+---
+
+### Mistake 7: Commenting with `//` (That's JavaScript, Not Python!)
+
+```python
+// This is NOT a Python comment  # SyntaxError!
+# This IS a Python comment        # Correct!
+```
+
+Python uses `#` for comments. `//` is used in JavaScript and other languages.
+
+---
+
+## PART 10 — Reflection Questions
+
+Answer these in your notebook or in your head before moving on:
+
+1. What is a comment and what are the three main reasons to use one?
+2. What symbol starts a Python comment?
+3. What does the `=` sign do when used with a variable? (Hint: it is not the same as "equals" in maths.)
+4. What is the difference between `x = 5` and `x = "5"`? Are they the same?
+5. Write two valid variable names for storing someone's date of birth.
+6. What is the difference between a global and a local variable?
+7. When do you need the `global` keyword inside a function?
+8. If you write `x, y, z = 10, 20, 30`, what values do `x`, `y`, and `z` hold?
+9. What does `type(x)` return when `x = 3.14`?
+10. Why is `student_age` a better variable name than `a`?
+
+---
+
+## PART 11 — Completion Checklist
+
+Before moving to Lesson 03, make sure you can tick off every item below:
+
+- [ ] I can write a single-line comment using `#`
+- [ ] I can write an inline comment at the end of a code line
+- [ ] I can write a multi-line comment using `#` on each line
+- [ ] I can write a multi-line comment using triple quotes `"""..."""`
+- [ ] I can create a variable and assign a value to it
+- [ ] I understand that Python variables do not need a type declaration
+- [ ] I can use `type()` to check what kind of data a variable holds
+- [ ] I can use `str()`, `int()`, and `float()` to cast (convert) variable types
+- [ ] I know all the rules for valid variable names
+- [ ] I know what snake_case naming style is and why Python uses it
+- [ ] I can assign different values to multiple variables in one line
+- [ ] I can assign the same value to multiple variables in one line
+- [ ] I can unpack a list into multiple variables
+- [ ] I can print multiple variables using commas in `print()`
+- [ ] I can print variables and text together using f-strings
+- [ ] I understand what a global variable is
+- [ ] I understand what a local variable is
+- [ ] I know when and how to use the `global` keyword
+- [ ] I completed the Student Profile Card mini project
 
 ---
 
 ## Lesson Summary
 
-Here is everything you learned in Lesson 02:
+In this lesson you learned two foundational skills for writing Python programs:
 
-**Python Syntax** is the set of rules that define how Python code must be written. Breaking these rules causes errors.
+**Comments** are lines in your code that Python ignores. They begin with `#` for single lines, or use triple quotes `"""..."""` for blocks of text. Comments make your code readable, explainable, and easier to maintain. They also let you temporarily disable lines during testing.
 
-**Indentation** is the spaces at the start of a line. Unlike other languages, Python uses indentation to group lines of code into blocks. You must indent at least one space after a colon `:`, and you must use the same number of spaces within the same block. The most common choice is 4 spaces.
+**Variables** are named containers that store data in your computer's memory. You create a variable by writing `name = value`. Python is dynamically typed, meaning a variable can hold different kinds of data at different times. Variable names must follow strict rules: start with a letter or underscore, contain only letters, numbers, and underscores, and never be a Python reserved keyword.
 
-**Variables** are named containers for storing values. You create a variable by writing its name, then `=`, then the value. Python creates the variable automatically — no special declaration command is needed.
+You learned three ways to assign values: one at a time, multiple different values in a single line, and the same value to many variables at once. You also learned to print variables cleanly using f-strings.
 
-**Comments** start with `#` and are completely ignored by Python. They exist purely as notes for human readers.
+Finally, you learned about **scope**: global variables live outside functions and are visible everywhere, while local variables live inside functions and disappear when the function finishes. Use the `global` keyword when you need to modify a global variable from inside a function.
 
-**Statements** are individual instructions to Python. A program is a list of statements executed one at a time, from top to bottom, in order. In Python, a statement ends when the line ends — you do not need a semicolon. Multiple statements can technically be placed on one line using `;`, but this is discouraged. Two statements on the same line without any separator causes a `SyntaxError`.
-
----
-
-> 🎉 **Well done!** You have completed Lesson 02. You now understand the core structure of every Python program. In the next lesson, you will explore **Python Output** — learning different ways to print text and numbers to the screen with much more control. Keep going!
+These skills — commenting and using variables — are used in every single Python program ever written. Mastering them here gives you a rock-solid foundation for everything that comes next.
 
 ---
 
-*Sources: W3Schools Python Syntax (https://www.w3schools.com/python/python_syntax.asp) and Python Statements (https://www.w3schools.com/python/python_statements.asp)*
+*Next lesson: Python Data Types — learning about the different kinds of values Python can store and work with.*

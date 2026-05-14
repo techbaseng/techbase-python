@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python Programming — Techbase STEM Academy</title>
+<meta name="description" content="Free beginner Python course. 10 lessons from your first program to building real projects. By Techbase, Ibadan, Nigeria.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#030507;--ink1:#0b0f14;--ink2:#141920;--rim:#232d3a;--rim2:#2e3d50;--fog:#8494ab;--mist:#bdc8d6;--snow:#eef2f7;--c:#3b82f6;--cg:rgba(59,130,246,.12);--D:'Unbounded',sans-serif;--B:'Instrument Sans',sans-serif;--M:'JetBrains Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--ink);color:var(--snow);font-family:var(--B);font-size:16px;line-height:1.7;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;mix-blend-mode:overlay}
+nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:200;background:rgba(11,15,20,.8);backdrop-filter:blur(24px) saturate(1.6);border:1px solid var(--rim);border-radius:100px;padding:0 1.5rem;height:52px;display:flex;align-items:center;justify-content:space-between;gap:2.5rem;width:min(900px,calc(100vw - 2rem));box-shadow:0 4px 40px rgba(0,0,0,.5)}
+.nav-logo{font-family:var(--D);font-weight:700;font-size:.75rem;letter-spacing:.06em;color:var(--snow);text-decoration:none;white-space:nowrap}
+.nav-logo em{font-style:normal;color:#10b981}
+.nav-links{list-style:none;display:flex;gap:1.8rem}
+.nav-links a{color:var(--fog);font-size:.8rem;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--snow)}
+.hero{min-height:100svh;display:flex;align-items:center;padding:100px 2rem 80px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--rim) 1px,transparent 1px),linear-gradient(90deg,var(--rim) 1px,transparent 1px);background-size:60px 60px;opacity:.22;mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,black 10%,transparent 100%)}
+.blob{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 2rem}
+.badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-radius:100px;padding:.3rem 1rem;font-family:var(--M);font-size:.68rem;letter-spacing:.1em;color:var(--c);margin-bottom:1.8rem}
+.badge-pip{width:6px;height:6px;border-radius:50%;background:var(--c);animation:pip 2.2s ease-in-out infinite}
+@keyframes pip{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
+h1{font-family:var(--D);font-weight:900;font-size:clamp(2.8rem,7vw,6rem);line-height:.95;letter-spacing:-.03em;margin-bottom:1.3rem;animation:rise .7s .1s both}
+.grad{background:linear-gradient(135deg,var(--c),#06b6d4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1rem;color:var(--fog);line-height:1.8;max-width:540px;margin-bottom:2rem;animation:rise .7s .2s both}
+.hero-sub code{font-family:var(--M);color:var(--c);font-size:.88em}
+.hero-stats{display:flex;gap:3rem;margin-bottom:2rem;animation:rise .7s .3s both}
+.stat-n{font-family:var(--D);font-weight:700;font-size:1.9rem;color:var(--c);display:block;line-height:1}
+.stat-l{font-size:.72rem;color:var(--fog);letter-spacing:.1em;text-transform:uppercase}
+.btn-row{display:flex;gap:.85rem;flex-wrap:wrap;animation:rise .7s .4s both}
+.btn-p{display:inline-flex;align-items:center;gap:.5rem;background:var(--c);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;padding:.85rem 1.8rem;border-radius:100px;text-decoration:none;transition:transform .25s,box-shadow .25s;letter-spacing:.03em;white-space:nowrap}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(59,130,246,.35)}
+.btn-g{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--snow);font-family:var(--D);font-weight:600;font-size:.75rem;padding:.85rem 1.8rem;border-radius:100px;text-decoration:none;border:1px solid var(--rim2);transition:border-color .2s,background .2s;letter-spacing:.03em;white-space:nowrap}
+.btn-g:hover{border-color:var(--fog);background:var(--ink2)}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.ticker-wrap{border-top:1px solid var(--rim);border-bottom:1px solid var(--rim);background:var(--ink1);overflow:hidden;padding:.75rem 0}
+.ticker{display:flex;white-space:nowrap;animation:scroll 28s linear infinite}
+.ti{font-family:var(--M);font-size:.72rem;color:var(--fog);padding:0 2.5rem;display:flex;align-items:center;gap:1rem}
+.ti::after{content:'·';color:var(--rim2)}
+.ti em{font-style:normal;color:var(--c)}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sec{padding:5rem 0;position:relative;z-index:1}
+.sec-div{border-top:1px solid var(--rim)}
+.slbl{font-family:var(--M);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--c);margin-bottom:.9rem;display:flex;align-items:center;gap:.6rem}
+.slbl::before{content:'//';opacity:.4}
+.sec-h2{font-family:var(--D);font-weight:700;font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-.02em;line-height:1.15}
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:4.5rem;align-items:start}
+.about-text h2{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,2.8vw,2rem);letter-spacing:-.02em;margin-bottom:1rem;line-height:1.2}
+.about-text p{color:var(--fog);margin-bottom:1rem;line-height:1.8;font-size:.95rem}
+.learn-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-top:.5rem}
+.learn-list li{display:flex;align-items:flex-start;gap:.7rem;font-size:.9rem;color:var(--mist)}
+.learn-list li::before{content:'→';color:var(--c);font-family:var(--M);flex-shrink:0;margin-top:2px;font-size:.8rem}
+.tc{background:var(--ink1);border:1px solid var(--rim);border-radius:20px;overflow:hidden}
+.tc-head{padding:.9rem 1.5rem;border-bottom:1px solid var(--rim);font-family:var(--M);font-size:.7rem;color:var(--fog);display:flex;align-items:center;gap:.45rem}
+.dot{width:9px;height:9px;border-radius:50%}.dr{background:#ff5f57}.dy{background:#febc2e}.dg{background:#28c840}
+.tc-row{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--rim);transition:background .15s}
+.tc-row:last-child{border-bottom:none}.tc-row:hover{background:var(--ink2)}
+.tc-name{font-weight:600;font-size:.88rem}.tc-info{font-size:.78rem;color:var(--fog)}
+.tc-link{font-family:var(--M);font-size:.68rem;color:#4d9fff;text-decoration:none;opacity:.75;transition:opacity .2s}
+.tc-link:hover{opacity:1}
+.phase-div{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1rem}
+.phase-div span{font-family:var(--M);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fog);white-space:nowrap}
+.phase-div::after{content:'';flex:1;height:1px;background:var(--rim)}
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--rim);border:1px solid var(--rim);border-radius:20px;overflow:hidden}
+.lc{background:var(--ink1);padding:1.2rem 1.5rem;display:flex;align-items:flex-start;gap:.9rem;text-decoration:none;position:relative;transition:background .2s}
+.lc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2.5px;background:var(--c);transform:scaleY(0);transform-origin:bottom;transition:transform .22s}
+.lc:hover{background:var(--ink2)}.lc:hover::before{transform:scaleY(1)}
+.lnum{font-family:var(--M);font-size:.64rem;color:var(--c);background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.22);padding:.15rem .5rem;border-radius:5px;flex-shrink:0;margin-top:3px;letter-spacing:.04em}
+.ltitle{font-size:.87rem;color:var(--mist);line-height:1.45;transition:color .2s}
+.lc:hover .ltitle{color:var(--snow)}
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;position:relative}
+.steps-row::before{content:'';position:absolute;top:27px;left:12.5%;right:12.5%;height:1px;background:linear-gradient(90deg,var(--c),#fde047,#38bdf8,var(--c));opacity:.3}
+.step-item{text-align:center;padding:0 .5rem}
+.step-circle{width:54px;height:54px;border-radius:50%;border:1px solid var(--rim);background:var(--ink2);display:flex;align-items:center;justify-content:center;font-family:var(--M);font-size:.78rem;color:var(--c);margin:0 auto 1rem;transition:border-color .2s,box-shadow .2s;position:relative;z-index:1}
+.step-item:hover .step-circle{border-color:var(--c);box-shadow:0 0 20px rgba(59,130,246,.18)}
+.step-item h3{font-family:var(--D);font-weight:600;font-size:.85rem;margin-bottom:.4rem}
+.step-item p{font-size:.82rem;color:var(--fog);line-height:1.6}
+footer{border-top:1px solid var(--rim);background:var(--ink1);padding:3rem 2.5rem;position:relative;z-index:1}
+.fi{max-width:1180px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:2.5rem}
+.fb{font-family:var(--D);font-weight:700;font-size:1rem;color:var(--c)}
+.fb p{font-family:var(--B);font-weight:400;font-size:.8rem;color:var(--fog);margin-top:.3rem;line-height:1.6}
+.fl-head{font-family:var(--D);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--fog);margin-bottom:.8rem}
+.fl{list-style:none;display:flex;flex-direction:column;gap:.45rem}
+.fl a{color:var(--fog);font-size:.82rem;text-decoration:none;transition:color .2s}
+.fl a:hover{color:var(--snow)}
+.fc{font-size:.75rem;color:var(--fog);line-height:1.9}
+.fc strong{color:var(--mist)}
+.sr{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
+.sr.in{opacity:1;transform:none}
+@media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:2.5rem}.steps-row{grid-template-columns:1fr 1fr}.steps-row::before{display:none}.nav-links{display:none}}
+@media(max-width:540px){.steps-row{grid-template-columns:1fr}.lesson-grid{grid-template-columns:1fr}h1{font-size:2.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="https://techbaseng.github.io" class="nav-logo">TECH<em>BASE</em> ACADEMY</a>
+  <ul class="nav-links">
+    <li><a href="#lessons">Lessons</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="https://techbaseng.github.io">← All Courses</a></li>
+    <li><a href="https://github.com/techbaseng/techbase-python" target="_blank">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="blob" style="width:550px;height:550px;background:radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 70%);top:5%;left:55%"></div>
+  <div class="blob" style="width:350px;height:350px;background:radial-gradient(circle,rgba(6,182,212,.06) 0%,transparent 70%);bottom:15%;left:5%"></div>
+  <div class="wrap" style="position:relative;z-index:1;width:100%">
+    <div class="badge"><span class="badge-pip"></span>FREE COURSE · IBADAN, NIGERIA · BEGINNER</div>
+    <h1><span class="grad">Python</span><br>Programming</h1>
+    <p class="hero-sub">Learn the world's most beginner-friendly programming language. From your first <code>print()</code> statement to building real programs — <strong style="color:var(--snow)">10 lessons</strong>, zero prerequisites.</p>
+    <div class="hero-stats">
+      <div><span class="stat-n">10</span><span class="stat-l">Lessons</span></div>
+      <div><span class="stat-n">100%</span><span class="stat-l">Free</span></div>
+      <div><span class="stat-n">0</span><span class="stat-l">Prerequisites</span></div>
+    </div>
+    <div class="btn-row">
+      <a href="lessons/lesson_01.md" class="btn-p">Start Lesson 01 →</a>
+      <a href="#lessons" class="btn-g">View All 10 Lessons</a>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker">
+    <span class="ti"><em>print()</em> output</span><span class="ti"><em>variables</em> data types</span><span class="ti"><em>input()</em> user input</span><span class="ti"><em>if/else</em> conditions</span><span class="ti"><em>for loops</em> iteration</span><span class="ti"><em>functions</em> reusable code</span><span class="ti"><em>lists</em> collections</span><span class="ti"><em>dictionaries</em> key-value pairs</span><span class="ti"><em>files</em> file I/O</span>
+    <span class="ti"><em>print()</em> output</span><span class="ti"><em>variables</em> data types</span><span class="ti"><em>input()</em> user input</span><span class="ti"><em>if/else</em> conditions</span><span class="ti"><em>for loops</em> iteration</span><span class="ti"><em>functions</em> reusable code</span><span class="ti"><em>lists</em> collections</span><span class="ti"><em>dictionaries</em> key-value pairs</span><span class="ti"><em>files</em> file I/O</span>
+  </div>
+</div>
+
+<main>
+<section class="sec" id="about">
+<div class="wrap">
+<div class="about-grid sr">
+  <div class="about-text">
+    <div class="slbl">About This Course</div>
+    <h2>Write code that<br>solves real problems.</h2>
+    <p>Python is one of the world's most popular programming languages. It is used in data science, web development, automation, artificial intelligence, and much more.</p>
+    <p>Designed by <strong style="color:var(--snow)">Babatunde Awoyemi</strong> at Techbase Consultant Services, Ibadan. 10 lessons taking you from absolute zero to confidently building your own Python programs.</p>
+    <ul class="learn-list">
+      <li>How to write and run Python programs</li>
+      <li>Variables, data types, and operators</li>
+      <li>User input and formatted output</li>
+      <li>Conditions and loops for program flow</li>
+      <li>Functions and code reusability</li>
+      <li>Lists, tuples, and dictionaries</li>
+      <li>Reading and writing files</li>
+      <li>Build a complete, practical project</li>
+    </ul>
+  </div>
+  <div class="tc">
+    <div class="tc-head"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span>&nbsp;&nbsp;tools_you_need.py</div>
+    <div class="tc-row"><div><div class="tc-name">Python 3.x</div><div class="tc-info">Run Python programs</div></div><a href="https://python.org/downloads" class="tc-link" target="_blank">↗ Download</a></div>
+    <div class="tc-row"><div><div class="tc-name">VS Code</div><div class="tc-info">Write your code</div></div><a href="https://code.visualstudio.com" class="tc-link" target="_blank">↗ Download</a></div>
+    <div class="tc-row"><div><div class="tc-name">Replit</div><div class="tc-info">Online editor — no install needed</div></div><a href="https://replit.com" class="tc-link" target="_blank">↗ Use online</a></div>
+    <div class="tc-row"><div><div class="tc-name">Python Tutor</div><div class="tc-info">Visualize code execution</div></div><a href="https://pythontutor.com" class="tc-link" target="_blank">↗ Visualize</a></div>
+    <div class="tc-row"><div><div class="tc-name">Next: Web Dev</div><div class="tc-info">After completing this course</div></div><a href="https://techbaseng.github.io/techbase-html/" class="tc-link">↗ Learn HTML</a></div>
+  </div>
+</div>
+</div>
+</section>
+
+<section class="sec sec-div" id="lessons">
+<div class="wrap">
+  <div class="sr" style="margin-bottom:.5rem">
+    <div class="slbl">Course Content</div>
+    <h2 class="sec-h2">10 Lessons</h2>
+  </div>
+
+  <div class="phase-div sr"><span>Phase 1 — Foundations (01–04)</span></div>
+  <div class="lesson-grid sr">
+    <a href="lessons/lesson_01.md" class="lc"><span class="lnum">01</span><span class="ltitle">Introduction to Python — what it is, setup, your first program</span></a>
+    <a href="lessons/lesson_02.md" class="lc"><span class="lnum">02</span><span class="ltitle">Variables & Data Types — strings, integers, floats, booleans</span></a>
+    <a href="lessons/lesson_03.md" class="lc"><span class="lnum">03</span><span class="ltitle">User Input & Output — input(), print(), f-strings, formatting</span></a>
+    <a href="lessons/lesson_04.md" class="lc"><span class="lnum">04</span><span class="ltitle">Operators — arithmetic, comparison, logical, assignment operators</span></a>
+  </div>
+
+  <div class="phase-div sr"><span>Phase 2 — Control Flow (05–07)</span></div>
+  <div class="lesson-grid sr">
+    <a href="lessons/lesson_05.md" class="lc"><span class="lnum">05</span><span class="ltitle">Conditions — if, elif, else</span></a>
+    <a href="lessons/lesson_06.md" class="lc"><span class="lnum">06</span><span class="ltitle">Loops — for, while, range(), break, continue</span></a>
+    <a href="lessons/lesson_07.md" class="lc"><span class="lnum">07</span><span class="ltitle">Functions — defining, calling, parameters, return values</span></a>
+  </div>
+
+  <div class="phase-div sr"><span>Phase 3 — Data Structures (08–09)</span></div>
+  <div class="lesson-grid sr">
+    <a href="lessons/lesson_08.md" class="lc"><span class="lnum">08</span><span class="ltitle">Lists & Tuples — creating, indexing, slicing, looping, methods</span></a>
+    <a href="lessons/lesson_09.md" class="lc"><span class="lnum">09</span><span class="ltitle">Dictionaries — key-value pairs, adding, updating, looping</span></a>
+  </div>
+
+  <div class="phase-div sr"><span>Phase 4 — Capstone (10)</span></div>
+  <div class="lesson-grid sr">
+    <a href="lessons/lesson_10.md" class="lc"><span class="lnum">10</span><span class="ltitle">Mini Project — Student Grade Calculator</span></a>
+  </div>
+</div>
+</section>
+
+<section class="sec sec-div">
+<div class="wrap sr">
+  <div class="slbl" style="margin-bottom:1rem">How It Works</div>
+  <h2 class="sec-h2" style="margin-bottom:3rem">Learn at your own pace.</h2>
+  <div class="steps-row">
+    <div class="step-item"><div class="step-circle">01</div><h3>Start Here</h3><p>Read this overview page to understand all 10 lessons and what you'll build.</p></div>
+    <div class="step-item"><div class="step-circle">02</div><h3>Open Lesson 01</h3><p>Click the first card above or the hero button. No installation needed to begin.</p></div>
+    <div class="step-item"><div class="step-circle">03</div><h3>Read & Practice</h3><p>Each lesson explains a concept with code examples and ends with hands-on exercises.</p></div>
+    <div class="step-item"><div class="step-circle">04</div><h3>Progress Forward</h3><p>Move to the next lesson whenever you're ready. No deadlines, no pressure.</p></div>
+  </div>
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="fi">
+    <div class="fb">TECHBASE ACADEMY<p>Ibadan, Nigeria · Free STEM Education</p></div>
+    <div>
+      <p class="fl-head">This Course</p>
+      <ul class="fl">
+        <li><a href="#lessons">All 10 Lessons</a></li>
+        <li><a href="https://github.com/techbaseng/techbase-python" target="_blank">GitHub Repo ↗</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="fl-head">Next Steps</p>
+      <ul class="fl">
+        <li><a href="https://techbaseng.github.io/techbase-html/">HTML →</a></li>
+        <li><a href="https://techbaseng.github.io/techbase-css/">CSS →</a></li>
+        <li><a href="https://techbaseng.github.io">← All Courses</a></li>
+      </ul>
+    </div>
+    <div class="fc"><strong>MIT License</strong><br>© 2025 Techbase Consultant Services<br>Made with ❤️ in Ibadan, Nigeria</div>
+  </div>
+</footer>
+<script>const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.07});document.querySelectorAll('.sr').forEach(el=>io.observe(el));</script>
+</body>
+</html>

@@ -1,297 +1,180 @@
 ---
 render_with_liquid: false
-title: "Lesson 01 — Introduction to Python & Getting Started"
+title: "Lesson 01 — Introduction to Python: What It Is, How to Set It Up, and How to Use It"
 nav_order: 1
 ---
 
-# Lesson 01 — Introduction to Python & Getting Started
+# Lesson 01 — Introduction to Python: What It Is, How to Set It Up, and How to Use It
 
 ---
 
-## Lesson Introduction
+## Welcome to Your Python Journey
 
-Welcome to your very first Python lesson! 🎉
+Imagine being able to tell a computer exactly what to do — step by step — and have it follow your instructions perfectly every single time. That is exactly what programming is. And **Python** is one of the friendliest languages to start learning how to do it.
 
-You are about to learn one of the most popular, beginner-friendly, and powerful programming languages in the world. Python is used every single day by students, engineers, scientists, data analysts, web developers, and AI researchers all over the world — including here in Nigeria and across Africa.
+This lesson is designed for absolute beginners. You do not need any previous experience with programming, computers, or mathematics beyond basic arithmetic. Every single concept will be explained from scratch, with real examples and expected outputs so you always know what to expect.
 
 By the end of this lesson you will:
+- Know what Python is and why it is worth learning
+- Have Python installed and running on your computer
+- Understand how Python reads and runs your code
+- Write your first Python programs
+- Understand how Python statements, syntax, indentation, and output work
+- Print text and numbers to the screen confidently
 
-- Understand what Python is and why it was created
-- Know what Python is used for in the real world
-- Have Python installed and running on your computer (or use it directly in your browser — no install needed!)
-- Have written and successfully run your very first Python program
-- Understand how Python differs from other programming languages
-
-This lesson is designed for **absolute beginners**. You do not need to know anything at all about programming before reading this. Every word, every symbol, every concept will be explained clearly.
+Let's begin.
 
 ---
 
 ## Prerequisite Concepts
 
-Before we dive into Python itself, let us make sure we understand a few everyday ideas that will make this lesson much easier.
-
-### What is a Programming Language?
-
-Think of a programming language as a set of instructions you give to a computer. A computer cannot understand human language like English or Yoruba on its own. It only understands a very low-level language made of 0s and 1s (called "binary"). Programming languages like Python are the **bridge** between human thinking and computer action.
-
-**Analogy:** Imagine you want to teach a robot to make jollof rice. You cannot just say "make jollof rice" — the robot needs very specific, step-by-step instructions: "Add 2 cups of rice. Add 1 litre of tomato sauce. Set the temperature to 180 degrees." A programming language lets you write those precise instructions for a computer.
+Before we dive into Python, let's quickly cover two foundational ideas you need to understand. Don't worry — these are very simple.
 
 ### What is a Program?
 
-A program is simply a list of instructions that a computer follows from top to bottom, one step at a time. Python programs are text files that you write, and then Python reads and carries them out.
+A **program** is a list of instructions written for a computer. Just like a recipe tells a cook what to do step by step, a program tells a computer what to do step by step.
 
-### What is a Syntax?
+**Analogy:** Imagine you are directing a robot helper. You cannot just say "make breakfast." You have to say:
+1. Open the fridge.
+2. Take out two eggs.
+3. Turn on the stove.
+4. Crack the eggs into the pan.
+5. Wait 3 minutes.
+6. Turn off the stove.
 
-Just like English has grammar rules (capital letters at the start of sentences, full stops at the end), programming languages have **syntax** rules — the rules that say how code must be written so the computer can understand it. We will explore Python's syntax in this lesson.
+A computer program works the same way — precise, step-by-step instructions.
 
----
+### What is a Programming Language?
 
-## Part 1 — What is Python?
+Computers do not understand human language (like English or Yoruba). They only understand numbers (0s and 1s). A **programming language** is a special language that sits between human language and machine language. You write instructions in a programming language, and a tool called an **interpreter** or **compiler** translates those instructions into something the computer can understand.
 
-### A Brief History
-
-Python was created by a Dutch programmer named **Guido van Rossum**. He started working on it in the late 1980s and released the first version in **1991**. The name "Python" was not inspired by a snake — Guido was a fan of the British comedy group *Monty Python's Flying Circus* and wanted a name that was short and a little bit fun.
-
-Python was designed with one core idea in mind: **code should be easy to read and write**. Guido wanted a language that looked almost like reading plain English.
-
-### What is Python Used For?
-
-Python is incredibly versatile. Here are the main areas where Python is used today:
-
-**1. Web Development (Server-Side)**
-Large websites and web apps use Python on the back end (the part you do not see). Platforms like Instagram, Pinterest, and Dropbox are built with Python.
-
-**2. Software Development**
-Python is used to build tools, automation scripts, and standalone software programs.
-
-**3. Data Science and Mathematics**
-Scientists, engineers, and analysts use Python to crunch numbers, analyse large datasets, draw graphs, and run statistical models. This is one of the most popular uses of Python in universities and research centres.
-
-**4. Machine Learning and Artificial Intelligence**
-Python is the dominant language for AI research. Tools like TensorFlow, PyTorch, and Scikit-learn — all used for training AI models — are Python libraries.
-
-**5. System Scripting and Automation**
-Python can automate repetitive tasks. For example, automatically renaming 1,000 files, sending scheduled emails, or scraping information from websites.
-
-**6. Database Interaction**
-Python can connect to databases (like MySQL or MongoDB), read data from them, and write new data into them.
-
-**7. Rapid Prototyping**
-Because Python is quick to write, many developers use it to build a working "draft" of an idea before implementing it in another language.
-
-> **Real-world tip:** If you are studying Engineering, Biology, Economics, or any STEM subject, Python can help you analyse experimental data, build simulations, and create charts — skills that are increasingly required in the job market.
+Python is one of the most popular and beginner-friendly programming languages in the world.
 
 ---
 
-## Part 2 — Why Python? (The Big Advantages)
+## Section 1 — What is Python?
 
-Let us look at why Python has become one of the most popular languages in the world.
+### The History and Purpose
 
-### 1. It Works on Every Platform
+Python is a **general-purpose programming language** created by a Dutch programmer named **Guido van Rossum**. It was first released to the public in **1991** — over 30 years ago! Since then, it has grown into one of the most widely used languages in the world.
 
-Python runs on Windows, Mac, Linux, Raspberry Pi, and many other systems. Write your code once, run it anywhere.
+The word "Python" comes not from the snake, but from Guido's love of the British comedy show *Monty Python's Flying Circus*.
 
-### 2. Simple Syntax That Looks Like English
+### What Can Python Do?
 
-Compare these two programs that do the same thing — printing "Hello" five times:
+Python is like a Swiss army knife for programmers — it can be used for many different things:
 
-**In Java (another popular language):**
+- **Web development (server-side):** Python can power the behind-the-scenes logic of websites. Big platforms like Instagram and Pinterest were built using Python.
+- **Software development:** You can build desktop applications, games, and tools.
+- **Mathematics and data analysis:** Python is widely used by scientists, engineers, and data analysts to crunch numbers, draw charts, and find patterns in data.
+- **Automation:** Python can automate repetitive tasks, like renaming thousands of files, sending emails, or scraping data from websites.
+- **Machine learning and artificial intelligence:** Python powers most of the AI tools you hear about today — from recommendation systems to image recognition.
+- **Connecting to databases:** Python can read from and write to databases like MySQL and MongoDB.
+- **Big data:** Python handles and processes enormous datasets.
+- **Rapid prototyping:** You can quickly test ideas without writing hundreds of lines of code first.
 
-```java
-public class Hello {
-    public static void main(String[] args) {
-        for (int i = 0; i < 5; i++) {
-            System.out.println("Hello");
-        }
-    }
-}
-```
+### Why Should You Learn Python?
 
-**In Python:**
+Here are the key reasons Python is such a great first language:
 
-```python
-for i in range(5):
-    print("Hello")
-```
+- **Simple syntax:** Python's code reads almost like plain English. Compare this to languages like Java or C++ which require much more complex setup just to print "Hello World".
+- **Fewer lines of code:** Python lets you accomplish the same task with far fewer lines than most other languages, saving you time.
+- **Cross-platform:** Python runs on Windows, Mac, Linux, Raspberry Pi, and many other systems without any changes to your code.
+- **Interpreted language:** Python runs code line by line as soon as it is written, so you see results immediately. There is no long "compile" wait like in some other languages.
+- **Flexible programming styles:** Python can be written in a procedural way (step-by-step instructions), an object-oriented way (using classes and objects), or a functional way (using pure functions). You learn more about these styles as you grow.
+- **Huge community:** Millions of programmers use Python. Whatever problem you face, someone has probably solved it and shared the solution online.
 
-Python does the same job in far fewer lines. Notice how the Python version almost reads like English: "for i in range 5, print Hello."
+### Python in the Real World
 
-### 3. Fewer Lines of Code
+| Field | How Python is Used |
+|---|---|
+| Data Science | Analysing stock prices, weather patterns, election data |
+| Medicine | Modelling virus spread, genomics research |
+| Finance | Automated trading bots, risk analysis |
+| Engineering | Simulating physical systems, robotics |
+| Education | Teaching programming, e-learning platforms |
+| Social Media | Recommending posts, detecting spam |
 
-Python allows you to accomplish complex tasks with much less writing. This means less chance of making mistakes and faster development.
-
-### 4. Immediate Execution (Interpreted Language)
-
-Python is an **interpreted** language. This is an important concept.
-
-- **Compiled languages** (like C or Java) must be fully translated into machine code before running. This is like translating an entire book before reading it.
-- **Interpreted languages** (like Python) are translated and run **line by line**, one instruction at a time. This is like reading and translating a book sentence by sentence as you go.
-
-The advantage? You can test and run your code almost instantly. You do not have to wait for a full compilation step. This makes experimenting and learning very fast.
-
-### 5. Multiple Programming Styles
-
-Python supports three main ways of organising your code:
-
-- **Procedural** — writing step-by-step instructions (what we will start with)
-- **Object-Oriented** — organising code into objects that have properties and behaviours (more advanced)
-- **Functional** — treating code as a series of mathematical functions (advanced)
-
-Do not worry about understanding all three right now. We start procedural, and everything else will come naturally.
-
-### 6. A Huge Community and Ecosystem
-
-Millions of developers use Python. This means there are countless free libraries (ready-made tools), endless tutorials, and a huge community ready to help you when you get stuck.
+> **Thinking Prompt:** Which of these use cases interests you most? As you learn Python, keep that application in mind — it will motivate you.
 
 ---
 
-## Part 3 — Python Syntax: How Python Looks Different
+## Section 2 — Getting Started: Installing and Running Python
 
-### Python Uses Indentation to Define Structure
+### Option A: Try Python Online (No Installation Needed)
 
-Most programming languages use **curly brackets `{}`** to show where a block of code begins and ends. Python does it differently — it uses **indentation** (spaces or tabs at the start of a line).
+If you just want to start experimenting right now without installing anything, you can use an online Python editor. Websites like [https://www.w3schools.com/python/trypython.asp](https://www.w3schools.com/python/trypython.asp) let you type Python code in your browser and see the result immediately.
 
-**Indentation** simply means the empty space at the beginning of a line. In Python, this space is not just for looks — it is part of the language itself.
+This is a great way to follow along with the examples in this lesson.
 
-**Example — using indentation:**
+### Option B: Install Python on Your Computer
 
-```python
-if 5 > 3:
-    print("Five is greater than three")
-```
+To run Python on your own machine, follow these steps.
 
-**Expected Output:**
-```
-Five is greater than three
-```
+#### Step 1: Check if Python is Already Installed
 
-The `print` line is indented (moved inward) because it is *inside* the `if` block. Python uses this to know which lines belong together.
-
-**What happens if you forget the indentation?**
-
-```python
-if 5 > 3:
-print("Five is greater than three")   # ← No indentation — this will CRASH
-```
-
-**Output (error):**
-```
-IndentationError: expected an indented block after 'if' statement
-```
-
-> **Key takeaway:** Always indent consistently in Python. Use 4 spaces per level (this is the standard).
-
-### Python Uses New Lines to End Commands
-
-In many other languages, each command must end with a semicolon `;`. Not in Python. A new line is enough.
-
-**Python:**
-```python
-print("Hello")
-print("World")
-```
-
-**A language like JavaScript:**
-```javascript
-console.log("Hello");
-console.log("World");
-```
-
-Both do the same thing, but Python is cleaner.
-
-### Python is Case-Sensitive
-
-This is very important. `print` and `Print` and `PRINT` are completely different things in Python. The built-in function is only recognised as `print` (all lowercase).
-
-```python
-print("This works!")    # ✅ Correct
-Print("This crashes!")  # ❌ Will give an error — capital P
-```
-
----
-
-## Part 4 — Getting Started with Python
-
-Now that you understand what Python is, let us get it up and running!
-
-### Option A — Use Python Directly in Your Browser (No Installation Needed)
-
-The fastest way to start is to use an **online Python editor**. You do not need to install anything on your computer. Just visit:
-
-👉 [https://www.w3schools.com/python/trypython.asp](https://www.w3schools.com/python/trypython.asp)
-
-This editor lets you type Python code and run it instantly. We will use this approach for all the examples in this lesson.
-
-### Option B — Install Python on Your Computer
-
-If you want to run Python on your own machine, follow these steps.
-
-#### Step 1 — Check if Python is Already Installed
-
-Many computers already have Python! Let us check.
+Many computers already have Python installed. Let's check.
 
 **On Windows:**
-1. Press the Windows key, type `cmd`, and press Enter to open the Command Prompt.
-2. Type the following command and press Enter:
+1. Press the **Windows key**, type `cmd`, and open the Command Prompt.
+2. Type the following and press Enter:
 
 ```
 python --version
 ```
 
 **On Mac or Linux:**
-1. Open the Terminal application.
+1. Open the **Terminal**.
 2. Type:
 
 ```
 python --version
 ```
 
-**Expected Output (if Python is installed):**
+If you see something like `Python 3.12.0`, you already have Python! If not, move to Step 2.
+
+#### Step 2: Download Python
+
+Go to the official Python website: **https://www.python.org/**
+
+Click **Download Python** and follow the installer instructions. Make sure you are downloading **Python 3** (not Python 2, which is outdated).
+
+> **Important for Windows users:** During installation, tick the box that says **"Add Python to PATH"**. This makes Python accessible from your Command Prompt.
+
+#### Step 3: Verify the Installation
+
+After installation, open your Command Prompt or Terminal again and type:
+
+```
+python --version
+```
+
+You should now see a version number printed, like:
+
 ```
 Python 3.12.0
 ```
 
-(The exact version number may differ, but any version starting with `3.` is fine.)
+Congratulations — Python is installed!
 
-**If you see "command not found" or "Python is not recognized":**
-Python is not installed. Go to Step 2.
+### Writing and Running Your First Python File
 
-#### Step 2 — Download and Install Python
+Now let's write our very first Python program.
 
-1. Go to the official Python website: [https://www.python.org/](https://www.python.org/)
-2. Click the big yellow **"Download Python"** button.
-3. Run the installer file that downloads.
-4. **IMPORTANT (Windows only):** During installation, tick the checkbox that says **"Add Python to PATH"** before clicking Install. This is very important — without it, Python will not be found by the command line.
-5. Click "Install Now" and wait for it to finish.
+**Step 1:** Open any plain-text editor (Notepad on Windows, TextEdit on Mac, or any code editor like VS Code).
 
-After installation, repeat the `python --version` check from Step 1 to confirm it worked.
-
-#### Step 3 — Choose Where to Write Python Code
-
-You write Python code in a plain text file with a `.py` extension. You can use:
-
-- **Notepad** (Windows) — built-in, simple, no colour coding
-- **TextEdit** (Mac) — built-in but make sure to save as plain text
-- **VS Code** — free, powerful, shows errors in real time (recommended): [https://code.visualstudio.com/](https://code.visualstudio.com/)
-- **Thonny** — free, designed specifically for Python beginners: [https://thonny.org/](https://thonny.org/)
-- **PyCharm** — professional-grade Python IDE, free community edition available
-
-> **Beginner recommendation:** Start with Thonny. It is the simplest to set up and use.
-
----
-
-## Part 5 — Your First Python Program
-
-### The Classic "Hello, World!"
-
-By tradition, the very first program every programmer writes in a new language is one that displays the words "Hello, World!" on the screen. It sounds simple, but it is a powerful moment — it is proof that your setup works and that you are officially a programmer.
-
-Let us write it.
-
-**Code:**
+**Step 2:** Type the following:
 
 ```python
 print("Hello, World!")
+```
+
+**Step 3:** Save the file as `hello.py` (the `.py` extension tells the computer this is a Python file).
+
+**Step 4:** Open your Command Prompt or Terminal, navigate to the folder where you saved the file, and type:
+
+```
+python hello.py
 ```
 
 **Expected Output:**
@@ -299,124 +182,54 @@ print("Hello, World!")
 Hello, World!
 ```
 
-That's it! One line. Let us break it down completely.
+You just ran your first Python program! Let's unpack exactly what happened.
 
-#### Line-by-Line Explanation
+- `print` is a **function** — a built-in tool in Python that displays output.
+- The parentheses `()` tell Python "here comes what I want to print."
+- `"Hello, World!"` is the **text** you want to display. The quotation marks tell Python this is a piece of text (called a **string**).
 
-| Part | What it is | What it does |
-|------|-----------|--------------|
-| `print` | A **built-in function** | Tells Python to display something on the screen |
-| `(` | Opening **parenthesis** | Marks the start of what we want to print |
-| `"Hello, World!"` | A **string** (text) | The text we want to display, wrapped in quotation marks |
-| `)` | Closing **parenthesis** | Marks the end of what we want to print |
+### Using the Python Command Line (Interactive Mode)
 
-**What is a function?** Think of a function like a machine. You feed something into it (the input), and it does a job and gives you a result. `print` is Python's built-in "display machine" — you feed it text, and it puts that text on the screen.
+Python also has a special **interactive mode** where you can type one line of code at a time and see the result immediately. This is perfect for quick experiments.
 
-**What are quotation marks for?** In Python, any text (called a **string**) must be wrapped in quotation marks so that Python knows it is text and not a command. You can use either single quotes `'Hello, World!'` or double quotes `"Hello, World!"` — both work the same way.
+Open your Command Prompt or Terminal and type:
 
-```python
-print("Hello, World!")   # Using double quotes
-print('Hello, World!')   # Using single quotes — same result!
-```
-
-**Expected Output (both lines):**
-```
-Hello, World!
-Hello, World!
-```
-
-> **Thinking prompt:** What do you think happens if you remove the quotation marks? Try it!
-
----
-
-### Running Your First Program — Step by Step
-
-#### Method 1: Using the Online Editor
-
-1. Go to [https://www.w3schools.com/python/trypython.asp](https://www.w3schools.com/python/trypython.asp)
-2. You will see a code box on the left and a result box on the right.
-3. Clear whatever is there and type: `print("Hello, World!")`
-4. Click the "Run" button.
-5. You should see `Hello, World!` appear in the result box.
-
-#### Method 2: Using a File on Your Computer
-
-1. Open Notepad (or any text editor).
-2. Type: `print("Hello, World!")`
-3. Save the file as `hello.py` (not `hello.py.txt` — make sure the extension is `.py`).
-4. Open your Command Prompt or Terminal.
-5. Navigate to the folder where you saved the file. For example, if it is on your Desktop:
-
-**Windows:**
-```
-cd Desktop
-```
-
-**Mac/Linux:**
-```
-cd ~/Desktop
-```
-
-6. Run the file by typing:
-```
-python hello.py
-```
-
-7. Press Enter. You should see:
-```
-Hello, World!
-```
-
-🎉 Congratulations — you just ran your first Python program!
-
-#### Method 3: Using the Python Interactive Command Line
-
-Python has a special interactive mode where you can type commands and see results immediately — no file needed. Think of it as a live conversation with Python.
-
-To open it:
-
-**Windows:**
 ```
 python
 ```
 
-(If `python` does not work, try `py` instead.)
+(On some systems, use `py` instead of `python`.)
 
-**Mac/Linux:**
-```
-python3
-```
-
-You will see something like this:
+You will see something like:
 
 ```
-Python 3.12.0 (main, Oct 2 2023, 00:00:00)
+Python 3.12.0 (main, Oct  3 2023, ...) on win32
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-The `>>>` symbol means Python is ready and waiting for your instruction. Type your command and press Enter:
+The `>>>` symbol is called the **prompt**. It means Python is ready and waiting for your instruction.
 
-```
+Type this and press Enter:
+
+```python
 >>> print("Hello, World!")
+```
+
+**Expected Output:**
+```
 Hello, World!
->>>
 ```
 
-Python immediately shows the result! This is a great way to experiment with small pieces of code.
+To exit the Python command line, type:
 
-To exit the interactive mode, type:
+```python
+exit()
 ```
->>> exit()
-```
 
-And press Enter.
+### Checking Your Python Version From Inside Code
 
----
-
-## Part 6 — Checking Your Python Version in Code
-
-Sometimes you need to know which version of Python is running your code. Here is how to check it from inside a Python program:
+You can also find out which version of Python is running directly from your program:
 
 ```python
 import sys
@@ -424,180 +237,817 @@ import sys
 print(sys.version)
 ```
 
-**Expected Output (example — your version may differ):**
+**Expected Output (will vary depending on your version):**
 ```
-3.12.0 (main, Oct 2 2023, 00:00:00) [MSC v.1900 64 bit (AMD64)]
+3.12.0 (main, Oct  3 2023, 08:56:10) [GCC 11.4.0]
 ```
 
-**Line-by-line explanation:**
+- `import sys` loads a built-in Python **module** (a collection of extra tools). `sys` is the system module.
+- `sys.version` is a piece of information stored in that module — your Python version.
 
-- `import sys` — This loads a built-in Python **module** called `sys`. A module is like a toolbox of extra features. The word `import` means "bring this toolbox into my program so I can use it."
-- `sys.version` — This accesses the `version` information stored inside the `sys` module. Think of it like opening the toolbox and picking out the tool labelled `version`.
-- `print(sys.version)` — Displays that version information on the screen.
-
-Do not worry about fully understanding `import` right now — we cover modules in detail in a later lesson. The important thing is that you can run this code and see your Python version.
-
-> **Why does the version matter?** This tutorial uses Python 3. Python 2 (an older version) works differently in some areas and is no longer actively developed. Always make sure you are using Python 3.
+> You will learn a lot more about modules later in the course. For now, just know they are extra toolkits you can bring into your program.
 
 ---
 
-## Guided Practice Exercises
+## Section 3 — Python Syntax: The Rules of the Language
 
-Now it is time to practise! These exercises help you build confidence by applying what you have just learned.
+Just like English has grammar rules (sentences start with a capital letter, end with a full stop, etc.), Python has **syntax rules**. Syntax means the correct way to write code so that Python can understand it.
 
----
+Think of syntax as the grammar of your programming language. Break the rules, and Python gives you an error — just like how a teacher might mark a sentence wrong if you break grammar rules.
 
-### Exercise 1 — Your First Print Statement
+### Rule 1: Python Executes Code Line by Line
 
-**Objective:** Print your own name and a greeting message.
+Python reads your code from the very first line to the very last line, one line at a time. Each line is a new instruction.
 
-**Scenario:** Imagine you are writing a program that introduces itself to the user.
-
-**Steps:**
-1. Open the online editor or your text editor.
-2. Write a Python program that prints two lines:
-   - Your name
-   - The message: "Welcome to Python!"
-
-**Hints:**
-- Use `print()` twice, once on each line.
-- Wrap your text in quotation marks.
-- Each `print()` call goes on its own line.
-
-**Expected Output (example for a person named Amara):**
-```
-Amara
-Welcome to Python!
-```
-
-**Self-check Questions:**
-- Did both lines print correctly?
-- What happens if you put both texts in one `print()` — separated by a comma?
-- What happens if you remove the quotation marks from one of them?
-
----
-
-### Exercise 2 — Multiple Print Statements
-
-**Objective:** Display a short poem or story using multiple print statements.
-
-**Scenario:** You are building a simple text-based storybook program.
-
-**Steps:**
-1. Write a Python program with at least 4 `print()` statements.
-2. Each `print()` should contain one sentence of a short story about yourself.
-
-**Example:**
 ```python
-print("My name is Emeka.")
-print("I live in Ibadan, Nigeria.")
-print("I am learning Python.")
-print("One day I will build great software.")
+print("First line runs first")
+print("Second line runs second")
+print("Third line runs third")
 ```
 
 **Expected Output:**
 ```
-My name is Emeka.
-I live in Ibadan, Nigeria.
-I am learning Python.
-One day I will build great software.
+First line runs first
+Second line runs second
+Third line runs third
 ```
 
-**What-if challenge:** What happens if you add an empty `print()` (with nothing inside the brackets)? Try it and observe the output.
+This is called **sequential execution** — instructions run in the order you write them. This is very important: if you want something to happen first, you must write it first.
+
+### Rule 2: Python Uses Indentation (Spaces) to Define Blocks
+
+This is one of Python's most important and unique rules.
+
+**What is indentation?**
+Indentation means the spaces at the beginning of a line. Look at this:
+
+```
+This line has no spaces at the start.
+    This line has 4 spaces at the start.
+```
+
+In many other programming languages, indentation is optional — just for humans to read more easily. But in Python, **indentation is mandatory**. It is how Python knows which lines of code belong together.
+
+Let's see this with a simple example. You will not fully understand the `if` statement yet (we cover that in a later lesson), but focus on the indentation:
+
+**Correct — with indentation:**
+
+```python
+if 5 > 2:
+    print("Five is greater than two!")
+```
+
+**Expected Output:**
+```
+Five is greater than two!
+```
+
+**Incorrect — without indentation:**
+
+```python
+if 5 > 2:
+print("Five is greater than two!")
+```
+
+**Expected Output (Error!):**
+```
+IndentationError: expected an indented block after 'if' statement on line 1
+```
+
+Do you see the difference? The second example is missing the 4 spaces before `print(...)`. Python sees this as a syntax error because the `if` statement needs at least one indented line after it.
+
+**How many spaces?**
+
+You can use any number of spaces, as long as you are consistent within a block. The standard is **4 spaces**, which most professional programmers and style guides recommend.
+
+```python
+if 5 > 2:
+    print("Using 4 spaces — this works!")
+
+if 5 > 2:
+        print("Using 8 spaces — this also works!")
+```
+
+**Expected Output:**
+```
+Using 4 spaces — this works!
+Using 8 spaces — this also works!
+```
+
+**Mixing spaces in the same block causes an error:**
+
+```python
+if 5 > 2:
+    print("Four spaces here")
+        print("Eight spaces here — ERROR!")
+```
+
+**Expected Output (Error!):**
+```
+IndentationError: unexpected indent
+```
+
+> **Golden Rule:** Always use the same number of spaces for each level of indentation. Using 4 spaces consistently is the best practice.
+
+> **Thinking Prompt:** What do you think would happen if you used a tab (`Tab` key) instead of spaces? In Python, mixing tabs and spaces causes errors. Always pick one and stick with it. The recommended choice is **spaces**.
+
+### Rule 3: Variables Are Created by Assignment
+
+A **variable** is a named storage box in your computer's memory. You put a value into it, and you can use that value later by calling its name.
+
+In Python, you create a variable simply by writing its name, the `=` sign, and the value:
+
+```python
+x = 5
+y = "Hello, World!"
+```
+
+Let's break this down:
+- `x` is the variable **name** (you choose this name).
+- `=` is the **assignment operator** — it means "store this value into this variable."
+- `5` is the **value** being stored. Since it has no quotes, Python knows it is a number.
+- `y` is another variable name.
+- `"Hello, World!"` is the value stored in `y`. Since it has quotes, Python knows it is text (a string).
+
+Unlike some other languages, you do not need to tell Python in advance what type of value a variable will hold. Python figures it out automatically.
+
+```python
+age = 25
+name = "Adaora"
+height = 1.72
+is_student = True
+```
+
+> You will explore variables much more deeply in Lesson 02. For now, just know they exist and how to create them.
+
+### Rule 4: Comments Explain Your Code
+
+A **comment** is a note written in your code for humans to read. Python completely ignores comments when running the program.
+
+Comments start with the `#` (hash) symbol:
+
+```python
+# This is a comment. Python ignores this line.
+print("Hello, World!")  # This comment is at the end of a line
+```
+
+**Expected Output:**
+```
+Hello, World!
+```
+
+Notice that the comment on line 1 produces no output — Python just skips it.
+
+**Why are comments important?**
+- They help you (and others) remember why you wrote a piece of code.
+- They are essential for collaboration with other programmers.
+- They help when you return to your code weeks or months later.
+
+```python
+# Calculate the area of a rectangle
+length = 10   # length in centimetres
+width = 5     # width in centimetres
+area = length * width
+print(area)
+```
+
+**Expected Output:**
+```
+50
+```
 
 ---
 
-### Exercise 3 — Checking Python Version
+## Section 4 — Python Statements: The Building Blocks
 
-**Objective:** Write a program that imports `sys` and displays the Python version.
+### What is a Statement?
+
+A **statement** is a single instruction in a Python program. It is the most basic unit of a program — one action the computer performs.
+
+Here is a very simple statement:
+
+```python
+print("Python is fun!")
+```
+
+**Expected Output:**
+```
+Python is fun!
+```
+
+This is one statement. It does one thing: print the text "Python is fun!" to the screen.
+
+### Programs Contain Many Statements
+
+Real programs contain many statements. Each statement runs in order, from top to bottom:
+
+```python
+print("Hello World!")
+print("Have a good day.")
+print("Learning Python is fun!")
+```
+
+**Expected Output:**
+```
+Hello World!
+Have a good day.
+Learning Python is fun!
+```
+
+Let's trace through this step by step:
+1. Python reads line 1: `print("Hello World!")` → It prints "Hello World!" → moves on.
+2. Python reads line 2: `print("Have a good day.")` → It prints "Have a good day." → moves on.
+3. Python reads line 3: `print("Learning Python is fun!")` → It prints "Learning Python is fun!" → program ends.
+
+> **Thinking Prompt:** What would happen if you swapped line 1 and line 3? Try it and see!
+
+### In Python, Each Statement Goes on Its Own Line
+
+Unlike many other languages (like Java or C++), Python does **not** require a semicolon (`;`) at the end of each statement. Just pressing Enter (a new line) is enough to end a statement:
+
+**Python (correct — no semicolons needed):**
+```python
+print("Statement one")
+print("Statement two")
+```
+
+**Java (requires semicolons):**
+```java
+System.out.println("Statement one");
+System.out.println("Statement two");
+```
+
+This is one reason Python is much cleaner and easier to read.
+
+### Optional: Multiple Statements on One Line with Semicolons
+
+Python does allow you to put multiple statements on one line by separating them with semicolons, but this is considered bad practice and is rarely done. It makes code hard to read:
+
+```python
+print("Hello"); print("How are you?"); print("Bye bye!")
+```
+
+**Expected Output:**
+```
+Hello
+How are you?
+Bye bye!
+```
+
+This works, but the best practice is to put each statement on its own line:
+
+```python
+print("Hello")
+print("How are you?")
+print("Bye bye!")
+```
+
+**Expected Output:**
+```
+Hello
+How are you?
+Bye bye!
+```
+
+The second version is much cleaner. Follow this rule: **one statement per line**.
+
+### What Happens if You Put Two Statements on One Line Without a Separator?
+
+```python
+print("Python is fun!") print("Really!")
+```
+
+**Expected Output (Error!):**
+```
+SyntaxError: invalid syntax
+```
+
+Python sees the second `print` and does not know what to do with it because there is no separator (newline or semicolon). This is a **SyntaxError** — you have broken a syntax rule.
+
+---
+
+## Section 5 — Python Output: Displaying Information
+
+### What is Output?
+
+In computing, **output** means information that a program sends out to be seen or used. The most common form of output in Python for beginners is text or numbers displayed in the terminal (the black Command Prompt or Terminal window).
+
+Think of output as your program talking to you.
+
+### The `print()` Function
+
+The `print()` function is the most fundamental output tool in Python. It displays whatever you give it on the screen.
+
+**Syntax:**
+```python
+print(something_to_display)
+```
+
+The word `print` is the function name. The parentheses `()` contain what you want to display. That content inside the parentheses is called the **argument**.
+
+#### Printing Text
+
+Text in Python must always be wrapped in quotes. You can use either double quotes (`"..."`) or single quotes (`'...'`) — both work:
+
+```python
+print("This will work!")
+print('This will also work!')
+```
+
+**Expected Output:**
+```
+This will work!
+This will also work!
+```
+
+**What happens without quotes?**
+
+```python
+print(This will cause an error)
+```
+
+**Expected Output (Error!):**
+```
+SyntaxError: invalid syntax
+```
+
+Python sees `This will cause an error` without quotes and tries to treat each word as a variable name or function. Since these variables do not exist, it throws an error.
+
+> **Golden Rule:** Text (strings) must always be wrapped in quotes.
+
+#### Printing Multiple Lines of Text
+
+You can call `print()` multiple times to display multiple lines:
+
+```python
+print("Hello World!")
+print("I am learning Python.")
+print("It is awesome!")
+```
+
+**Expected Output:**
+```
+Hello World!
+I am learning Python.
+It is awesome!
+```
+
+Each `print()` call automatically moves to a **new line** before printing the next item. This is the default behaviour — it happens automatically.
+
+#### Printing on the Same Line (Removing the New Line)
+
+Sometimes you want multiple prints to appear on the same line. You can do this using the `end` parameter:
+
+```python
+print("Hello World!", end=" ")
+print("I will print on the same line.")
+```
+
+**Expected Output:**
+```
+Hello World! I will print on the same line.
+```
+
+Let's break this down:
+- By default, `print()` adds a newline character (`\n`) at the end of its output, which moves the cursor to the next line.
+- When you write `end=" "`, you are telling Python: "Instead of ending with a newline, end with a space." So the next `print()` call continues on the same line.
+
+> **Thinking Prompt:** What do you think would happen if you wrote `end=""` (with nothing inside the quotes)?
+
+---
+
+## Section 6 — Printing Numbers
+
+### Numbers vs. Text: A Key Difference
+
+In Python, there is an important distinction between **text (strings)** and **numbers**:
+
+- Text must be surrounded by quotes: `"Hello"` or `'42'`
+- Numbers must NOT have quotes: `42` or `3.14`
+
+If you put a number inside quotes, Python treats it as text, not as a number. This matters a lot when you want to do maths with it.
+
+```python
+print(42)        # This is the number 42
+print("42")      # This is the TEXT "42" — not a number!
+```
+
+**Expected Output:**
+```
+42
+42
+```
+
+They look the same when printed! But internally Python treats them very differently. The first can be used in maths; the second cannot.
+
+### Printing Numbers Directly
+
+You can print numbers without any quotes:
+
+```python
+print(3)
+print(358)
+print(50000)
+```
+
+**Expected Output:**
+```
+3
+358
+50000
+```
+
+### Doing Mathematics Inside print()
+
+One of the most useful beginner tricks: you can perform calculations directly inside `print()`:
+
+```python
+print(3 + 3)
+print(2 * 5)
+```
+
+**Expected Output:**
+```
+6
+10
+```
+
+Let's trace through:
+- Line 1: Python sees `3 + 3`, **evaluates** it (calculates it), gets `6`, then prints `6`.
+- Line 2: Python sees `2 * 5`, evaluates it, gets `10`, then prints `10`.
+
+Python supports all the basic arithmetic operations:
+
+| Operator | Meaning | Example | Result |
+|---|---|---|---|
+| `+` | Addition | `3 + 4` | `7` |
+| `-` | Subtraction | `10 - 3` | `7` |
+| `*` | Multiplication | `4 * 5` | `20` |
+| `/` | Division | `10 / 4` | `2.5` |
+| `**` | Exponentiation (power) | `2 ** 3` | `8` |
+| `//` | Integer (floor) division | `10 // 3` | `3` |
+| `%` | Modulus (remainder) | `10 % 3` | `1` |
+
+Let's try a few:
+
+```python
+print(10 + 5)
+print(10 - 5)
+print(10 * 5)
+print(10 / 5)
+print(2 ** 4)
+print(10 // 3)
+print(10 % 3)
+```
+
+**Expected Output:**
+```
+15
+5
+50
+2.0
+16
+3
+1
+```
+
+> **Notice:** `10 / 5` gives `2.0` (with a decimal point), not just `2`. Python's `/` operator always returns a decimal (float). If you want a whole number result, use `//`.
+
+### Mixing Text and Numbers in One Output
+
+You can combine text and numbers in a single `print()` by separating them with a comma:
+
+```python
+print("I am", 35, "years old.")
+```
+
+**Expected Output:**
+```
+I am 35 years old.
+```
+
+Let's break this down:
+- `"I am"` — this is a text string.
+- `35` — this is a number.
+- `"years old."` — this is another text string.
+- The commas `,` inside `print()` separate multiple items to display. Python automatically puts a space between each item.
+
+Another example:
+
+```python
+print("The answer is", 5 + 7, "and that is correct!")
+```
+
+**Expected Output:**
+```
+The answer is 12 and that is correct!
+```
+
+Python first evaluates `5 + 7` to get `12`, then combines everything and prints it.
+
+---
+
+## Section 7 — Guided Practice Exercises
+
+Now it is time to practise what you have learned. Work through each exercise carefully.
+
+### Exercise 1: Your First Program (Warm-Up)
+
+**Objective:** Print three lines of text about yourself.
+
+**Scenario:** Imagine you are introducing yourself to your Python teacher. Write a program that prints your name, your city, and one thing you want to learn with Python.
 
 **Steps:**
-1. Write a program with `import sys` on the first line.
-2. On the second line, print the version.
+1. Open your text editor or Python command line.
+2. Write three `print()` statements.
+3. Run the program.
 
-**Expected Output (example):**
-```
-3.12.0 (main, Oct 2 2023, ...)
+**Example Solution:**
+
+```python
+print("My name is Chidi.")
+print("I live in Ibadan, Nigeria.")
+print("I want to learn Python to build data analysis tools.")
 ```
 
-**Self-check:** What does the number after `Python` tell you?
+**Expected Output:**
+```
+My name is Chidi.
+I live in Ibadan, Nigeria.
+I want to learn Python to build data analysis tools.
+```
+
+**Self-check Question:** Did each line print on its own line? Did you use quotes around your text?
 
 ---
 
-## Mini Project — Personal Introduction Card
+### Exercise 2: Maths with print()
 
-Now let us combine everything from this lesson into a small but satisfying project!
+**Objective:** Use Python as a calculator.
 
-### Project: Your Python Profile Card
+**Scenario:** A student scored 45 out of 60 in a maths test and 38 out of 50 in an English test. Use Python's `print()` to calculate and display:
+1. The total marks scored across both subjects.
+2. The total possible marks.
+3. The difference between the highest possible and actual marks.
 
-**Goal:** Build a program that acts like a personal introduction card — it prints your name, location, what you are studying, and why you are learning Python.
+**Steps:**
+1. Write a `print()` for each calculation.
+2. Use arithmetic operators inside `print()`.
 
-**Stage 1 — Setup**
-
-Create a new file called `profile_card.py`.
-
-**Stage 2 — Core Logic**
-
-Write print statements that display each piece of information. Add a decorative line of dashes to make it look like a card.
-
-```python
-print("========================================")
-print("           MY PYTHON PROFILE CARD       ")
-print("========================================")
-print("Name    : Adaeze Okonkwo")
-print("City    : Ibadan, Nigeria")
-print("Course  : Computer Science, Year 1")
-print("Goal    : To build apps that help people")
-print("Motto   : Start small. Think big.")
-print("========================================")
-```
-
-**Milestone Output:**
-```
-========================================
-           MY PYTHON PROFILE CARD       
-========================================
-Name    : Adaeze Okonkwo
-City    : Ibadan, Nigeria
-Course  : Computer Science, Year 1
-Goal    : To build apps that help people
-Motto   : Start small. Think big.
-========================================
-```
-
-**Stage 3 — Enhancement**
-
-Add one more section below the card that prints today's date using Python's built-in `datetime` module (just copy this for now — we cover it in a later lesson):
+**Solution:**
 
 ```python
-import datetime
-print("Date    :", datetime.date.today())
+print("Maths score:", 45)
+print("English score:", 38)
+print("Total scored:", 45 + 38)
+print("Total possible:", 60 + 50)
+print("Marks missed:", (60 + 50) - (45 + 38))
 ```
 
-**Stage 4 — Final Output**
+**Expected Output:**
+```
+Maths score: 45
+English score: 38
+Total scored: 83
+Total possible: 110
+Marks missed: 27
+```
 
-Run the complete program. Your final output should look like a proper card with your real information filled in.
+**Self-check Question:** What would the output look like if you wrote `print("Total scored:", "45 + 38")` instead? Try it!
+
+---
+
+### Exercise 3: Comments and Readability
+
+**Objective:** Write a well-commented program.
+
+**Scenario:** Write a program that prints the name of a product, its price, and a discount percentage. Add comments explaining what each line does.
+
+**Solution:**
+
+```python
+# Program to display product pricing information
+print("Product: Rice (25kg bag)")   # Print the product name
+print("Original Price: N12,500")    # Print the original price
+print("Discount: 10%")              # Print the discount
+print("You save: N1,250")           # Print the savings amount
+```
+
+**Expected Output:**
+```
+Product: Rice (25kg bag)
+Original Price: N12,500
+Discount: 10%
+You save: N1,250
+```
+
+**Self-check Question:** If you deleted the `#` from line 1, what would happen when you run the program?
+
+---
+
+### Exercise 4: Indentation Awareness
+
+**Objective:** Understand the importance of indentation.
+
+**Scenario:** Identify the error in each code snippet and fix it.
+
+**Buggy Code 1:**
+```python
+if 10 > 5:
+print("Ten is greater!")
+```
+
+**What is wrong?** There is no indentation before `print`. The line inside the `if` block must be indented.
+
+**Fixed Code:**
+```python
+if 10 > 5:
+    print("Ten is greater!")
+```
+
+**Expected Output:**
+```
+Ten is greater!
+```
+
+**Buggy Code 2:**
+```python
+if 3 > 1:
+    print("First line")
+        print("Second line — wrong indentation!")
+```
+
+**What is wrong?** Both `print` statements are inside the same `if` block, but they have different levels of indentation (4 spaces vs. 8 spaces).
+
+**Fixed Code:**
+```python
+if 3 > 1:
+    print("First line")
+    print("Second line — correct now!")
+```
+
+**Expected Output:**
+```
+First line
+Second line — correct now!
+```
+
+---
+
+### Exercise 5: Mixing Text and Numbers
+
+**Objective:** Use commas inside `print()` to mix text and calculated numbers.
+
+**Scenario:** A STEM student is measuring the dimensions of a rectangular plot of land. Length is 12 metres, width is 8 metres. Print a sentence showing the area.
+
+**Solution:**
+
+```python
+length = 12
+width = 8
+print("The area of the plot is", length * width, "square metres.")
+```
+
+**Expected Output:**
+```
+The area of the plot is 96 square metres.
+```
+
+**What-if challenge:** Change `length` to 15 and `width` to 10. What does the output become?
+
+---
+
+## Section 8 — Mini Project: Personal Greetings Display
+
+Now let's combine everything you've learned into one small, realistic project.
+
+### Project Description
+
+You will build a simple **greeting card program**. When you run it, it will display a neatly formatted greeting message with your name, today's date, a motivational quote, and a maths result.
+
+### Stage 1: Setup — Basic Output
+
+Start with just printing your name and a welcome message:
+
+```python
+# Stage 1: Basic greeting
+print("==============================")
+print("Welcome to My Python Program!")
+print("==============================")
+```
+
+**Expected Output:**
+```
+==============================
+Welcome to My Python Program!
+==============================
+```
+
+**Milestone Achieved:** You can print decorative separators using repeated characters inside strings.
+
+### Stage 2: Core Logic — Personal Information
+
+Add your personal details:
+
+```python
+# Stage 2: Personal information display
+print("==============================")
+print("Welcome to My Python Program!")
+print("==============================")
+print("Name: Chidi Okonkwo")
+print("City: Ibadan, Nigeria")
+print("Course: Python Fundamentals")
+print("Lesson: 01 — Introduction")
+print("==============================")
+```
+
+**Expected Output:**
+```
+==============================
+Welcome to My Python Program!
+==============================
+Name: Chidi Okonkwo
+City: Ibadan, Nigeria
+Course: Python Fundamentals
+Lesson: 01 — Introduction
+==============================
+```
+
+**Milestone Achieved:** Your program produces a structured, readable layout.
+
+### Stage 3: Enhancements — Adding Calculations
+
+Now add a maths calculation to show that Python works as a calculator:
+
+```python
+# Stage 3: Full greeting card with calculation
+print("==============================")
+print("Welcome to My Python Program!")
+print("==============================")
+print("Name: Chidi Okonkwo")
+print("City: Ibadan, Nigeria")
+print("Course: Python Fundamentals")
+print("Lesson: 01 — Introduction")
+print("==============================")
+print("Fun Fact: 2 to the power of 10 =", 2 ** 10)
+print("Fun Fact: 365 days in a year x 24 hours =", 365 * 24, "hours")
+print("==============================")
+print("Keep learning! Every expert was once a beginner.")
+print("==============================")
+```
+
+**Expected Output:**
+```
+==============================
+Welcome to My Python Program!
+==============================
+Name: Chidi Okonkwo
+City: Ibadan, Nigeria
+Course: Python Fundamentals
+Lesson: 01 — Introduction
+==============================
+Fun Fact: 2 to the power of 10 = 1024
+Fun Fact: 365 days in a year x 24 hours = 8760 hours
+==============================
+Keep learning! Every expert was once a beginner.
+==============================
+```
 
 **Reflection Questions:**
-- How does changing the number of `=` signs affect the look?
-- What else could you add to your profile card?
-- How could this idea be extended to a simple contact book?
+- How would you change this to display someone else's name?
+- What other fun facts could you add using Python maths?
+- How could you make the banner wider?
 
-**Optional Advanced Extension:** Try printing the card in a different language for the label names (e.g., use Yoruba or Igbo labels like `Orukọ :` for "Name").
+### Optional Extension: Printing on the Same Line
+
+Try creating a horizontal banner using `end`:
+
+```python
+print("* ", end="")
+print("* ", end="")
+print("* ", end="")
+print("* ", end="")
+print("*")
+```
+
+**Expected Output:**
+```
+* * * * *
+```
+
+> **Advanced Optional:** How could you print 20 stars on one line using only two lines of code? (Hint: think about multiplying strings — you will learn this in a future lesson!)
 
 ---
 
-## Common Beginner Mistakes
+## Section 9 — Common Beginner Mistakes
 
-Here are the most common mistakes beginners make in their very first Python programs — along with the corrected versions.
+Let's look at the most common mistakes new Python learners make — and how to fix them.
 
----
-
-### Mistake 1 — Forgetting Quotation Marks
+### Mistake 1: Forgetting Quotes Around Text
 
 **Wrong:**
 ```python
-print(Hello, World!)
+print(Hello World)
 ```
 
 **Error:**
@@ -605,62 +1055,20 @@ print(Hello, World!)
 SyntaxError: invalid syntax
 ```
 
-**Why it fails:** Python thinks `Hello` is a variable name or command, not text. Text must always be in quotes.
-
-**Correct:**
+**Fixed:**
 ```python
-print("Hello, World!")
+print("Hello World")
 ```
+
+**Why:** Text that is not a number must be wrapped in quotes. Without quotes, Python thinks you are referencing a variable called `Hello`, which does not exist.
 
 ---
 
-### Mistake 2 — Using the Wrong Case for `print`
+### Mistake 2: Using the Wrong Quote Style (Mixing Quotes)
 
 **Wrong:**
 ```python
-Print("Hello, World!")
-```
-
-**Error:**
-```
-NameError: name 'Print' is not defined
-```
-
-**Why it fails:** Python is case-sensitive. The function is `print`, not `Print` or `PRINT`.
-
-**Correct:**
-```python
-print("Hello, World!")
-```
-
----
-
-### Mistake 3 — Missing the Closing Parenthesis
-
-**Wrong:**
-```python
-print("Hello, World!"
-```
-
-**Error:**
-```
-SyntaxError: '(' was never closed
-```
-
-**Why it fails:** Every opening `(` must have a matching closing `)`.
-
-**Correct:**
-```python
-print("Hello, World!")
-```
-
----
-
-### Mistake 4 — Mixing Single and Double Quotes
-
-**Wrong:**
-```python
-print("Hello, World!')
+print("Hello World')
 ```
 
 **Error:**
@@ -668,21 +1076,47 @@ print("Hello, World!')
 SyntaxError: EOL while scanning string literal
 ```
 
-**Why it fails:** You opened with double quotes `"` but tried to close with a single quote `'`. They must match.
-
-**Correct — either of these:**
+**Fixed:**
 ```python
-print("Hello, World!")    # Both double
-print('Hello, World!')    # Both single
+print("Hello World")
+# OR
+print('Hello World')
 ```
+
+**Why:** You must open and close with the same type of quote. If you open with `"`, you must close with `"`. If you open with `'`, you must close with `'`.
 
 ---
 
-### Mistake 5 — Adding Extra Spaces Before `print` at the Top Level
+### Mistake 3: Missing Indentation
 
 **Wrong:**
 ```python
-    print("Hello, World!")
+if 5 > 2:
+print("Five is greater!")
+```
+
+**Error:**
+```
+IndentationError: expected an indented block
+```
+
+**Fixed:**
+```python
+if 5 > 2:
+    print("Five is greater!")
+```
+
+**Why:** Python requires at least one indented line inside blocks like `if` statements. The indentation tells Python which code belongs inside the block.
+
+---
+
+### Mistake 4: Inconsistent Indentation
+
+**Wrong:**
+```python
+if 5 > 2:
+    print("Line one")
+      print("Line two — extra spaces!")
 ```
 
 **Error:**
@@ -690,104 +1124,180 @@ print('Hello, World!')    # Both single
 IndentationError: unexpected indent
 ```
 
-**Why it fails:** The very first line of a simple Python program should not be indented. Indentation is only used inside blocks like `if`, `for`, and functions.
-
-**Correct:**
+**Fixed:**
 ```python
-print("Hello, World!")
+if 5 > 2:
+    print("Line one")
+    print("Line two — consistent now!")
 ```
 
----
-
-### Mistake 6 — Saving the File Without the `.py` Extension
-
-If you save your file as `hello.txt` instead of `hello.py`, running `python hello.txt` may work in some setups but is bad practice. The `.py` extension tells editors and the system that this is a Python file.
-
-**Always name your files:** `something.py`
+**Why:** All lines inside the same block must have the exact same indentation level.
 
 ---
 
-## Reflection Questions
+### Mistake 5: Putting Numbers Inside Quotes When You Want to Do Maths
 
-Take a moment to think about these questions. Try to answer them in your own words — this will solidify your understanding.
-
-1. In your own words, what is Python? Who created it and when?
-2. Name three things Python can be used for in the real world.
-3. What does "interpreted language" mean? How is it different from a compiled language?
-4. Why does Python use indentation instead of curly brackets?
-5. What does the `print()` function do? What would happen if Python did not have it?
-6. Why must text be wrapped in quotation marks in Python?
-7. If you type `Print("Hello")` in Python, what happens and why?
-8. What is the difference between running Python interactively (`>>>`) and running a `.py` file?
-9. Why is Python popular for data science and artificial intelligence?
-10. What is the significance of the `import` keyword? (Think of an analogy.)
-
----
-
-## Completion Checklist
-
-Use this checklist to confirm you have mastered Lesson 01. Tick each item only when you can do it comfortably without looking at notes.
-
-- [ ] I can explain what Python is in simple terms.
-- [ ] I can name at least 4 real-world uses of Python.
-- [ ] I can explain what an interpreted language is.
-- [ ] I know why Python uses indentation and what happens when you forget it.
-- [ ] I can check whether Python is installed on my computer.
-- [ ] I can install Python from the official website.
-- [ ] I have successfully written and run `print("Hello, World!")`.
-- [ ] I understand what quotation marks do in a `print()` statement.
-- [ ] I can explain why `Print("Hello")` causes an error.
-- [ ] I can use the Python interactive command line (`>>>`).
-- [ ] I can check my Python version using `import sys`.
-- [ ] I have completed all three practice exercises.
-- [ ] I have built and run my Personal Introduction Card mini project.
-- [ ] I can describe at least 5 common beginner mistakes and their fixes.
-- [ ] I have answered the reflection questions in my own words.
-
----
-
-## Lesson Summary
-
-Here is everything you learned in Lesson 01, summarised clearly.
-
-**What Python is:** Python is a high-level, interpreted programming language created by Guido van Rossum and released in 1991. It is designed to be readable and concise.
-
-**What Python does:** It is used for web development, data science, machine learning, automation, database work, software development, and rapid prototyping.
-
-**Why Python is special:**
-- Works on Windows, Mac, and Linux.
-- Has simple, English-like syntax.
-- Uses fewer lines of code than most other languages.
-- Is interpreted — runs immediately, line by line.
-- Supports procedural, object-oriented, and functional programming styles.
-
-**Key syntax rules:**
-- Python uses **indentation** (spaces) to define code blocks — not curly brackets.
-- Python uses **new lines** to end statements — not semicolons.
-- Python is **case-sensitive** — `print` is not the same as `Print`.
-- Text (strings) must always be wrapped in **matching quotation marks**.
-
-**Your first program:**
+**Wrong (if you want to add numbers):**
 ```python
-print("Hello, World!")
-```
-Output: `Hello, World!`
-
-**Three ways to run Python:**
-1. An online editor (browser-based, no install needed).
-2. A `.py` file run from the command line: `python hello.py`
-3. The Python interactive shell: type `python` in the terminal.
-
-**Checking your Python version:**
-```python
-import sys
-print(sys.version)
+print("5" + "3")
 ```
 
+**Unexpected Output:**
+```
+53
+```
+
+**What you probably wanted:**
+```python
+print(5 + 3)
+```
+
+**Expected Output:**
+```
+8
+```
+
+**Why:** When numbers are inside quotes, Python treats them as text (strings). Adding two text strings with `+` joins them together (called **concatenation**), not adds them mathematically. So `"5" + "3"` becomes `"53"`, not `8`.
+
 ---
 
-> **What comes next?** In Lesson 02, we will explore Python Syntax in depth — how to write proper Python statements, use comments to add notes in your code, and start working with variables (containers for storing information). Keep going — you are off to a great start!
+### Mistake 6: Running Two Statements on the Same Line Without a Separator
+
+**Wrong:**
+```python
+print("Hello") print("World")
+```
+
+**Error:**
+```
+SyntaxError: invalid syntax
+```
+
+**Fixed:**
+```python
+print("Hello")
+print("World")
+```
+
+**Why:** Python expects one statement per line. If you must put two on one line, separate them with a semicolon (but the recommended practice is always one statement per line).
 
 ---
 
-*Sources: W3Schools Python Tutorial — [python/default.asp](https://www.w3schools.com/python/default.asp), [python/python_intro.asp](https://www.w3schools.com/python/python_intro.asp), [python/python_getstarted.asp](https://www.w3schools.com/python/python_getstarted.asp)*
+### Mistake 7: Case Sensitivity — `Print` Is Not `print`
+
+**Wrong:**
+```python
+Print("Hello World!")
+```
+
+**Error:**
+```
+NameError: name 'Print' is not defined
+```
+
+**Fixed:**
+```python
+print("Hello World!")
+```
+
+**Why:** Python is **case-sensitive**. `print`, `Print`, and `PRINT` are three completely different names in Python. The built-in function is all lowercase: `print`.
+
+---
+
+## Section 10 — Reflection Questions
+
+Take a moment to think about these questions. You do not need to write code — just think through the answers:
+
+1. What is the difference between `print(5)` and `print("5")`? When would each be useful?
+
+2. If you wrote `print("Hello")` and then `print("World")` — what is the output? Now what if you used `end=" "` on the first `print`?
+
+3. Why do you think Python uses indentation to define blocks instead of curly braces `{}` like Java and C? What advantage does indentation give to human readers?
+
+4. A friend writes `print(10 / 3)`. What will they see in the output? Why?
+
+5. You want to calculate how many seconds are in a week. How would you write that as a single `print()` statement? (Hint: 7 days, 24 hours per day, 60 minutes per hour, 60 seconds per minute.)
+
+6. Look at this code:
+```python
+# Calculate total cost
+items = 3
+price = 250
+print("Total cost:", items * price, "Naira")
+```
+What does each line do? What is the output?
+
+---
+
+## Section 11 — Completion Checklist
+
+Use this checklist to confirm you have mastered Lesson 01. Tick each item as you feel confident with it:
+
+- [ ] I can explain what Python is and list at least 3 things it can be used for.
+- [ ] I know when Python was created and by whom.
+- [ ] I have installed Python on my computer (or know how to access it online).
+- [ ] I can check the Python version from the command line.
+- [ ] I can create a `.py` file and run it from the terminal.
+- [ ] I know what a statement is and can write multiple statements.
+- [ ] I understand that Python runs statements from top to bottom.
+- [ ] I understand that each statement goes on its own line.
+- [ ] I know what indentation is and why Python requires it.
+- [ ] I know how to write single-line comments with `#`.
+- [ ] I can use `print()` to display text.
+- [ ] I know that text must be wrapped in quotes.
+- [ ] I can use both double (`"`) and single (`'`) quotes.
+- [ ] I can use `print()` to display numbers without quotes.
+- [ ] I can perform arithmetic operations inside `print()`.
+- [ ] I can use commas inside `print()` to mix text and numbers.
+- [ ] I can use the `end` parameter to control line endings.
+- [ ] I can identify and fix the 7 common beginner mistakes listed in this lesson.
+- [ ] I have completed the mini project greeting card program.
+- [ ] I can answer at least 4 of the 6 reflection questions.
+
+---
+
+## Section 12 — Lesson Summary
+
+Here is a concise summary of everything covered in this lesson.
+
+**Python is a general-purpose programming language** created by Guido van Rossum and released in 1991. It is used for web development, software, data analysis, automation, AI, and much more. Its simple, readable syntax makes it ideal for beginners.
+
+**Installing Python:** Download from python.org. Check installation with `python --version` in your terminal. Python files use the `.py` extension and are run with `python filename.py`.
+
+**Python Syntax Rules:**
+- Code executes line by line, top to bottom.
+- **Indentation is mandatory** to define code blocks (4 spaces is standard).
+- Each statement goes on its own line.
+- Python is case-sensitive (`print` ≠ `Print`).
+
+**Variables** are created simply by assigning a value: `x = 5`.
+
+**Comments** start with `#` and are ignored by Python — they are for humans only.
+
+**Statements** are individual instructions. Python does not require semicolons. One statement per line is best practice.
+
+**The `print()` function:**
+- Displays text (must be in quotes) or numbers (no quotes needed).
+- Each call prints on a new line by default.
+- Use `end=" "` to print on the same line.
+- Commas inside `print()` separate multiple items and automatically add spaces.
+- Arithmetic expressions like `print(5 + 3)` are evaluated before printing.
+
+**Common mistakes:**
+- Forgetting quotes around text → `SyntaxError`
+- Mixing quote types → `SyntaxError`
+- Missing indentation → `IndentationError`
+- Treating numbers as text by adding quotes → wrong maths behaviour
+- Wrong capitalisation of function names → `NameError`
+
+---
+
+## What Comes Next?
+
+In **Lesson 02**, you will dive deep into **Python Variables and Data Types** — you will learn how to store, name, and manipulate different kinds of information including text, whole numbers, decimals, and true/false values. This is where Python programming truly begins to come alive!
+
+Keep practising the examples from this lesson. The more you type code yourself (rather than copy-pasting), the faster your muscle memory and understanding will grow. Every expert programmer started exactly where you are now.
+
+---
+
+*Sources: W3Schools Python Tutorial (python_intro, python_getstarted, python_syntax, python_statements, python_output, python_output_numbers) — https://www.w3schools.com/python/*
