@@ -1,1505 +1,1829 @@
 ---
 render_with_liquid: false
-title: "Python Tuples – A Complete Beginner's Guide"
+title: "Lesson 12: Python Dictionary Methods & If/Elif/Else Conditions"
 nav_order: 12
 ---
 
-# Lesson 12: Python Tuples — Everything You Need to Know
+# Lesson 12: Python Dictionary Methods & If / Elif / Else Conditions
 
 ---
 
-## 📌 Lesson Introduction
+## Lesson Introduction
 
-Welcome to Lesson 12! In the last lesson, you learned about **Lists** — collections of items you can freely change. Today you will meet their close cousin: the **Tuple**.
+Welcome to Lesson 12! In this lesson, you will master two powerful areas of Python programming:
 
-A tuple is also a collection of items. But there's one big difference: **once you create a tuple, you cannot change it**. This might sound strange at first — why would you want data you can't change? By the end of this lesson, you will understand exactly why tuples exist, when to use them, and how to work with them confidently.
+**Part 1 — Dictionary Methods:** Python gives you a built-in toolkit of methods (special actions) that let you do powerful things with dictionaries — like safely reading values, adding new data, removing items, copying, and viewing keys/values in loops. You will learn all 11 official dictionary methods with clear examples.
 
-Here is what you will learn:
-- What a tuple is and why it exists
-- How to create tuples and access items inside them
-- How to work around the "unchangeable" rule when you really need to
-- How to unpack a tuple into separate variables
-- How to loop through a tuple
-- How to join tuples together
-- Which built-in methods tuples provide
-- How to use tuples in real-world mini projects
+**Part 2 — If / Elif / Else Conditions:** Computers make decisions just like humans do. When you wake up and check if it is raining, you decide whether to carry an umbrella. Python does the same — using `if`, `elif`, and `else` to make decisions based on conditions. This section teaches you everything about decision-making in Python, from the simplest `if` check to multi-branch `elif` chains.
 
-**No prior knowledge beyond what was covered in Lessons 1–11 is needed.** If you have completed the Lists lesson, you are perfectly ready. Let's go!
+By the end of this lesson you will be able to:
+- Use all 11 dictionary methods confidently
+- Write `if`, `elif`, and `else` statements correctly
+- Combine dictionaries with conditions to build smart, real-world programs
+- Complete a mini student report card project
 
 ---
 
-## 🔑 Prerequisite Concepts
+## What You Need to Know First (Prerequisites)
 
-Before we begin, let's quickly review a few ideas you already know, because we'll use them throughout this lesson.
+Before continuing, make sure you are comfortable with these concepts. If any of them feel unfamiliar, here is a quick refresher:
 
-### What is a Variable?
+### What is a Dictionary?
 
-A variable is a name that stores a value. For example:
-
-```python
-name = "Alice"
-age = 25
-```
-
-`name` stores the text `"Alice"`. `age` stores the number `25`.
-
-### What is a List?
-
-A list is a collection of items stored in a single variable, written with **square brackets** `[ ]`.
+A **dictionary** is a Python data structure that stores information in **key-value pairs**. Think of it like a real-world dictionary: you look up a word (the key) and get its meaning (the value).
 
 ```python
-fruits = ["apple", "banana", "cherry"]
-print(fruits)
+# A simple dictionary
+student = {
+    "name": "Amara",
+    "age": 17,
+    "grade": "A"
+}
 ```
 
-**Output:**
-```
-['apple', 'banana', 'cherry']
-```
+- `"name"`, `"age"`, `"grade"` are **keys** — they are labels for your data
+- `"Amara"`, `17`, `"A"` are **values** — they are the actual data
 
-You can **change** a list after creating it — add items, remove items, swap items.
-
-### What is an Index?
-
-An index is the position number of an item in a collection. Python counts from **0**, not from 1.
+You access a value using its key:
 
 ```python
-fruits = ["apple", "banana", "cherry"]
-#          index 0   index 1   index 2
-print(fruits[0])  # apple
-print(fruits[2])  # cherry
+print(student["name"])   # Output: Amara
+print(student["age"])    # Output: 17
 ```
 
-**Output:**
-```
-apple
-cherry
+### What is a Method?
+
+A **method** is a built-in action that belongs to a data type. You call it using a dot (`.`) after the variable name. For example:
+
+```python
+my_dict.keys()    # The keys() method belongs to dictionaries
+my_list.append()  # The append() method belongs to lists
 ```
 
-Now you are ready for tuples!
+Think of methods as the dictionary's own built-in tools.
+
+### What is a Boolean?
+
+A **Boolean** is a value that is either `True` or `False`. This is the foundation of all conditions in Python.
+
+```python
+is_raining = True
+is_sunny = False
+```
+
+### What is a Comparison Operator?
+
+Comparison operators compare two values and produce a Boolean result (`True` or `False`):
+
+| Operator | Meaning                  | Example       | Result  |
+|----------|--------------------------|---------------|---------|
+| `==`     | Equal to                 | `5 == 5`      | `True`  |
+| `!=`     | Not equal to             | `5 != 3`      | `True`  |
+| `>`      | Greater than             | `10 > 3`      | `True`  |
+| `<`      | Less than                | `2 < 8`       | `True`  |
+| `>=`     | Greater than or equal to | `5 >= 5`      | `True`  |
+| `<=`     | Less than or equal to    | `4 <= 6`      | `True`  |
 
 ---
 
-## 🧠 Part 1: What is a Tuple?
-
-### The Big Idea
-
-Imagine you are writing a program that stores the **GPS coordinates** of a city — say, latitude and longitude. These values should **never change** because Lagos is always at the same location on Earth. You don't want any part of your code accidentally modifying them.
-
-For situations like this, Python gives you the **tuple** — a collection that is **locked** after creation.
-
-> **Analogy:** Think of a list as a whiteboard you can erase and rewrite anytime. A tuple is a **printed certificate** — once it is printed, no one can change what it says.
-
-### Technical Definition
-
-A **tuple** is a collection in Python that is:
-- **Ordered** — items have a fixed position (index 0, 1, 2, ...)
-- **Unchangeable (Immutable)** — you cannot add, remove, or change items after creation
-- **Allows duplicates** — the same value can appear more than once
-
-Tuples are written with **round brackets (parentheses)** `( )`.
+# PART 1: Python Dictionary Methods
 
 ---
 
-## 🔍 Part 2: Creating Tuples
+## Section 1 — What Are Dictionary Methods and Why Do They Exist?
 
-### 2.1 Basic Tuple Syntax
+Imagine you have a dictionary of student scores, and you want to:
+- Safely check if a student's score exists without crashing your program
+- Get a list of all student names
+- Remove a student from the dictionary
+- Make a copy so you don't accidentally change the original
 
-```python
-# Creating a simple tuple
-mytuple = ("apple", "banana", "cherry")
-print(mytuple)
-```
+Doing all of this manually (writing many lines of code from scratch) would be tedious and error-prone. Python's **dictionary methods** are pre-built, ready-to-use tools that do all of this for you in one line.
 
-**Output:**
-```
-('apple', 'banana', 'cherry')
-```
+Python has **11 built-in dictionary methods**:
 
-Let's break this line down:
-- `mytuple` — the name we give this tuple (just like any variable name)
-- `=` — the assignment operator; it says "store this value in this variable"
-- `(` — the opening round bracket; this tells Python we are creating a tuple
-- `"apple", "banana", "cherry"` — three items separated by commas
-- `)` — the closing round bracket
+| Method          | What It Does                                                              |
+|-----------------|---------------------------------------------------------------------------|
+| `clear()`       | Removes all items from the dictionary (empties it)                       |
+| `copy()`        | Makes a shallow copy of the dictionary                                   |
+| `fromkeys()`    | Creates a new dictionary from a list of keys, with a shared value        |
+| `get()`         | Safely returns the value for a key (no crash if key is missing)          |
+| `items()`       | Returns all key-value pairs as a list of tuples                          |
+| `keys()`        | Returns all keys in the dictionary                                        |
+| `pop()`         | Removes a specific key and returns its value                             |
+| `popitem()`     | Removes and returns the last inserted key-value pair                     |
+| `setdefault()`  | Returns a key's value; inserts the key with a default if it doesn't exist|
+| `update()`      | Adds or updates multiple key-value pairs at once                         |
+| `values()`      | Returns all values in the dictionary                                      |
 
-> **Why round brackets?** Square brackets `[ ]` are for lists. Round brackets `( )` are for tuples. This difference helps Python (and you!) tell them apart instantly.
-
----
-
-### 2.2 Tuple Items are Ordered
-
-When we say a tuple is **ordered**, we mean every item has a specific position that never changes.
-
-```python
-colors = ("red", "green", "blue")
-#          pos 0   pos 1    pos 2
-print(colors[0])  # red
-print(colors[1])  # green
-print(colors[2])  # blue
-```
-
-**Output:**
-```
-red
-green
-blue
-```
-
-If you create a tuple with `("red", "green", "blue")`, red will **always** be at position 0 and blue will **always** be at position 2.
+We will go through each one clearly with examples.
 
 ---
 
-### 2.3 Tuples Allow Duplicates
+## Method 1: `keys()` — Get All Keys
 
-Since items are identified by position (index), the same value can appear more than once:
+### What Is It?
+
+`keys()` returns a special view object that lists all the **keys** (labels) in your dictionary.
+
+**Why use it?** When you want to see what keys exist, loop through them, or check if a key is in your dictionary.
+
+### Simple Example
 
 ```python
-thistuple = ("apple", "banana", "cherry", "apple", "cherry")
-print(thistuple)
+person = {"name": "Chidi", "age": 25, "city": "Lagos"}
+
+all_keys = person.keys()
+print(all_keys)
 ```
 
-**Output:**
+**Expected Output:**
 ```
-('apple', 'banana', 'cherry', 'apple', 'cherry')
+dict_keys(['name', 'age', 'city'])
 ```
 
-Both `"apple"` values are perfectly valid — one is at index 0 and the other at index 3. They occupy different positions.
+> 💡 The output shows `dict_keys([...])` — this is a special view object, not a regular list. But you can use it in loops just like a list!
+
+### Using `keys()` in a Loop
+
+```python
+person = {"name": "Chidi", "age": 25, "city": "Lagos"}
+
+for key in person.keys():
+    print(key)
+```
+
+**Expected Output:**
+```
+name
+age
+city
+```
+
+**Line-by-line explanation:**
+- `for key in person.keys():` — loop through every key in the dictionary
+- `print(key)` — print each key on its own line
+
+### Checking If a Key Exists Using `in`
+
+```python
+person = {"name": "Chidi", "age": 25, "city": "Lagos"}
+
+print("name" in person.keys())    # Output: True
+print("salary" in person.keys())  # Output: False
+```
+
+> 🤔 **Thinking prompt:** What would happen if you tried `person["salary"]` directly? You would get a `KeyError`! That is why checking first (or using `.get()`) is so important.
 
 ---
 
-### 2.4 Tuple Length with `len()`
+## Method 2: `values()` — Get All Values
 
-To count how many items are in a tuple, use the `len()` function (short for "length"):
+### What Is It?
+
+`values()` returns a view of all the **values** in your dictionary.
+
+**Why use it?** When you only care about the data, not the labels — for example, calculating the total of all scores.
+
+### Simple Example
 
 ```python
-thistuple = ("apple", "banana", "cherry")
-print(len(thistuple))
+scores = {"maths": 85, "english": 90, "science": 78}
+
+print(scores.values())
 ```
 
-**Output:**
+**Expected Output:**
 ```
-3
+dict_values([85, 90, 78])
 ```
 
-`len()` counts the items and gives you back a whole number.
+### Looping Through Values
+
+```python
+scores = {"maths": 85, "english": 90, "science": 78}
+
+for score in scores.values():
+    print(score)
+```
+
+**Expected Output:**
+```
+85
+90
+78
+```
+
+### Practical Use — Calculating the Total
+
+```python
+scores = {"maths": 85, "english": 90, "science": 78}
+
+total = sum(scores.values())
+print("Total score:", total)
+```
+
+**Expected Output:**
+```
+Total score: 253
+```
+
+**Explanation:**
+- `sum(scores.values())` — Python's built-in `sum()` function adds all the values together
+- The result is stored in `total` and printed
 
 ---
 
-### 2.5 The Tricky One-Item Tuple
+## Method 3: `items()` — Get All Key-Value Pairs
 
-What if you want a tuple with just one item? You might try this:
+### What Is It?
 
-```python
-# This is NOT a tuple — Python thinks the brackets are just grouping
-thistuple = ("apple")
-print(type(thistuple))
-```
+`items()` returns a view of all key-value pairs. Each pair is wrapped in a **tuple** — a bracket `()` that holds two items: the key and the value.
 
-**Output:**
-```
-<class 'str'>
-```
+**Why use it?** When you want to loop through a dictionary and need both the key AND the value at the same time.
 
-Python saw `("apple")` and thought: "This is just the word 'apple' in brackets, like in math — it is still a string." To make Python recognise it as a **tuple**, you must add a **trailing comma** after the single item:
+### Simple Example
 
 ```python
-# THIS is a one-item tuple
-thistuple = ("apple",)
-print(type(thistuple))
+student = {"name": "Fatima", "score": 92, "grade": "A"}
+
+print(student.items())
 ```
 
-**Output:**
+**Expected Output:**
 ```
-<class 'tuple'>
+dict_items([('name', 'Fatima'), ('score', 92), ('grade', 'A')])
 ```
 
-> **Remember the comma rule:** A one-item tuple must have a comma after the item. `("apple",)` ✅ — `("apple")` ❌
+Each pair like `('name', 'Fatima')` is a **tuple** — the key comes first, then the value.
+
+### Looping with `items()` — The Most Common Pattern
+
+```python
+student = {"name": "Fatima", "score": 92, "grade": "A"}
+
+for key, value in student.items():
+    print(key, "->", value)
+```
+
+**Expected Output:**
+```
+name -> Fatima
+score -> 92
+grade -> A
+```
+
+**Line-by-line explanation:**
+- `for key, value in student.items():` — for each pair, Python automatically unpacks it into two variables: `key` and `value`
+- `print(key, "->", value)` — print both the key and its value with an arrow between them
+
+> 💡 This is one of the most commonly used patterns in all of Python programming! You will use it constantly.
 
 ---
 
-### 2.6 Tuples Can Hold Mixed Data Types
+## Method 4: `get()` — Safely Read a Value
 
-A tuple is not restricted to only strings or only numbers. It can hold any mix:
+### What Is It?
+
+`get(key)` returns the value for the given key. But unlike `dict[key]`, it does **not crash** if the key doesn't exist — it returns `None` (or a default value you choose) instead.
+
+**Why use it?** To safely read dictionary values without risking a `KeyError` crash.
+
+### The Problem Without `get()`
 
 ```python
-# Only strings
-tuple1 = ("apple", "banana", "cherry")
+person = {"name": "Emeka", "age": 30}
 
-# Only integers
-tuple2 = (1, 5, 7, 9, 3)
-
-# Only booleans
-tuple3 = (True, False, False)
-
-# Mixed types
-tuple4 = ("abc", 34, True, 40, "male")
-
-print(tuple1)
-print(tuple2)
-print(tuple3)
-print(tuple4)
+# This CRASHES with a KeyError if 'salary' doesn't exist:
+print(person["salary"])   # KeyError: 'salary'
 ```
 
-**Output:**
-```
-('apple', 'banana', 'cherry')
-(1, 5, 7, 9, 3)
-(False, False, False)
-('abc', 34, True, 40, 'male')
+### The Safe Way with `get()`
+
+```python
+person = {"name": "Emeka", "age": 30}
+
+salary = person.get("salary")
+print(salary)
 ```
 
-This is useful in real programs. For example, you might store a record about a student as `("Alice", 17, True, "Senior")` — name, age, enrolled status, year group — all in one tuple.
+**Expected Output:**
+```
+None
+```
+
+No crash! It returned `None` because `"salary"` doesn't exist in the dictionary.
+
+### Using a Default Value with `get()`
+
+You can provide a second argument — the value to return if the key is missing:
+
+```python
+person = {"name": "Emeka", "age": 30}
+
+salary = person.get("salary", 0)
+print(salary)
+```
+
+**Expected Output:**
+```
+0
+```
+
+**Explanation:**
+- `person.get("salary", 0)` — look for `"salary"`; if not found, return `0` instead of `None`
+
+### Second Example
+
+```python
+inventory = {"apples": 10, "oranges": 5}
+
+# Key exists:
+print(inventory.get("apples", 0))    # Output: 10
+
+# Key doesn't exist:
+print(inventory.get("bananas", 0))   # Output: 0
+```
+
+> 🤔 **Thinking prompt:** Why is `get()` safer than `dict[key]` in a real application? What would happen in a school database if you tried to access a student that doesn't exist?
 
 ---
 
-### 2.7 Checking the Data Type
+## Method 5: `update()` — Add or Modify Multiple Items
 
-Python stores tuples as objects of type `tuple`. You can verify this with `type()`:
+### What Is It?
+
+`update()` lets you add new key-value pairs or change existing ones — all at once — by passing in another dictionary or keyword arguments.
+
+**Why use it?** When you need to update many things in a dictionary at once, instead of doing it one by one.
+
+### Simple Example — Adding New Keys
 
 ```python
-mytuple = ("apple", "banana", "cherry")
-print(type(mytuple))
+profile = {"name": "Ngozi", "age": 22}
+
+profile.update({"city": "Abuja", "job": "Engineer"})
+
+print(profile)
 ```
 
-**Output:**
+**Expected Output:**
 ```
-<class 'tuple'>
+{'name': 'Ngozi', 'age': 22, 'city': 'Abuja', 'job': 'Engineer'}
+```
+
+**Explanation:**
+- `profile.update({...})` — pass a dictionary with new pairs to add
+- Python merges the new dictionary into the existing one
+
+### Updating Existing Keys
+
+```python
+product = {"name": "Laptop", "price": 500, "stock": 10}
+
+product.update({"price": 450, "stock": 8})
+
+print(product)
+```
+
+**Expected Output:**
+```
+{'name': 'Laptop', 'price': 450, 'stock': 8}
+```
+
+The price and stock were updated. The name stayed the same.
+
+### Update Using Keyword Arguments
+
+```python
+car = {"brand": "Toyota", "year": 2018}
+
+car.update(year=2023, color="Red")
+
+print(car)
+```
+
+**Expected Output:**
+```
+{'brand': 'Toyota', 'year': 2023, 'color': 'Red'}
 ```
 
 ---
 
-### 2.8 Using the `tuple()` Constructor
+## Method 6: `pop()` — Remove a Specific Key
 
-Another way to create a tuple is to use the built-in `tuple()` function (called a **constructor**). Notice the **double round brackets** — one belongs to the function call, the other belongs to the inner collection:
+### What Is It?
+
+`pop(key)` removes the item with the given key from the dictionary AND returns its value so you can use it.
+
+**Why use it?** When you need to both remove a key and use the value it had.
+
+### Simple Example
 
 ```python
-thistuple = tuple(("apple", "banana", "cherry"))  # note the double round-brackets
-print(thistuple)
+cart = {"apple": 3, "banana": 5, "mango": 2}
+
+removed_value = cart.pop("banana")
+
+print("Removed:", removed_value)
+print("Cart after:", cart)
 ```
 
-**Output:**
+**Expected Output:**
 ```
-('apple', 'banana', 'cherry')
+Removed: 5
+Cart after: {'apple': 3, 'mango': 2}
 ```
 
-> **Thinking Prompt:** Why would you ever use `tuple()` instead of just writing `(...)` ? This comes in handy when you start with a list and want to convert it into a tuple, like `tuple(my_list)`.
+**Explanation:**
+- `cart.pop("banana")` — removes `"banana"` from the dictionary and returns `5` (the value)
+- We store that returned value in `removed_value`
+
+### Using a Default Value to Avoid KeyError
+
+If the key doesn't exist and you don't provide a default, `pop()` crashes:
+
+```python
+cart = {"apple": 3, "mango": 2}
+
+# Safe pop with default:
+result = cart.pop("banana", "Not in cart")
+print(result)
+```
+
+**Expected Output:**
+```
+Not in cart
+```
+
+> 🤔 **Thinking prompt:** What happens if you call `pop()` on a key that doesn't exist, without providing a default? Try it and see!
 
 ---
 
-### 2.9 Python's Four Collection Types — Side by Side
+## Method 7: `popitem()` — Remove the Last Item
 
-Python has four ways to store collections of data. Here's how they compare:
+### What Is It?
 
-| Collection | Symbol | Ordered? | Changeable? | Duplicates? |
-|---|---|---|---|---|
-| **List** | `[ ]` | ✅ Yes | ✅ Yes | ✅ Yes |
-| **Tuple** | `( )` | ✅ Yes | ❌ No | ✅ Yes |
-| **Set** | `{ }` | ❌ No | ⚠️ Items can't change | ❌ No |
-| **Dictionary** | `{ key: value }` | ✅ Yes (Python 3.7+) | ✅ Yes | ❌ No (keys) |
+`popitem()` removes and returns the **last inserted** key-value pair as a tuple.
 
-Choosing the right one matters. Use a **tuple** when your data should stay fixed, like coordinates, RGB colour values, or days of the week.
+**Why use it?** Useful when you want to process and remove items one at a time from the end, like a stack.
+
+### Simple Example
+
+```python
+data = {"a": 1, "b": 2, "c": 3}
+
+last_item = data.popitem()
+
+print("Removed:", last_item)
+print("Dictionary after:", data)
+```
+
+**Expected Output:**
+```
+Removed: ('c', 3)
+Dictionary after: {'a': 1, 'b': 2}
+```
+
+**Explanation:**
+- `data.popitem()` removes `('c', 3)` because `"c"` was inserted last
+- It returns the pair as a tuple
+
+> ⚠️ **Common Mistake:** In Python versions before 3.7, `popitem()` removed a random item. In Python 3.7+, it always removes the LAST inserted item. Always check your Python version.
 
 ---
 
-## 🔍 Part 3: Accessing Tuple Items
+## Method 8: `clear()` — Empty the Dictionary
 
-Now that you know how to create tuples, let's look at how to **read individual items** from them.
+### What Is It?
 
-### 3.1 Accessing by Positive Index
+`clear()` removes ALL items from the dictionary, leaving it completely empty.
 
-Just like lists, you access a tuple item using square brackets with the index number.
+**Why use it?** When you want to reset a dictionary and start fresh without deleting the variable itself.
 
-```python
-thistuple = ("apple", "banana", "cherry")
-print(thistuple[1])
-```
-
-**Output:**
-```
-banana
-```
-
-Remember: index **0** is the first item, index **1** is the second, and so on.
+### Simple Example
 
 ```python
-fruits = ("mango", "kiwi", "grape", "pear")
-print(fruits[0])   # first item
-print(fruits[3])   # fourth item
+user_data = {"name": "Kola", "score": 95, "level": 3}
+
+print("Before:", user_data)
+
+user_data.clear()
+
+print("After:", user_data)
 ```
 
-**Output:**
+**Expected Output:**
 ```
-mango
-pear
+Before: {'name': 'Kola', 'score': 95, 'level': 3}
+After: {}
 ```
 
-> **Thinking Prompt:** What happens if you try `fruits[4]` when there are only 4 items (indices 0–3)? Try it and read the error message carefully!
+The `{}` means the dictionary is now empty.
+
+> ⚠️ **Common Mistake:** Don't confuse `clear()` with reassigning: `user_data = {}` also empties it, but `clear()` is the "correct" method because it modifies the existing dictionary in place. If another variable points to the same dictionary, `clear()` affects both; reassignment only affects the one variable.
 
 ---
 
-### 3.2 Negative Indexing — Counting from the End
+## Method 9: `copy()` — Make a Duplicate
 
-Python allows **negative indexing**, which counts backwards from the end of the tuple.
+### What Is It?
 
-- `-1` = the **last** item
-- `-2` = the **second to last** item
-- `-3` = the **third from the end**, etc.
+`copy()` creates a **shallow copy** of the dictionary — a new independent dictionary with the same keys and values.
+
+**Why use it?** To work with a duplicate so you don't accidentally change the original.
+
+### The Problem Without `copy()`
 
 ```python
-thistuple = ("apple", "banana", "cherry")
-print(thistuple[-1])   # last item
-print(thistuple[-2])   # second to last
+original = {"name": "Ada", "score": 80}
+
+# This does NOT create a new dict — it just creates another name for the same dict:
+alias = original
+
+alias["score"] = 99   # This also changes original!
+
+print("Original:", original)
+print("Alias:", alias)
 ```
 
-**Output:**
+**Expected Output:**
 ```
-cherry
-banana
+Original: {'name': 'Ada', 'score': 99}
+Alias: {'name': 'Ada', 'score': 99}
 ```
 
-This is extremely useful when you don't know the exact length of a tuple but always need the last item.
+Both changed! That's because `alias` and `original` point to the **same** dictionary in memory.
 
-**Real-world use:** In data processing, you might receive a tuple of sensor readings. You almost always want the most recent (last) reading — `readings[-1]` gets it without needing to know the total count.
+### The Safe Way with `copy()`
+
+```python
+original = {"name": "Ada", "score": 80}
+
+backup = original.copy()   # A truly separate copy
+
+backup["score"] = 99       # Only changes backup
+
+print("Original:", original)
+print("Backup:", backup)
+```
+
+**Expected Output:**
+```
+Original: {'name': 'Ada', 'score': 80}
+Backup: {'name': 'Ada', 'score': 99}
+```
+
+Now the original is safe!
 
 ---
 
-### 3.3 Range of Indexes (Slicing)
+## Method 10: `fromkeys()` — Create a New Dictionary from Keys
 
-You can extract a **portion** (called a "slice") of a tuple by specifying a start and end index:
+### What Is It?
 
-```python
-thistuple = ("apple", "banana", "cherry", "orange", "kiwi", "melon", "mango")
-print(thistuple[2:5])
-```
+`fromkeys(keys, value)` creates a **brand new dictionary** using a list of keys, all set to the same value.
 
-**Output:**
-```
-('cherry', 'orange', 'kiwi')
-```
+**Why use it?** When you want to initialize a dictionary quickly with many keys all set to the same starting value — like all scores starting at 0.
 
-The slice `[2:5]` means:
-- **Start at index 2** (included) — `"cherry"`
-- **Stop before index 5** (not included) — so stop before `"kiwi"` at index 4
-
-> **Important rule:** The end index is **exclusive** — the item at that index is NOT included. `[2:5]` gives you items at positions 2, 3, and 4 — NOT 5.
-
-**Leaving out the start — slice from the beginning:**
+### Simple Example
 
 ```python
-thistuple = ("apple", "banana", "cherry", "orange", "kiwi", "melon", "mango")
-print(thistuple[:4])
+subjects = ["maths", "english", "science"]
+
+scores = dict.fromkeys(subjects, 0)
+
+print(scores)
 ```
 
-**Output:**
+**Expected Output:**
 ```
-('apple', 'banana', 'cherry', 'orange')
+{'maths': 0, 'english': 0, 'science': 0}
 ```
 
-No start means "begin at index 0".
+**Explanation:**
+- `dict.fromkeys(subjects, 0)` — creates a new dict using `subjects` as keys, all set to `0`
+- Notice: we call it on `dict` (the class), not on an existing dictionary
 
-**Leaving out the end — slice to the end:**
+### Without a Default Value
 
 ```python
-thistuple = ("apple", "banana", "cherry", "orange", "kiwi", "melon", "mango")
-print(thistuple[2:])
+keys = ["a", "b", "c"]
+
+new_dict = dict.fromkeys(keys)
+
+print(new_dict)
 ```
 
-**Output:**
+**Expected Output:**
 ```
-('cherry', 'orange', 'kiwi', 'melon', 'mango')
+{'a': None, 'b': None, 'c': None}
 ```
 
-No end means "go all the way to the last item".
+When no value is specified, all keys default to `None`.
 
 ---
 
-### 3.4 Negative Index Slicing
+## Method 11: `setdefault()` — Get Value or Insert Default
 
-You can also slice using negative indexes:
+### What Is It?
+
+`setdefault(key, default)` is like `get()`, but with an extra superpower: if the key **doesn't exist**, it **inserts the key** with the default value into the dictionary.
+
+**Why use it?** When you want to ensure a key exists with a starting value, but don't want to overwrite it if it already has a value.
+
+### Simple Example
 
 ```python
-thistuple = ("apple", "banana", "cherry", "orange", "kiwi", "melon", "mango")
-print(thistuple[-4:-1])
+data = {"name": "Bola"}
+
+# Key doesn't exist — it gets inserted with default value:
+result = data.setdefault("score", 0)
+
+print("Result:", result)
+print("Dictionary:", data)
 ```
 
-**Output:**
+**Expected Output:**
 ```
-('orange', 'kiwi', 'melon')
+Result: 0
+Dictionary: {'name': 'Bola', 'score': 0}
 ```
 
-`[-4:-1]` means: from the 4th-from-last item (index -4, which is "orange"), up to but not including the last item (index -1, which is "mango").
+### Key Already Exists — No Overwrite
+
+```python
+data = {"name": "Bola", "score": 95}
+
+# Key already exists — returns existing value without changing it:
+result = data.setdefault("score", 0)
+
+print("Result:", result)
+print("Dictionary:", data)
+```
+
+**Expected Output:**
+```
+Result: 95
+Dictionary: {'name': 'Bola', 'score': 95}
+```
+
+The score stayed `95` — `setdefault()` never overwrites an existing value.
+
+> 💡 **Real-world use:** `setdefault()` is widely used when counting things. For example, counting how many times each word appears in a text.
+
+```python
+text = ["apple", "banana", "apple", "cherry", "banana", "apple"]
+counts = {}
+
+for word in text:
+    counts.setdefault(word, 0)   # Make sure the key exists with 0
+    counts[word] += 1             # Increment the count
+
+print(counts)
+```
+
+**Expected Output:**
+```
+{'apple': 3, 'banana': 2, 'cherry': 1}
+```
 
 ---
 
-### 3.5 Checking if an Item Exists — The `in` Keyword
+## Guided Practice — Dictionary Methods
 
-To check if a specific value is present in a tuple, use the `in` keyword:
+### Exercise 1: Student Report System
 
-```python
-thistuple = ("apple", "banana", "cherry")
-if "apple" in thistuple:
-    print("Yes, 'apple' is in the fruits tuple")
-```
+**Objective:** Use dictionary methods to manage a student's data safely and efficiently.
 
-**Output:**
-```
-Yes, 'apple' is in the fruits tuple
-```
+**Scenario:** You are building a school database tool. You have a student's record and need to perform several operations on it.
 
-This returns `True` if the item is found, `False` if not.
+**Setup:**
 
 ```python
-thistuple = ("apple", "banana", "cherry")
-print("mango" in thistuple)    # False
-print("banana" in thistuple)   # True
+student = {
+    "name": "Tunde",
+    "age": 16,
+    "maths": 72,
+    "english": 88
+}
 ```
 
-**Output:**
+**Steps:**
+
+**Step 1 — Add new subjects using `update()`:**
+
+```python
+student.update({"science": 91, "history": 65})
+print(student)
+```
+
+**Expected Output:**
+```
+{'name': 'Tunde', 'age': 16, 'maths': 72, 'english': 88, 'science': 91, 'history': 65}
+```
+
+**Step 2 — Safely get a subject that might not exist using `get()`:**
+
+```python
+art_score = student.get("art", "Not enrolled")
+print("Art:", art_score)
+```
+
+**Expected Output:**
+```
+Art: Not enrolled
+```
+
+**Step 3 — Print all subjects and scores using `items()`:**
+
+```python
+for subject, value in student.items():
+    print(f"{subject}: {value}")
+```
+
+**Expected Output:**
+```
+name: Tunde
+age: 16
+maths: 72
+english: 88
+science: 91
+history: 65
+```
+
+**Step 4 — Calculate average score using `values()`:**
+
+```python
+# Only average the actual scores (not name or age)
+score_subjects = {"maths": 72, "english": 88, "science": 91, "history": 65}
+scores_only = list(score_subjects.values())
+average = sum(scores_only) / len(scores_only)
+print("Average score:", average)
+```
+
+**Expected Output:**
+```
+Average score: 79.0
+```
+
+**Step 5 — Remove a subject using `pop()`:**
+
+```python
+removed = student.pop("history")
+print("Removed history score:", removed)
+print("Updated student:", student)
+```
+
+**Expected Output:**
+```
+Removed history score: 65
+Updated student: {'name': 'Tunde', 'age': 16, 'maths': 72, 'english': 88, 'science': 91}
+```
+
+**Self-check Questions:**
+1. What would `get()` return if we searched for a key that doesn't exist and gave no default?
+2. What is the difference between `pop()` and `popitem()`?
+3. Why is `copy()` important when sharing dictionaries?
+
+---
+
+# PART 2: Python If / Elif / Else Conditions
+
+---
+
+## Section 2 — What Are Conditions and Why Do We Need Them?
+
+Every program needs to make **decisions**. Think about these real-world situations:
+
+- **ATM machine:** "If the PIN is correct, allow withdrawal. Otherwise, deny access."
+- **Weather app:** "If temperature > 35°C, show 'Hot'. If 20–35°C, show 'Warm'. If below 20°C, show 'Cool'."
+- **Video game:** "If health = 0, display Game Over."
+- **School system:** "If score >= 70, display 'Pass'. Otherwise, display 'Fail'."
+
+In Python, we express decisions using three keywords: `if`, `elif`, and `else`.
+
+---
+
+## Section 3 — Python Comparison Operators (Refresher + More)
+
+These operators evaluate to `True` or `False` and are the building blocks of all conditions:
+
+```python
+a = 10
+b = 20
+
+print(a == b)   # Equal? → False
+print(a != b)   # Not equal? → True
+print(a < b)    # Less than? → True
+print(a > b)    # Greater than? → False
+print(a <= 10)  # Less than or equal? → True
+print(b >= 20)  # Greater than or equal? → True
+```
+
+**Expected Output:**
 ```
 False
+True
+True
+False
+True
 True
 ```
 
 ---
 
-## 🔍 Part 4: Updating Tuples (Workarounds)
+## Section 4 — The `if` Statement
 
-### Why Can't We Change a Tuple?
+### What Is It?
 
-You now know tuples are **immutable** (unchangeable). If you try to directly modify a tuple item, Python will throw an error:
+The `if` statement checks a condition. If the condition is `True`, Python runs the code block inside the `if`. If the condition is `False`, Python skips that block.
 
-```python
-thistuple = ("apple", "banana", "cherry")
-thistuple[1] = "kiwi"   # ❌ This will cause an error!
+### The Structure
+
+```
+if condition:
+    code to run when condition is True
 ```
 
-**Error:**
-```
-TypeError: 'tuple' object does not support item assignment
-```
+> ⚠️ **Critical Rule — Indentation:** The code inside the `if` block MUST be indented (moved right) with spaces or a tab. Python uses indentation to know what belongs inside the `if`. Other languages use `{}` brackets, but Python uses indentation.
 
-This is by design — tuples are meant to be permanent. But Python is flexible. If you truly need to change a tuple's data, there are three workarounds.
-
----
-
-### 4.1 Workaround 1: Convert → Change → Convert Back
-
-The most common approach:
-1. Convert the tuple to a **list** (mutable)
-2. Make your changes
-3. Convert the list back to a **tuple**
+### Very Simple Example
 
 ```python
-x = ("apple", "banana", "cherry")
+temperature = 38
 
-# Step 1: Convert tuple to list
-y = list(x)
-
-# Step 2: Change the item
-y[1] = "kiwi"
-
-# Step 3: Convert back to tuple
-x = tuple(y)
-
-print(x)
-```
-
-**Output:**
-```
-('apple', 'kiwi', 'cherry')
-```
-
-Let's trace through every step:
-- `y = list(x)` — creates `["apple", "banana", "cherry"]` (a list)
-- `y[1] = "kiwi"` — replaces "banana" with "kiwi" in the **list**
-- `x = tuple(y)` — converts the modified list back into a tuple
-- Now `x` points to a brand new tuple `('apple', 'kiwi', 'cherry')`
-
----
-
-### 4.2 Workaround 2: Adding Items via List Conversion
-
-Since tuples have no `.append()` method, use the list conversion trick:
-
-```python
-thistuple = ("apple", "banana", "cherry")
-
-# Convert to list, add item, convert back
-y = list(thistuple)
-y.append("orange")
-thistuple = tuple(y)
-
-print(thistuple)
-```
-
-**Output:**
-```
-('apple', 'banana', 'cherry', 'orange')
-```
-
----
-
-### 4.3 Workaround 3: Adding Items by Concatenating Tuples
-
-You can **add two tuples together** to create a new, longer tuple:
-
-```python
-thistuple = ("apple", "banana", "cherry")
-y = ("orange",)          # single-item tuple — note the trailing comma!
-thistuple += y           # += is shorthand for: thistuple = thistuple + y
-
-print(thistuple)
-```
-
-**Output:**
-```
-('apple', 'banana', 'cherry', 'orange')
-```
-
-`+=` here adds the second tuple to the end of the first, creating a new combined tuple.
-
-> **Note:** `("orange",)` uses a trailing comma because it is a one-item tuple. `("orange")` without the comma is just a string in parentheses.
-
----
-
-### 4.4 Removing Items from a Tuple
-
-You **cannot** directly remove items from a tuple. But you can:
-
-**Option A: Convert to list, remove, convert back:**
-
-```python
-thistuple = ("apple", "banana", "cherry")
-y = list(thistuple)
-y.remove("apple")
-thistuple = tuple(y)
-print(thistuple)
-```
-
-**Output:**
-```
-('banana', 'cherry')
-```
-
-**Option B: Delete the entire tuple with `del`:**
-
-```python
-thistuple = ("apple", "banana", "cherry")
-del thistuple
-# print(thistuple)  # This would raise an error — thistuple no longer exists
-```
-
-After `del thistuple`, the variable `thistuple` is completely removed from memory. Trying to use it afterwards will produce a `NameError`.
-
----
-
-## 🔍 Part 5: Unpacking Tuples
-
-### What Does "Packing" Mean?
-
-When you assign values to a tuple like this:
-
-```python
-fruits = ("apple", "banana", "cherry")
-```
-
-You are **packing** three values into a single tuple variable. The values are bundled together in `fruits`.
-
-### What Does "Unpacking" Mean?
-
-**Unpacking** is the reverse: extracting the values back out into separate individual variables.
-
-```python
-fruits = ("apple", "banana", "cherry")
-
-# Unpack the tuple into three variables
-(green, yellow, red) = fruits
-
-print(green)
-print(yellow)
-print(red)
-```
-
-**Output:**
-```
-apple
-banana
-cherry
-```
-
-Line by line:
-- `(green, yellow, red) = fruits` — Python looks at the tuple `fruits` and assigns each value to the matching variable in order
-- `green` gets `"apple"` (position 0)
-- `yellow` gets `"banana"` (position 1)
-- `red` gets `"cherry"` (position 2)
-
-> **Rule:** The number of variables on the left **must match** the number of items in the tuple. If they don't match and you haven't used an asterisk `*`, Python will raise a `ValueError`.
-
-**Real-world use:** When a function returns multiple values as a tuple, you can unpack them in one clean line:
-
-```python
-def get_coordinates():
-    return (6.5244, 3.3792)   # Latitude and Longitude of Lagos
-
-lat, lon = get_coordinates()
-print(f"Latitude: {lat}, Longitude: {lon}")
-```
-
-**Output:**
-```
-Latitude: 6.5244, Longitude: 3.3792
-```
-
----
-
-### 5.1 Unpacking with Asterisk `*` (Collecting Remaining Values)
-
-What if you have more tuple items than variables? Use `*` in front of one variable name to collect all extra items into a **list**:
-
-```python
-fruits = ("apple", "banana", "cherry", "strawberry", "raspberry")
-
-(green, yellow, *red) = fruits
-
-print(green)    # apple
-print(yellow)   # banana
-print(red)      # ['cherry', 'strawberry', 'raspberry']
-```
-
-**Output:**
-```
-apple
-banana
-['cherry', 'strawberry', 'raspberry']
-```
-
-The `*red` variable collects everything that was not assigned to `green` or `yellow`. It becomes a list of the remaining values.
-
-**Putting `*` in the middle:**
-
-```python
-fruits = ("apple", "mango", "papaya", "pineapple", "cherry")
-
-(green, *tropic, red) = fruits
-
-print(green)     # apple
-print(tropic)    # ['mango', 'papaya', 'pineapple']
-print(red)       # cherry
-```
-
-**Output:**
-```
-apple
-['mango', 'papaya', 'pineapple']
-cherry
-```
-
-Python figures this out by working from both ends: `green` takes the first item, `red` takes the last item, and `*tropic` collects everything in between as a list.
-
----
-
-## 🔍 Part 6: Looping Through Tuples
-
-Loops let you go through each item in a tuple one by one and do something with it.
-
-### 6.1 The `for` Loop (Most Common)
-
-A `for` loop goes through every item in the tuple automatically:
-
-```python
-thistuple = ("apple", "banana", "cherry")
-
-for x in thistuple:
-    print(x)
-```
-
-**Output:**
-```
-apple
-banana
-cherry
-```
-
-Line by line:
-- `for x in thistuple:` — Python starts at index 0 and works through every item
-- On the first pass: `x = "apple"`, then `print(x)` prints `apple`
-- On the second pass: `x = "banana"`, then `print(x)` prints `banana`
-- On the third pass: `x = "cherry"`, then `print(x)` prints `cherry`
-- Loop ends automatically when all items have been visited
-
-**Real-world example:** Loop through a tuple of student names and greet each one:
-
-```python
-students = ("Alice", "Bob", "Carol", "David")
-
-for student in students:
-    print(f"Good morning, {student}!")
-```
-
-**Output:**
-```
-Good morning, Alice!
-Good morning, Bob!
-Good morning, Carol!
-Good morning, David!
-```
-
----
-
-### 6.2 Looping Through Index Numbers with `range()` and `len()`
-
-Sometimes you need the **index number** as well as the item. Use `range()` combined with `len()`:
-
-```python
-thistuple = ("apple", "banana", "cherry")
-
-for i in range(len(thistuple)):
-    print(i, thistuple[i])
-```
-
-**Output:**
-```
-0 apple
-1 banana
-2 cherry
-```
-
-- `len(thistuple)` returns `3`
-- `range(3)` generates the numbers `0, 1, 2`
-- In each loop pass, `i` holds the current index number
-- `thistuple[i]` gets the item at that index
-
-**Real-world use:** When you need to print a numbered list:
-
-```python
-subjects = ("Math", "English", "Science", "History")
-
-for i in range(len(subjects)):
-    print(f"{i + 1}. {subjects[i]}")
-```
-
-**Output:**
-```
-1. Math
-2. English
-3. Science
-4. History
-```
-
-(We use `i + 1` so the list starts at 1, not 0.)
-
----
-
-### 6.3 Using a `while` Loop
-
-A `while` loop keeps running as long as a condition is true. You can loop through a tuple this way:
-
-```python
-thistuple = ("apple", "banana", "cherry")
-i = 0
-
-while i < len(thistuple):
-    print(thistuple[i])
-    i = i + 1
-```
-
-**Output:**
-```
-apple
-banana
-cherry
-```
-
-- `i = 0` — start at the first index
-- `while i < len(thistuple):` — keep looping as long as `i` is less than 3
-- `thistuple[i]` — access the current item by index
-- `i = i + 1` — move to the next index (very important! Without this, the loop runs forever)
-
-> **Thinking Prompt:** What would happen if you forgot to write `i = i + 1`? The loop would keep printing `"apple"` forever — an **infinite loop**! Always make sure your `while` loop has a way to end.
-
----
-
-## 🔍 Part 7: Joining Tuples
-
-Sometimes you need to combine two or more tuples into one.
-
-### 7.1 Using the `+` Operator
-
-```python
-tuple1 = ("a", "b", "c")
-tuple2 = (1, 2, 3)
-
-tuple3 = tuple1 + tuple2
-print(tuple3)
-```
-
-**Output:**
-```
-('a', 'b', 'c', 1, 2, 3)
-```
-
-The `+` operator **concatenates** (joins) two tuples end-to-end and creates a new tuple.
-
-Important: the original tuples `tuple1` and `tuple2` are unchanged. The result is stored in the new variable `tuple3`.
-
----
-
-### 7.2 Using the `*` Operator (Repeating)
-
-To repeat a tuple's content multiple times, use `*` with a number:
-
-```python
-fruits = ("apple", "banana", "cherry")
-mytuple = fruits * 2
-print(mytuple)
-```
-
-**Output:**
-```
-('apple', 'banana', 'cherry', 'apple', 'banana', 'cherry')
-```
-
-`fruits * 2` creates a new tuple that is the contents of `fruits` repeated twice.
-
-**When is this useful?** If you need a default set of values duplicated, for example default settings repeated for multiple users or tiles in a game grid.
-
-```python
-# Create a row of 4 empty slots for a game board
-empty_row = ("_",) * 4
-print(empty_row)
-```
-
-**Output:**
-```
-('_', '_', '_', '_')
-```
-
----
-
-## 🔍 Part 8: Tuple Methods
-
-Unlike lists (which have many methods like `.append()`, `.remove()`, `.sort()`), tuples have only **two built-in methods**. This makes sense — since you can't change a tuple, most list methods would be useless.
-
-### 8.1 The `count()` Method
-
-`count()` tells you how many times a specific value appears in the tuple.
-
-**Syntax:** `tuple.count(value)`
-
-```python
-thistuple = (1, 3, 7, 8, 7, 5, 4, 6, 8, 5)
-x = thistuple.count(5)
-print(x)
-```
-
-**Output:**
-```
-2
-```
-
-The number `5` appears twice in the tuple, so `count(5)` returns `2`.
-
-Another example:
-
-```python
-colors = ("red", "blue", "red", "green", "red")
-print(colors.count("red"))
-```
-
-**Output:**
-```
-3
-```
-
-`"red"` appears 3 times.
-
-**Real-world use:** Count how many times a student chose "Math" as their favourite subject from a survey response tuple:
-
-```python
-responses = ("Math", "English", "Math", "Science", "Math", "History")
-math_count = responses.count("Math")
-print(f"Math was chosen {math_count} times.")
-```
-
-**Output:**
-```
-Math was chosen 3 times.
-```
-
----
-
-### 8.2 The `index()` Method
-
-`index()` tells you the **position (index)** of the first occurrence of a specified value.
-
-**Syntax:** `tuple.index(value)`
-
-```python
-thistuple = (1, 3, 7, 8, 7, 5, 4, 6, 8, 5)
-x = thistuple.index(8)
-print(x)
-```
-
-**Output:**
-```
-3
-```
-
-The value `8` first appears at index 3. (There is another `8` at index 8, but `index()` only returns the **first** one.)
-
-Another example:
-
-```python
-days = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-print(days.index("Thu"))
-```
-
-**Output:**
-```
-3
-```
-
-**What happens if the value doesn't exist?**
-
-```python
-days = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-print(days.index("Holiday"))  # ❌ This will raise an error
-```
-
-**Error:**
-```
-ValueError: tuple.index(x): x not in tuple
-```
-
-Always make sure the item exists before calling `index()`, or use `in` to check first:
-
-```python
-days = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-target = "Wed"
-
-if target in days:
-    print(f"{target} is at index {days.index(target)}")
-else:
-    print(f"{target} was not found.")
-```
-
-**Output:**
-```
-Wed is at index 2
-```
-
----
-
-## 🛠️ Guided Practice Exercises
-
-Now let's put everything together with exercises. Work through each one step by step.
-
----
-
-### Exercise 1: Creating and Exploring a Tuple
-
-**Objective:** Create a tuple and explore its properties.
-
-**Scenario:** You are building a simple database for a school. Store the following days of the school week as a tuple.
-
-**Steps:**
-
-1. Create a tuple called `school_days` with the values: `"Monday"`, `"Tuesday"`, `"Wednesday"`, `"Thursday"`, `"Friday"`
-2. Print the full tuple
-3. Print the total number of days using `len()`
-4. Print the first day (index 0)
-5. Print the last day using negative indexing
-6. Check if `"Saturday"` is in the tuple and print a result
-
-**Solution:**
-
-```python
-# Step 1: Create the tuple
-school_days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
-
-# Step 2: Print the full tuple
-print(school_days)
-
-# Step 3: Print the count
-print("Number of school days:", len(school_days))
-
-# Step 4: Print the first day
-print("First day:", school_days[0])
-
-# Step 5: Print the last day using negative indexing
-print("Last day:", school_days[-1])
-
-# Step 6: Check membership
-if "Saturday" in school_days:
-    print("Saturday is a school day.")
-else:
-    print("Saturday is NOT a school day.")
+if temperature > 35:
+    print("It is very hot outside!")
 ```
 
 **Expected Output:**
 ```
-('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
-Number of school days: 5
-First day: Monday
-Last day: Friday
-Saturday is NOT a school day.
+It is very hot outside!
 ```
 
-**Self-check Questions:**
-- Why did we use round brackets to create the tuple?
-- What would `school_days[-2]` print?
-- What is the index of `"Wednesday"`?
+**Line-by-line explanation:**
+- `temperature = 38` — we store the value `38` in a variable called `temperature`
+- `if temperature > 35:` — Python checks: is `38 > 35`? Yes! So it is `True`
+- The colon `:` at the end of the `if` line is required — it signals that a code block follows
+- `    print("It is very hot outside!")` — this line is indented (4 spaces), so it is inside the `if` block. Since the condition was `True`, this line runs
+
+### Example Where Condition is False
+
+```python
+temperature = 20
+
+if temperature > 35:
+    print("It is very hot outside!")
+
+print("Program continues...")
+```
+
+**Expected Output:**
+```
+Program continues...
+```
+
+Since `20 > 35` is `False`, the print inside the `if` block is skipped. Execution jumps to the next unindented line.
+
+### Multiple Statements Inside an `if` Block
+
+All statements inside the block must be at the same indentation level:
+
+```python
+age = 20
+
+if age >= 18:
+    print("You are an adult.")
+    print("You can vote.")
+    print("You can drive.")
+```
+
+**Expected Output:**
+```
+You are an adult.
+You can vote.
+You can drive.
+```
+
+All three `print` statements are at the same indentation level, so they are all inside the `if` block. All three run because the condition is `True`.
+
+### Common Beginner Mistake — Missing Colon
+
+```python
+# WRONG - Missing colon after condition:
+if age >= 18
+    print("Adult")
+# SyntaxError: invalid syntax
+```
+
+```python
+# CORRECT:
+if age >= 18:
+    print("Adult")
+```
+
+### Common Beginner Mistake — Wrong Indentation
+
+```python
+# WRONG - print is not indented:
+if age >= 18:
+print("Adult")   # IndentationError
+```
+
+```python
+# CORRECT - print is indented:
+if age >= 18:
+    print("Adult")
+```
+
+### Using Boolean Variables in `if`
+
+You can use a variable that is already `True` or `False` directly in an `if` statement:
+
+```python
+is_logged_in = True
+
+if is_logged_in:
+    print("Welcome back!")
+```
+
+**Expected Output:**
+```
+Welcome back!
+```
+
+### Truthy and Falsy Values
+
+Python treats some values as "truthy" (behaves like `True`) and others as "falsy" (behaves like `False`):
+
+| Falsy (acts like False) | Truthy (acts like True)      |
+|-------------------------|------------------------------|
+| `0` (zero)              | Any non-zero number (5, -3)  |
+| `""` (empty string)     | Any non-empty string         |
+| `[]` (empty list)       | Any non-empty list           |
+| `{}` (empty dict)       | Any non-empty dict           |
+| `None`                  | Everything else              |
+
+```python
+name = ""
+
+if name:
+    print("Name exists:", name)
+
+# Since name is an empty string (falsy), nothing is printed
+print("Done")
+```
+
+**Expected Output:**
+```
+Done
+```
+
+```python
+name = "Chidi"
+
+if name:
+    print("Name exists:", name)
+```
+
+**Expected Output:**
+```
+Name exists: Chidi
+```
 
 ---
 
-### Exercise 2: Unpacking a Student Record
+## Section 5 — The `else` Statement
 
-**Objective:** Practice tuple unpacking.
+### What Is It?
 
-**Scenario:** A student's record is stored as a tuple containing their name, age, and score. Unpack it and display a formatted summary.
+`else` is added after an `if` block. It runs when the `if` condition is `False`. Think of it as "otherwise, do this instead."
+
+### The Structure
+
+```
+if condition:
+    code runs when condition is True
+else:
+    code runs when condition is False
+```
+
+### Simple Example
 
 ```python
-student_record = ("Chidi", 16, 87)
+score = 55
 
-# Unpack the tuple
-(name, age, score) = student_record
+if score >= 70:
+    print("You passed!")
+else:
+    print("You did not pass. Try again!")
+```
 
-# Display the information
-print(f"Student Name: {name}")
-print(f"Age: {age}")
-print(f"Score: {score}")
+**Expected Output:**
+```
+You did not pass. Try again!
+```
 
-# Determine grade
+**Explanation:**
+- `score >= 70` → `55 >= 70` → `False`
+- The `if` block is skipped
+- Python runs the `else` block instead
+
+### Another Example
+
+```python
+age = 15
+
+if age >= 18:
+    print("You can vote.")
+else:
+    print("You are too young to vote.")
+```
+
+**Expected Output:**
+```
+You are too young to vote.
+```
+
+> 💡 `else` never has a condition of its own — it is simply the "everything else" case. It catches whatever the `if` didn't catch.
+
+### Common Beginner Mistake — `else` with a condition
+
+```python
+# WRONG - else cannot have a condition:
+if score >= 70:
+    print("Pass")
+else score < 70:     # SyntaxError!
+    print("Fail")
+```
+
+```python
+# CORRECT:
+if score >= 70:
+    print("Pass")
+else:
+    print("Fail")
+```
+
+---
+
+## Section 6 — The `elif` Statement (Else If)
+
+### What Is It?
+
+`elif` stands for "else if." It lets you check **multiple conditions** in sequence. Python checks each condition from top to bottom and runs the first block whose condition is `True`. Once a match is found, the rest are skipped.
+
+### The Structure
+
+```
+if condition_1:
+    code for condition_1
+elif condition_2:
+    code for condition_2
+elif condition_3:
+    code for condition_3
+else:
+    code when nothing matched
+```
+
+### Why Do We Need `elif`?
+
+Without `elif`, you would need multiple separate `if` statements, and ALL of them would be checked even after a match is found. `elif` stops checking once a match is found — this is both more efficient and produces correct results.
+
+### Simple Example — Grade Calculator
+
+```python
+score = 82
+
 if score >= 90:
-    grade = "A"
+    print("Grade: A")
+elif score >= 80:
+    print("Grade: B")
 elif score >= 70:
-    grade = "B"
-elif score >= 50:
-    grade = "C"
+    print("Grade: C")
+elif score >= 60:
+    print("Grade: D")
 else:
-    grade = "F"
-
-print(f"Grade: {grade}")
+    print("Grade: F")
 ```
 
 **Expected Output:**
 ```
-Student Name: Chidi
-Age: 16
-Score: 87
 Grade: B
 ```
 
-**What-if Challenge:** Change the score to `95` and run it again. Does the grade change correctly?
+**Step-by-step trace:**
+1. `score >= 90` → `82 >= 90` → `False` → skip
+2. `score >= 80` → `82 >= 80` → `True` ✅ → print `"Grade: B"` → stop checking
 
----
-
-### Exercise 3: Looping Through a Tuple
-
-**Objective:** Use loops to process all items in a tuple.
-
-**Scenario:** You have a tuple of exam scores for a class. Find the total, average, highest, and lowest score.
+### Another Example — Time of Day Greeting
 
 ```python
-scores = (72, 85, 90, 61, 78, 95, 55, 88, 74, 82)
+hour = 14   # 2:00 PM in 24-hour format
 
-# Initialize variables
-total = 0
-highest = scores[0]
-lowest = scores[0]
-
-# Loop through scores
-for score in scores:
-    total += score              # add each score to total
-    if score > highest:
-        highest = score         # update highest if current is bigger
-    if score < lowest:
-        lowest = score          # update lowest if current is smaller
-
-average = total / len(scores)
-
-print(f"Total:   {total}")
-print(f"Average: {average:.1f}")
-print(f"Highest: {highest}")
-print(f"Lowest:  {lowest}")
+if hour < 12:
+    print("Good morning!")
+elif hour < 17:
+    print("Good afternoon!")
+elif hour < 21:
+    print("Good evening!")
+else:
+    print("Good night!")
 ```
 
 **Expected Output:**
 ```
-Total:   780
-Average: 78.0
-Highest: 95
-Lowest:  55
+Good afternoon!
 ```
 
-**What-if Challenge:** Add two more scores to the tuple — say `100` and `45` — and re-run. Do all four statistics update correctly?
+**Trace:**
+1. `hour < 12` → `14 < 12` → `False` → skip
+2. `hour < 17` → `14 < 17` → `True` ✅ → print `"Good afternoon!"` → stop
 
----
-
-### Exercise 4: Working with Tuple Methods
-
-**Objective:** Practice `count()` and `index()`.
-
-**Scenario:** A classroom survey asked 12 students to pick their favourite subject. The results are stored in a tuple. Analyse the responses.
+### Example — Traffic Light System
 
 ```python
-responses = ("Math", "English", "Math", "Science", "Math", "History",
-             "English", "Math", "Science", "Math", "English", "Science")
+light = "red"
 
-# Count how many voted for each subject
-subjects = ("Math", "English", "Science", "History")
-
-print("=== Survey Results ===")
-for subject in subjects:
-    count = responses.count(subject)
-    print(f"{subject}: {count} vote(s)")
-
-# Find where "History" first appears
-print(f"\nFirst 'History' vote is at position: {responses.index('History')}")
+if light == "green":
+    print("Go!")
+elif light == "yellow":
+    print("Slow down!")
+elif light == "red":
+    print("Stop!")
+else:
+    print("Unknown light color")
 ```
 
 **Expected Output:**
 ```
-=== Survey Results ===
-Math: 5 vote(s)
-English: 3 vote(s)
-Science: 3 vote(s)
-History: 1 vote(s)
-
-First 'History' vote is at position: 5
+Stop!
 ```
 
----
-
-## 🚀 Mini Project: Student Grade Book
-
-Let's combine everything we've learned into a realistic mini project.
-
-**Project Goal:** Build a simple grade book that stores student records as tuples, analyses the data, and prints a formatted report.
+> 🤔 **Thinking prompt:** What if you changed `light = "red"` to `light = "purple"`? What would print?
 
 ---
 
-### Stage 1: Setup — Store Student Records
+## Section 7 — Combining Conditions: `and`, `or`, `not`
 
-Each student record is a tuple: `(name, score)`.
-All records together form a **tuple of tuples**.
+Sometimes a single comparison isn't enough. You can combine conditions using logical operators:
+
+| Operator | Meaning                               | Example                   |
+|----------|---------------------------------------|---------------------------|
+| `and`    | Both conditions must be True          | `age >= 18 and age <= 65` |
+| `or`     | At least one condition must be True   | `day == "Sat" or day == "Sun"` |
+| `not`    | Reverses True to False and vice versa | `not is_banned`           |
+
+### Using `and`
 
 ```python
-# Each inner tuple is (student_name, score)
-grade_book = (
-    ("Alice",   88),
-    ("Bob",     72),
-    ("Carol",   95),
-    ("David",   61),
-    ("Eve",     79),
-    ("Frank",   55),
-    ("Grace",   91),
-    ("Henry",   68),
-)
+age = 25
+has_id = True
 
-print("Grade Book Loaded:")
-print(grade_book)
+if age >= 18 and has_id:
+    print("Entry allowed.")
+else:
+    print("Entry denied.")
 ```
 
-**Milestone Output:**
+**Expected Output:**
 ```
-Grade Book Loaded:
-(('Alice', 88), ('Bob', 72), ('Carol', 95), ('David', 61), ('Eve', 79), ('Frank', 55), ('Grace', 91), ('Henry', 68))
+Entry allowed.
+```
+
+Both conditions must be `True`. `age >= 18` → `True`, `has_id` → `True` → overall `True`.
+
+### Using `or`
+
+```python
+day = "Saturday"
+
+if day == "Saturday" or day == "Sunday":
+    print("It's the weekend!")
+else:
+    print("It's a weekday.")
+```
+
+**Expected Output:**
+```
+It's the weekend!
+```
+
+Only one condition needs to be `True`. `day == "Saturday"` → `True` → done!
+
+### Using `not`
+
+```python
+is_banned = False
+
+if not is_banned:
+    print("User is allowed.")
+else:
+    print("User is banned.")
+```
+
+**Expected Output:**
+```
+User is allowed.
+```
+
+`not is_banned` → `not False` → `True` → run the `if` block.
+
+---
+
+## Section 8 — `if` Statements with Dictionaries
+
+This is where everything comes together! You can use `if` statements with dictionaries to make smart, data-driven decisions.
+
+### Example 1 — Check if a Key Exists
+
+```python
+student = {"name": "Amaka", "score": 88}
+
+if "score" in student:
+    print("Score found:", student["score"])
+else:
+    print("No score recorded.")
+```
+
+**Expected Output:**
+```
+Score found: 88
+```
+
+### Example 2 — Grade Based on Dictionary Score
+
+```python
+student = {"name": "Emeka", "score": 74}
+
+score = student["score"]
+
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+elif score >= 60:
+    grade = "D"
+else:
+    grade = "F"
+
+print(f"{student['name']} scored {score} → Grade: {grade}")
+```
+
+**Expected Output:**
+```
+Emeka scored 74 → Grade: C
+```
+
+### Example 3 — Check Multiple Students
+
+```python
+students = {
+    "Ada": 92,
+    "Bisi": 58,
+    "Chike": 75,
+    "Dayo": 45
+}
+
+for name, score in students.items():
+    if score >= 70:
+        status = "PASS"
+    else:
+        status = "FAIL"
+    print(f"{name}: {score} → {status}")
+```
+
+**Expected Output:**
+```
+Ada: 92 → PASS
+Bisi: 58 → FAIL
+Chike: 75 → PASS
+Dayo: 45 → FAIL
 ```
 
 ---
 
-### Stage 2: Core Logic — Calculate Statistics
+## Section 9 — Nested `if` Statements
+
+An `if` statement inside another `if` statement is called a **nested if**. Use this when a second decision only matters if the first condition is already `True`.
+
+### Example — Age and Membership Check
 
 ```python
-total_score = 0
-highest_score = 0
-lowest_score = 100
-top_student = ""
-lowest_student = ""
+age = 25
+is_member = True
 
-for record in grade_book:
-    name, score = record    # unpack each inner tuple
+if age >= 18:
+    print("Age check passed.")
+    if is_member:
+        print("Member discount applied!")
+    else:
+        print("No member discount.")
+else:
+    print("Must be 18 or older.")
+```
 
-    total_score += score
+**Expected Output:**
+```
+Age check passed.
+Member discount applied!
+```
 
-    if score > highest_score:
-        highest_score = score
-        top_student = name
+**Explanation:**
+- First, Python checks if `age >= 18` → `True` → enter outer `if`
+- Inside the outer `if`, it checks `is_member` → `True` → print discount message
 
-    if score < lowest_score:
-        lowest_score = score
-        lowest_student = name
+> ⚠️ **Warning:** Deeply nested `if` statements (3+ levels deep) make code hard to read. Try to keep nesting to a maximum of 2 levels when possible.
 
-average_score = total_score / len(grade_book)
+---
+
+## Section 10 — The `pass` Statement
+
+Sometimes you want to write an `if` block but not fill in the code yet (maybe as a placeholder). But Python doesn't allow an empty block. Use `pass` to create an empty placeholder:
+
+```python
+score = 85
+
+if score >= 70:
+    pass   # TODO: Add passing logic later
+
+print("End of check")
+```
+
+**Expected Output:**
+```
+End of check
+```
+
+`pass` does nothing — it simply tells Python "this block is intentionally empty for now."
+
+---
+
+## Guided Practice — If / Elif / Else
+
+### Exercise 1: Temperature Classifier
+
+**Objective:** Use `elif` to classify a temperature reading.
+
+**Scenario:** You are building a weather monitoring app. Write code that classifies temperature into categories.
+
+**Steps:**
+
+```python
+temperature = 28   # Try changing this value
+
+if temperature >= 40:
+    print("Extreme heat! Stay indoors.")
+elif temperature >= 30:
+    print("Very hot. Stay hydrated.")
+elif temperature >= 20:
+    print("Warm and comfortable.")
+elif temperature >= 10:
+    print("Cool. Bring a jacket.")
+else:
+    print("Cold. Dress warmly!")
+```
+
+**Expected Output (temperature = 28):**
+```
+Warm and comfortable.
+```
+
+**What-if challenges:**
+- Change `temperature = 28` to `42`. What prints?
+- Change it to `5`. What prints?
+- What is the minimum temperature that would trigger "Very hot"?
+
+---
+
+### Exercise 2: Login System with Dictionary
+
+**Objective:** Use a dictionary to store user credentials and `if/else` to validate login.
+
+```python
+users = {
+    "admin": "password123",
+    "ngozi": "securepass",
+    "emeka": "mypass456"
+}
+
+# Simulated login attempt:
+username = "ngozi"
+password = "securepass"
+
+if username in users:
+    if users[username] == password:
+        print(f"Welcome, {username}! Login successful.")
+    else:
+        print("Incorrect password.")
+else:
+    print("Username not found.")
+```
+
+**Expected Output:**
+```
+Welcome, ngozi! Login successful.
+```
+
+**Self-check Questions:**
+1. What prints if `password = "wrongpass"`?
+2. What prints if `username = "unknown"`?
+3. Why do we check `username in users` first, before checking the password?
+
+---
+
+## Mini Project: Student Report Card Generator
+
+### Project Overview
+
+You will build a **Student Report Card Generator** that:
+1. Stores multiple students and their subject scores in a dictionary
+2. Calculates the average score for each student
+3. Assigns a grade using `if/elif/else`
+4. Prints a formatted report card for each student
+
+This project combines ALL the skills from this lesson: dictionary methods, loops, and conditions.
+
+---
+
+### Stage 1 — Setup: Create the Student Data
+
+```python
+# Stage 1: Student database
+students = {
+    "Amara": {"maths": 85, "english": 78, "science": 92},
+    "Bola":  {"maths": 60, "english": 55, "science": 58},
+    "Chike": {"maths": 95, "english": 88, "science": 91},
+    "Dayo":  {"maths": 40, "english": 45, "science": 50},
+}
+
+print("Student database loaded successfully.")
+print("Number of students:", len(students))
+```
+
+**Expected Output:**
+```
+Student database loaded successfully.
+Number of students: 4
 ```
 
 ---
 
-### Stage 3: Grade Assignment
+### Stage 2 — Grade Assignment Function Logic
+
+Before building the full project, let's write the grade logic separately:
 
 ```python
-def assign_grade(score):
-    if score >= 90:
+def get_grade(average):
+    if average >= 90:
         return "A"
-    elif score >= 70:
+    elif average >= 80:
         return "B"
-    elif score >= 50:
+    elif average >= 70:
         return "C"
+    elif average >= 60:
+        return "D"
     else:
         return "F"
+
+# Quick test:
+print(get_grade(92))   # Expected: A
+print(get_grade(75))   # Expected: C
+print(get_grade(45))   # Expected: F
+```
+
+**Expected Output:**
+```
+A
+C
+F
 ```
 
 ---
 
-### Stage 4: Final Output — Print the Report
+### Stage 3 — Build the Full Report Card
 
 ```python
-print("=" * 40)
-print("      STUDENT GRADE REPORT")
-print("=" * 40)
-print(f"{'NAME':<12} {'SCORE':>6} {'GRADE':>6}")
-print("-" * 40)
+students = {
+    "Amara": {"maths": 85, "english": 78, "science": 92},
+    "Bola":  {"maths": 60, "english": 55, "science": 58},
+    "Chike": {"maths": 95, "english": 88, "science": 91},
+    "Dayo":  {"maths": 40, "english": 45, "science": 50},
+}
 
-for record in grade_book:
-    name, score = record
-    grade = assign_grade(score)
-    print(f"{name:<12} {score:>6} {grade:>6}")
+def get_grade(average):
+    if average >= 90:
+        return "A"
+    elif average >= 80:
+        return "B"
+    elif average >= 70:
+        return "C"
+    elif average >= 60:
+        return "D"
+    else:
+        return "F"
 
-print("-" * 40)
-print(f"\nClass Average:  {average_score:.1f}")
-print(f"Top Student:    {top_student} ({highest_score})")
-print(f"Needs Support:  {lowest_student} ({lowest_score})")
+# Print report card for each student
 print("=" * 40)
+print("       STUDENT REPORT CARDS")
+print("=" * 40)
+
+for student_name, subjects in students.items():
+    # Calculate average using values()
+    scores = list(subjects.values())
+    average = sum(scores) / len(scores)
+    grade = get_grade(average)
+
+    # Determine pass/fail
+    if grade in ["A", "B", "C"]:
+        status = "PASS"
+    else:
+        status = "FAIL"
+
+    # Print the report for this student
+    print(f"\nStudent: {student_name}")
+    print("-" * 30)
+
+    for subject, score in subjects.items():
+        print(f"  {subject.capitalize():<12}: {score}")
+
+    print(f"  {'Average':<12}: {average:.1f}")
+    print(f"  {'Grade':<12}: {grade}")
+    print(f"  {'Status':<12}: {status}")
+
+print("\n" + "=" * 40)
+print("End of Report")
 ```
 
-**Complete Final Output:**
+**Expected Output:**
 ```
 ========================================
-      STUDENT GRADE REPORT
+       STUDENT REPORT CARDS
 ========================================
-NAME          SCORE  GRADE
-----------------------------------------
-Alice            88      B
-Bob              72      B
-Carol            95      A
-David            61      C
-Eve              79      B
-Frank            55      C
-Grace            91      A
-Henry            68      C
-----------------------------------------
 
-Class Average:  76.1
-Top Student:    Carol (95)
-Needs Support:  Frank (55)
+Student: Amara
+------------------------------
+  Maths       : 85
+  English      : 78
+  Science      : 92
+  Average      : 85.0
+  Grade        : B
+  Status       : PASS
+
+Student: Bola
+------------------------------
+  Maths       : 60
+  English      : 55
+  Science      : 58
+  Average      : 57.7
+  Grade        : F
+  Status       : FAIL
+
+Student: Chike
+------------------------------
+  Maths       : 95
+  English      : 88
+  Science      : 91
+  Average      : 91.3
+  Grade        : A
+  Status       : PASS
+
+Student: Dayo
+------------------------------
+  Maths       : 40
+  English      : 45
+  Science      : 50
+  Average      : 45.0
+  Grade        : F
+  Status       : FAIL
+
 ========================================
-```
-
-**Reflection Questions:**
-- Why did we store the records as tuples instead of lists? (Hint: student names and scores shouldn't be accidentally modified)
-- What would happen if we added a third value to each record, like `("Alice", 88, "Present")`? How would you change the unpacking code?
-- Can you extend this project to also count how many students got each grade using `count()`?
-
-**Optional Extension:** Add an attendance column to each tuple record and count how many students were "Present" using `count()`.
-
----
-
-## ⚠️ Common Beginner Mistakes
-
-### Mistake 1: Forgetting the Comma in a One-Item Tuple
-
-```python
-# ❌ WRONG — this is just a string
-single = ("hello")
-print(type(single))     # <class 'str'>
-
-# ✅ CORRECT — add the trailing comma
-single = ("hello",)
-print(type(single))     # <class 'tuple'>
-```
-
-**Why it happens:** Brackets in math and in Python function calls are used for grouping, not for creating tuples. The comma is what tells Python "this is a tuple".
-
----
-
-### Mistake 2: Trying to Directly Modify a Tuple
-
-```python
-# ❌ WRONG
-my_tuple = ("apple", "banana", "cherry")
-my_tuple[1] = "kiwi"   # TypeError!
-
-# ✅ CORRECT — use the convert-change-convert workaround
-my_list = list(my_tuple)
-my_list[1] = "kiwi"
-my_tuple = tuple(my_list)
-print(my_tuple)     # ('apple', 'kiwi', 'cherry')
+End of Report
 ```
 
 ---
 
-### Mistake 3: Forgetting That Indexing Starts at 0
+### Stage 4 — Enhancement: Find Top Student
 
 ```python
-fruits = ("apple", "banana", "cherry")
+# Add this to the end of the Stage 3 code:
 
-# ❌ WRONG — trying to get the "first" item with index 1
-print(fruits[1])   # banana  ← this is actually the SECOND item!
+best_student = None
+best_average = 0
 
-# ✅ CORRECT — first item is at index 0
-print(fruits[0])   # apple
+for student_name, subjects in students.items():
+    scores = list(subjects.values())
+    average = sum(scores) / len(scores)
+
+    if average > best_average:
+        best_average = average
+        best_student = student_name
+
+print(f"\n🏆 Top Student: {best_student} with an average of {best_average:.1f}")
+```
+
+**Expected Output:**
+```
+🏆 Top Student: Chike with an average of 91.3
 ```
 
 ---
 
-### Mistake 4: Going Out of Range
+### Reflection Questions for the Mini Project
+
+1. What dictionary method did you use to loop through each student's subjects and scores?
+2. Why was `values()` useful when calculating the average?
+3. In the grade function, why does the order of `elif` conditions matter?
+4. What would happen if you put `elif average >= 60` before `elif average >= 90`?
+5. How could you modify the project to also show which subject each student scored highest in?
+
+---
+
+## Common Beginner Mistakes — Full Summary
+
+### Dictionary Method Mistakes
+
+**Mistake 1 — Accessing a missing key directly:**
 
 ```python
-fruits = ("apple", "banana", "cherry")
+data = {"name": "Ada"}
 
-# ❌ WRONG — there are only 3 items (indices 0, 1, 2)
-print(fruits[3])   # IndexError: tuple index out of range
+# WRONG - crashes with KeyError:
+print(data["score"])
 
-# ✅ CORRECT — use len() to check before accessing
-print(len(fruits))   # 3
-print(fruits[2])     # cherry (last valid index)
+# CORRECT - use get():
+print(data.get("score", "No score"))
+```
+
+**Mistake 2 — Forgetting `copy()` before editing:**
+
+```python
+original = {"x": 10}
+copy1 = original        # NOT a copy! Both point to same dict
+copy2 = original.copy() # TRUE copy
+
+copy1["x"] = 99         # This also changes original!
+copy2["x"] = 50         # This only changes copy2
+
+print(original)   # {'x': 99}  ← original was modified!
+```
+
+**Mistake 3 — `pop()` on a missing key without a default:**
+
+```python
+data = {"a": 1}
+
+# WRONG - crashes:
+data.pop("b")
+
+# CORRECT - use default:
+data.pop("b", None)
+```
+
+**Mistake 4 — Confusing `pop()` and `popitem()`:**
+- `pop("key")` — removes a specific key you name
+- `popitem()` — removes the last inserted key (you don't get to choose which)
+
+---
+
+### If/Elif/Else Mistakes
+
+**Mistake 1 — Missing colon:**
+
+```python
+# WRONG:
+if score > 90
+    print("A")
+
+# CORRECT:
+if score > 90:
+    print("A")
+```
+
+**Mistake 2 — Wrong indentation:**
+
+```python
+# WRONG:
+if score > 90:
+print("A")    # IndentationError
+
+# CORRECT:
+if score > 90:
+    print("A")
+```
+
+**Mistake 3 — Using `=` instead of `==` in a condition:**
+
+```python
+# WRONG (this assigns, not compares):
+if score = 90:
+    print("A")
+
+# CORRECT (double == for comparison):
+if score == 90:
+    print("A")
+```
+
+**Mistake 4 — Wrong order in `elif` chains:**
+
+```python
+# WRONG - Grade A will never be reached because >= 60 catches everything first:
+if score >= 60:
+    grade = "D"
+elif score >= 90:   # Never reached!
+    grade = "A"
+
+# CORRECT - Put the most specific (largest) condition first:
+if score >= 90:
+    grade = "A"
+elif score >= 60:
+    grade = "D"
+```
+
+**Mistake 5 — Using `else` when you need `elif`:**
+
+```python
+score = 75
+
+# WRONG - 'else' doesn't check a condition:
+if score >= 90:
+    print("A")
+else score >= 80:   # SyntaxError!
+    print("B")
+
+# CORRECT:
+if score >= 90:
+    print("A")
+elif score >= 80:
+    print("B")
 ```
 
 ---
 
-### Mistake 5: Mismatched Unpacking Variables
+## Lesson Reflection Questions
 
-```python
-fruits = ("apple", "banana", "cherry")
-
-# ❌ WRONG — 2 variables for 3 items (without *)
-(a, b) = fruits    # ValueError: too many values to unpack
-
-# ✅ CORRECT — match the count
-(a, b, c) = fruits
-print(a, b, c)     # apple banana cherry
-
-# ✅ OR use * to collect extras
-(a, *rest) = fruits
-print(a)      # apple
-print(rest)   # ['banana', 'cherry']
-```
+1. What is the difference between `get()` and accessing a key with `dict[key]`?
+2. When would you use `setdefault()` instead of `get()`?
+3. What does `items()` return, and why is it useful in a loop?
+4. What does the colon `:` at the end of an `if` line tell Python?
+5. What is the role of indentation in `if` statements?
+6. Can you have an `elif` without a preceding `if`? Why or why not?
+7. What is the difference between `and` and `or` in conditions?
+8. What would happen if you have two `if` statements checking the same variable instead of `if/elif`? Give an example.
+9. Why is the order of `elif` conditions important when checking number ranges?
+10. How would you combine `items()` and `if/elif/else` to filter a dictionary and print only students who passed?
 
 ---
 
-### Mistake 6: Concatenating a Tuple with a Non-Tuple
+## Lesson Completion Checklist
 
-```python
-t1 = ("apple", "banana")
+Use this checklist to confirm you have mastered this lesson:
 
-# ❌ WRONG — can't add a tuple and a list
-result = t1 + ["cherry"]   # TypeError!
-
-# ✅ CORRECT — both must be tuples
-result = t1 + ("cherry",)
-print(result)   # ('apple', 'banana', 'cherry')
-```
-
----
-
-## 💭 Reflection Questions
-
-Take a moment to test your understanding:
-
-1. What is the key difference between a **tuple** and a **list** in Python?
-2. Why would a programmer intentionally use a tuple instead of a list?
-3. If `t = (10, 20, 30, 40, 50)`, what does `t[1:4]` return?
-4. How would you unpack `(latitude, longitude) = (6.5244, 3.3792)` — what values do the variables get?
-5. Given `scores = (85, 90, 85, 70, 85)`, what does `scores.count(85)` return?
-6. What does `scores.index(70)` return for the same tuple above?
-7. If you join `("a", "b")` and `("c", "d")` using `+`, what is the result?
-8. What happens when you multiply a tuple: `("go",) * 3`?
-9. In the statement `(first, *rest) = (1, 2, 3, 4, 5)`, what is the value of `rest`?
-10. Name one real-world situation where you would use a tuple instead of a list.
+- [ ] I can name all 11 Python dictionary methods and describe what each one does
+- [ ] I can use `keys()`, `values()`, and `items()` in loops
+- [ ] I understand the difference between `get()` and direct key access `dict[key]`
+- [ ] I can use `update()` to add and modify multiple items at once
+- [ ] I can use `pop()` and `popitem()` to remove items safely
+- [ ] I can use `copy()` to create an independent duplicate of a dictionary
+- [ ] I can use `fromkeys()` to create a new dictionary from a list of keys
+- [ ] I understand `setdefault()` and when it inserts vs. retrieves
+- [ ] I can write a correct `if` statement with proper colon and indentation
+- [ ] I can write `if/else` for two-path decisions
+- [ ] I can write `if/elif/elif/else` for multi-path decisions
+- [ ] I can combine conditions using `and`, `or`, and `not`
+- [ ] I can use `if` inside dictionary loops to filter or classify data
+- [ ] I completed the Student Report Card mini project
+- [ ] I understand and can fix all common mistakes listed
 
 ---
 
-## ✅ Completion Checklist
+## Lesson Summary
 
-Before you move on to the next lesson, make sure you can:
+This lesson covered two major topics that work beautifully together in Python:
 
-- [ ] Create a tuple with multiple items using round brackets
-- [ ] Create a single-item tuple correctly (with the trailing comma)
-- [ ] Access a specific tuple item using its positive index
-- [ ] Access items using negative indexing (from the end)
-- [ ] Slice a range of items from a tuple
-- [ ] Check if an item exists using `in`
-- [ ] Modify tuple values using the convert-change-convert workaround
-- [ ] Add items to a tuple by concatenation or list conversion
-- [ ] Remove items from a tuple using list conversion
-- [ ] Unpack a tuple into multiple variables
-- [ ] Use `*` to collect remaining values when unpacking
-- [ ] Loop through a tuple using a `for` loop
-- [ ] Loop with index using `range()` and `len()`
-- [ ] Loop using a `while` loop
-- [ ] Join two tuples with `+`
-- [ ] Repeat a tuple with `*`
-- [ ] Use `count()` to count occurrences of a value
-- [ ] Use `index()` to find the first position of a value
-- [ ] Complete the mini grade book project
+**Dictionary Methods** give you a complete toolkit for managing your data:
+- `keys()`, `values()`, `items()` — for viewing and looping through dictionary contents
+- `get()` — the safe way to read values without crashing
+- `update()` — for adding or changing multiple items at once
+- `pop()` / `popitem()` — for removing items
+- `clear()` — for emptying a dictionary
+- `copy()` — for making true duplicates
+- `fromkeys()` — for creating dictionaries from key lists
+- `setdefault()` — for reading with an automatic insert-if-missing feature
 
----
+**If / Elif / Else Conditions** give Python the ability to make decisions:
+- `if` checks a condition; if `True`, runs the block
+- `else` runs when the `if` condition is `False`
+- `elif` lets you check multiple conditions in sequence
+- `and`, `or`, `not` combine conditions for more complex logic
+- Proper **indentation** is mandatory — it defines what belongs inside each block
+- Order matters in `elif` chains — put the most specific condition first
 
-## 📋 Lesson Summary
-
-Here is everything you learned in Lesson 12, condensed for quick review:
-
-**What is a tuple?**
-A tuple is an ordered, immutable (unchangeable) collection of items written with round brackets `( )`. It allows duplicate values and can hold any data type.
-
-**Creating tuples:**
-- Multi-item: `t = ("a", "b", "c")`
-- One-item: `t = ("a",)` ← comma is required!
-- Using constructor: `t = tuple(["a", "b", "c"])`
-
-**Accessing items:**
-- Positive index: `t[0]` → first item
-- Negative index: `t[-1]` → last item
-- Slice: `t[1:3]` → items at index 1 and 2
-- Membership: `"a" in t` → True or False
-
-**Updating (workaround):**
-```python
-t = list(t)   # convert to list
-# ... make changes ...
-t = tuple(t)  # convert back
-```
-
-**Unpacking:**
-```python
-(a, b, c) = ("x", "y", "z")     # basic
-(first, *rest) = (1, 2, 3, 4)   # with asterisk
-```
-
-**Looping:**
-```python
-for item in t:            # direct loop
-for i in range(len(t)):   # loop with index
-```
-
-**Joining:**
-```python
-t3 = t1 + t2     # concatenate
-t3 = t1 * 3      # repeat
-```
-
-**Methods:**
-- `t.count(value)` — how many times does `value` appear?
-- `t.index(value)` — what is the first index of `value`?
-
-**When to use tuples (real-world):**
-- Storing fixed data: GPS coordinates, RGB colour codes, database records
-- Returning multiple values from a function
-- Protecting data from accidental modification
-- As dictionary keys (lists can't be dict keys; tuples can)
+**Combined**, these two concepts let you build programs that store structured data AND respond intelligently to it — which is the foundation of virtually every real-world application: school systems, banking software, e-commerce platforms, weather apps, and much more.
 
 ---
 
-*You are now ready for Lesson 13: Python Sets!*
+*End of Lesson 12*

@@ -1,78 +1,70 @@
 ---
 render_with_liquid: false
-title: "Lesson 04 — Python Comments & Variables"
+title: "Lesson 04 – Python Strings: From Basics to Formatting Mastery"
 nav_order: 4
 ---
 
-# Lesson 04 — Python Comments & Variables
+# Lesson 04 – Python Strings: From Basics to Formatting Mastery
 
 ---
 
 ## Lesson Introduction
 
-Welcome to Lesson 04! In this lesson you are going to learn two of the most important foundational skills in Python programming:
+In nearly every program ever written, text plays a central role. Programs greet users by name, display error messages, format reports, read files, send emails, and present results — all using **text**. In Python, text is stored and handled using a data type called a **string**.
 
-**Comments** — how to write notes inside your code that Python ignores but humans can read.
+This lesson takes you from the very ground floor — _what a string even is_ — all the way through slicing, modifying, joining, formatting, and using special characters inside strings. By the end, you will have a complete, confident understanding of one of the most important tools in all of Python programming.
 
-**Variables** — how to store, name, and work with information in your programs.
+**What you will learn in this lesson:**
 
-These two skills will appear in every single Python program you ever write. By the end of this lesson you will be able to:
-
-- Write single-line and multi-line comments in Python.
-- Create variables and assign values to them.
-- Follow the rules for naming variables correctly.
-- Assign multiple values at once using different techniques.
-- Print (display) variables and combine them in output.
-- Understand the difference between local variables and global variables.
-- Use the `global` keyword correctly.
-
-This lesson is for **absolute beginners**. Every concept is explained from scratch, with analogies, examples, and step-by-step walkthroughs.
+- What strings are and how to create them
+- How to access individual characters and ranges of characters (slicing)
+- How to modify string content using built-in Python methods
+- How to join strings together (concatenation)
+- How to build clean, dynamic text using string formatting
+- How to include special characters like tabs, newlines, and quotes inside strings
 
 ---
 
 ## Prerequisite Concepts
 
-Before we start, make sure you are comfortable with these ideas from previous lessons:
+> **Before you begin**, this lesson assumes you have completed Lessons 01–03. You should be comfortable with:
+> - Running Python code in a script or interpreter
+> - What a **variable** is and how to assign values with `=`
+> - What **print()** does
+> - Basic Python data types: integers (`int`) and floats (`float`)
 
-- You know how to use `print()` to display text on the screen.
-- You understand that Python is case-sensitive (`name` ≠ `Name`).
-- You understand that Python uses indentation (spaces) to define code blocks.
-
-If any of those feel unclear, quickly review Lesson 01 and Lesson 02 before continuing.
-
----
-
-## Part 1 — Python Comments
-
-### What is a Comment?
-
-A **comment** is a note you write inside your code. Python completely ignores it — comments are not instructions for the computer, they are messages for human beings (including your future self).
-
-**Why do we need comments?**
-
-Imagine you write a long, complex program today. Six months later you open the file again. Without comments, you might struggle to remember *why* you wrote certain parts the way you did. Comments act like sticky notes on your code, explaining what it does and why.
-
-**Real-world analogy:** Think of comments like the margin notes a student writes in a textbook — the textbook (code) still works without them, but the notes help the reader understand the content much better.
-
-**In professional software development**, comments are essential for team collaboration. If five developers are working on the same codebase, comments help each person understand what the others have written.
-
-### Comments are also used to:
-- Temporarily disable a line of code during testing (called "commenting out").
-- Explain complex logic.
-- Provide authorship or copyright information at the top of a file.
-- Document what a function does.
+If any of these feel unfamiliar, briefly review the earlier lessons before continuing. Every concept in this lesson builds on them.
 
 ---
 
-### Single-Line Comments
+## Part 1 – What Is a String?
 
-The most common type of comment in Python is the **single-line comment**. You create one by placing a hash symbol (`#`) at the start of a line. Everything to the right of the `#` on that line is ignored by Python.
+### 1.1 Understanding Strings in Everyday Terms
 
-**Example 1 — A comment on its own line:**
+Think of a string like a **necklace made of letter-beads**. Each bead is one character — a letter, a number, a space, a punctuation mark, or even an emoji. String them all together and you get a piece of text.
+
+In Python, a **string** is a sequence of characters enclosed in quotation marks.
+
+**Why does Python need a special type for text?**  
+Numbers can be added, subtracted, and multiplied mathematically. But text works differently — you cannot multiply "hello" by 3 in a mathematical sense (though Python does have a fun trick for that, which you'll see shortly). Python uses a dedicated string type so it knows to treat that data as text, not as arithmetic.
+
+---
+
+### 1.2 Creating a String
+
+You create a string by surrounding characters with:
+
+- **Single quotes:** `'hello'`
+- **Double quotes:** `"hello"`
+- **Triple quotes:** `"""hello"""` or `'''hello'''` (for multi-line text)
+
+Both single and double quotes produce identical strings. Triple quotes are used when your text needs to span multiple lines.
+
+**Simple Example 1 – Your first string:**
 
 ```python
-# This is a comment
-print("Hello, World!")
+greeting = "Hello, World!"
+print(greeting)
 ```
 
 **Expected Output:**
@@ -80,1561 +72,1453 @@ print("Hello, World!")
 Hello, World!
 ```
 
-Notice that the comment line produces no output — Python simply skips it. Only the `print()` line runs.
-
-**Example 2 — A comment explaining a line of code:**
-
-```python
-# Print a greeting message to the user
-print("Welcome to Python!")
-```
-
-**Expected Output:**
-```
-Welcome to Python!
-```
-
-**Example 3 — An inline comment (placed after code on the same line):**
-
-You can also put a comment at the end of a line of code. Python will run the code, then ignore the rest of the line after the `#`.
-
-```python
-print("Hello, World!")   # This prints a greeting
-```
-
-**Expected Output:**
-```
-Hello, World!
-```
-
-The code runs normally. Python executes `print("Hello, World!")`, then sees `#` and ignores everything after it.
-
-> **Thinking prompt:** What do you think happens if you put the `#` at the very start of a line that has `print()` in it?
-
-**Example 4 — Commenting out a line of code:**
-
-```python
-# print("This line will NOT run")
-print("This line WILL run")
-```
-
-**Expected Output:**
-```
-This line WILL run
-```
-
-The first `print()` is "commented out" — it is deactivated. This is incredibly useful when testing and debugging your programs.
+**Line-by-line explanation:**
+- `greeting` — a variable name we chose to hold our text
+- `=` — the assignment operator; stores the value on the right into the variable on the left
+- `"Hello, World!"` — the string value; the double quotes tell Python "this is text, not code"
+- `print(greeting)` — displays the value stored in `greeting` to the screen
 
 ---
 
-### Multi-Line Comments
-
-Sometimes you need a comment that spans more than one line. There are two approaches in Python.
-
-#### Approach 1 — Multiple `#` symbols
-
-Simply put a `#` at the start of each comment line.
+**Simple Example 2 – Single quotes work too:**
 
 ```python
-# This program calculates a student's average score.
-# It takes three test scores as input.
-# It adds them together and divides by three.
-print("Student Grade Calculator")
+name = 'Alice'
+print(name)
 ```
 
 **Expected Output:**
 ```
-Student Grade Calculator
+Alice
 ```
 
-#### Approach 2 — Triple-Quoted Strings
+> **Tip:** Single and double quotes are interchangeable for single-line strings. Most Python programmers pick one style and stay consistent. This lesson uses double quotes as the default.
 
-Python does not have an official multi-line comment syntax, but developers commonly use **triple-quoted strings** (`"""` or `'''`) as a workaround. A string not assigned to any variable is simply created and immediately discarded — Python ignores it.
+---
+
+**Simple Example 3 – Multi-line string with triple quotes:**
 
 ```python
-"""
-This is a multi-line comment.
-It spans multiple lines.
-Python will not execute any of this.
-"""
-print("Hello!")
+address = """123 Maple Street
+Springfield
+USA"""
+print(address)
 ```
 
 **Expected Output:**
 ```
-Hello!
+123 Maple Street
+Springfield
+USA
 ```
 
-> **Important note:** Triple-quoted strings are not *true* comments — they are string literals that Python technically evaluates but does not do anything with. For short notes, always prefer `#`. Triple quotes are more commonly used for **docstrings** (formal documentation inside functions and classes, which you will learn about in later lessons).
+**Why triple quotes?** When your text naturally contains line breaks — like an address, a poem, or a block of instructions — triple quotes let you write exactly that without any extra tricks. Python preserves every line break you type.
 
-**Example — Using both styles together:**
+---
+
+### 1.3 Strings Are Sequences — Characters Have Positions
+
+Here is a crucial idea: **every character in a string has a numbered position called an index**. Python starts counting at **zero**, not one.
+
+Consider the string `"Python"`:
+
+| Character | P | y | t | h | o | n |
+|-----------|---|---|---|---|---|---|
+| Index     | 0 | 1 | 2 | 3 | 4 | 5 |
+
+You access a single character using **square brackets** with the index number inside.
+
+**Example – Accessing individual characters:**
 
 ```python
-# ============================================
-# Author  : Chidi Okafor
-# Date    : 2026-05-03
-# Purpose : Calculate monthly savings
-# ============================================
+word = "Python"
+print(word[0])   # first character
+print(word[1])   # second character
+print(word[5])   # last character
+```
 
-print("Monthly Savings Calculator")
-result = 500 * 12   # Multiply monthly savings by 12 months
+**Expected Output:**
+```
+P
+y
+n
+```
+
+> **Common Beginner Mistake:** Trying `word[6]` on a 6-character string causes an **IndexError** because valid indexes are 0 through 5. There is no position 6.
+
+```python
+word = "Python"
+print(word[6])  # ❌ IndexError: string index out of range
+```
+
+**Fix:** Always remember — for a string of length `n`, the valid indexes are `0` to `n-1`.
+
+---
+
+### 1.4 Negative Indexing — Counting from the End
+
+Python also allows **negative indexes**. Think of it as counting backwards from the end of the necklace.
+
+- `-1` is the last character
+- `-2` is the second-to-last
+- And so on...
+
+```python
+word = "Python"
+print(word[-1])   # last character
+print(word[-2])   # second to last
+print(word[-6])   # first character (same as index 0)
+```
+
+**Expected Output:**
+```
+n
+o
+P
+```
+
+> **Why is this useful?** When you don't know how long a string is — imagine reading a filename from a folder — negative indexing lets you reliably grab the last few characters without calculating the exact length first.
+
+---
+
+### 1.5 Finding the Length of a String
+
+The built-in `len()` function returns the number of characters in a string (including spaces and punctuation).
+
+```python
+sentence = "Hello, World!"
+print(len(sentence))
+```
+
+**Expected Output:**
+```
+13
+```
+
+Every character — the comma, the space, the exclamation mark — counts. Spaces are characters too.
+
+```python
+print(len(""))     # empty string
+print(len("Hi"))   # two characters
+```
+
+**Expected Output:**
+```
+0
+2
+```
+
+> **Thinking prompt:** What does `len("Hello, World!") - 1` give you? Why is that useful when working with indexes?
+
+---
+
+## Part 2 – Slicing Strings
+
+### 2.1 What Is Slicing?
+
+Accessing one character with `word[0]` is useful, but what if you need a **portion** of a string — the first five letters, the last three, or everything from position 4 to position 10?
+
+**Slicing** is the technique for extracting a **substring** (a smaller piece of a string). You specify a start position and a stop position, and Python gives you everything in between.
+
+**The slicing syntax:**
+
+```python
+string[start:stop]
+```
+
+- `start` — the index where the slice **begins** (this character **is included**)
+- `stop` — the index where the slice **ends** (this character **is NOT included** — Python stops just before it)
+
+This "up to but not including" behaviour is a common Python convention. It can feel odd at first, but it makes many calculations very clean.
+
+---
+
+### 2.2 Basic Slicing Examples
+
+**Example – Slicing "Hello, World!":**
+
+```python
+text = "Hello, World!"
+
+print(text[0:5])    # characters at index 0, 1, 2, 3, 4
+print(text[7:12])   # characters at index 7, 8, 9, 10, 11
+```
+
+**Expected Output:**
+```
+Hello
+World
+```
+
+**Visualising the positions:**
+
+```
+H  e  l  l  o  ,     W  o  r  l  d  !
+0  1  2  3  4  5  6  7  8  9 10 11 12
+```
+
+`text[0:5]` captures positions 0, 1, 2, 3, 4 → `Hello`  
+`text[7:12]` captures positions 7, 8, 9, 10, 11 → `World`
+
+---
+
+### 2.3 Omitting Start or Stop
+
+Python lets you leave out either end of the slice:
+
+- **Omit `start`** → Python assumes you mean "from the very beginning"
+- **Omit `stop`** → Python assumes you mean "all the way to the end"
+
+```python
+text = "Hello, World!"
+
+print(text[:5])    # from start up to (not including) index 5
+print(text[7:])    # from index 7 to the end
+print(text[:])     # the entire string
+```
+
+**Expected Output:**
+```
+Hello
+World!
+Hello, World!
+```
+
+> **Real-world use:** If you have a filename like `"report_2024.csv"` and you want just the name without the extension, you can slice off the last 4 characters: `filename[:-4]` → `"report_2024"`. This works regardless of how long the filename is!
+
+---
+
+### 2.4 Slicing with a Step
+
+Slicing has an optional third value called a **step** (also called a stride):
+
+```python
+string[start:stop:step]
+```
+
+The step controls **how many positions to jump** between each character taken.
+
+```python
+text = "Hello, World!"
+
+print(text[0:13:2])   # every second character
+print(text[::3])      # every third character, whole string
+```
+
+**Expected Output:**
+```
+Hlo ol!
+HlWl
+```
+
+**The famous reverse trick:**
+
+```python
+text = "Python"
+print(text[::-1])   # step of -1 means go backwards
+```
+
+**Expected Output:**
+```
+nohtyP
+```
+
+Step `-1` walks backwards through the entire string from end to start — a popular Python trick for reversing a string in one line.
+
+---
+
+### 2.5 Negative Indexes in Slices
+
+You can mix negative indexes into slices freely:
+
+```python
+text = "Hello, World!"
+print(text[-6:-1])   # five characters before the last one
+```
+
+**Expected Output:**
+```
+World
+```
+
+---
+
+> **Thinking prompt:** What slice would give you just the `","` from `"Hello, World!"`? Work it out using the position table above.
+
+---
+
+## Part 3 – Modifying Strings
+
+### 3.1 Strings Are Immutable — A Critical Concept
+
+Before learning modification methods, you must understand one very important rule:
+
+> **Strings in Python are immutable.** This means once a string is created, you cannot change individual characters inside it.
+
+```python
+word = "Hello"
+word[0] = "J"   # ❌ This causes a TypeError
+```
+
+**Error:**
+```
+TypeError: 'str' object does not support item assignment
+```
+
+**Why?** Immutability is a design decision that makes Python strings safe, efficient, and predictable. When you "modify" a string, Python actually creates a **brand-new string** with the changes applied and gives it to you.
+
+**Fix:** Assign the result to a new (or the same) variable:
+
+```python
+word = "Hello"
+new_word = "J" + word[1:]   # build a new string
+print(new_word)
+```
+
+**Expected Output:**
+```
+Jello
+```
+
+---
+
+### 3.2 Changing Case
+
+Python strings come with built-in **methods** — think of a method as a specialised function that belongs to strings and can be called using a dot (`.`).
+
+**`upper()` — Convert all letters to UPPERCASE:**
+
+```python
+text = "hello world"
+print(text.upper())
+```
+
+**Expected Output:**
+```
+HELLO WORLD
+```
+
+---
+
+**`lower()` — Convert all letters to lowercase:**
+
+```python
+text = "PYTHON IS FUN"
+print(text.lower())
+```
+
+**Expected Output:**
+```
+python is fun
+```
+
+---
+
+**`title()` — Capitalise the First Letter of Each Word:**
+
+```python
+text = "learning python is great"
+print(text.title())
+```
+
+**Expected Output:**
+```
+Learning Python Is Great
+```
+
+---
+
+**`capitalize()` — Capitalise only the very first letter:**
+
+```python
+text = "python programming"
+print(text.capitalize())
+```
+
+**Expected Output:**
+```
+Python programming
+```
+
+---
+
+**`swapcase()` — Flip every letter's case:**
+
+```python
+text = "Hello World"
+print(text.swapcase())
+```
+
+**Expected Output:**
+```
+hELLO wORLD
+```
+
+> **Real-world use:** `lower()` is extremely common when comparing user input. If a user types "YES", "Yes", or "yes", converting both sides to lowercase before comparing ensures your code treats them identically.
+
+---
+
+### 3.3 Removing Whitespace
+
+**Whitespace** means spaces, tabs, and newlines — invisible characters. They often sneak into data from user input, file reads, or copy-paste.
+
+| Method | What it removes |
+|--------|----------------|
+| `strip()` | Whitespace from both ends |
+| `lstrip()` | Whitespace from the left end only |
+| `rstrip()` | Whitespace from the right end only |
+
+```python
+messy = "   hello world   "
+
+print(messy.strip())    # removes both sides
+print(messy.lstrip())   # removes left side only
+print(messy.rstrip())   # removes right side only
+```
+
+**Expected Output:**
+```
+hello world
+hello world   
+   hello world
+```
+
+> **Real-world use:** When reading names or emails from a form or CSV file, `strip()` is almost always the first step to clean the data before using it.
+
+---
+
+### 3.4 Replacing Parts of a String
+
+`replace(old, new)` finds all occurrences of `old` and swaps them for `new`:
+
+```python
+sentence = "I love cats. Cats are great."
+result = sentence.replace("cats", "dogs")
 print(result)
 ```
 
 **Expected Output:**
 ```
-Monthly Savings Calculator
-6000
+I love dogs. Cats are great.
 ```
 
----
+Notice: `replace()` is **case-sensitive**. It replaced `"cats"` but left `"Cats"` (capital C) untouched. To replace both, you would need `sentence.lower().replace(...)` or two separate replace calls.
 
-## Part 2 — Python Variables
-
-### What is a Variable?
-
-A **variable** is a named container that stores a piece of information in your program. Think of it like a labelled box: the label (the variable name) lets you find the box again later, and inside the box is the value (the information you stored).
-
-**Analogy:** Imagine a shelf in a market stall with labelled containers:
-- A box labelled `price` contains the value `500`
-- A box labelled `customer_name` contains the value `"Ngozi"`
-- A box labelled `quantity` contains the value `3`
-
-At any point you can look at a box (read the variable), change what is inside (update the variable), or use the value in a calculation.
-
-**Why do we need variables?**
-
-Without variables, you would have to hard-code (write directly) every value in every place you need it. If a price changes, you would need to find and update every single place you wrote it. With a variable, you update it in one place and the change spreads everywhere automatically.
-
----
-
-### Creating a Variable (Assignment)
-
-In Python, you create a variable by simply writing its name, followed by `=`, followed by the value you want to store. This is called **assignment**.
-
-```
-variable_name = value
-```
-
-The `=` symbol here is the **assignment operator**. It does NOT mean "equals" in the mathematical sense — it means "store this value in this variable."
-
-**Example 1 — Storing a number:**
+**Replacing multiple characters:**
 
 ```python
-age = 25
-print(age)
+text = "banana"
+print(text.replace("a", "o"))
 ```
 
 **Expected Output:**
 ```
-25
-```
-
-**Line-by-line breakdown:**
-- `age` — the name of our variable (the label on the box).
-- `=` — the assignment operator ("put this into the box").
-- `25` — the value we are storing (what goes into the box).
-- `print(age)` — look inside the box labelled `age` and display what is there.
-
-**Example 2 — Storing text:**
-
-```python
-name = "Fatima"
-print(name)
-```
-
-**Expected Output:**
-```
-Fatima
-```
-
-**Example 3 — Storing a decimal number:**
-
-```python
-price = 149.99
-print(price)
-```
-
-**Expected Output:**
-```
-149.99
-```
-
-**Example 4 — Multiple variables:**
-
-```python
-student_name = "Emeka"
-student_age = 19
-student_gpa = 3.75
-print(student_name)
-print(student_age)
-print(student_gpa)
-```
-
-**Expected Output:**
-```
-Emeka
-19
-3.75
+bonono
 ```
 
 ---
 
-### Python Does Not Require a Type Declaration
+### 3.5 Splitting a String into a List
 
-In some other programming languages (like Java or C++), when you create a variable you must declare what *type* of data it will hold:
-
-```java
-// Java — you must say "int" (integer) before the variable name
-int age = 25;
-String name = "Emeka";
-```
-
-In Python, **you do not need to do this**. Python automatically figures out the type of data based on the value you assign. This makes Python much faster to write.
+`split(separator)` breaks a string apart at every occurrence of the separator and returns a **list** (a collection of parts):
 
 ```python
-# Python — no type needed, Python figures it out
-age = 25          # Python knows this is a whole number (integer)
-name = "Emeka"    # Python knows this is text (string)
-price = 149.99    # Python knows this is a decimal number (float)
-```
-
-This feature is called **dynamic typing** — the type is determined at runtime based on what value you give the variable.
-
----
-
-### Variables Can Change (That Is Why They Are Called "Variables"!)
-
-A variable's value can be changed (updated) at any time by simply assigning a new value to it.
-
-```python
-x = 10
-print(x)
-
-x = 50
-print(x)
-
-x = x + 5    # Take the current value of x, add 5, store the result back in x
-print(x)
+sentence = "apple,banana,cherry"
+fruits = sentence.split(",")
+print(fruits)
 ```
 
 **Expected Output:**
 ```
-10
-50
-55
+['apple', 'banana', 'cherry']
 ```
 
-**Thinking prompt:** On the line `x = x + 5`, what is happening? The right side (`x + 5`) is evaluated first using the *current* value of x (which is 50), giving 55. Then that result is stored back into `x`. So `x` becomes 55.
-
----
-
-### Variables Are Case-Sensitive
-
-Remember from Lesson 01: Python treats uppercase and lowercase letters as completely different characters. So `age`, `Age`, and `AGE` are three entirely separate variables.
+Without a separator argument, `split()` splits on any whitespace:
 
 ```python
-age = 30
-Age = 45
-AGE = 99
-
-print(age)   # prints 30
-print(Age)   # prints 45
-print(AGE)   # prints 99
+sentence = "The quick brown fox"
+words = sentence.split()
+print(words)
 ```
 
 **Expected Output:**
 ```
-30
-45
-99
+['The', 'quick', 'brown', 'fox']
 ```
 
-This is a frequent source of bugs for beginners! Always be consistent with how you write variable names.
+> **Real-world use:** CSV (Comma Separated Values) files store data as text with commas between fields. `split(",")` is a fundamental tool for reading that data into Python.
 
 ---
 
-## Part 3 — Python Variable Names (Naming Rules and Conventions)
+### 3.6 Checking String Content
 
-### Why Naming Rules Matter
-
-Variables must be named according to Python's rules. If you break these rules, Python will give you an error. Beyond the rules, there are also **conventions** — best practices that experienced programmers follow to make code readable.
-
----
-
-### The Official Rules (You MUST Follow These)
-
-These are not suggestions — breaking any of these will cause a `SyntaxError` or `NameError`.
-
-**Rule 1 — A variable name must start with a letter or an underscore (`_`)**
+These methods return `True` or `False` and are excellent for validation:
 
 ```python
-name = "Tunde"        # ✅ Starts with a letter
-_score = 95           # ✅ Starts with underscore
-2name = "Error"       # ❌ Starts with a number — INVALID
-```
-
-**Rule 2 — A variable name can only contain letters, numbers, and underscores**
-
-No spaces, no hyphens, no dots, no special characters.
-
-```python
-student_name = "Amaka"    # ✅ Uses letters and underscore
-studentName = "Amaka"     # ✅ Uses letters only
-student-name = "Amaka"    # ❌ Hyphen not allowed
-student name = "Amaka"    # ❌ Space not allowed
-student.name = "Amaka"    # ❌ Dot not allowed
-```
-
-**Rule 3 — Variable names are case-sensitive**
-
-```python
-colour = "blue"
-Colour = "red"
-COLOUR = "green"
-# These are THREE different variables
-```
-
-**Rule 4 — Variable names cannot be Python keywords (reserved words)**
-
-Python has special reserved words that have built-in meaning. You cannot use them as variable names. Examples:
-
-`if`, `else`, `for`, `while`, `True`, `False`, `None`, `import`, `return`, `def`, `class`, `and`, `or`, `not`, `in`, `is`, `pass`, `break`, `continue`, `try`, `except`, `lambda`, `with`, `as`, `global`, `del`, `yield`, `raise`, `assert`, `from`
-
-```python
-if = 5        # ❌ 'if' is a reserved keyword
-return = 10   # ❌ 'return' is a reserved keyword
-for = "loop"  # ❌ 'for' is a reserved keyword
-```
-
-You can see the full list of Python keywords by running:
-```python
-import keyword
-print(keyword.kwlist)
-```
-
----
-
-### Best Practice Conventions (You SHOULD Follow These)
-
-These are not enforced by Python, but professional developers follow them for readability.
-
-**Convention 1 — Use snake_case for variable names**
-
-`snake_case` means all lowercase letters with underscores between words. This is the Python standard (defined in a style guide called PEP 8).
-
-```python
-# ✅ Recommended (snake_case)
-student_age = 20
-monthly_salary = 85000
-total_score = 98.5
-
-# ❌ Not recommended
-StudentAge = 20         # This style is for class names in Python
-monthlySalary = 85000   # This is camelCase — common in JavaScript but not Python
-TOTAL_SCORE = 98.5      # ALL_CAPS is reserved for constants (values that never change)
-```
-
-**Convention 2 — Use meaningful, descriptive names**
-
-A variable name should clearly describe what the variable contains.
-
-```python
-# ❌ Bad — what does 'x' or 'd' mean?
-x = 85000
-d = 365
-
-# ✅ Good — instantly understandable
-annual_salary = 85000
-days_in_year = 365
-```
-
-**Convention 3 — Use ALL_CAPS for constants**
-
-A **constant** is a variable whose value never changes (like the speed of light or the value of Pi). By convention, constants are written in ALL CAPS.
-
-```python
-PI = 3.14159
-MAX_STUDENTS = 50
-COUNTRY_CODE = "NG"
-```
-
-**Convention 4 — Keep names reasonably short but not cryptic**
-
-```python
-# Too short (cryptic)
-n = "Adaeze"
-
-# Too long (annoying to type)
-the_full_name_of_the_student_enrolled_in_the_course = "Adaeze"
-
-# Just right
-student_name = "Adaeze"
-```
-
----
-
-### Valid and Invalid Name Examples
-
-| Variable Name | Valid? | Why |
-|---------------|--------|-----|
-| `my_var` | ✅ Yes | Letters and underscore |
-| `myvar` | ✅ Yes | All letters |
-| `_myvar` | ✅ Yes | Starts with underscore |
-| `myVar` | ✅ Yes | Letters only (camelCase — works but not recommended) |
-| `MYVAR` | ✅ Yes | All caps — valid (use for constants) |
-| `myvar2` | ✅ Yes | Letters and number |
-| `my-var` | ❌ No | Hyphen not allowed |
-| `my var` | ❌ No | Space not allowed |
-| `2myvar` | ❌ No | Starts with a number |
-| `my.var` | ❌ No | Dot not allowed |
-
----
-
-## Part 4 — Assigning Multiple Values
-
-Python offers several clever shortcuts for assigning values to multiple variables at once.
-
-### Method 1 — Assign Multiple Values to Multiple Variables (One Line)
-
-You can assign different values to different variables on a single line by separating them with commas.
-
-```python
-x, y, z = "Orange", "Banana", "Cherry"
-print(x)
-print(y)
-print(z)
+print("Hello123".isalnum())   # letters and digits only?
+print("Hello".isalpha())      # letters only?
+print("12345".isdigit())      # digits only?
+print("hello".islower())      # all lowercase?
+print("HELLO".isupper())      # all uppercase?
+print("   ".isspace())        # only whitespace?
 ```
 
 **Expected Output:**
 ```
-Orange
-Banana
-Cherry
-```
-
-**How it works:** Python matches them up in order — `x` gets `"Orange"`, `y` gets `"Banana"`, `z` gets `"Cherry"`. The number of variables on the left must exactly match the number of values on the right.
-
-**What happens if the counts do not match:**
-
-```python
-x, y = "Apple", "Banana", "Cherry"   # ❌ 2 variables, 3 values
-```
-
-**Error:**
-```
-ValueError: too many values to unpack (expected 2)
-```
-
-**Practical use case:**
-
-```python
-length, width, height = 10, 5, 3
-volume = length * width * height
-print(volume)
-```
-
-**Expected Output:**
-```
-150
+True
+True
+True
+True
+True
+True
 ```
 
 ---
 
-### Method 2 — Assign One Value to Multiple Variables (One Line)
+### 3.7 Finding and Counting Substrings
 
-If you want all variables to start with the same value, you can chain assignment operators.
+**`find(substring)` — Returns the index where a substring first appears (or `-1` if not found):**
 
 ```python
-x = y = z = 0
-print(x)
-print(y)
-print(z)
+text = "Hello, World!"
+print(text.find("World"))   # where does "World" start?
+print(text.find("xyz"))     # not found
 ```
 
 **Expected Output:**
 ```
-0
-0
-0
+7
+-1
 ```
 
-**Practical use case — resetting counters:**
+**`count(substring)` — Counts how many times a substring appears:**
 
 ```python
-errors = warnings = skipped = 0
-print(errors)
-print(warnings)
-print(skipped)
+text = "banana"
+print(text.count("a"))
 ```
 
 **Expected Output:**
 ```
-0
-0
-0
-```
-
----
-
-### Method 3 — Unpacking a Collection
-
-If you have a list (a collection of items), you can "unpack" it directly into individual variables.
-
-```python
-fruits = ["apple", "banana", "cherry"]
-x, y, z = fruits
-print(x)
-print(y)
-print(z)
-```
-
-**Expected Output:**
-```
-apple
-banana
-cherry
-```
-
-**How it works:** Python takes the items out of the list one by one and puts them into the variables in the same order.
-
-> **Note:** We will learn much more about lists in a future lesson. For now, just know this technique exists.
-
-**Swapping two variables in one line:**
-
-Here is a beautiful Python trick — you can swap the values of two variables without needing a temporary third variable:
-
-```python
-a = 10
-b = 20
-
-print("Before swap:")
-print(a)   # 10
-print(b)   # 20
-
-a, b = b, a   # Swap!
-
-print("After swap:")
-print(a)   # 20
-print(b)   # 10
-```
-
-**Expected Output:**
-```
-Before swap:
-10
-20
-After swap:
-20
-10
-```
-
-In most other languages you would need a temporary variable:
-```python
-temp = a
-a = b
-b = temp
-```
-Python's one-line swap is much more elegant.
-
----
-
-## Part 5 — Output Variables (Printing Variables)
-
-You already know the `print()` function. Now let us explore all the ways you can display variable values.
-
-### Method 1 — Printing a Single Variable
-
-The simplest way:
-
-```python
-name = "Ngozi"
-print(name)
-```
-
-**Expected Output:**
-```
-Ngozi
-```
-
----
-
-### Method 2 — Printing Multiple Variables with Commas (Recommended)
-
-You can pass multiple variables to `print()` by separating them with commas. Python automatically adds a space between them.
-
-```python
-first_name = "Emeka"
-last_name = "Obi"
-age = 22
-print(first_name, last_name, age)
-```
-
-**Expected Output:**
-```
-Emeka Obi 22
-```
-
-You can also mix variables and literal text (strings) in the same print:
-
-```python
-name = "Amara"
-age = 19
-print("Name:", name, "| Age:", age)
-```
-
-**Expected Output:**
-```
-Name: Amara | Age: 19
-```
-
----
-
-### Method 3 — String Concatenation with `+`
-
-You can join (concatenate) strings together using the `+` operator.
-
-```python
-first_name = "Chidi"
-last_name = "Okafor"
-print("Full name: " + first_name + " " + last_name)
-```
-
-**Expected Output:**
-```
-Full name: Chidi Okafor
-```
-
-> **Important warning:** The `+` operator can only join strings with strings. If you try to join a string with a number, Python will give an error:
-
-```python
-age = 25
-print("Age: " + age)    # ❌ Error!
-```
-
-**Error:**
-```
-TypeError: can only concatenate str (not "int") to str
-```
-
-**Fix — convert the number to a string first using `str()`:**
-
-```python
-age = 25
-print("Age: " + str(age))    # ✅ Works!
-```
-
-**Expected Output:**
-```
-Age: 25
-```
-
----
-
-### Method 4 — f-Strings (The Modern and Best Way) ⭐
-
-**f-strings** (formatted string literals) are the most powerful and readable way to include variable values inside text. Just put the letter `f` before the opening quote, then write variable names inside `{}` curly brackets.
-
-```python
-name = "Tunde"
-age = 21
-city = "Lagos"
-
-print(f"My name is {name}, I am {age} years old, and I live in {city}.")
-```
-
-**Expected Output:**
-```
-My name is Tunde, I am 21 years old, and I live in Lagos.
-```
-
-**Why f-strings are the best approach:**
-- No type conversion needed — numbers, text, all types work directly.
-- Easy to read — you can see exactly where each variable will appear.
-- Can include expressions directly inside the `{}`:
-
-```python
-price = 200
-quantity = 5
-print(f"Total cost: {price * quantity} Naira")
-```
-
-**Expected Output:**
-```
-Total cost: 1000 Naira
-```
-
-The calculation `price * quantity` happens *inside* the f-string!
-
----
-
-### Summary of Output Methods
-
-```python
-name = "Adaeze"
-age = 23
-
-# Method 1 — single variable
-print(name)
-
-# Method 2 — multiple variables with commas
-print(name, age)
-
-# Method 3 — concatenation (strings only, numbers need str())
-print("Name: " + name + ", Age: " + str(age))
-
-# Method 4 — f-string (recommended)
-print(f"Name: {name}, Age: {age}")
-```
-
-**Expected Output:**
-```
-Adaeze
-Adaeze 23
-Name: Adaeze, Age: 23
-Name: Adaeze, Age: 23
-```
-
----
-
-## Part 6 — Global Variables
-
-### What is Scope?
-
-Before we explain global variables, we need to understand the concept of **scope**. Scope refers to *where* in your code a variable can be accessed.
-
-Think of it like rooms in a house. A variable created inside a specific room (a function) only exists inside that room. If you go outside that room, the variable is gone. A variable created in the main hallway (outside all rooms) can be seen from everywhere in the house.
-
-### Local Variables
-
-A variable created **inside a function** is called a **local variable**. It only exists while that function is running, and it can only be accessed from inside that function.
-
-```python
-def greet():
-    message = "Hello from inside the function!"   # This is a LOCAL variable
-    print(message)
-
-greet()
-# print(message)   # ← If you uncomment this, it would cause an error!
-```
-
-**Expected Output:**
-```
-Hello from inside the function!
-```
-
-If you tried to print `message` outside the function, Python would say `NameError: name 'message' is not defined` — because `message` only exists *inside* `greet()`.
-
-> **Note:** We cover functions in detail in a later lesson. For now, just understand that a function is a block of code that does a specific job, defined with the `def` keyword.
-
----
-
-### Global Variables
-
-A variable created **outside all functions** — at the top level of your program — is called a **global variable**. It can be accessed from anywhere in the program, including from inside functions.
-
-```python
-country = "Nigeria"   # This is a GLOBAL variable
-
-def show_country():
-    print(country)    # Accessing the global variable from inside a function
-
-show_country()
-print(country)        # Accessing it from outside the function too
-```
-
-**Expected Output:**
-```
-Nigeria
-Nigeria
-```
-
-Both the function and the main code can read the global variable `country`.
-
----
-
-### The Problem: Modifying a Global Variable from Inside a Function
-
-Here is an important and tricky situation. If you try to *change* (reassign) a global variable from inside a function, Python does not modify the global one — it creates a *new local variable* with the same name instead.
-
-```python
-score = 100    # Global variable
-
-def update_score():
-    score = 200    # Python creates a NEW local variable called 'score'
-    print(f"Inside function: {score}")
-
-update_score()
-print(f"Outside function: {score}")   # The global 'score' is unchanged!
-```
-
-**Expected Output:**
-```
-Inside function: 200
-Outside function: 100
-```
-
-This can be confusing! The function seems to have changed `score`, but it actually just created its own private copy. The global `score` is still 100.
-
----
-
-### The `global` Keyword
-
-To tell Python "I want to modify the actual global variable from inside this function", use the `global` keyword before the variable name.
-
-```python
-score = 100    # Global variable
-
-def update_score():
-    global score       # ← "I want to work with the GLOBAL 'score'"
-    score = 200        # Now this modifies the actual global variable
-    print(f"Inside function: {score}")
-
-update_score()
-print(f"Outside function: {score}")   # Global 'score' IS now changed!
-```
-
-**Expected Output:**
-```
-Inside function: 200
-Outside function: 200
-```
-
-Now the global variable is truly updated.
-
----
-
-### Creating a Global Variable Inside a Function
-
-You can even *create* a global variable from inside a function using the `global` keyword:
-
-```python
-def create_greeting():
-    global greeting      # Declare 'greeting' as global
-    greeting = "Hello!"  # Create it and assign a value
-
-create_greeting()        # Run the function to create the variable
-print(greeting)          # Now accessible outside the function
-```
-
-**Expected Output:**
-```
-Hello!
-```
-
----
-
-### When to Use Global Variables
-
-**Use global variables sparingly.** Overusing them makes programs harder to understand and debug because any function can change them at any time. As a beginner, a good rule of thumb is:
-
-- Use global variables only for values that truly need to be shared across your entire program (like configuration settings).
-- For everything else, pass values to functions as **arguments** (you will learn about this in the functions lesson).
-
----
-
-### Comparing Local vs. Global — A Full Example
-
-```python
-# ========================================
-# Global variable — accessible everywhere
-# ========================================
-school_name = "Ibadan Polytechnic"
-
-def display_student():
-    # Local variable — only accessible inside this function
-    student_name = "Blessing"
-    print(f"Student: {student_name}")
-    print(f"School : {school_name}")   # Can read the global variable
-
-def display_school():
-    # This function also accesses the global variable
-    print(f"Welcome to {school_name}!")
-
-display_student()
-display_school()
-
-# print(student_name)  # ← Would cause NameError — student_name is local to display_student
-```
-
-**Expected Output:**
-```
-Student: Blessing
-School : Ibadan Polytechnic
-Welcome to Ibadan Polytechnic!
-```
-
----
-
-## Part 7 — Variable Exercises (From W3Schools)
-
-The following exercises are based on the W3Schools Python Variable Exercises. Try each one yourself before reading the solution.
-
----
-
-### Exercise A — Create and Print a Variable
-
-**Task:** Create a variable called `carname` and assign the value `"Volvo"` to it.
-
-**Your code should produce this output:**
-```
-Volvo
-```
-
-**Solution:**
-```python
-carname = "Volvo"
-print(carname)
-```
-
----
-
-### Exercise B — Change the Value of a Variable
-
-**Task:** Create a variable called `x` with value `50`. Change the value of `x` to `80`.
-
-**Expected Output (after the change):**
-```
-80
-```
-
-**Solution:**
-```python
-x = 50
-x = 80
-print(x)
-```
-
----
-
-### Exercise C — Assign Multiple Variables in One Line
-
-**Task:** Create three variables `x`, `y`, `z` in one line. Assign values `1`, `2`, `3` respectively.
-
-**Expected Output:**
-```
-1
-2
 3
 ```
 
-**Solution:**
-```python
-x, y, z = 1, 2, 3
-print(x)
-print(y)
-print(z)
-```
-
 ---
 
-### Exercise D — Assign the Same Value to Multiple Variables
-
-**Task:** Assign the value `"Orange"` to all three variables `x`, `y`, `z` in one line.
-
-**Expected Output:**
-```
-Orange
-Orange
-Orange
-```
-
-**Solution:**
-```python
-x = y = z = "Orange"
-print(x)
-print(y)
-print(z)
-```
-
----
-
-### Exercise E — Unpack a List
-
-**Task:** Given the list `fruits = ["apple", "banana", "cherry"]`, unpack the list into variables `x`, `y`, `z`.
-
-**Expected Output:**
-```
-apple
-banana
-cherry
-```
-
-**Solution:**
-```python
-fruits = ["apple", "banana", "cherry"]
-x, y, z = fruits
-print(x)
-print(y)
-print(z)
-```
-
----
-
-### Exercise F — Global Variable with `global` Keyword
-
-**Task:** Call the function below and make sure the global variable `x` is changed to `"Python"` inside the function.
+### 3.8 Checking Start and End
 
 ```python
-x = "awesome"
+filename = "report_2024.csv"
 
-def myfunc():
-    # Your code here — make x = "Python" and update the global variable
-    pass
-
-myfunc()
-print("Python is " + x)
+print(filename.startswith("report"))   # does it start with this?
+print(filename.endswith(".csv"))       # does it end with this?
 ```
 
 **Expected Output:**
 ```
-Python is Python
+True
+True
 ```
 
-**Solution:**
+> **Real-world use:** When scanning a folder of files, `endswith(".csv")` is a clean way to filter for only spreadsheet files.
+
+---
+
+## Part 4 – Concatenating Strings
+
+### 4.1 What Is Concatenation?
+
+**Concatenation** means **joining two or more strings together into one**. The word comes from a Latin root meaning "to chain together" — just like linking those letter-beads on the necklace.
+
+In Python, the `+` operator joins strings:
+
 ```python
-x = "awesome"
-
-def myfunc():
-    global x
-    x = "Python"
-
-myfunc()
-print("Python is " + x)
+first = "Hello"
+second = "World"
+result = first + " " + second
+print(result)
 ```
+
+**Expected Output:**
+```
+Hello World
+```
+
+Notice: `+` does **not** automatically add a space. You must include it yourself as `" "` between the two strings.
+
+---
+
+### 4.2 Concatenation Rules
+
+**Rule 1: Both values must be strings.**
+
+```python
+name = "Alice"
+age = 30
+print("Name: " + name)          # ✅ Both strings
+print("Age: " + age)            # ❌ TypeError: can only concatenate str to str
+print("Age: " + str(age))       # ✅ Convert age to string first
+```
+
+**Expected Output (lines 3 and 5):**
+```
+Name: Alice
+Age: 30
+```
+
+**`str()` converts a non-string value into its text representation.** This is essential whenever you want to include a number inside a string using `+`.
+
+---
+
+### 4.3 Repeating Strings with `*`
+
+The `*` operator repeats a string a given number of times:
+
+```python
+line = "-" * 20
+print(line)
+
+laugh = "ha" * 3
+print(laugh)
+```
+
+**Expected Output:**
+```
+--------------------
+hahaha
+```
+
+> **Real-world use:** Creating separator lines in terminal output or padding fields to a fixed width.
+
+---
+
+### 4.4 Building Strings in a Loop
+
+A common pattern is to start with an empty string and add to it piece by piece:
+
+```python
+result = ""
+words = ["Python", "is", "awesome"]
+
+for word in words:
+    result = result + word + " "
+
+print(result.strip())
+```
+
+**Expected Output:**
+```
+Python is awesome
+```
+
+> **Thinking prompt:** What happens if you remove `.strip()` from the last line? Why?
+
+---
+
+## Part 5 – Formatting Strings
+
+### 5.1 Why String Formatting?
+
+Concatenation works, but it becomes clunky when mixing many variables and text:
+
+```python
+name = "Alice"
+age = 30
+city = "London"
+
+# Clunky concatenation:
+print("My name is " + name + ", I am " + str(age) + " years old, and I live in " + city + ".")
+```
+
+This is hard to read and error-prone. Python offers cleaner, more powerful alternatives: **f-strings** (the modern, recommended method) and `format()`.
+
+---
+
+### 5.2 F-Strings (Formatted String Literals) — The Modern Way
+
+An **f-string** is a string that starts with the letter `f` before the opening quote. Inside the string, you place variable names (or any expression) inside **curly braces `{}`**. Python automatically inserts the value there.
+
+```python
+name = "Alice"
+age = 30
+print(f"My name is {name} and I am {age} years old.")
+```
+
+**Expected Output:**
+```
+My name is Alice and I am 30 years old.
+```
+
+**Line-by-line:**
+- `f"..."` — the `f` prefix activates f-string mode
+- `{name}` — Python replaces this with the value of the variable `name`
+- `{age}` — Python replaces this with the value of `age` (automatically converted to text — no `str()` needed!)
+
+---
+
+### 5.3 F-Strings with Expressions
+
+You can put any valid Python expression inside `{}`:
+
+```python
+price = 49.99
+quantity = 3
+
+print(f"Total cost: ${price * quantity:.2f}")
+```
+
+**Expected Output:**
+```
+Total cost: $149.97
+```
+
+**What is `:.2f`?**  
+This is a **format specifier**. The `:` separates the expression from formatting instructions. `.2f` means: display as a **f**loating-point number with exactly **2** decimal places. This is invaluable for money, measurements, and scientific values.
+
+---
+
+**More format specifiers:**
+
+```python
+pi = 3.14159265
+
+print(f"Pi to 2 decimal places: {pi:.2f}")
+print(f"Pi to 4 decimal places: {pi:.4f}")
+print(f"Pi as integer: {pi:.0f}")
+```
+
+**Expected Output:**
+```
+Pi to 2 decimal places: 3.14
+Pi to 4 decimal places: 3.1416
+Pi as integer: 3
+```
+
+---
+
+### 5.4 The `format()` Method — The Classic Way
+
+Before f-strings existed (prior to Python 3.6), `format()` was the standard approach. You will encounter it in older codebases, so it is important to recognise it.
+
+The `format()` method uses `{}` as placeholders inside the string, then fills them in order with the arguments passed to `format()`:
+
+```python
+name = "Bob"
+age = 25
+print("My name is {} and I am {} years old.".format(name, age))
+```
+
+**Expected Output:**
+```
+My name is Bob and I am 25 years old.
+```
+
+---
+
+**Using numbered placeholders:**
+
+```python
+print("First: {0}, Second: {1}, First again: {0}".format("apple", "banana"))
+```
+
+**Expected Output:**
+```
+First: apple, Second: banana, First again: apple
+```
+
+The `{0}` means "insert the first argument", `{1}` the second. You can reuse them.
+
+---
+
+**Using named placeholders:**
+
+```python
+print("Name: {n}, Age: {a}".format(n="Carol", a=28))
+```
+
+**Expected Output:**
+```
+Name: Carol, Age: 28
+```
+
+---
+
+### 5.5 The `%` Operator — The Legacy Way
+
+The oldest Python string formatting method uses `%`. You will see it in older tutorials and legacy Python 2 code:
+
+```python
+name = "Dave"
+age = 35
+print("Name: %s, Age: %d" % (name, age))
+```
+
+**Expected Output:**
+```
+Name: Dave, Age: 35
+```
+
+- `%s` → string placeholder
+- `%d` → integer placeholder
+- `%f` → float placeholder
+
+> **Recommendation:** Use f-strings in all new code. They are the most readable, flexible, and efficient of the three methods.
+
+---
+
+### 5.6 F-String Alignment and Padding
+
+F-strings can align text within a fixed-width field — extremely useful for making neat columns in terminal output:
+
+```python
+item1 = "Apple"
+item2 = "Banana"
+item3 = "Kiwi"
+
+print(f"{'Item':<10} {'Price':>8}")
+print(f"{item1:<10} {'$1.20':>8}")
+print(f"{item2:<10} {'$0.85':>8}")
+print(f"{item3:<10} {'$2.50':>8}")
+```
+
+**Expected Output:**
+```
+Item          Price
+Apple         $1.20
+Banana        $0.85
+Kiwi          $2.50
+```
+
+- `:<10` — left-align within a 10-character wide field
+- `:>8` — right-align within an 8-character wide field
+
+---
+
+## Part 6 – Escape Characters
+
+### 6.1 The Problem: Special Characters Inside Strings
+
+Imagine you want to print:
+```
+She said "Hello!"
+```
+
+If you write:
+
+```python
+print("She said "Hello!"")   # ❌ SyntaxError
+```
+
+Python gets confused — the second `"` ends the string prematurely, then `Hello` is unparseable code. You need a way to tell Python "this quote is part of the text, not the end of the string."
+
+The solution is **escape characters**.
+
+---
+
+### 6.2 What Is an Escape Character?
+
+An **escape character** is a **backslash `\`** placed before a special character. The backslash tells Python: _"Do not treat the next character normally — interpret it as a special instruction or literal character."_
+
+The backslash + the following character form an **escape sequence** — two characters that Python reads as one special instruction.
+
+---
+
+### 6.3 The Escape Sequences Table
+
+| Escape Sequence | What it produces | Description |
+|-----------------|-----------------|-------------|
+| `\'` | `'` | Single quote inside a string |
+| `\"` | `"` | Double quote inside a string |
+| `\\` | `\` | A literal backslash |
+| `\n` | (newline) | Moves to a new line |
+| `\t` | (tab) | Inserts a horizontal tab |
+| `\r` | (carriage return) | Returns cursor to start of line |
+| `\b` | (backspace) | Moves back one character |
+| `\0` | (null character) | Null / empty character |
+| `\ooo` | (octal value) | Character from octal code |
+| `\xhh` | (hex value) | Character from hex code |
+
+---
+
+### 6.4 Escape Sequences in Detail with Examples
+
+#### `\"` — Double quote inside a double-quoted string
+
+```python
+print("She said \"Hello!\"")
+```
+
+**Expected Output:**
+```
+She said "Hello!"
+```
+
+---
+
+#### `\'` — Single quote inside a single-quoted string
+
+```python
+print('It\'s a beautiful day.')
+```
+
+**Expected Output:**
+```
+It's a beautiful day.
+```
+
+> **Alternative:** When you need a single quote inside the string, you can also use double quotes on the outside (and vice versa):
+> ```python
+> print("It's a beautiful day.")   # No escape needed
+> print('She said "Hello!"')       # No escape needed
+> ```
+
+---
+
+#### `\n` — Newline (the most commonly used escape sequence)
+
+```python
+print("Line one\nLine two\nLine three")
+```
+
+**Expected Output:**
+```
+Line one
+Line two
+Line three
+```
+
+`\n` is the standard way to create line breaks within a single string — critical for generating multi-line output in reports, emails, and files.
+
+---
+
+#### `\t` — Tab (horizontal indentation)
+
+```python
+print("Name:\tAlice")
+print("Age:\t30")
+print("City:\tLondon")
+```
+
+**Expected Output:**
+```
+Name:	Alice
+Age:	30
+City:	London
+```
+
+`\t` jumps forward to the next tab stop, creating neatly aligned columns.
+
+---
+
+#### `\\` — Literal backslash
+
+A backslash by itself is an escape character, so to print an actual backslash you need two:
+
+```python
+print("C:\\Users\\Alice\\Documents")
+```
+
+**Expected Output:**
+```
+C:\Users\Alice\Documents
+```
+
+This is especially important when working with Windows file paths.
+
+---
+
+### 6.5 Raw Strings — Disabling Escape Sequences
+
+Sometimes you want Python to treat backslashes as literal characters and ignore all escape sequences. This is common with Windows file paths and **regular expressions** (a text-searching tool).
+
+Prefix the string with `r` to create a **raw string**:
+
+```python
+path = r"C:\Users\Alice\new_folder"
+print(path)
+```
+
+**Expected Output:**
+```
+C:\Users\Alice\new_folder
+```
+
+Without `r`, `\n` would have been a newline and `\f` a form-feed character. With `r`, every `\` is treated as a plain backslash.
 
 ---
 
 ## Guided Practice Exercises
 
-Now let us practise with more realistic scenarios.
+### Exercise 1 – Student Profile Card
 
----
+**Objective:** Use string creation, indexing, `len()`, and f-strings to build a formatted profile card.
 
-### Practice 1 — Student Report Card (Variables + Output)
-
-**Objective:** Store student information in variables and display it in a formatted report.
-
-**Scenario:** You are building a simple student report system for a school.
+**Scenario:** You are building a simple student management system. Create a profile card for one student.
 
 **Steps:**
-1. Create variables for: `student_name`, `subject`, `score_1`, `score_2`, `score_3`.
-2. Calculate the `average` (sum of three scores divided by 3).
-3. Print a formatted report using f-strings.
-4. Add comments explaining each section.
+
+1. Create variables: `first_name`, `last_name`, `age`, `grade`, `city`
+2. Combine first and last name into a `full_name` variable using concatenation
+3. Print how many characters are in the full name (including the space)
+4. Print the first letter of the first name and the first letter of the last name (their initials)
+5. Print a formatted profile card using an f-string
 
 **Starter code:**
 
 ```python
-# ============================================
-# Student Report Card
-# ============================================
+first_name = "Maria"
+last_name = "Santos"
+age = 17
+grade = "11B"
+city = "Melbourne"
 
-# Student information
-student_name = "Adaobi Nwosu"
-subject = "Mathematics"
-score_1 = 78
-score_2 = 85
-score_3 = 91
+# Step 2: Combine names
+full_name = first_name + " " + last_name
 
-# Calculate average
-average = (score_1 + score_2 + score_3) / 3
+# Step 3: Name length
+print(f"Full name character count: {len(full_name)}")
 
-# Display the report
-print("============================================")
-print(f"  STUDENT REPORT CARD")
-print("============================================")
-print(f"Name    : {student_name}")
-print(f"Subject : {subject}")
-print(f"Test 1  : {score_1}")
-print(f"Test 2  : {score_2}")
-print(f"Test 3  : {score_3}")
-print(f"Average : {average:.1f}")   # :.1f means 1 decimal place
-print("============================================")
+# Step 4: Initials
+print(f"Initials: {first_name[0]}.{last_name[0]}.")
+
+# Step 5: Profile card
+print("=" * 30)
+print(f"  Name  : {full_name}")
+print(f"  Age   : {age}")
+print(f"  Grade : {grade}")
+print(f"  City  : {city}")
+print("=" * 30)
 ```
 
 **Expected Output:**
 ```
-============================================
-  STUDENT REPORT CARD
-============================================
-Name    : Adaobi Nwosu
-Subject : Mathematics
-Test 1  : 78
-Test 2  : 85
-Test 3  : 91
-Average : 84.7
-============================================
+Full name character count: 12
+Initials: M.S.
+==============================
+  Name  : Maria Santos
+  Age   : 17
+  Grade : 11B
+  City  : Melbourne
+==============================
 ```
 
 **Self-check questions:**
-- What is `:.1f` inside the f-string? (It formats the number to 1 decimal place.)
-- What would the average be if all three scores were 100?
-- Try changing the scores and see if the average updates automatically.
-
-**What-if challenge:** Add a `grade` variable:
-- Average 90–100 → `grade = "A"`
-- Average 80–89 → `grade = "B"`
-- Average 70–79 → `grade = "C"`
-
-We will learn `if/else` statements in a future lesson to make this dynamic, but for now you can set it manually.
+- Why is the character count 12 and not 11?
+- What would `full_name[-1]` give you? Why?
+- What change would you make to print initials in lowercase?
 
 ---
 
-### Practice 2 — Swapping Prices (Multiple Assignment)
+### Exercise 2 – Temperature Data Cleaner
 
-**Objective:** Use Python's one-line swap technique in a practical scenario.
+**Objective:** Use `strip()`, `replace()`, `upper()`, `split()`, and f-strings together.
 
-**Scenario:** A market data analyst accidentally recorded two prices in the wrong variables. Fix it.
+**Scenario:** You receive messy temperature readings from a sensor log file. Clean and report them.
 
 ```python
-# These values were entered in the wrong order
-price_of_rice = 350
-price_of_garri = 120
+raw_data = "  24.5C, 19.0C, 31.2C, 22.8C,  "
 
-print("Before correction:")
-print(f"Rice  : {price_of_rice} Naira")
-print(f"Garri : {price_of_garri} Naira")
+# Step 1: Strip whitespace from both ends
+cleaned = raw_data.strip()
+print(f"After strip: '{cleaned}'")
 
-# Swap the values using Python's one-line swap
-price_of_rice, price_of_garri = price_of_garri, price_of_rice
+# Step 2: Remove the degree symbol 'C' and split into a list
+values = cleaned.replace("C", "").split(", ")
+print(f"Values list: {values}")
 
-print("\nAfter correction:")
-print(f"Rice  : {price_of_rice} Naira")
-print(f"Garri : {price_of_garri} Naira")
+# Step 3: Convert to floats and compute the average
+temperatures = [float(v) for v in values if v.strip()]
+average = sum(temperatures) / len(temperatures)
+
+# Step 4: Report
+print(f"\n--- Temperature Report ---")
+print(f"Readings : {temperatures}")
+print(f"Count    : {len(temperatures)}")
+print(f"Average  : {average:.1f}°C")
+print(f"Highest  : {max(temperatures):.1f}°C")
+print(f"Lowest   : {min(temperatures):.1f}°C")
 ```
 
 **Expected Output:**
 ```
-Before correction:
-Rice  : 350 Naira
-Garri : 120 Naira
+After strip: '24.5C, 19.0C, 31.2C, 22.8C,'
+Values list: ['24.5', '19.0', '31.2', '22.8', '']
 
-After correction:
-Rice  : 120 Naira
-Garri : 350 Naira
+--- Temperature Report ---
+Readings : [24.5, 19.0, 31.2, 22.8]
+Count    : 4
+Average  : 23.9°C
+Highest  : 31.2°C
+Lowest   : 19.0°C
 ```
+
+**What-if challenge:** What happens if you add an extra comma at the end of `raw_data` and don't filter empty strings with `if v.strip()`? Try it!
 
 ---
 
-### Practice 3 — Global Counter (Global Variables)
+### Exercise 3 – Escape Character Postcard
 
-**Objective:** Use a global variable to count how many times a function has been called.
-
-**Scenario:** A simple page view counter for a website.
+**Objective:** Use `\n`, `\t`, `\"`, and f-strings to format a postcard message.
 
 ```python
-# Global variable — shared across all function calls
-page_views = 0
+sender = "Alice"
+recipient = "Bob"
+city = "Paris"
+weather = "sunny"
+temperature = 22
 
-def visit_page():
-    global page_views
-    page_views += 1    # Increase the counter by 1
-    print(f"Page visited! Total views: {page_views}")
+postcard = (
+    f"To: {recipient}\n"
+    f"From: {sender}\n"
+    f"\n"
+    f"\tGreetings from {city}!\n"
+    f"\tThe weather here is {weather} and {temperature}°C.\n"
+    f"\tWish you were here!\n"
+    f"\n"
+    f"\t\t\t\t- {sender}"
+)
 
-visit_page()
-visit_page()
-visit_page()
-print(f"\nFinal page view count: {page_views}")
+print(postcard)
 ```
 
 **Expected Output:**
 ```
-Page visited! Total views: 1
-Page visited! Total views: 2
-Page visited! Total views: 3
+To: Bob
+From: Alice
 
-Final page view count: 3
+	Greetings from Paris!
+	The weather here is sunny and 22°C.
+	Wish you were here!
+
+				- Alice
 ```
-
-**Self-check:** What would happen to `page_views` after each `visit_page()` call if you removed the `global page_views` line?
 
 ---
 
-## Mini Project — Personal Budget Tracker
+## Mini Project — Personal Receipt Generator
 
-Let us bring everything together into one realistic project.
+### Project Overview
 
-### Project: Monthly Budget Calculator
+You will build a Python program that generates a formatted shop receipt — a real-world document that combines nearly every string concept from this lesson.
 
-**Goal:** Build a program that tracks monthly income, lists expenses with comments, calculates the total spending, and displays a budget summary.
+**Skills used:** string creation, f-strings, `.upper()`, `.ljust()`, `.rjust()`, `*` repetition, `\n`, concatenation, `:.2f` formatting.
 
-**Stage 1 — Setup (Variables and Comments)**
+---
 
-```python
-# ============================================
-# MONTHLY BUDGET TRACKER
-# Author : [Your Name]
-# Date   : May 2026
-# ============================================
-
-# --- Income ---
-monthly_income = 150000    # Salary in Naira
-
-# --- Fixed Expenses ---
-rent = 35000
-electricity = 5000
-internet = 8000
-transport = 12000
-
-# --- Variable Expenses ---
-food = 25000
-clothing = 10000
-entertainment = 7000
-miscellaneous = 5000
-```
-
-**Stage 2 — Calculations**
+### Stage 1 – Setup: Store and Customer Information
 
 ```python
-# Calculate total expenses
-total_expenses = (rent + electricity + internet + transport +
-                  food + clothing + entertainment + miscellaneous)
+store_name = "Green Valley Market"
+store_address = "42 Oak Lane, Riverside"
+cashier = "Jamie"
+customer_name = "Alice Brown"
 
-# Calculate savings
-savings = monthly_income - total_expenses
-
-# Calculate savings percentage
-savings_percentage = (savings / monthly_income) * 100
+# Print header
+print("=" * 40)
+print(store_name.upper().center(40))
+print(store_address.center(40))
+print("=" * 40)
+print(f"Cashier : {cashier}")
+print(f"Customer: {customer_name}")
+print("-" * 40)
 ```
 
-**Stage 3 — Display the Report**
+**Milestone Output:**
+```
+========================================
+       GREEN VALLEY MARKET       
+     42 Oak Lane, Riverside      
+========================================
+Cashier : Jamie
+Customer: Alice Brown
+----------------------------------------
+```
+
+---
+
+### Stage 2 – Core Logic: Items and Prices
 
 ```python
-# Display the budget report
-print("=" * 45)
-print("       MONTHLY BUDGET SUMMARY")
-print("=" * 45)
-print(f"Monthly Income    : ₦{monthly_income:,}")
-print("-" * 45)
-print("  FIXED EXPENSES")
-print(f"  Rent            : ₦{rent:,}")
-print(f"  Electricity     : ₦{electricity:,}")
-print(f"  Internet        : ₦{internet:,}")
-print(f"  Transport       : ₦{transport:,}")
-print("  VARIABLE EXPENSES")
-print(f"  Food            : ₦{food:,}")
-print(f"  Clothing        : ₦{clothing:,}")
-print(f"  Entertainment   : ₦{entertainment:,}")
-print(f"  Miscellaneous   : ₦{miscellaneous:,}")
-print("-" * 45)
-print(f"Total Expenses    : ₦{total_expenses:,}")
-print(f"Monthly Savings   : ₦{savings:,}")
-print(f"Savings Rate      : {savings_percentage:.1f}%")
-print("=" * 45)
+items = [
+    ("Apples (1kg)", 2.99),
+    ("Whole Milk (2L)", 1.85),
+    ("Sourdough Bread", 3.50),
+    ("Cheddar Cheese", 4.20),
+    ("Orange Juice (1L)", 2.75),
+]
+
+subtotal = 0
+
+print(f"{'ITEM':<25} {'PRICE':>10}")
+print("-" * 40)
+
+for name, price in items:
+    print(f"{name:<25} ${price:>8.2f}")
+    subtotal += price
 ```
 
-**Stage 4 — Milestone Output**
-
+**Milestone Output:**
 ```
-=============================================
-       MONTHLY BUDGET SUMMARY
-=============================================
-Monthly Income    : ₦150,000
----------------------------------------------
-  FIXED EXPENSES
-  Rent            : ₦35,000
-  Electricity     : ₦5,000
-  Internet        : ₦8,000
-  Transport       : ₦12,000
-  VARIABLE EXPENSES
-  Food            : ₦25,000
-  Clothing        : ₦10,000
-  Entertainment   : ₦7,000
-  Miscellaneous   : ₦5,000
----------------------------------------------
-Total Expenses    : ₦107,000
-Monthly Savings   : ₦43,000
-Savings Rate      : 28.7%
-=============================================
+ITEM                          PRICE
+----------------------------------------
+Apples (1kg)              $    2.99
+Whole Milk (2L)           $    1.85
+Sourdough Bread           $    3.50
+Cheddar Cheese            $    4.20
+Orange Juice (1L)         $    2.75
 ```
 
-**Reflection Questions:**
-- Which variable represents your net financial position each month?
-- What would you need to change to update just the food budget?
-- How does using variables (instead of raw numbers) make this program easier to maintain?
-- What would happen to the `savings` variable if `monthly_income` decreased by 20,000?
+---
 
-**Optional Advanced Extensions:**
-1. Add an `annual_savings` variable that multiplies `savings` by 12.
-2. Add a comment that flags whether the savings rate is healthy (financial experts recommend at least 20%).
-3. Create a global variable called `currency_symbol` and use it throughout all the print statements.
+### Stage 3 – Enhancements: Tax and Total
+
+```python
+tax_rate = 0.10   # 10% tax
+tax = subtotal * tax_rate
+total = subtotal + tax
+
+print("-" * 40)
+print(f"{'Subtotal':<25} ${subtotal:>8.2f}")
+print(f"{'Tax (10%)':<25} ${tax:>8.2f}")
+print("=" * 40)
+print(f"{'TOTAL':<25} ${total:>8.2f}")
+print("=" * 40)
+```
+
+**Milestone Output:**
+```
+----------------------------------------
+Subtotal                  $   15.29
+Tax (10%)                 $    1.53
+========================================
+TOTAL                     $   16.82
+========================================
+```
+
+---
+
+### Stage 4 – Final Output: Thank You Message
+
+```python
+print(f"\n  Thank you, {customer_name.split()[0]}!")
+print(f"  Please keep this receipt for your records.")
+print(f"\n{'- Green Valley Market -'.center(40)}")
+```
+
+**Final Output:**
+```
+
+  Thank you, Alice!
+  Please keep your receipt for your records.
+
+       - Green Valley Market -       
+```
+
+---
+
+### Full Project Reflection Questions
+
+1. Why did we use `customer_name.split()[0]` to get just "Alice" from "Alice Brown"?
+2. What does `.center(40)` do? Where else in everyday life do you see centred text?
+3. What would you change to add a 20% discount for loyalty card holders?
+4. How would you save this receipt to a text file instead of printing it? (Hint: look up Python's `open()` function for the next lesson.)
+
+**Optional Extensions:**
+- Add a date and time to the receipt header (look up Python's `datetime` module)
+- Add an item quantity column and compute `quantity × unit_price` per line
+- Allow the user to input item names and prices interactively using `input()`
 
 ---
 
 ## Common Beginner Mistakes
 
----
+### Mistake 1 – Forgetting strings are zero-indexed
 
-### Mistake 1 — Using a Variable Before Creating It
-
-**Wrong:**
 ```python
-print(city)    # Used before being created!
-city = "Ibadan"
+word = "Python"
+print(word[6])   # ❌ IndexError — valid indexes are 0–5
 ```
 
-**Error:**
-```
-NameError: name 'city' is not defined
-```
-
-**Fix — always assign before using:**
-```python
-city = "Ibadan"
-print(city)
-```
+**Fix:** The last valid index is always `len(string) - 1`, or use `word[-1]` for the last character.
 
 ---
 
-### Mistake 2 — Using a Python Keyword as a Variable Name
+### Mistake 2 – Trying to concatenate a string and a number
 
-**Wrong:**
 ```python
-for = 10       # 'for' is a keyword!
-type = "dog"   # 'type' is a built-in function — avoid using it!
-```
-
-**Error:**
-```
-SyntaxError: invalid syntax
-```
-
-**Fix — choose a descriptive alternative:**
-```python
-loop_count = 10
-animal_type = "dog"
-```
-
----
-
-### Mistake 3 — Starting a Variable Name with a Number
-
-**Wrong:**
-```python
-1st_place = "Gold"    # Starts with a number!
-```
-
-**Error:**
-```
-SyntaxError: invalid syntax
+age = 25
+print("I am " + age + " years old.")   # ❌ TypeError
 ```
 
 **Fix:**
 ```python
-first_place = "Gold"
-place_1 = "Gold"
+print("I am " + str(age) + " years old.")   # ✅ convert with str()
+print(f"I am {age} years old.")              # ✅ f-string handles it automatically
 ```
 
 ---
 
-### Mistake 4 — Using `+` to Concatenate a String and a Number
+### Mistake 3 – Expecting `replace()` to modify the original string
 
-**Wrong:**
 ```python
-score = 95
-print("Your score is: " + score)
+text = "Hello World"
+text.replace("World", "Python")   # ❌ Nothing changes!
+print(text)                        # Still "Hello World"
 ```
 
-**Error:**
-```
-TypeError: can only concatenate str (not "int") to str
-```
-
-**Fix — use `str()` to convert, or use an f-string:**
+**Fix:** Assign the result back:
 ```python
-score = 95
-print("Your score is: " + str(score))   # Option 1
-print(f"Your score is: {score}")        # Option 2 (better)
+text = text.replace("World", "Python")   # ✅
+print(text)                              # "Hello Python"
 ```
 
 ---
 
-### Mistake 5 — Forgetting `global` When Trying to Modify a Global Variable
+### Mistake 4 – Off-by-one errors in slices
 
-**Wrong:**
 ```python
-total = 0
-
-def add_item():
-    total = total + 1    # This creates a LOCAL 'total', doesn't modify global
-    print(total)
-
-add_item()
+text = "Python"
+print(text[0:6])   # ✅ Correct — gives "Python"
+print(text[1:6])   # Gives "ython", not "Python"
+print(text[0:5])   # Gives "Pytho", not "Python"
 ```
 
-**Error:**
+Remember: `stop` is **excluded**. To get all 6 characters (indexes 0–5), use `[0:6]` or just `[:]`.
+
+---
+
+### Mistake 5 – Missing the `f` prefix on an f-string
+
+```python
+name = "Alice"
+print("Hello, {name}!")   # ❌ Prints literally: Hello, {name}!
+print(f"Hello, {name}!")  # ✅ Prints: Hello, Alice!
 ```
-UnboundLocalError: local variable 'total' referenced before assignment
+
+---
+
+### Mistake 6 – Forgetting to escape backslashes in Windows paths
+
+```python
+path = "C:\new_folder\test"   # ❌ \n is a newline, \t is a tab!
+print(path)
+```
+
+**Expected (broken) Output:**
+```
+C:
+ew_folder	est
 ```
 
 **Fix:**
 ```python
-total = 0
-
-def add_item():
-    global total
-    total = total + 1
-    print(total)
-
-add_item()
+path = r"C:\new_folder\test"      # ✅ raw string
+# or
+path = "C:\\new_folder\\test"     # ✅ escaped backslashes
 ```
 
 ---
 
-### Mistake 6 — Mismatched Variable Count in Multi-Assignment
+### Mistake 7 – Using `+` to concatenate many strings in a loop (performance issue)
 
-**Wrong:**
 ```python
-x, y = 1, 2, 3    # 2 variables but 3 values
+result = ""
+for i in range(1000):
+    result = result + str(i)   # ⚠️ Creates 1000 new strings — slow!
 ```
 
-**Error:**
-```
-ValueError: too many values to unpack (expected 2)
-```
-
-**Fix — make the counts match:**
+**Better fix:** Use `"".join()` for building strings from many parts:
 ```python
-x, y, z = 1, 2, 3
-```
-
----
-
-### Mistake 7 — Inconsistent Capitalisation
-
-**Wrong (hard-to-catch bug):**
-```python
-studentName = "Kemi"
-print(StudentName)    # Capital S — different variable!
-```
-
-**Error:**
-```
-NameError: name 'StudentName' is not defined
-```
-
-**Fix — be consistent:**
-```python
-student_name = "Kemi"
-print(student_name)
+result = "".join(str(i) for i in range(1000))   # ✅ Fast and memory-efficient
 ```
 
 ---
 
 ## Reflection Questions
 
-1. What is a comment in Python? Give two reasons why comments are important.
-2. What symbol do you use to write a single-line comment?
-3. Can a comment appear at the end of a line of code? Show an example.
-4. What is a variable? Describe it using a real-world analogy.
-5. What does the `=` symbol do in Python? Is it the same as "equals" in mathematics?
-6. Why is Python called a "dynamically typed" language?
-7. Write three valid variable names and three invalid variable names, and explain why each is valid or invalid.
-8. What is the difference between `name`, `Name`, and `NAME` in Python?
-9. What does "snake_case" mean? Give two examples.
-10. Show two ways to assign the value `0` to variables `a`, `b`, and `c` on a single line.
-11. What is the difference between a local variable and a global variable?
-12. Why do we need the `global` keyword? What problem does it solve?
-13. What is an f-string? How does it improve on concatenation with `+`?
-14. What error do you get if you try to use `+` to join a string and an integer?
-15. What is a constant, and how is it named by convention in Python?
+1. What is the difference between `"hello"[0]` and `"hello"[0:1]`? Are they the same type?
+2. Can you have a negative step in a slice? What does `text[10:2:-1]` mean?
+3. Why do `upper()` and `strip()` return a new string instead of modifying the original? What Python principle does this relate to?
+4. If `format()` and f-strings both work, why do most modern Python developers prefer f-strings?
+5. What would happen if you used `\\n` in a string? What about `r"\n"`?
+6. How would you check if a username entered by a user contains only letters and digits (no spaces or symbols)?
 
 ---
 
 ## Completion Checklist
 
-Tick each item when you can do it comfortably without looking at your notes.
+Before moving on to Lesson 05, confirm you can:
 
-- [ ] I can write a single-line comment using `#`.
-- [ ] I can write an inline comment on the same line as code.
-- [ ] I can write multi-line comments using multiple `#` lines.
-- [ ] I understand what triple-quoted strings are and when to use them.
-- [ ] I can create a variable and assign a value to it.
-- [ ] I understand that Python uses dynamic typing (no need to declare the type).
-- [ ] I can reassign a new value to an existing variable.
-- [ ] I know the four rules for valid variable names.
-- [ ] I know the conventions (snake_case, ALL_CAPS for constants, descriptive names).
-- [ ] I can tell valid variable names from invalid ones.
-- [ ] I can assign multiple values to multiple variables on one line.
-- [ ] I can assign the same value to multiple variables on one line.
-- [ ] I can unpack a list into individual variables.
-- [ ] I can swap two variables using Python's one-line swap.
-- [ ] I can print variables using commas, concatenation, and f-strings.
-- [ ] I know when to use `str()` and why.
-- [ ] I can explain the difference between local and global variables.
-- [ ] I can use the `global` keyword correctly inside a function.
-- [ ] I can identify and fix all 7 common beginner mistakes from this lesson.
-- [ ] I have completed all the guided practice exercises.
-- [ ] I have built and run the Monthly Budget Tracker mini project.
+- [ ] Create strings using single quotes, double quotes, and triple quotes
+- [ ] Access individual characters using positive and negative indexes
+- [ ] Use `len()` to find a string's length
+- [ ] Slice a string with `[start:stop]` and `[start:stop:step]`
+- [ ] Reverse a string using `[::-1]`
+- [ ] Use `.upper()`, `.lower()`, `.title()`, `.capitalize()`, `.swapcase()`
+- [ ] Use `.strip()`, `.lstrip()`, `.rstrip()` to clean whitespace
+- [ ] Use `.replace()` to swap parts of a string
+- [ ] Use `.split()` to break a string into a list
+- [ ] Use `.find()` and `.count()` to search within a string
+- [ ] Concatenate strings with `+` and repeat them with `*`
+- [ ] Use f-strings with `{}` to insert variables and expressions
+- [ ] Apply format specifiers like `:.2f`, `:<10`, `:>8`
+- [ ] Use `format()` with positional and named placeholders
+- [ ] Use escape sequences: `\n`, `\t`, `\"`, `\'`, `\\`
+- [ ] Use raw strings with the `r` prefix
+- [ ] Explain why strings are immutable and what that means in practice
 
 ---
 
 ## Lesson Summary
 
-Here is everything you learned in Lesson 04, summarised clearly.
+In this lesson, you mastered Python strings from the ground up. Here is a concise reference of everything covered:
 
-**Comments:**
+### String Creation
+| Method | Example | Result |
+|--------|---------|--------|
+| Double quotes | `"Hello"` | `Hello` |
+| Single quotes | `'Hello'` | `Hello` |
+| Triple quotes | `"""Hello\nWorld"""` | Multi-line |
 
-| Type | Syntax | Use Case |
-|------|--------|----------|
-| Single-line | `# This is a comment` | Short notes on any line |
-| Inline | `code  # comment` | Explaining a specific line |
-| Multi-line | Multiple `#` lines | Longer explanations |
-| Triple-quoted string | `"""..."""` | Often used for docstrings |
+### Indexing & Slicing
+| Operation | Example | Result |
+|-----------|---------|--------|
+| Single char | `"Python"[0]` | `P` |
+| Negative index | `"Python"[-1]` | `n` |
+| Slice | `"Python"[1:4]` | `yth` |
+| From start | `"Python"[:3]` | `Pyt` |
+| To end | `"Python"[3:]` | `hon` |
+| With step | `"Python"[::2]` | `Pto` |
+| Reverse | `"Python"[::-1]` | `nohtyP` |
 
-**Variables:**
-- A variable is a named container that stores a value.
-- Created with `=` (the assignment operator): `name = "Kemi"`
-- Python automatically detects the type (dynamic typing).
-- Variables are case-sensitive: `age ≠ Age ≠ AGE`.
-- Values can be changed (reassigned) at any time.
+### Key Methods
+| Method | Purpose |
+|--------|---------|
+| `upper()` / `lower()` | Change case |
+| `strip()` | Remove edge whitespace |
+| `replace(a, b)` | Swap substring |
+| `split(sep)` | Break into list |
+| `find(sub)` | Find position |
+| `count(sub)` | Count occurrences |
+| `startswith()` / `endswith()` | Check edges |
+| `len()` | String length |
 
-**Naming rules (MUST follow):**
-- Must start with a letter or `_`
-- Can only contain letters, numbers, `_`
-- Cannot be a Python keyword
-- Case-sensitive
+### String Formatting
+| Method | Example |
+|--------|---------|
+| f-string | `f"Hello {name}"` |
+| format() | `"Hello {}".format(name)` |
+| % operator | `"Hello %s" % name` |
 
-**Naming conventions (SHOULD follow):**
-- Use `snake_case` for variable names
-- Use `ALL_CAPS` for constants
-- Use descriptive, meaningful names
-
-**Multiple Assignment:**
-
-```python
-x, y, z = 1, 2, 3          # Different values to different variables
-x = y = z = 0               # Same value to all variables
-a, b = b, a                 # Swap two variables in one line
-x, y, z = ["a", "b", "c"]  # Unpack a list
-```
-
-**Output Methods (best to least preferred):**
-
-```python
-print(f"Name: {name}, Age: {age}")         # f-string ⭐ best
-print("Name:", name, "Age:", age)           # comma-separated
-print("Name: " + name + ", Age: " + str(age))  # concatenation
-```
-
-**Global Variables:**
-- Defined outside all functions — accessible everywhere.
-- To *modify* a global variable from inside a function, use the `global` keyword.
-- Use sparingly — prefer passing values as function arguments.
-
-```python
-count = 0
-
-def increment():
-    global count
-    count += 1
-```
+### Escape Sequences
+| Sequence | Meaning |
+|----------|---------|
+| `\n` | New line |
+| `\t` | Tab |
+| `\\` | Backslash |
+| `\"` | Double quote |
+| `\'` | Single quote |
 
 ---
 
-> **What comes next?** In Lesson 05 we will explore **Python Data Types** — the different kinds of values Python works with, including integers, floats, strings, and booleans. Understanding data types is the key to understanding how Python does calculations, makes decisions, and handles information.
-
----
-
-*Sources: W3Schools Python Tutorial — [python_comments.asp](https://www.w3schools.com/python/python_comments.asp), [python_variables.asp](https://www.w3schools.com/python/python_variables.asp), [python_variables_names.asp](https://www.w3schools.com/python/python_variables_names.asp), [python_variables_multiple.asp](https://www.w3schools.com/python/python_variables_multiple.asp), [python_variables_output.asp](https://www.w3schools.com/python/python_variables_output.asp), [python_variables_global.asp](https://www.w3schools.com/python/python_variables_global.asp), [python_variables_exercises.asp](https://www.w3schools.com/python/python_variables_exercises.asp)*
+> **Up Next — Lesson 05:** In the next lesson, you will learn about Python **Lists** — ordered, changeable collections that let you store and work with multiple values at once. Everything you learned about indexing and slicing strings applies directly to lists too, so you are already well prepared!

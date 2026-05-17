@@ -1,1577 +1,2063 @@
 ---
 render_with_liquid: false
-title: "Lesson 05 – Python Data Types"
+title: "Lesson 05: Python String Methods, Operators, Arithmetic & Assignment Operators"
 nav_order: 5
 ---
 
-# Lesson 05 – Python Data Types
+# Lesson 05: String Methods, Operators, Arithmetic & Assignment Operators
 
 ---
 
 ## Lesson Introduction
 
-Imagine you are packing boxes before moving house. You would not throw your clothes, your eggs, your books, and your tools all into the same box — each category of item needs its own kind of container so it can be handled properly. Shirts fold, eggs need padding, books stack flat, and tools need to be wrapped so they do not damage anything else.
+Welcome to Lesson 05! So far you have learned what strings are, how to create them, slice them, modify them, format them, and escape special characters inside them. In this lesson we close the chapter on strings by exploring the **full library of built-in string methods** Python gives you for free. You will then step into an entirely new territory — **operators** — the symbols Python uses to perform calculations, store results, and update values. By the end of this lesson you will be able to clean text, run arithmetic, and write update shorthand like a professional Python developer.
 
-Python thinks the same way about **data**.
+### What You Will Learn
 
-Every piece of data you give Python — a name, a number, a list of items, a yes/no answer — belongs to a particular **data type**. The data type tells Python exactly what kind of "box" the value lives in, what it can do, and how it behaves.
+By the end of this lesson you will be able to:
 
-Understanding data types is one of the most important foundations in programming. Get this right, and everything else — variables, calculations, conditions, loops, functions — will make much more sense.
-
-In this lesson you will learn:
-- What a data type is and why Python uses them
-- All the built-in data types Python provides, with clear explanations and examples
-- What a **variable** is (a prerequisite concept — explained from scratch)
-- How to use `type()` to find out what data type you are working with
-- How Python sets the data type automatically when you assign a value
-- How to **force** a specific data type using constructor functions
-- Real-world examples of where each data type is used
+1. Identify and use the most important Python string methods.
+2. Understand that string methods return new values and do NOT change the original string.
+3. Explain what an operator is and name the seven groups Python provides.
+4. Use all seven arithmetic operators to perform mathematical calculations.
+5. Use assignment operators — including shorthand forms — to store and update variable values.
+6. Combine string methods and operators in practical programs.
 
 ---
 
 ## Prerequisite Concepts
 
-Before we begin, let us make sure two important concepts are clear. You need to understand both of these before data types will make sense.
+Before diving in, make sure you are comfortable with the following ideas from earlier lessons:
+
+- **Variables:** A named container that stores a value (e.g., `market = "Lagos Island Market"`).
+- **Strings:** Text enclosed in single or double quotes (e.g., `"Jollof rice is delicious"`).
+- **print():** The function that displays output to the screen.
+- **Data Types:** You know that `"hello"` is a string (`str`) and `10` is an integer (`int`).
+
+If any of these feel unclear, revisit Lessons 02 to 04 before continuing.
 
 ---
 
-### What is a Variable?
+## Part 1 — Python String Methods
 
-A **variable** is a named storage location in your program. Think of it like a labelled jar on a shelf. You put something inside the jar, label it with a name, and then later you can pick it up by that name whenever you need it.
+### Section 1.1 — What Is a Method?
 
-```python
-age = 25
+Imagine you have a brand-new Nokia phone fresh out of the box. The phone itself is the **object** — in Python terms, that is your string. The phone comes with buttons and features built in: you can call someone, take a photo, or send an SMS. Those built-in features are called **methods** in Python.
+
+A **method** is a special function that is already built into an object. You call it by writing the object's name, then a dot `.`, then the method name, followed by parentheses `()`.
+
+```
+object.method()
 ```
 
-Here:
-- `age` is the **variable name** (the label on the jar)
-- `=` is the **assignment operator** — it puts a value into the variable
-- `25` is the **value** being stored
+For strings, a method is a tool you use **on** a piece of text to transform or examine it.
 
-From this moment on, whenever your program sees the word `age`, it fetches the value `25` from that jar.
+**One critical rule you must never forget:**
+
+> **All string methods return a new value. They do NOT change the original string.**
+
+This is unlike editing a document — it is more like making a photocopy and changing the copy. The original stays untouched.
+
+---
+
+### Section 1.2 — Case-Changing Methods
+
+These methods change the capitalisation of text. They are incredibly useful when you receive user input that may be typed inconsistently — for example, someone types `"ABUJA"` or `"abuja"` when you want `"Abuja"`.
+
+---
+
+#### `upper()` — Convert Everything to UPPERCASE
+
+**Why it exists:** Useful when you want to emphasise text, create headings, or standardise input for comparison.
+
+**How it works:** Every letter in the string is converted to its capital form.
 
 ```python
-age = 25
-print(age)
+city = "lagos"
+print(city.upper())
 ```
 
-**Expected Output:**
+**Expected output in the terminal:**
+
+```
+LAGOS
+```
+
+Notice that `city` still holds `"lagos"` — the original is untouched. Only the printed result changed.
+
+---
+
+#### `lower()` — Convert Everything to lowercase
+
+**Why it exists:** Useful for normalising input. For example, when checking if an email address or username already exists, you want to compare everything in lowercase so `"Amaka@mail.com"` and `"amaka@mail.com"` are treated the same.
+
+```python
+email = "AMAKA@GMAIL.COM"
+print(email.lower())
+```
+
+**Expected output:**
+
+```
+amaka@gmail.com
+```
+
+---
+
+#### `capitalize()` — Capitalise ONLY the First Letter
+
+**Why it exists:** Useful for proper names, titles, or the first word of a sentence when the input came in all-lowercase or mixed case.
+
+**How it works:** The very first character of the entire string is made uppercase, and every other character is made lowercase.
+
+```python
+dish = "egusi soup"
+print(dish.capitalize())
+```
+
+**Expected output:**
+
+```
+Egusi soup
+```
+
+> **Thinking Prompt:** What happens if the string is `"EGUSI SOUP"`? Try it mentally — capitalize() makes the first letter upper and ALL others lower. The result would still be `"Egusi soup"`.
+
+---
+
+#### `title()` — Capitalise the First Letter of Every Word
+
+**Why it exists:** Perfect for formatting names, book titles, city names, or article headings.
+
+**How it works:** The first character of **each word** is made uppercase.
+
+```python
+meal = "pounded yam and egusi soup"
+print(meal.title())
+```
+
+**Expected output:**
+
+```
+Pounded Yam And Egusi Soup
+```
+
+---
+
+#### `swapcase()` — Flip Every Letter's Case
+
+**Why it exists:** Occasionally used for creative text effects or decoding puzzles.
+
+**How it works:** Any uppercase letter becomes lowercase, and any lowercase letter becomes uppercase.
+
+```python
+greeting = "Good Morning Lagos"
+print(greeting.swapcase())
+```
+
+**Expected output:**
+
+```
+gOOD mORNING lAGOS
+```
+
+---
+
+#### `casefold()` — Aggressive Lowercase for Comparisons
+
+**Why it exists:** `casefold()` goes even further than `lower()` when comparing strings across different languages and special characters. For everyday Python in English, it behaves the same as `lower()`, but it is the recommended method for text comparisons.
+
+```python
+name1 = "CHUKWUEMEKA"
+name2 = "chukwuemeka"
+print(name1.casefold() == name2.casefold())
+```
+
+**Expected output:**
+
+```
+True
+```
+
+---
+
+### Section 1.3 — Searching Inside Strings
+
+These methods let you look for something inside a string, similar to using Ctrl+F in a document editor.
+
+---
+
+#### `find()` — Find a Substring's Position
+
+**Why it exists:** You need to know where a word or character appears inside a string — for example, scanning a customer complaint for the word "refund".
+
+**How it works:** `find(substring)` searches the string from left to right. It returns the **index position** (position number) where the substring first appears. If it cannot find it, it returns **-1**.
+
+> **Quick reminder:** Index positions in Python start at **0**, not 1. So the first character is at position 0, the second at position 1, and so on.
+
+```python
+message = "Please send the Ankara fabric to Kano"
+position = message.find("Ankara")
+print(position)
+```
+
+**Expected output:**
+
+```
+17
+```
+
+This means the word `"Ankara"` starts at position 17 in the string.
+
+```python
+# What if the word is not found?
+print(message.find("Aso-Oke"))
+```
+
+**Expected output:**
+
+```
+-1
+```
+
+The value `-1` is Python's way of saying "not found."
+
+---
+
+#### `index()` — Like find(), but Raises an Error if Not Found
+
+**Why it exists:** When you are absolutely certain a word should be there and want Python to crash loudly if it is not (so you notice the bug immediately).
+
+```python
+text = "Dangote is a major Nigerian business group"
+print(text.index("Nigerian"))
+```
+
+**Expected output:**
+
+```
+23
+```
+
+If the word is not there, `index()` raises a `ValueError` error — unlike `find()` which quietly returns -1. For beginners, `find()` is usually safer.
+
+---
+
+#### `count()` — Count How Many Times a Substring Appears
+
+**Why it exists:** Useful in data analysis — for example, counting how many times a customer said "broken" in a product review.
+
+```python
+review = "The suya was good. The pepper was good. The service was good."
+print(review.count("good"))
+```
+
+**Expected output:**
+
+```
+3
+```
+
+---
+
+#### `startswith()` — Does the String Begin with This?
+
+**Why it exists:** Quickly check if a filename, URL, phone number, or code starts with the expected characters.
+
+```python
+phone = "0801-234-5678"
+print(phone.startswith("0801"))
+```
+
+**Expected output:**
+
+```
+True
+```
+
+```python
+print(phone.startswith("0902"))
+```
+
+**Expected output:**
+
+```
+False
+```
+
+---
+
+#### `endswith()` — Does the String Finish with This?
+
+**Why it exists:** Check file types, extensions, or suffixes. For example, check if a filename is a PDF.
+
+```python
+filename = "WAEC_Result_2024.pdf"
+print(filename.endswith(".pdf"))
+```
+
+**Expected output:**
+
+```
+True
+```
+
+---
+
+#### `rfind()` — Find the LAST Occurrence of a Substring
+
+**Why it exists:** If a word appears multiple times, sometimes you want the position of the last one, not the first.
+
+```python
+sentence = "Eko is great. Lagos is great. Nigeria is great."
+print(sentence.rfind("great"))
+```
+
+**Expected output:**
+
+```
+40
+```
+
+---
+
+### Section 1.4 — Replacing and Splitting Text
+
+---
+
+#### `replace()` — Swap One Word for Another
+
+**Why it exists:** Update text without rewriting the whole thing — like Find & Replace in Microsoft Word.
+
+**How it works:** `replace(old, new)` takes two arguments: the text to find, and the text to replace it with.
+
+```python
+menu = "We serve Jollof rice with chicken"
+updated_menu = menu.replace("chicken", "catfish")
+print(updated_menu)
+```
+
+**Expected output:**
+
+```
+We serve Jollof rice with catfish
+```
+
+```python
+# Replace ALL occurrences
+prices = "Price: ₦500. Discount Price: ₦500. Bulk Price: ₦500."
+print(prices.replace("₦500", "₦450"))
+```
+
+**Expected output:**
+
+```
+Price: ₦450. Discount Price: ₦450. Bulk Price: ₦450.
+```
+
+You can also limit how many replacements are made by providing a third argument:
+
+```python
+print(prices.replace("₦500", "₦450", 1))  # Replace only the first occurrence
+```
+
+**Expected output:**
+
+```
+Price: ₦450. Discount Price: ₦500. Bulk Price: ₦500.
+```
+
+---
+
+#### `split()` — Break a String into a List of Pieces
+
+**Why it exists:** When you receive a string of comma-separated values, or a sentence of words, and you need to process each part separately.
+
+**How it works:** `split(separator)` cuts the string at every point where the separator occurs, and returns a **list** (a collection of items).
+
+```python
+states = "Lagos,Abuja,Kano,Rivers,Enugu"
+state_list = states.split(",")
+print(state_list)
+```
+
+**Expected output:**
+
+```
+['Lagos', 'Abuja', 'Kano', 'Rivers', 'Enugu']
+```
+
+Without a separator, `split()` splits on any whitespace (spaces, tabs):
+
+```python
+sentence = "My name is Tunde"
+words = sentence.split()
+print(words)
+```
+
+**Expected output:**
+
+```
+['My', 'name', 'is', 'Tunde']
+```
+
+---
+
+#### `join()` — Join a List of Strings into One
+
+**Why it exists:** The opposite of `split()`. It takes a list of words and glues them together with a separator.
+
+**How it works:** You call `join()` **on the separator string** and pass it the list.
+
+```python
+words = ["Fried", "plantain", "is", "delicious"]
+sentence = " ".join(words)  # Join using a space
+print(sentence)
+```
+
+**Expected output:**
+
+```
+Fried plantain is delicious
+```
+
+```python
+items = ["beans", "yam", "palm oil"]
+shopping = ", ".join(items)
+print(shopping)
+```
+
+**Expected output:**
+
+```
+beans, yam, palm oil
+```
+
+---
+
+#### `splitlines()` — Split a Multi-Line String at Line Breaks
+
+**Why it exists:** When you read a text file or multi-line message, you often want to handle each line separately.
+
+```python
+address = "No. 12 Adeola Odeku Street\nVictoria Island\nLagos"
+lines = address.splitlines()
+print(lines)
+```
+
+**Expected output:**
+
+```
+['No. 12 Adeola Odeku Street', 'Victoria Island', 'Lagos']
+```
+
+---
+
+### Section 1.5 — Stripping Whitespace and Padding Text
+
+**Whitespace** means invisible characters like spaces, tabs, or newlines that appear at the beginning or end of a string. They are often the culprit when user input doesn't match what you expect.
+
+---
+
+#### `strip()` — Remove Whitespace from BOTH Ends
+
+```python
+name = "   Funmilayo   "
+print(name.strip())
+```
+
+**Expected output:**
+
+```
+Funmilayo
+```
+
+---
+
+#### `lstrip()` — Remove Whitespace from the LEFT Only
+
+```python
+name = "   Funmilayo   "
+print(name.lstrip())
+```
+
+**Expected output:**
+
+```
+Funmilayo   
+```
+
+---
+
+#### `rstrip()` — Remove Whitespace from the RIGHT Only
+
+```python
+name = "   Funmilayo   "
+print(name.rstrip())
+```
+
+**Expected output:**
+
+```
+   Funmilayo
+```
+
+> **Real-world use:** When users type their name into a form and accidentally add spaces, `strip()` cleans the input before your program uses it. This prevents bugs like `"Lagos" != " Lagos"`.
+
+---
+
+#### `center()`, `ljust()`, `rjust()` — Aligning Text with Padding
+
+These methods position text within a fixed-width field, filling empty space with a character (default is a space).
+
+```python
+# center() — centre the text in a field of 30 characters
+print("LAGBAJA MARKET".center(30))
+print("LAGBAJA MARKET".center(30, "-"))
+```
+
+**Expected output:**
+
+```
+        LAGBAJA MARKET        
+--------LAGBAJA MARKET--------
+```
+
+```python
+# ljust() — left-align in a field of 30 characters
+print("Beans".ljust(20, "."))
+print("Jollof Rice".ljust(20, "."))
+print("Pounded Yam".ljust(20, "."))
+```
+
+**Expected output:**
+
+```
+Beans...............
+Jollof Rice.........
+Pounded Yam.........
+```
+
+```python
+# rjust() — right-align
+print("₦1500".rjust(15))
+print("₦200".rjust(15))
+```
+
+**Expected output:**
+
+```
+          ₦1500
+           ₦200
+```
+
+---
+
+#### `zfill()` — Pad a String on the Left with Zeros
+
+**Why it exists:** Useful for formatting order numbers, student IDs, bank account numbers, or phone extension codes that must always have a fixed number of digits.
+
+```python
+order_id = "42"
+print(order_id.zfill(6))   # Pad to 6 digits
+```
+
+**Expected output:**
+
+```
+000042
+```
+
+---
+
+### Section 1.6 — Checking What a String Contains
+
+These methods inspect a string and return either `True` or `False`. They are perfect for **validating input** — checking if what the user typed matches the expected format.
+
+---
+
+#### `isalpha()` — Are ALL Characters Letters?
+
+```python
+print("Ngozi".isalpha())      # True — only letters
+print("Ngozi123".isalpha())   # False — has digits
+print("Ngozi Obi".isalpha())  # False — has a space
+```
+
+**Expected output:**
+
+```
+True
+False
+False
+```
+
+---
+
+#### `isdigit()` — Are ALL Characters Digits?
+
+```python
+print("12345".isdigit())    # True
+print("123.45".isdigit())   # False — decimal point is not a digit
+print("₦500".isdigit())     # False — currency symbol is not a digit
+```
+
+**Expected output:**
+
+```
+True
+False
+False
+```
+
+---
+
+#### `isalnum()` — Are ALL Characters Letters OR Digits?
+
+```python
+print("Student123".isalnum())   # True
+print("Student 123".isalnum())  # False — space is not allowed
+```
+
+**Expected output:**
+
+```
+True
+False
+```
+
+---
+
+#### `isnumeric()` — A Broader Check for Numeric Characters
+
+Similar to `isdigit()` but also accepts characters like fractions and superscripts used in other writing systems.
+
+---
+
+#### `isspace()` — Is the String ONLY Whitespace?
+
+```python
+print("   ".isspace())    # True — only spaces
+print("  a  ".isspace())  # False — contains a letter
+```
+
+**Expected output:**
+
+```
+True
+False
+```
+
+---
+
+#### `islower()` and `isupper()` — Check Letter Case
+
+```python
+print("hello".islower())   # True
+print("HELLO".isupper())   # True
+print("Hello".isupper())   # False
+```
+
+**Expected output:**
+
+```
+True
+True
+False
+```
+
+---
+
+#### `istitle()` — Does It Follow Title Case Rules?
+
+```python
+print("The Lagos State Government".istitle())  # True
+print("the lagos state government".istitle())  # False
+```
+
+**Expected output:**
+
+```
+True
+False
+```
+
+---
+
+### Section 1.7 — Encoding and Translating
+
+#### `encode()` — Encode the String as Bytes
+
+**Why it exists:** When you send data over a network or save it to a file, it is sometimes stored as raw bytes rather than human-readable text. This method converts the string into that byte format.
+
+```python
+text = "Abuja"
+print(text.encode())
+```
+
+**Expected output:**
+
+```
+b'Abuja'
+```
+
+The `b` in front means "this is bytes, not a regular string."
+
+---
+
+#### `partition()` and `rpartition()` — Split a String into Exactly Three Parts
+
+`partition(sep)` finds the **first** occurrence of a separator and returns a **tuple** (a fixed group) of three parts: the text before, the separator itself, and the text after.
+
+```python
+data = "Name: Emeka Eze"
+result = data.partition(": ")
+print(result)
+```
+
+**Expected output:**
+
+```
+('Name', ': ', 'Emeka Eze')
+```
+
+`rpartition()` does the same but from the right (last occurrence).
+
+---
+
+#### `format()` — Insert Values into a String Template
+
+You have already used f-strings. The `format()` method does the same thing in a slightly older style using `{}` placeholders.
+
+```python
+template = "Hello, {}! You have {} new messages."
+message = template.format("Chidinma", 5)
+print(message)
+```
+
+**Expected output:**
+
+```
+Hello, Chidinma! You have 5 new messages.
+```
+
+---
+
+#### `expandtabs()` — Control Tab Width
+
+When strings contain tab characters (`\t`), this method sets how wide each tab should appear.
+
+```python
+text = "Name\tCity\tAge"
+print(text.expandtabs(15))
+```
+
+**Expected output:**
+
+```
+Name           City           Age
+```
+
+---
+
+#### `maketrans()` and `translate()` — Character Substitution Table
+
+These two methods work together to create a character-by-character replacement map.
+
+```python
+# Replace 'a' → '4', 'e' → '3', 'o' → '0'
+table = str.maketrans("aeo", "430")
+text = "Suya and pepper soup"
+print(text.translate(table))
+```
+
+**Expected output:**
+
+```
+Suy4 4nd p3pp3r s0up
+```
+
+---
+
+### Section 1.8 — The Full String Methods Reference Table
+
+Here is a complete reference of every built-in Python string method:
+
+| Method | What It Does |
+|---|---|
+| `capitalize()` | Makes the first character uppercase; the rest lowercase |
+| `casefold()` | Converts to lowercase (stronger than `lower()` for comparisons) |
+| `center(width, char)` | Returns a centred string padded with `char` |
+| `count(sub)` | Counts how many times `sub` appears |
+| `encode(encoding)` | Returns an encoded version of the string as bytes |
+| `endswith(suffix)` | Returns `True` if string ends with `suffix` |
+| `expandtabs(tabsize)` | Sets tab size and expands tab characters |
+| `find(sub)` | Returns the position of first occurrence, or -1 |
+| `format(*args)` | Inserts values into placeholders `{}` |
+| `format_map(mapping)` | Like `format()` but uses a dictionary |
+| `index(sub)` | Like `find()` but raises an error if not found |
+| `isalnum()` | `True` if all characters are letters or digits |
+| `isalpha()` | `True` if all characters are letters |
+| `isascii()` | `True` if all characters are ASCII |
+| `isdecimal()` | `True` if all characters are decimal digits |
+| `isdigit()` | `True` if all characters are digits |
+| `isidentifier()` | `True` if the string is a valid Python identifier |
+| `islower()` | `True` if all letters are lowercase |
+| `isnumeric()` | `True` if all characters are numeric |
+| `isprintable()` | `True` if all characters are printable |
+| `isspace()` | `True` if all characters are whitespace |
+| `istitle()` | `True` if string follows title case rules |
+| `isupper()` | `True` if all letters are uppercase |
+| `join(iterable)` | Joins items in an iterable with the string as separator |
+| `ljust(width, char)` | Left-aligns string padded with `char` |
+| `lower()` | Converts all letters to lowercase |
+| `lstrip(chars)` | Removes leading characters (default: whitespace) |
+| `maketrans(x, y, z)` | Creates a translation mapping |
+| `partition(sep)` | Splits into 3 parts at the first `sep` |
+| `replace(old, new)` | Replaces all occurrences of `old` with `new` |
+| `rfind(sub)` | Finds the last occurrence of `sub`, or -1 |
+| `rindex(sub)` | Like `rfind()` but raises an error if not found |
+| `rjust(width, char)` | Right-aligns string padded with `char` |
+| `rpartition(sep)` | Splits into 3 parts at the last `sep` |
+| `rsplit(sep)` | Splits at `sep`, scanning from the right |
+| `rstrip(chars)` | Removes trailing characters (default: whitespace) |
+| `split(sep)` | Splits string into a list at each `sep` |
+| `splitlines()` | Splits at line breaks and returns a list |
+| `startswith(prefix)` | Returns `True` if string starts with `prefix` |
+| `strip(chars)` | Removes leading and trailing characters |
+| `swapcase()` | Flips uppercase to lowercase and vice versa |
+| `title()` | Makes the first letter of each word uppercase |
+| `translate(table)` | Translates characters using a mapping table |
+| `upper()` | Converts all letters to uppercase |
+| `zfill(width)` | Pads string with leading zeros to fill `width` |
+
+---
+
+## Part 2 — Python Operators
+
+### Section 2.1 — What Is an Operator?
+
+An **operator** is a symbol that tells Python to perform a specific action on one or more values. You already know the most famous one: `+`. When you write `5 + 3`, the `+` is the operator, and `5` and `3` are the **operands** (the values being operated on).
+
+Think of operators like the buttons on your calculator. Each button tells the calculator what to do with the numbers you have entered.
+
+```python
+print(10 + 5)    # The + operator adds two numbers
+```
+
+**Expected output:**
+
+```
+15
+```
+
+Operators can also work with variables:
+
+```python
+naira_price = 100
+vat = 50
+total = naira_price + vat    # 100 + 50
+print(total)
+```
+
+**Expected output:**
+
+```
+150
+```
+
+And variables can be combined with each other:
+
+```python
+cost_price = 5000
+markup    = cost_price + 1000   # 6000
+selling_price = markup + markup  # 12000
+print(selling_price)
+```
+
+**Expected output:**
+
+```
+12000
+```
+
+---
+
+### Section 2.2 — The Seven Groups of Python Operators
+
+Python organises its operators into seven groups based on what they do:
+
+1. **Arithmetic Operators** — do maths (`+`, `-`, `*`, `/`, etc.)
+2. **Assignment Operators** — store values in variables (`=`, `+=`, etc.)
+3. **Comparison Operators** — compare two values and return True or False (`==`, `>`, `<`, etc.)
+4. **Logical Operators** — combine conditions (`and`, `or`, `not`)
+5. **Identity Operators** — check if two variables point to the same object (`is`, `is not`)
+6. **Membership Operators** — check if a value exists in a sequence (`in`, `not in`)
+7. **Bitwise Operators** — work on binary representations of numbers (`&`, `|`, `^`, etc.)
+
+In this lesson we cover Groups 1 and 2 in full depth. The other groups will be taught as they become relevant.
+
+---
+
+## Part 3 — Arithmetic Operators
+
+### Section 3.1 — What Are Arithmetic Operators?
+
+**Arithmetic operators** are used with **numeric values** to perform common mathematical operations — the same operations you learned in primary school. Python supports seven of them.
+
+Here is the complete table:
+
+| Operator | Name | Example |
+|---|---|---|
+| `+` | Addition | `x + y` |
+| `-` | Subtraction | `x - y` |
+| `*` | Multiplication | `x * y` |
+| `/` | Division | `x / y` |
+| `%` | Modulus (remainder) | `x % y` |
+| `**` | Exponentiation (power) | `x ** y` |
+| `//` | Floor Division (round down) | `x // y` |
+
+Let us learn each one carefully.
+
+---
+
+### Section 3.2 — Addition `+`
+
+**What it does:** Adds two numbers together.
+
+```python
+bags_of_rice = 20
+bags_donated = 5
+total_bags = bags_of_rice + bags_donated
+print(total_bags)
+```
+
+**Expected output:**
+
 ```
 25
 ```
 
-You can store any kind of value in a variable — a word, a number, a list, anything. The kind of value you put in determines the **data type** of that variable.
-
----
-
-### What is a Value?
-
-A **value** is the actual piece of data — the thing you are working with. Examples of values include `"Hello"`, `42`, `3.14`, `True`, and `["apples", "bananas"]`. Every value has a data type that describes what kind of thing it is.
-
----
-
-## What is a Data Type?
-
-A **data type** is a classification — a label that tells Python what *kind* of data a value is.
-
-Why does this matter? Because Python needs to know the type of a value before it can decide what to do with it.
-
-Consider the `+` symbol. If you use it with numbers, Python adds them together. But if you use it with words (strings), Python *joins* them together:
+The `+` operator also works on strings (it **concatenates** them — joins them together):
 
 ```python
-print(5 + 3)          # Adds two numbers
-print("Hello" + " World")   # Joins two pieces of text
+first_name = "Amina"
+last_name = " Bello"
+full_name = first_name + last_name
+print(full_name)
 ```
 
-**Expected Output:**
-```
-8
-Hello World
-```
-
-Python knows to add in the first case and join in the second because it knows the **data type** of each value. Without data types, Python would not know the difference between the number `5` and the text `"5"`.
-
-> 💡 **Real-World Analogy:** Think of data types like the categories on a library shelf. Books, DVDs, maps, and magazines are all physical objects — but the library stores them differently, labels them differently, and handles them by different rules. Data types are Python's "shelf categories" for values.
-
----
-
-## All of Python's Built-in Data Types
-
-Python comes with many built-in data types, organised into categories. Here is the complete overview:
-
-| Category | Data Type(s) | What it stores |
-|---|---|---|
-| **Text** | `str` | Words, sentences, characters |
-| **Numeric** | `int`, `float`, `complex` | Whole numbers, decimal numbers, complex numbers |
-| **Sequence** | `list`, `tuple`, `range` | Ordered collections of items |
-| **Mapping** | `dict` | Key-value pairs (like a phone book) |
-| **Set** | `set`, `frozenset` | Unordered unique collections |
-| **Boolean** | `bool` | True or False only |
-| **Binary** | `bytes`, `bytearray`, `memoryview` | Raw binary data |
-| **None** | `NoneType` | The absence of a value |
-
-Do not worry — we are going to explore every single one of these with clear examples. The most important ones for beginners are `str`, `int`, `float`, `bool`, `list`, `tuple`, `dict`, and `set`. The binary types are advanced and mostly used in specialised technical work.
-
----
-
-## Using `type()` to Find the Data Type
-
-Before we explore each type, learn this one essential tool: the `type()` function.
-
-### What is `type()`?
-
-`type()` is a built-in Python function that tells you the data type of any value or variable. You hand it something, and it tells you exactly what kind of thing it is.
-
-```python
-x = 5
-print(type(x))
-```
-
-**Expected Output:**
-```
-<class 'int'>
-```
-
-**Breaking this down:**
-- `x = 5` → stores the value `5` in a variable called `x`
-- `type(x)` → asks Python: "what type of thing is `x`?"
-- `print(...)` → displays the answer on screen
-- The output `<class 'int'>` means: "this is an integer (whole number)"
-
-The word `class` in the output is Python's internal way of categorising types — for now, read `<class 'int'>` as simply "this is an int".
-
-> 💡 **`type()` is your detective tool.** Whenever you are unsure what kind of data you are working with, use `type()` to find out instantly.
-
----
-
-### Quick `type()` Demos
-
-```python
-print(type("Hello"))
-print(type(42))
-print(type(3.14))
-print(type(True))
-```
-
-**Expected Output:**
-```
-<class 'str'>
-<class 'int'>
-<class 'float'>
-<class 'bool'>
-```
-
-Each one gives you a clear label for the type of value you are working with.
-
-> 💡 **Thinking Prompt:** What do you think `type("99")` would output? Is `"99"` a number or text? Think carefully — remember those quotes!
-
----
-
-## Part 1 – Text Type: `str` (String)
-
-### What is a String?
-
-A **string** is any sequence of characters — letters, spaces, digits, punctuation — all wrapped together inside quotation marks.
-
-The word comes from "a string of characters", like beads on a necklace. The necklace holds all the beads in order.
-
-**Examples of strings:**
-- `"Hello, World!"`
-- `"My name is Amara"`
-- `"The temperature is 28 degrees"`
-- `"Python3"` ← even though it contains the number 3, it is a string because of the quotes
-- `""` ← an empty string (a necklace with no beads — valid but empty)
-
-### Setting a String Variable
-
-```python
-x = "Hello World"
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-Hello World
-<class 'str'>
-```
-
-### Two More String Examples
-
-```python
-name = "Chukwuemeka"
-print(name)
-print(type(name))
-```
-
-**Expected Output:**
-```
-Chukwuemeka
-<class 'str'>
-```
-
-```python
-city = 'Lagos'
-print(city)
-print(type(city))
-```
-
-**Expected Output:**
-```
-Lagos
-<class 'str'>
-```
-
-Both double quotes `"..."` and single quotes `'...'` create strings.
-
-### Real-World Use of Strings
-
-Strings are used everywhere:
-- Storing names, addresses, messages in a user database
-- Displaying error messages in an application
-- Reading text from a file or website
-- Sending email subject lines
-- Storing DNA sequences in bioinformatics (`"ATCGGCTA..."`)
-- Representing any data that is fundamentally text-based
-
----
-
-## Part 2 – Numeric Types: `int`, `float`, `complex`
-
-Python has three types for storing numbers, depending on what kind of number you need.
-
----
-
-### 2a – `int` (Integer — Whole Numbers)
-
-An **integer** is any whole number — positive, negative, or zero. No decimal points allowed.
-
-Think of integers as the numbers you would count on your fingers: 1, 2, 3... or backwards: -1, -2, -3... or exactly zero.
-
-**Examples:** `0`, `1`, `-5`, `100`, `1000000`, `-999`
-
-```python
-x = 20
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-20
-<class 'int'>
-```
-
-```python
-temperature = -7
-print(temperature)
-print(type(temperature))
-```
-
-**Expected Output:**
-```
--7
-<class 'int'>
-```
-
-**Real-World Use of int:**
-- Number of students in a class: `students = 32`
-- Age: `age = 17`
-- Score in a game: `score = 1500`
-- Number of items in stock: `stock = 247`
-- Year: `year = 2024`
-
-> 💡 **Thinking Prompt:** If you write `x = 100`, what type is `x`? What if you write `x = "100"`? Are they the same? Why not?
-
----
-
-### 2b – `float` (Floating-Point — Decimal Numbers)
-
-A **float** is any number with a decimal point. The name comes from "floating point", which refers to how computers represent decimal numbers internally (the decimal "floats" to different positions).
-
-Think of floats as any measurement that needs precision: a temperature of 36.6°C, a price of ₦1,249.50, a height of 1.75 metres.
-
-**Examples:** `3.14`, `0.5`, `-2.7`, `100.0`, `0.001`
-
-```python
-x = 20.5
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-20.5
-<class 'float'>
-```
-
-```python
-pi = 3.14159
-print(pi)
-print(type(pi))
-```
-
-**Expected Output:**
-```
-3.14159
-<class 'float'>
-```
-
-> ⚠️ **Important:** Even `100.0` is a float, not an int — the presence of the decimal point is what makes it a float, regardless of whether the decimal part is zero.
-
-```python
-price = 100.0
-print(type(price))
-```
-
-**Expected Output:**
-```
-<class 'float'>
-```
-
-**Real-World Use of float:**
-- Prices: `item_price = 4.99`
-- Scientific measurements: `weight_kg = 72.3`
-- GPS coordinates: `latitude = 6.5244`
-- Percentage: `pass_rate = 87.5`
-- Division results: `10 / 3` produces `3.3333...` — a float
-
----
-
-### 2c – `complex` (Complex Numbers)
-
-A **complex number** has two parts: a **real part** and an **imaginary part**. In Python, the imaginary part is written with a `j` suffix.
-
-This is an advanced mathematical type used in fields like electrical engineering, signal processing, quantum physics, and advanced mathematics. If you are a beginner, you do not need to use this type yet — just know it exists.
-
-**Example:** `1j`, `3+5j`, `2-4j`
-
-```python
-x = 1j
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-1j
-<class 'complex'>
-```
-
-```python
-z = 3 + 5j
-print(z)
-print(type(z))
-```
-
-**Expected Output:**
-```
-(3+5j)
-<class 'complex'>
-```
-
-**Real-World Use of complex:** Electrical engineers use complex numbers to represent AC voltage and current. Data scientists use them in Fourier transforms for audio and image processing.
-
----
-
-## Part 3 – Sequence Types: `list`, `tuple`, `range`
-
-Sequence types store **multiple items in a specific order**. Think of them as different kinds of containers that hold a collection of values.
-
----
-
-### 3a – `list`
-
-A **list** is an ordered collection of items that you **can change** (add to, remove from, or modify). Lists are written using square brackets `[...]` with items separated by commas.
-
-Think of a list like a shopping list written on paper — you can cross things off, add new items, and rearrange the order.
-
-```python
-x = ["apple", "banana", "cherry"]
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-['apple', 'banana', 'cherry']
-<class 'list'>
-```
-
-A list can hold items of different types:
-
-```python
-mixed_list = ["Amara", 17, 3.14, True]
-print(mixed_list)
-print(type(mixed_list))
-```
-
-**Expected Output:**
-```
-['Amara', 17, 3.14, True]
-<class 'list'>
-```
-
-**Real-World Use of list:**
-- A list of student names in a class
-- A list of product names in a shop
-- Daily temperatures recorded over a week: `[28, 31, 27, 29, 30, 33, 26]`
-- A to-do list in an app
-- Search results returned from a database
-
----
-
-### 3b – `tuple`
-
-A **tuple** is like a list, but it is **fixed** — once created, you cannot change its contents. Tuples are written with round brackets `(...)`.
-
-Think of a tuple like a printed, laminated card. The information is set, sealed, and permanent. You can read it, but you cannot cross things out or write new things on it.
-
-```python
-x = ("apple", "banana", "cherry")
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-('apple', 'banana', 'cherry')
-<class 'tuple'>
-```
-
-**Why use a tuple instead of a list?**
-Because permanence is sometimes a feature, not a bug. If you have a set of values that should never change — like the days of the week, or a set of GPS coordinates for a fixed location — a tuple protects that data from accidental modification.
-
-**Real-World Use of tuple:**
-- Days of the week: `("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")`
-- RGB colour values: `(255, 128, 0)` — red, green, blue values that define a colour
-- A fixed pair of coordinates: `(latitude, longitude)`
-- Return values from a function that gives multiple results
-
----
-
-### 3c – `range`
-
-A **range** represents a sequence of numbers, generated on demand. Instead of storing all the numbers, it just remembers the start, stop, and step, and produces each number when needed.
-
-`range(6)` means: "give me the numbers 0, 1, 2, 3, 4, 5" — starting from 0, up to but not including 6.
-
-```python
-x = range(6)
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-range(0, 6)
-<class 'range'>
-```
-
-To see all the values, convert it to a list:
-
-```python
-print(list(range(6)))
-```
-
-**Expected Output:**
-```
-[0, 1, 2, 3, 4, 5]
-```
-
-**Real-World Use of range:**
-- Looping a certain number of times: "repeat this action 10 times"
-- Generating a series of numbers for a data table
-- Creating row numbers for a spreadsheet report
-
----
-
-## Part 4 – Mapping Type: `dict` (Dictionary)
-
-### What is a Dictionary?
-
-A **dict** (short for **dictionary**) stores data as **key-value pairs**. Think of it like a real dictionary: you look up a word (the **key**), and you find its definition (the **value**).
-
-Or think of a phone book: you look up a person's name (key), and you find their phone number (value).
-
-Dicts are written using curly braces `{...}` with `key: value` pairs separated by commas.
-
-```python
-x = {"name": "John", "age": 36}
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-{'name': 'John', 'age': 36}
-<class 'dict'>
-```
-
-Here, `"name"` is a key and `"John"` is its value. `"age"` is a key and `36` is its value.
-
-```python
-student = {"name": "Fatima", "score": 91, "grade": "A"}
-print(student)
-print(type(student))
-```
-
-**Expected Output:**
-```
-{'name': 'Fatima', 'score': 91, 'grade': 'A'}
-<class 'dict'>
-```
-
-**Real-World Use of dict:**
-- A student's profile: name, age, score, class
-- Product information: name, price, stock count, category
-- Settings in an application: font size, theme colour, language
-- JSON data from a web API (nearly all web data is structured like a dict)
-- A contact in a phonebook app
-
----
-
-## Part 5 – Set Types: `set` and `frozenset`
-
-### What is a Set?
-
-A **set** is an unordered collection of **unique** items. Unlike lists, sets automatically remove duplicates. Sets are written with curly braces `{...}`.
-
-Think of a set like a bag of unique coloured marbles — you cannot have two identical marbles, and the bag does not keep them in any particular order.
-
-```python
-x = {"apple", "banana", "cherry"}
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-{'cherry', 'banana', 'apple'}
-<class 'set'>
-```
-
-> ⚠️ **Notice:** The output order may differ from what you typed — sets are **unordered**. Python does not guarantee any particular display order for sets.
-
-**Automatic duplicate removal:**
-
-```python
-fruits = {"apple", "banana", "apple", "cherry", "banana"}
-print(fruits)
-```
-
-**Expected Output:**
-```
-{'cherry', 'banana', 'apple'}
-```
-
-Python silently removed the duplicates. Only unique items remain.
-
-**Real-World Use of set:**
-- Getting a list of unique visitors to a website
-- Checking which items appear in both of two lists (intersection)
-- Removing duplicates from a data column in data analysis
-- Finding unique words in a document (text analysis)
-
----
-
-### `frozenset`
-
-A **frozenset** is exactly like a `set`, but **frozen** (immutable — cannot be changed after creation). Just as a tuple is the immutable version of a list, a frozenset is the immutable version of a set.
-
-```python
-x = frozenset({"apple", "banana", "cherry"})
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-frozenset({'cherry', 'banana', 'apple'})
-<class 'frozenset'>
-```
-
-**Real-World Use of frozenset:** Useful when you need a set that serves as a dictionary key (regular sets cannot be dict keys because they are mutable, but frozensets can).
-
----
-
-## Part 6 – Boolean Type: `bool`
-
-### What is a Boolean?
-
-A **boolean** (`bool`) is the simplest possible data type — it can only ever hold one of two values: `True` or `False`.
-
-Think of a boolean like a light switch — it is either on (`True`) or off (`False`). Nothing in between.
-
-The name comes from mathematician George Boole, who developed the algebra of logic (Boolean algebra) in the 1800s.
-
-```python
-x = True
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-True
-<class 'bool'>
-```
-
-```python
-is_raining = False
-print(is_raining)
-print(type(is_raining))
-```
-
-**Expected Output:**
-```
-False
-<class 'bool'>
-```
-
-> ⚠️ **Critical:** In Python, `True` and `False` must begin with a **capital letter**. Writing `true` or `false` (lowercase) will cause an error — Python will not recognise them.
-
-**Wrong:**
-```python
-x = true    # ❌ NameError: name 'true' is not defined
-```
-
-**Right:**
-```python
-x = True    # ✅ Correct
-```
-
-**Real-World Use of bool:**
-- Is a user logged in? `is_logged_in = True`
-- Has a payment been confirmed? `payment_confirmed = False`
-- Is a student passing? `is_passing = True`
-- Did the file upload successfully? `upload_success = True`
-- Controlling `if` statements and conditions — booleans are the backbone of all decision-making in programming
-
----
-
-## Part 7 – Binary Types: `bytes`, `bytearray`, `memoryview`
-
-These types deal with **raw binary data** — the 0s and 1s that computers use at the lowest level. They are advanced types used in specific technical work.
-
-### `bytes`
-
-A `bytes` object stores a sequence of integers (0–255), representing raw binary data. Once created, it cannot be changed.
-
-```python
-x = b"Hello"
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-b'Hello'
-<class 'bytes'>
-```
-
-The `b` prefix before the quotes tells Python this is bytes, not a regular string.
-
-**Real-World Use:** Reading binary files (images, audio), network communication, cryptography, encoding data for transmission.
-
----
-
-### `bytearray`
-
-A `bytearray` is like `bytes` but **mutable** — you can change individual bytes after creation.
-
-```python
-x = bytearray(5)
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-bytearray(b'\x00\x00\x00\x00\x00')
-<class 'bytearray'>
-```
-
-`bytearray(5)` creates a bytearray of 5 zero bytes (`\x00` is hexadecimal for zero).
-
-**Real-World Use:** Modifying binary file contents, building network packets, image processing at the pixel level.
-
----
-
-### `memoryview`
-
-A `memoryview` provides a way to access the memory of another binary object (like `bytes` or `bytearray`) without copying it. This is used for efficiency when working with very large binary data.
-
-```python
-x = memoryview(bytes(5))
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-<memory at 0x...>
-<class 'memoryview'>
-```
-
-**Real-World Use:** High-performance data processing, scientific computing, working with large binary arrays without expensive memory copies.
-
-> 💡 **Beginner note:** You will rarely use binary types as a beginner. They become relevant in systems programming, data engineering, and low-level work. For now, just know they exist.
-
----
-
-## Part 8 – None Type: `NoneType`
-
-### What is `None`?
-
-`None` is Python's way of representing **nothing** — the intentional absence of a value. It is not zero, not an empty string, not `False`. It is specifically the concept of "no value here".
-
-Think of `None` like an empty box with a label that says "intentionally empty". It is different from a box that contains a `0` (which is *something*) or a box containing an empty string `""` (still *something*, just empty text).
-
-```python
-x = None
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-None
-<class 'NoneType'>
-```
-
-> ⚠️ **Critical:** `None` must always start with a capital `N`. Writing `none` (lowercase) will cause an error.
-
-**Real-World Use of None:**
-- A function that does not return anything — its return value is `None`
-- A database field that has no data entered yet
-- A variable declared but not yet assigned a meaningful value
-- Representing "no answer" in a quiz app when a user skips a question
-
----
-
-## How Python Sets the Data Type Automatically
-
-One of Python's most beginner-friendly features is **automatic type detection**. When you assign a value to a variable, Python looks at the value and automatically figures out what type it should be. You do not have to announce the type — Python reads the clue from the value itself.
-
-Here are the rules Python uses:
-
-| What you write | What Python reads | Data type assigned |
-|---|---|---|
-| `x = "Hello World"` | Sees quotes → text | `str` |
-| `x = 20` | Sees a whole number | `int` |
-| `x = 20.5` | Sees a decimal point | `float` |
-| `x = 1j` | Sees `j` suffix | `complex` |
-| `x = ["apple", "banana"]` | Sees `[...]` → square brackets | `list` |
-| `x = ("apple", "banana")` | Sees `(...)` → round brackets | `tuple` |
-| `x = range(6)` | Sees `range(...)` call | `range` |
-| `x = {"name": "John"}` | Sees `{key: value}` pairs | `dict` |
-| `x = {"apple", "banana"}` | Sees `{...}` no colons | `set` |
-| `x = frozenset({"apple"})` | Sees `frozenset(...)` call | `frozenset` |
-| `x = True` | Sees `True` or `False` keyword | `bool` |
-| `x = b"Hello"` | Sees `b"..."` prefix | `bytes` |
-| `x = bytearray(5)` | Sees `bytearray(...)` call | `bytearray` |
-| `x = memoryview(bytes(5))` | Sees `memoryview(...)` call | `memoryview` |
-| `x = None` | Sees `None` keyword | `NoneType` |
-
-Let us verify a few of these with code:
-
-```python
-x = "Hello World"
-print(type(x))
-
-x = 20
-print(type(x))
-
-x = 20.5
-print(type(x))
-
-x = ["apple", "banana", "cherry"]
-print(type(x))
-
-x = ("apple", "banana", "cherry")
-print(type(x))
-
-x = {"name": "John", "age": 36}
-print(type(x))
-
-x = {"apple", "banana", "cherry"}
-print(type(x))
-
-x = True
-print(type(x))
-
-x = None
-print(type(x))
-```
-
-**Expected Output:**
-```
-<class 'str'>
-<class 'int'>
-<class 'float'>
-<class 'list'>
-<class 'tuple'>
-<class 'dict'>
-<class 'set'>
-<class 'bool'>
-<class 'NoneType'>
-```
-
-> 💡 **Thinking Prompt:** In the code above, notice we re-used the variable name `x` for many different types. Each time we assigned a new value, the type of `x` changed! Python allows this — it is called **dynamic typing**. Some other languages require you to lock a variable to one type forever. Python is more flexible.
-
----
-
-## How to Set a Specific Data Type (Constructor Functions)
-
-Sometimes you want to be **explicit** — you want to tell Python exactly what type to use, rather than letting it guess. You do this using **constructor functions**.
-
-A **constructor function** is a special function whose name is the same as the data type. You call it and pass your value inside it, and it creates a value of that specific type.
-
-Here is the complete set of constructor functions:
-
-| Constructor call | Data type produced |
-|---|---|
-| `str("Hello World")` | `str` |
-| `int(20)` | `int` |
-| `float(20.5)` | `float` |
-| `complex(1j)` | `complex` |
-| `list(("apple", "banana", "cherry"))` | `list` |
-| `tuple(("apple", "banana", "cherry"))` | `tuple` |
-| `range(6)` | `range` |
-| `dict(name="John", age=36)` | `dict` |
-| `set(("apple", "banana", "cherry"))` | `set` |
-| `frozenset(("apple", "banana", "cherry"))` | `frozenset` |
-| `bool(5)` | `bool` |
-| `bytes(5)` | `bytes` |
-| `bytearray(5)` | `bytearray` |
-| `memoryview(bytes(5))` | `memoryview` |
-
-Let us look at the most useful ones in detail:
-
----
-
-### Using `str()` — Explicitly Create a String
-
-```python
-x = str("Hello World")
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-Hello World
-<class 'str'>
-```
-
-You can also convert a number to a string using `str()`:
-
-```python
-score = str(95)
-print(score)
-print(type(score))
-```
-
-**Expected Output:**
-```
-95
-<class 'str'>
-```
-
-Now `score` holds the text `"95"`, not the number `95`. This is useful when you need to join a number with text using concatenation (covered in later lessons).
-
----
-
-### Using `int()` — Explicitly Create an Integer
-
-```python
-x = int(20)
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-20
-<class 'int'>
-```
-
-You can convert a float to an int (this removes the decimal part — it does **not** round):
-
-```python
-x = int(9.9)
-print(x)
-```
-
-**Expected Output:**
-```
-9
-```
-
-> ⚠️ `int(9.9)` gives `9`, not `10`. It always cuts off the decimal without rounding. This is called **truncation**.
-
----
-
-### Using `float()` — Explicitly Create a Float
-
-```python
-x = float(20.5)
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-20.5
-<class 'float'>
-```
-
-You can convert an integer to a float:
-
-```python
-x = float(7)
-print(x)
-```
-
-**Expected Output:**
-```
-7.0
-```
-
-The `.0` is added to show it is now a float.
-
----
-
-### Using `bool()` — Explicitly Create a Boolean
-
-```python
-x = bool(5)
-print(x)
-print(type(x))
-```
-
-**Expected Output:**
-```
-True
-<class 'bool'>
-```
-
-> 💡 **Interesting rule:** In Python, almost every non-zero, non-empty value converts to `True`. Zero, empty strings `""`, empty lists `[]`, and `None` all convert to `False`.
-
-```python
-print(bool(0))      # False — zero is "falsy"
-print(bool(""))     # False — empty string is "falsy"
-print(bool([]))     # False — empty list is "falsy"
-print(bool(None))   # False — None is "falsy"
-print(bool(1))      # True
-print(bool("Hi"))   # True
-print(bool([1, 2])) # True
-```
+**Expected output:**
 
-**Expected Output:**
 ```
-False
-False
-False
-False
-True
-True
-True
+Amina Bello
 ```
 
 ---
 
-### Using `list()` — Convert to a List
+### Section 3.3 — Subtraction `-`
+
+**What it does:** Subtracts the second number from the first.
 
 ```python
-x = list(("apple", "banana", "cherry"))
-print(x)
-print(type(x))
+budget = 50000      # ₦50,000 market budget
+spent = 23500       # ₦23,500 spent
+remaining = budget - spent
+print(remaining)
 ```
 
-**Expected Output:**
-```
-['apple', 'banana', 'cherry']
-<class 'list'>
-```
+**Expected output:**
 
-Notice: we passed a **tuple** `("apple", "banana", "cherry")` into `list()`, and Python converted it to a list. This is how you convert between sequence types.
+```
+26500
+```
 
 ---
 
-### Using `dict()` — Create a Dictionary with Constructor
+### Section 3.4 — Multiplication `*`
+
+**What it does:** Multiplies two numbers.
 
 ```python
-x = dict(name="John", age=36)
-print(x)
-print(type(x))
+price_per_sachet = 50    # ₦50 per sachet of pure water
+sachets_sold = 200
+total_revenue = price_per_sachet * sachets_sold
+print(total_revenue)
 ```
 
-**Expected Output:**
+**Expected output:**
+
 ```
-{'name': 'John', 'age': 36}
-<class 'dict'>
+10000
 ```
 
-Notice the syntax difference: inside `dict()`, you write `key=value` without quotes around the key name.
+The `*` operator also works on strings — it repeats them:
+
+```python
+print("Ha" * 3)
+```
+
+**Expected output:**
+
+```
+HaHaHa
+```
 
 ---
 
-## Guided Practice Exercises
+### Section 3.5 — Division `/`
 
-Work through each exercise carefully. Predict the output before running the code!
+**What it does:** Divides the first number by the second.
+
+> **Important:** Division in Python **always returns a float** (a decimal number), even if the result is a whole number.
+
+```python
+total_akara = 30
+people = 6
+each_person_gets = total_akara / people
+print(each_person_gets)
+```
+
+**Expected output:**
+
+```
+5.0
+```
+
+Notice the `.0` at the end — that is the float. Even though 30 ÷ 6 = 5 exactly, Python still gives you `5.0`.
+
+```python
+# Another example showing float result
+print(12 / 5)
+```
+
+**Expected output:**
+
+```
+2.4
+```
 
 ---
 
-### Exercise 1 – Identify the Type
+### Section 3.6 — Modulus `%`
 
-**Objective:** Build the habit of recognising data types from how they look.
+**What it does:** Returns the **remainder** left over after division. This is sometimes called the "modulo" operator.
 
-Look at each value below. Without running any code, guess what type each one is. Then write the code to verify your guess using `type()`.
+Think back to primary school long division. When you divide 17 by 5, you get 3 with a remainder of 2. The modulus operator gives you that **remainder — which is 2**.
 
 ```python
-a = "Ibadan"
-b = 42
-c = 3.14
-d = True
-e = ["Maths", "English", "Science"]
-f = ("red", "green", "blue")
-g = {"country": "Nigeria", "capital": "Abuja"}
-h = None
+print(17 % 5)
 ```
 
-**Your Verification Code:**
+**Expected output:**
+
+```
+2
+```
+
+**Real-world examples:**
+
 ```python
-a = "Ibadan"
-b = 42
-c = 3.14
-d = True
-e = ["Maths", "English", "Science"]
-f = ("red", "green", "blue")
-g = {"country": "Nigeria", "capital": "Abuja"}
-h = None
-
-print(type(a))
-print(type(b))
-print(type(c))
-print(type(d))
-print(type(e))
-print(type(f))
-print(type(g))
-print(type(h))
+# Sharing yam portions: 25 tubers among 4 families
+tubers = 25
+families = 4
+leftover = tubers % families
+print("Leftover tubers:", leftover)
 ```
 
-**Expected Output:**
+**Expected output:**
+
 ```
-<class 'str'>
-<class 'int'>
-<class 'float'>
-<class 'bool'>
-<class 'list'>
-<class 'tuple'>
-<class 'dict'>
-<class 'NoneType'>
+Leftover tubers: 1
 ```
 
-**Self-check:** Did you guess all 8 correctly? Which ones surprised you?
+```python
+# Checking if a number is even (remainder when divided by 2 is 0)
+number = 46
+print(number % 2)    # Even numbers have remainder 0
+```
+
+**Expected output:**
+
+```
+0
+```
+
+```python
+number = 47
+print(number % 2)    # Odd numbers have remainder 1
+```
+
+**Expected output:**
+
+```
+1
+```
+
+This is one of the most useful tricks in programming — checking whether a number is even or odd by seeing if `number % 2` equals 0.
 
 ---
 
-### Exercise 2 – The Quote Trap
+### Section 3.7 — Exponentiation `**`
 
-**Objective:** Understand the difference between a number and a number-as-text.
-
-**Scenario:** A student is building a simple calculator. They write the following code. Predict what will happen — will it add, or will it join?
+**What it does:** Raises a number to a power. In mathematics, this is written as x^y (x to the power of y).
 
 ```python
-a = "10"
-b = "20"
-print(a + b)
-print(type(a))
+# 2 to the power of 10
+print(2 ** 10)
 ```
 
-**Expected Output:**
-```
-1020
-<class 'str'>
-```
+**Expected output:**
 
-**Why?** Because `"10"` and `"20"` are strings (text), not integers. When you `+` two strings, Python joins them (concatenates). So `"10" + "20"` gives `"1020"`, not `30`.
-
-**The Fix — Convert to int first:**
+```
+1024
+```
 
 ```python
-a = int("10")
-b = int("20")
-print(a + b)
-print(type(a))
+# Area of a square plot of land with side 15 metres
+side = 15
+area = side ** 2    # Side squared
+print("Area:", area, "square metres")
 ```
 
-**Expected Output:**
+**Expected output:**
+
+```
+Area: 225 square metres
+```
+
+```python
+# Volume of a cube
+side = 4
+volume = side ** 3
+print("Volume:", volume, "cubic metres")
+```
+
+**Expected output:**
+
+```
+Volume: 64 cubic metres
+```
+
+---
+
+### Section 3.8 — Floor Division `//`
+
+**What it does:** Divides and then **rounds DOWN** to the nearest whole number (integer). This is also called "integer division."
+
+**Why it exists:** Sometimes you need a whole-number result, not a decimal. For example, if you are distributing items, you cannot give someone half a loaf of bread.
+
+```python
+# Regular division — gives a float
+print(12 / 5)
+```
+
+**Expected output:**
+
+```
+2.4
+```
+
+```python
+# Floor division — rounds DOWN to an integer
+print(12 // 5)
+```
+
+**Expected output:**
+
+```
+2
+```
+
+Notice that `12 // 5` gives **2**, not 3 — it always rounds **down**, never up.
+
+```python
+# Sharing kola nuts: 25 nuts among 4 people
+total_kola = 25
+guests = 4
+per_person = total_kola // guests   # How many each person gets (whole number)
+leftover = total_kola % guests      # How many are left over
+print("Each person gets:", per_person)
+print("Left over:", leftover)
+```
+
+**Expected output:**
+
+```
+Each person gets: 6
+Left over: 1
+```
+
+> **Thinking Prompt:** What is the relationship between `//` and `%`? If `25 // 4 = 6`, and `6 * 4 = 24`, then `25 - 24 = 1`, which is exactly what `25 % 4` gives us. Floor division and modulus are two sides of the same coin!
+
+---
+
+### Section 3.9 — Using All Arithmetic Operators Together
+
+```python
+x = 15
+y = 4
+
+print("Addition:       ", x + y)    # 15 + 4
+print("Subtraction:    ", x - y)    # 15 - 4
+print("Multiplication: ", x * y)    # 15 × 4
+print("Division:       ", x / y)    # 15 ÷ 4
+print("Modulus:        ", x % y)    # Remainder of 15 ÷ 4
+print("Exponentiation: ", x ** y)   # 15 to the power of 4
+print("Floor Division: ", x // y)   # 15 ÷ 4 rounded down
+```
+
+**Expected output:**
+
+```
+Addition:        19
+Subtraction:     11
+Multiplication:  60
+Division:        3.75
+Modulus:         3
+Exponentiation:  50625
+Floor Division:  3
+```
+
+---
+
+## Part 4 — Assignment Operators
+
+### Section 4.1 — What Is an Assignment Operator?
+
+You have been using the basic assignment operator since Lesson 02:
+
+```python
+city = "Abuja"
+```
+
+That `=` is the **assignment operator**. It takes the value on the right side and stores it into the variable on the left side.
+
+But Python also gives you **shorthand assignment operators** that combine arithmetic with assignment. These save you from writing the variable name twice when updating its value.
+
+**The problem they solve:**
+
+Imagine you have ₦500 in a variable and you want to add ₦200 to it. The long way is:
+
+```python
+balance = 500
+balance = balance + 200   # Take the old value, add 200, store it back
+print(balance)
+```
+
+**Expected output:**
+
+```
+700
+```
+
+That works, but you have to write `balance` twice. The shorthand operator `+=` does the same thing more cleanly:
+
+```python
+balance = 500
+balance += 200    # Same as: balance = balance + 200
+print(balance)
+```
+
+**Expected output:**
+
+```
+700
+```
+
+---
+
+### Section 4.2 — The Complete Assignment Operators Table
+
+Here is every assignment operator Python provides:
+
+| Operator | Example | Equivalent To | Meaning |
+|---|---|---|---|
+| `=` | `x = 5` | `x = 5` | Assign the value 5 to x |
+| `+=` | `x += 3` | `x = x + 3` | Add 3 to x and store the result back |
+| `-=` | `x -= 3` | `x = x - 3` | Subtract 3 from x and store back |
+| `*=` | `x *= 3` | `x = x * 3` | Multiply x by 3 and store back |
+| `/=` | `x /= 3` | `x = x / 3` | Divide x by 3 and store back (gives float) |
+| `%=` | `x %= 3` | `x = x % 3` | Get remainder of x ÷ 3 and store back |
+| `//=` | `x //= 3` | `x = x // 3` | Floor-divide x by 3 and store back |
+| `**=` | `x **= 3` | `x = x ** 3` | Raise x to the power 3 and store back |
+| `&=` | `x &= 3` | `x = x & 3` | Bitwise AND (advanced — covered later) |
+| `\|=` | `x \|= 3` | `x = x \| 3` | Bitwise OR (advanced — covered later) |
+| `^=` | `x ^= 3` | `x = x ^ 3` | Bitwise XOR (advanced — covered later) |
+| `>>=` | `x >>= 3` | `x = x >> 3` | Bitwise right shift (advanced) |
+| `<<=` | `x <<= 3` | `x = x << 3` | Bitwise left shift (advanced) |
+| `:=` | `x := 5` | (see below) | Walrus operator — assigns AND evaluates |
+
+The bitwise operators (`&=`, `|=`, `^=`, `>>=`, `<<=`) work on the binary representation of numbers and are used in advanced topics. For now, master the first eight.
+
+---
+
+### Section 4.3 — Each Assignment Operator with Examples
+
+Let us go through each of the main ones with a practical Nigerian example.
+
+---
+
+#### `=` — Basic Assignment
+
+```python
+kola_nuts = 30   # Assign 30 to kola_nuts
+print(kola_nuts)
+```
+
+**Expected output:**
+
 ```
 30
-<class 'int'>
 ```
-
-**Self-check Questions:**
-- Why did `"10" + "20"` give `"1020"` and not `30`?
-- How did wrapping with `int()` change the behaviour?
-- What other constructor function could you use instead of `int()` if you wanted the answer as `30.0`?
 
 ---
 
-### Exercise 3 – Build a Student Profile Dictionary
+#### `+=` — Add and Assign
 
-**Objective:** Practice creating and displaying a `dict`.
-
-**Scenario:** You are building a school management system. Create a dictionary that stores a student's profile with the following information:
-- Name: Adaeze
-- Age: 15
-- Class: JSS3
-- Subject Score: 88.5
-- Is Active Student: True
-
-**Your Code:**
-```python
-student = {
-    "name": "Adaeze",
-    "age": 15,
-    "class": "JSS3",
-    "score": 88.5,
-    "is_active": True
-}
-
-print(student)
-print(type(student))
-print(type(student["name"]))
-print(type(student["age"]))
-print(type(student["score"]))
-print(type(student["is_active"]))
-```
-
-**Expected Output:**
-```
-{'name': 'Adaeze', 'age': 15, 'class': 'JSS3', 'score': 88.5, 'is_active': True}
-<class 'dict'>
-<class 'str'>
-<class 'int'>
-<class 'float'>
-<class 'bool'>
-```
-
-**Notice:** The dictionary itself is a `dict`, but each **value inside it** has its own type! The data types are nested inside each other. This is very common in real programs.
-
----
-
-### Exercise 4 – The Deduplication Challenge
-
-**Objective:** See how `set` automatically removes duplicates.
-
-**Scenario:** A school attendance system collected student IDs for an event, but some students scanned in multiple times. Use a set to get a clean, unique list.
+You receive more kola nuts in the market:
 
 ```python
-raw_scan_ids = [101, 102, 103, 101, 104, 102, 105, 103, 101]
-print("Raw list:", raw_scan_ids)
-print("Total scan events:", len(raw_scan_ids))
-
-unique_ids = set(raw_scan_ids)
-print("Unique students:", unique_ids)
-print("Number of unique students:", len(unique_ids))
-print(type(unique_ids))
+kola_nuts = 30
+kola_nuts += 12   # Someone brings 12 more
+print(kola_nuts)
 ```
 
-**Expected Output:**
+**Expected output:**
+
 ```
-Raw list: [101, 102, 103, 101, 104, 102, 105, 103, 101]
-Total scan events: 9
-Unique students: {101, 102, 103, 104, 105}
-Number of unique students: 5
-<class 'set'>
+42
 ```
 
-> 💡 **What is `len()`?** `len()` is a built-in function that counts the number of items in a collection. We used it here to count list items and set items.
-
-**Self-check Questions:**
-- Why did 9 scan events result in only 5 unique students?
-- What real-world systems use this kind of deduplication?
-
----
-
-### Exercise 5 – Type Conversion Round-Trip
-
-**Objective:** Practice converting between types using constructor functions.
-
-**Scenario:** A temperature sensor returns values as strings (because it reads them from a text file). You need to convert them to floats to do calculations.
+`+=` also works on strings — it appends (adds to the end):
 
 ```python
-# Step 1: Values arrive as strings
-temp_1 = "36.6"
-temp_2 = "37.1"
-temp_3 = "35.9"
-
-print("Types before conversion:")
-print(type(temp_1), type(temp_2), type(temp_3))
-
-# Step 2: Convert to float
-temp_1 = float(temp_1)
-temp_2 = float(temp_2)
-temp_3 = float(temp_3)
-
-print("\nTypes after conversion:")
-print(type(temp_1), type(temp_2), type(temp_3))
-
-# Step 3: Calculate average
-average = (temp_1 + temp_2 + temp_3) / 3
-print("\nAverage Temperature:", average)
+greeting = "Good"
+greeting += " morning"
+greeting += ", Sade!"
+print(greeting)
 ```
 
-**Expected Output:**
+**Expected output:**
+
 ```
-Types before conversion:
-<class 'str'> <class 'str'> <class 'str'>
-
-Types after conversion:
-<class 'float'> <class 'float'> <class 'float'>
-
-Average Temperature: 36.53333333333333
+Good morning, Sade!
 ```
-
-**Self-check Questions:**
-- What would happen if you tried to calculate the average BEFORE converting to float?
-- How would you round the average to 2 decimal places? (Hint: look up Python's `round()` function!)
 
 ---
 
-## Mini Project – Python Data Type Inspector
+#### `-=` — Subtract and Assign
 
-Let us build a small, useful program that demonstrates all the key data types in a realistic scenario. You will create a **product record** for an online store, using all the major data types.
-
----
-
-### Stage 1 – Define the Product Data
+Customers buy some items:
 
 ```python
-# Product basic information
-product_name = "Wireless Earbuds"       # str
-product_id = 10042                       # int
-price = 12499.99                         # float
-is_available = True                      # bool
-stock_count = None                       # NoneType — stock not yet confirmed
+stock = 100          # 100 bags of garri in the store
+stock -= 35          # 35 bags sold today
+print(stock)
+```
+
+**Expected output:**
+
+```
+65
 ```
 
 ---
 
-### Stage 2 – Define Collections
+#### `*=` — Multiply and Assign
+
+Price doubles due to market inflation:
 
 ```python
-# List of features (can be updated as features change)
-features = ["Bluetooth 5.0", "20hr battery", "Water resistant", "Touch controls"]
+price = 800      # ₦800 per kg of beef
+price *= 2       # Price doubles
+print(price)
+```
 
-# Tuple of supported colours (fixed — no new colours being added)
-colours = ("Black", "White", "Navy Blue")
+**Expected output:**
 
-# Dictionary of full product record
-product = {
-    "name": product_name,
-    "id": product_id,
-    "price": price,
-    "available": is_available,
-    "features": features,
-    "colours": colours,
-    "stock": stock_count
-}
-
-# Set of category tags (unique only)
-tags = {"electronics", "audio", "wireless", "bluetooth", "audio", "earbuds", "wireless"}
+```
+1600
 ```
 
 ---
 
-### Stage 3 – Display and Inspect
+#### `/=` — Divide and Assign
+
+Splitting a pot of money among partners:
 
 ```python
-print("=" * 45)
-print("      PRODUCT DATA TYPE INSPECTOR")
-print("=" * 45)
-
-print("\nProduct Name:", product_name, "→ Type:", type(product_name).__name__)
-print("Product ID:  ", product_id,   "→ Type:", type(product_id).__name__)
-print("Price:       ", price,         "→ Type:", type(price).__name__)
-print("Available:   ", is_available,  "→ Type:", type(is_available).__name__)
-print("Stock:       ", stock_count,   "→ Type:", type(stock_count).__name__)
-
-print("\nFeatures (list):  ", features)
-print("Type:", type(features).__name__)
-
-print("\nColours (tuple):  ", colours)
-print("Type:", type(colours).__name__)
-
-print("\nTags (set):", tags)
-print("Type:", type(tags).__name__)
-print("(Duplicates 'wireless' and 'audio' were removed automatically)")
-
-print("\nFull Product Dict:", product)
-print("Type:", type(product).__name__)
-print("=" * 45)
+partnership_profit = 900000   # ₦900,000 total profit
+partnership_profit /= 3       # Split equally among 3 partners
+print(partnership_profit)
 ```
 
-**Expected Output:**
+**Expected output:**
+
 ```
-=============================================
-      PRODUCT DATA TYPE INSPECTOR
-=============================================
-
-Product Name: Wireless Earbuds → Type: str
-Product ID:   10042            → Type: int
-Price:        12499.99         → Type: float
-Available:    True             → Type: bool
-Stock:        None             → Type: NoneType
-
-Features (list):   ['Bluetooth 5.0', '20hr battery', 'Water resistant', 'Touch controls']
-Type: list
-
-Colours (tuple):   ('Black', 'White', 'Navy Blue')
-Type: tuple
-
-Tags (set): {'bluetooth', 'earbuds', 'wireless', 'electronics', 'audio'}
-Type: set
-(Duplicates 'wireless' and 'audio' were removed automatically)
-
-Full Product Dict: {'name': 'Wireless Earbuds', 'id': 10042, 'price': 12499.99, 'available': True, 'features': [...], 'colours': (...), 'stock': None}
-Type: dict
-=============================================
+300000.0
 ```
 
-> 💡 **Notice:** `type(product_name).__name__` gives you just the name (`'str'`) without the `<class '...'>` wrapper. The `.__name__` part extracts just the clean name from the type object. This makes the output much more readable.
+Note the `.0` because `/=` always produces a float.
 
 ---
 
-### Stage 4 – Reflection Questions
+#### `%=` — Modulus and Assign
 
-1. Why did we use a `list` for features but a `tuple` for colours?
-2. Why is `stock_count = None` more meaningful than `stock_count = 0`?
-3. What happened to the duplicate tags in the `set`?
-4. How many different data types appear inside the `product` dictionary?
-5. Could you add a new colour to `colours` after creating the tuple? Why or why not?
+Check what is left after packing into complete groups:
+
+```python
+akara_count = 47
+akara_count %= 10    # How many remain after packing into groups of 10?
+print(akara_count)   # 47 = 4 groups of 10, plus 7 remaining
+```
+
+**Expected output:**
+
+```
+7
+```
 
 ---
 
-### Optional Extension Challenges
+#### `//=` — Floor Divide and Assign
 
-1. Add a `ratings` list to the product with 5 customer ratings (floats between 1.0 and 5.0), then calculate and print the average rating
-2. Convert the `features` list to a `tuple` using `tuple()` and print both — notice the brackets change from `[...]` to `(...)`
-3. Add a `discount_percent` field as an `int` and calculate the discounted price using `price * (1 - discount_percent / 100)`
+How many complete cartons can be filled?
+
+```python
+bottles = 250
+bottles //= 12        # 12 bottles per carton
+print(bottles)        # 250 ÷ 12 = 20 complete cartons (with 10 left over)
+```
+
+**Expected output:**
+
+```
+20
+```
+
+---
+
+#### `**=` — Exponentiate and Assign
+
+Investment grows (this is a simplified model):
+
+```python
+investment = 10000    # ₦10,000 invested
+investment **= 2      # Just for illustration
+print(investment)
+```
+
+**Expected output:**
+
+```
+100000000
+```
+
+---
+
+### Section 4.4 — The Walrus Operator `:=`
+
+Python 3.8 introduced the **walrus operator** `:=`. Its nickname comes from the fact that `:=` looks a little like a walrus — two eyes (`:`) and a pair of tusks (`=`).
+
+**What it does:** It assigns a value to a variable **and** uses that value in the same expression — all in one step. Previously, you needed two separate lines.
+
+**The old way (two lines):**
+
+```python
+numbers = [1, 2, 3, 4, 5]
+count = len(numbers)          # Line 1: count how many
+if count > 3:                 # Line 2: check the count
+    print(f"List has {count} elements")
+```
+
+**The walrus way (one step):**
+
+```python
+numbers = [1, 2, 3, 4, 5]
+if (count := len(numbers)) > 3:    # Assign AND check in one go
+    print(f"List has {count} elements")
+```
+
+**Expected output (both examples):**
+
+```
+List has 5 elements
+```
+
+> **Note for beginners:** The walrus operator is an advanced feature. You do not need to use it right away. Understand what it does, and you will encounter it when reading other people's code.
+
+---
+
+## Part 5 — Guided Practice Exercises
+
+### Exercise 1 — Cleaning Market Data
+
+**Scenario:** You work at Balogun Market's record office. Customer names arrive in the database with inconsistent capitalisation and stray spaces. Write code to clean and format each entry.
+
+**Step 1 — Warm-up:**
+
+```python
+raw_name = "  okonkwo Chukwuemeka  "
+print(raw_name.strip())
+```
+
+**Expected output:**
+
+```
+okonkwo Chukwuemeka
+```
+
+**Step 2 — Full exercise:**
+
+```python
+# Raw data from the form
+raw_name  = "  amaka OKAFOR  "
+raw_email = "  AMAKA.OKAFOR@GMAIL.COM  "
+raw_city  = "lagos island"
+
+# Clean and format
+clean_name  = raw_name.strip().title()
+clean_email = raw_email.strip().lower()
+clean_city  = raw_city.strip().title()
+
+print("Name:", clean_name)
+print("Email:", clean_email)
+print("City:", clean_city)
+```
+
+**Expected output:**
+
+```
+Name: Amaka Okafor
+Email: amaka.okafor@gmail.com
+City: Lagos Island
+```
+
+**Self-check questions:**
+- Why did we call `.strip()` before `.title()`?
+- What would happen if we swapped the order?
+- What does `.lower()` return for an already-lowercase string?
+
+---
+
+### Exercise 2 — Supermarket Receipt Calculator
+
+**Scenario:** You are building a simple receipt calculator for a supermarket in Abuja.
+
+**Objective:** Calculate the subtotal, apply a 10% discount, add 7.5% VAT, and display a formatted receipt.
+
+```python
+# Product prices
+jollof_rice_price  = 3500
+grilled_chicken    = 2500
+soft_drink         = 500
+bottled_water      = 200
+
+# Step 1: Calculate subtotal using +
+subtotal = jollof_rice_price + grilled_chicken + soft_drink + bottled_water
+print("Subtotal: ₦" + str(subtotal))
+
+# Step 2: Apply 10% discount using *
+discount_rate  = 0.10
+discount_amount = subtotal * discount_rate
+discounted_total = subtotal - discount_amount
+print("Discount (10%): -₦" + str(discount_amount))
+print("After Discount: ₦" + str(discounted_total))
+
+# Step 3: Add 7.5% VAT
+vat_rate    = 0.075
+vat_amount  = discounted_total * vat_rate
+final_total = discounted_total + vat_amount
+print("VAT (7.5%): +₦" + str(vat_amount))
+print("TOTAL:      ₦" + str(final_total))
+```
+
+**Expected output:**
+
+```
+Subtotal: ₦6700
+Discount (10%): -₦670.0
+After Discount: ₦6030.0
+VAT (7.5%): +₦452.25
+TOTAL:      ₦6482.25
+```
+
+**Self-check questions:**
+- Why did we use `str(subtotal)` inside the print with `+`?
+- What would the total be if the discount rate were 15% instead?
+
+---
+
+### Exercise 3 — Student Score Accumulator
+
+**Scenario:** A teacher at a school in Enugu wants to add up student test scores as she marks them. She starts with 0 and uses `+=` to add each score.
+
+```python
+teacher_total = 0    # Start at 0
+
+# Student scores come in one by one
+teacher_total += 78   # Adaeze's score
+teacher_total += 91   # Emeka's score
+teacher_total += 65   # Bello's score
+teacher_total += 88   # Ngozi's score
+teacher_total += 72   # Yusuf's score
+
+number_of_students = 5
+average = teacher_total / number_of_students
+
+print("Total score:", teacher_total)
+print("Number of students:", number_of_students)
+print("Class average:", average)
+```
+
+**Expected output:**
+
+```
+Total score: 394
+Number of students: 5
+Class average: 78.8
+```
+
+**Optional challenge:** Change two scores and recalculate. Does the average change as expected?
+
+---
+
+## Part 6 — Code Challenges
+
+### Challenge 1
+
+What is the output of the following code?
+
+```python
+text = "  Nigerian Naira  "
+print(text.strip().upper().replace("NAIRA", "₦"))
+```
+
+**Answer:**
+
+```
+NIGERIAN ₦
+```
+
+**Explanation:** `strip()` removes the spaces, `upper()` capitalises everything, and `replace()` swaps the word "NAIRA" with the currency symbol.
+
+---
+
+### Challenge 2
+
+What is the output?
+
+```python
+x = 17
+x %= 5
+x += 1
+print(x)
+```
+
+**Answer:**
+
+```
+3
+```
+
+**Explanation:** `17 % 5 = 2` (remainder), then `2 + 1 = 3`.
+
+---
+
+### Challenge 3
+
+Fill in the blank so the output is `"Akara"`:
+
+```python
+foods = "akara,puff-puff,boli,moimoi"
+first_item = foods.split(",")[_]
+print(first_item.capitalize())
+```
+
+**Answer:** Replace `_` with `0` (the first item in the list is at index 0).
+
+---
+
+### Challenge 4
+
+Write a single line of code that converts `"welcome to lagos"` to `"WELCOME TO LAGOS"`.
+
+**Answer:**
+
+```python
+print("welcome to lagos".upper())
+```
+
+---
+
+## Part 7 — Mini Project: Market Sales Summary Tool
+
+Build a simple sales reporting tool for a market trader in Lagos.
+
+---
+
+### Stage 1 — Setup: Define Products and Prices
+
+```python
+# --- MARKET SALES SUMMARY TOOL ---
+# Trader: Mama Tola's Provisions Store, Oshodi Market
+
+trader_name = "mama tola"
+store_name  = "mama tola's provisions"
+
+# Format the names properly
+trader_name = trader_name.title()
+store_name  = store_name.title()
+
+print("=".center(40, "="))
+print(store_name.center(40))
+print("Oshodi Market, Lagos".center(40))
+print("=".center(40, "="))
+```
+
+**Milestone 1 output:**
+
+```
+========================================
+      Mama Tola'S Provisions      
+          Oshodi Market, Lagos         
+========================================
+```
+
+---
+
+### Stage 2 — Core Logic: Record Sales
+
+```python
+# Daily sales
+total_sales = 0
+
+# Morning sales
+total_sales += 4500   # Semo flour
+total_sales += 1200   # Maggi cubes
+total_sales += 800    # Palm oil (small)
+total_sales += 3000   # Rice (small bag)
+
+print("Morning sales total: ₦" + str(total_sales))
+
+# Afternoon sales
+total_sales += 2500   # Beans
+total_sales += 600    # Salt and seasoning
+
+print("Afternoon sales total: ₦" + str(total_sales))
+```
+
+**Milestone 2 output:**
+
+```
+Morning sales total: ₦9500
+Afternoon sales total: ₦12600
+```
+
+---
+
+### Stage 3 — Enhancement: Apply Calculations
+
+```python
+# Cost of goods (60% of revenue)
+cost_of_goods  = total_sales * 0.60
+gross_profit   = total_sales - cost_of_goods
+
+# Market dues and transport (flat fee)
+expenses = 1500
+net_profit = gross_profit - expenses
+
+print("\n--- DAILY SUMMARY ---")
+print("Total Revenue:   ₦" + str(total_sales))
+print("Cost of Goods:   ₦" + str(cost_of_goods))
+print("Gross Profit:    ₦" + str(gross_profit))
+print("Expenses:        ₦" + str(expenses))
+print("Net Profit:      ₦" + str(net_profit))
+```
+
+**Milestone 3 output:**
+
+```
+--- DAILY SUMMARY ---
+Total Revenue:   ₦12600
+Cost of Goods:   ₦7560.0
+Gross Profit:    ₦5040.0
+Expenses:        ₦1500
+Net Profit:      ₦3540.0
+```
+
+---
+
+### Stage 4 — Final Output: Formatted Report
+
+```python
+print()
+print("=".center(40, "="))
+print("REPORT FOR: " + trader_name)
+days_worked   = 26
+monthly_estimate = net_profit * days_worked
+print("Daily Net Profit:    ₦" + str(net_profit))
+print("Estimated Monthly:   ₦" + str(monthly_estimate))
+print("Report ends.".rjust(40))
+print("=".center(40, "="))
+```
+
+**Milestone 4 output:**
+
+```
+========================================
+REPORT FOR: Mama Tola
+Daily Net Profit:    ₦3540.0
+Estimated Monthly:   ₦92040.0
+                     Report ends.
+========================================
+```
+
+**Reflection questions:**
+- What would happen to the monthly estimate if `days_worked` changed to 22?
+- How would you add a 5% savings goal on the net profit?
+- What string method would help you format ₦92040.0 as `"92,040.00"`?
+
+**Optional advanced extension:** Research Python's `format()` function with `,.2f` to display currency with comma separators and two decimal places.
 
 ---
 
 ## Common Beginner Mistakes
 
----
-
-### Mistake 1 – Confusing a Number with a Number-as-String
-
-**Wrong — thinking `"5"` and `5` are the same:**
-```python
-x = "5"
-print(x + 3)   # ❌ TypeError: can only concatenate str (not "int") to str
-```
-
-**Right:**
-```python
-x = 5           # No quotes → integer
-print(x + 3)   # ✅ Works — output: 8
-```
-
-Or convert explicitly:
-```python
-x = "5"
-print(int(x) + 3)   # ✅ Convert first — output: 8
-```
-
----
-
-### Mistake 2 – Using Lowercase `true` and `false`
-
-**Wrong:**
-```python
-x = true     # ❌ NameError: name 'true' is not defined
-y = false    # ❌ NameError: name 'false' is not defined
-```
-
-**Right:**
-```python
-x = True     # ✅ Capital T
-y = False    # ✅ Capital F
-```
-
----
-
-### Mistake 3 – Using Lowercase `none`
-
-**Wrong:**
-```python
-x = none     # ❌ NameError: name 'none' is not defined
-```
-
-**Right:**
-```python
-x = None     # ✅ Capital N
-```
-
----
-
-### Mistake 4 – Confusing `list` and `tuple` Brackets
-
-**Wrong (mixing brackets):**
-```python
-my_list  = ("apple", "banana")    # This is actually a TUPLE, not a list!
-my_tuple = ["apple", "banana"]    # This is actually a LIST, not a tuple!
-```
-
-**Right:**
-```python
-my_list  = ["apple", "banana"]    # ✅ Square brackets → list
-my_tuple = ("apple", "banana")    # ✅ Round brackets → tuple
-```
-
----
-
-### Mistake 5 – Confusing `dict` and `set` Curly Braces
-
-Both use `{...}` but they are very different:
-
-```python
-my_set  = {"apple", "banana"}              # ← No colons → this is a SET
-my_dict = {"fruit": "apple", "veg": "yam"} # ← Colons between key:value → DICT
-```
-
-**How to tell them apart:** If there are colons `:` separating pairs, it is a `dict`. If it is just comma-separated values with no colons, it is a `set`.
-
----
-
-### Mistake 6 – Assuming `int()` Rounds
+### Mistake 1 — Thinking string methods change the original
 
 **Wrong assumption:**
-```python
-print(int(9.9))   # You might expect 10 (rounded)
-```
-
-**Actual output:**
-```
-9
-```
-
-`int()` **truncates** (cuts off) the decimal — it never rounds. To round, use `round()` instead:
 
 ```python
-print(round(9.9))   # Output: 10
+name = "emeka"
+name.upper()          # This does NOT change name
+print(name)           # Still prints "emeka"
+```
+
+**Correct approach:**
+
+```python
+name = "emeka"
+name = name.upper()   # Reassign the result back to name
+print(name)           # Now prints "EMEKA"
 ```
 
 ---
 
-### Mistake 7 – Expecting a Set to Keep Order
+### Mistake 2 — Confusing `=` and `==`
 
-**Wrong expectation:**
+`=` means **assign** (store a value). `==` means **compare** (check if two things are equal).
+
+**Wrong:**
+
 ```python
-my_set = {"banana", "apple", "cherry"}
-print(my_set)   # You might expect: {'banana', 'apple', 'cherry'}
+# This tries to ASSIGN inside a condition — causes an error in most contexts
+if score = 90:
+    print("Excellent")
 ```
 
-**Actual output (order varies — may be different each time):**
-```
-{'cherry', 'apple', 'banana'}
+**Correct:**
+
+```python
+score = 90            # Assign with =
+if score == 90:       # Compare with ==
+    print("Excellent")
 ```
 
-Sets are **unordered**. Never rely on a set maintaining the order you put items in. If order matters, use a `list` or `tuple`.
+---
+
+### Mistake 3 — Using `/` when you want a whole number
+
+```python
+apples = 10
+people = 3
+each_gets = apples / people   # Returns 3.3333...
+print(each_gets)
+```
+
+**Output:**
+
+```
+3.3333333333333335
+```
+
+If you want whole-number division, use `//`:
+
+```python
+each_gets = apples // people   # Returns 3
+print(each_gets)
+```
+
+**Output:**
+
+```
+3
+```
+
+---
+
+### Mistake 4 — Forgetting that `find()` returns -1, not False
+
+```python
+sentence = "I love suya"
+result = sentence.find("pizza")
+
+# Beginner mistake: testing result as True/False
+if result:
+    print("Found!")
+else:
+    print("Not found")
+```
+
+**Output (incorrect logic):**
+
+```
+Not found
+```
+
+This accidentally works for -1 because `-1` is "truthy" in Python, but `0` is "falsy". If the word appears at position 0, `result` would be `0`, and the `if` block would incorrectly skip! Always compare explicitly:
+
+```python
+if result != -1:
+    print("Found!")
+else:
+    print("Not found")
+```
+
+---
+
+### Mistake 5 — Confusing `*` and `**`
+
+```python
+print(3 * 3)    # 9 — multiplication: 3 × 3
+print(3 ** 3)   # 27 — exponentiation: 3³ (3 to the power of 3)
+```
+
+One star = multiply. Two stars = power.
+
+---
+
+### Mistake 6 — Expecting `+=` to work before the variable is defined
+
+```python
+# This causes an error: NameError
+total += 500    # Python doesn't know what total was before
+```
+
+**Correct:**
+
+```python
+total = 0       # Define the variable first
+total += 500    # Now it works
+```
 
 ---
 
 ## Reflection Questions
 
-1. In Python, how does it know the difference between `5` (an integer) and `"5"` (a string)? What is the visual clue?
-2. What is the difference between a `list` and a `tuple`? When would you choose one over the other?
-3. What is the difference between a `dict` and a `set`? How can you tell them apart by looking at the code?
-4. Why would `None` be more useful than `0` for representing "no data"?
-5. A friend tells you: `x = True` and `y = 1` must be different types. Do you agree? Test it with `type()` and explain the result.
-6. You have a list of 1,000 email addresses, and some are duplicates. What single data type conversion would instantly remove all the duplicates?
-7. What does `type()` return, and how do you use it?
-8. Can one dictionary hold values of different data types? Show an example to support your answer.
+Take a moment to think about these before moving on:
+
+1. What is the difference between `lower()` and `casefold()`? When would you prefer one over the other?
+2. If `split()` breaks a string into a list, what method does the opposite?
+3. Why does division (`/`) in Python always return a float, even when the result is a whole number?
+4. If `x = 10` and you write `x **= 3`, what is the new value of `x`?
+5. What does the walrus operator `:=` allow you to do in one line that would normally take two lines?
+6. You have the string `" 0815-234-5678 "`. Which methods would you combine to clean it and check if it starts with `"0815"`?
 
 ---
 
 ## Completion Checklist
 
-Before moving to the next lesson, make sure you can confidently say yes to all of the following:
+Before moving to Lesson 06, confirm you can answer "yes" to every item below:
 
-- [ ] I understand what a data type is and why Python uses them
-- [ ] I know what a `str` is and how to create one
-- [ ] I know the difference between `int` and `float` and when to use each
-- [ ] I know what `bool` is and that it can only be `True` or `False` (capital letters)
-- [ ] I know what `None` is and that it represents the absence of a value
-- [ ] I understand that `list` uses `[...]` and is mutable (changeable)
-- [ ] I understand that `tuple` uses `(...)` and is immutable (fixed)
-- [ ] I understand that `dict` uses `{key: value}` pairs with colons
-- [ ] I understand that `set` stores only unique items and is unordered
-- [ ] I can use `type()` to check the data type of any value
-- [ ] I understand that Python sets the type automatically when a value is assigned
-- [ ] I know how to use constructor functions like `int()`, `float()`, `str()`, `list()` to set types explicitly
-- [ ] I can identify and fix the most common type-related mistakes
+- [ ] I understand that string methods return new values and do not change the original string.
+- [ ] I can use `upper()`, `lower()`, `capitalize()`, `title()`, and `swapcase()` correctly.
+- [ ] I can use `find()`, `count()`, `startswith()`, and `endswith()` to search inside strings.
+- [ ] I can use `replace()`, `split()`, and `join()` to manipulate string content.
+- [ ] I can use `strip()`, `lstrip()`, and `rstrip()` to remove whitespace.
+- [ ] I can use `center()`, `ljust()`, `rjust()`, and `zfill()` to pad and align text.
+- [ ] I can use `isalpha()`, `isdigit()`, `isalnum()`, `islower()`, `isupper()`, and `isspace()` to validate input.
+- [ ] I understand what an operator is and can name the seven groups Python uses.
+- [ ] I can apply all seven arithmetic operators: `+`, `-`, `*`, `/`, `%`, `**`, `//`.
+- [ ] I understand the difference between `/` (float division) and `//` (floor division).
+- [ ] I understand what `%` (modulus) does and why it is useful.
+- [ ] I can use all common assignment operators: `=`, `+=`, `-=`, `*=`, `/=`, `%=`, `//=`, `**=`.
+- [ ] I know what the walrus operator `:=` does, even if I don't use it yet.
 
 ---
 
 ## Lesson Summary
 
-**Data types** are Python's system for categorising values. Every value has a type that tells Python what kind of data it is and what rules apply to it.
+In this lesson you covered two major topics that power almost every Python program:
 
-Python's built-in types fall into these groups:
+**String Methods:**
+Python provides a rich built-in library of string methods — over 45 in total. They fall into clear groups: case-changing (`.upper()`, `.lower()`, `.title()`), searching (`.find()`, `.count()`, `.startswith()`), transforming (`.replace()`, `.split()`, `.join()`), stripping whitespace (`.strip()`), padding and aligning (`.center()`, `.zfill()`), and validating content (`.isalpha()`, `.isdigit()`). All of them return a **new** value and leave the original string unchanged.
 
-**Text:** `str` — any sequence of characters in quotes: `"Hello"`, `'Nigeria'`
-
-**Numeric:** `int` (whole numbers like `42`), `float` (decimals like `3.14`), `complex` (numbers with imaginary parts like `3+5j`)
-
-**Sequence:** `list` (ordered, changeable, `[...]`), `tuple` (ordered, fixed, `(...)`), `range` (a sequence of numbers)
-
-**Mapping:** `dict` (key-value pairs, `{"name": "Ada", "age": 15}`)
-
-**Set:** `set` (unique items, unordered, `{...}`), `frozenset` (like set but fixed)
-
-**Boolean:** `bool` — only `True` or `False`
-
-**Binary:** `bytes`, `bytearray`, `memoryview` — for raw binary data (advanced)
-
-**None:** `NoneType` — represents the absence of a value (`None`)
-
-**Key tools:**
-- `type(x)` → tells you the data type of `x`
-- Constructor functions (`int()`, `float()`, `str()`, `list()`, etc.) → explicitly set or convert types
-
-**Python sets types automatically** based on the value you assign. You only need constructor functions when you want to be explicit or when you are converting from one type to another.
-
-```python
-# Quick Reference Examples
-
-x = "Hello"                    # str
-x = 42                         # int
-x = 3.14                       # float
-x = True                       # bool
-x = None                       # NoneType
-x = [1, 2, 3]                  # list
-x = (1, 2, 3)                  # tuple
-x = {"a": 1, "b": 2}          # dict
-x = {1, 2, 3}                  # set
-
-# Check type
-print(type(x))                 # <class 'set'>
-
-# Convert type
-x = int("42")                  # str → int: 42
-x = float(7)                   # int → float: 7.0
-x = str(100)                   # int → str: "100"
-x = list((1, 2, 3))            # tuple → list: [1, 2, 3]
-x = set([1, 1, 2, 3, 3])      # list → set (removes duplicates): {1, 2, 3}
-```
+**Operators:**
+Python divides its operators into seven groups. This lesson focused on the two most immediately useful: **Arithmetic operators** perform maths (`+`, `-`, `*`, `/`, `%`, `**`, `//`), and **Assignment operators** store values in variables (`=`) plus shorthand forms that combine arithmetic and storage in one step (`+=`, `-=`, etc.). The walrus operator `:=` is a modern addition that assigns and evaluates in a single expression.
 
 ---
 
-> 🎉 **Congratulations!** You have completed Lesson 05. You now understand every major data type Python uses and how they relate to real-world data. This knowledge is the foundation for everything that comes next — variables, calculations, conditions, loops, and functions all depend on understanding what kind of data you are working with. In the next lesson, you will explore **Python Numbers** in much greater depth!
+## Quick-Reference Card
+
+```
+STRING METHODS — CASE
+  .upper()        → "abuja" → "ABUJA"
+  .lower()        → "ABUJA" → "abuja"
+  .capitalize()   → "abuja" → "Abuja"
+  .title()        → "abuja state" → "Abuja State"
+  .swapcase()     → "Abuja" → "aBUJA"
+  .casefold()     → "NAIRA" → "naira" (best for comparisons)
+
+STRING METHODS — SEARCH
+  .find("x")      → position of first "x", or -1
+  .index("x")     → position of first "x", raises error if missing
+  .rfind("x")     → position of LAST "x"
+  .count("x")     → number of times "x" appears
+  .startswith("x")→ True / False
+  .endswith("x")  → True / False
+
+STRING METHODS — TRANSFORM
+  .replace("a","b")→ swap all "a" with "b"
+  .split(",")      → break into list at ","
+  .join(list)      → glue list items together
+  .strip()         → remove whitespace both ends
+  .lstrip()        → remove whitespace left only
+  .rstrip()        → remove whitespace right only
+
+STRING METHODS — PAD & ALIGN
+  .center(n, c)    → centre in n-wide field, fill with c
+  .ljust(n, c)     → left-align in n-wide field
+  .rjust(n, c)     → right-align in n-wide field
+  .zfill(n)        → pad left with zeros to width n
+
+STRING METHODS — VALIDATE
+  .isalpha()       → only letters?
+  .isdigit()       → only digits?
+  .isalnum()       → only letters or digits?
+  .isspace()       → only whitespace?
+  .islower()       → all lowercase letters?
+  .isupper()       → all uppercase letters?
+  .istitle()       → title case?
+
+ARITHMETIC OPERATORS
+  +   Addition        5 + 3 = 8
+  -   Subtraction     5 - 3 = 2
+  *   Multiplication  5 * 3 = 15
+  /   Division        5 / 2 = 2.5  (always float)
+  %   Modulus         5 % 2 = 1    (remainder)
+  **  Exponentiation  5 ** 2 = 25  (power)
+  //  Floor Division  5 // 2 = 2   (round down)
+
+ASSIGNMENT OPERATORS
+  =    x = 5        Assign
+  +=   x += 3       x = x + 3
+  -=   x -= 3       x = x - 3
+  *=   x *= 3       x = x * 3
+  /=   x /= 3       x = x / 3
+  %=   x %= 3       x = x % 3
+  //=  x //= 3      x = x // 3
+  **=  x **= 3      x = x ** 3
+  :=   (x := 5)     Assign AND use in one expression (walrus)
+```

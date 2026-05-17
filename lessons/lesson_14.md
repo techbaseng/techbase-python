@@ -1,1658 +1,1348 @@
 ---
 render_with_liquid: false
-title: "Lesson 14: Python Dictionaries — The Complete Beginner's Guide"
+title: "Lesson 14: Python While Loops, For Loops, and the range() Function"
 nav_order: 14
 ---
 
-# Lesson 14: Python Dictionaries — The Complete Beginner's Guide
+# Lesson 14: Python While Loops, For Loops, and the `range()` Function
 
 ---
 
 ## Lesson Introduction
 
-Welcome to one of the most powerful and useful lessons in your Python journey!
+Welcome to Lesson 14! Today we are going to learn one of the most powerful ideas in programming: **loops**.
 
-In this lesson, you will learn all about **Python dictionaries** — one of Python's four built-in collection types. By the end, you will be able to create, read, change, add to, remove from, loop through, copy, and nest dictionaries. You will also learn all the built-in methods dictionaries come with.
+Imagine you are at the Balogun Market in Lagos and you need to count every customer who enters the shop. Would you write a separate line of code for each customer? No — that would take forever! Instead, you use a **loop**: a tool that tells Python to repeat a set of instructions automatically.
 
-Think of a dictionary as a **real-world contact book**. When you look up a person, you don't flip through every single page — you search by their **name** (the key) and instantly find their **phone number** (the value). That's exactly how Python dictionaries work: they store data in **key-value pairs**, making lookups fast and meaningful.
+Python has **two types of loops**:
 
-Dictionaries are used everywhere in real-world software:
-- **Web development**: storing user profile data (`{"username": "ada", "email": "ada@example.com"}`)
-- **Data science**: storing experiment results with labels
-- **APIs & JSON**: most web API responses are dictionary-like structures
-- **Configuration files**: storing settings like `{"theme": "dark", "language": "en"}`
+1. **The `while` loop** — keeps repeating as long as a condition is true
+2. **The `for` loop** — repeats once for each item in a sequence (like a list, string, or range of numbers)
 
-This lesson covers all 10 W3Schools dictionary pages, merged into one smooth progressive lesson.
+We will also learn about the **`range()` function**, which is Python's built-in tool for generating sequences of numbers. It works hand-in-hand with loops and is used everywhere in real Python code.
 
----
+### What You Will Learn in This Lesson
 
-## What You Need to Know First (Prerequisites)
+By the end of this lesson, you will be able to:
 
-Before diving in, make sure you are comfortable with:
-
-- **Variables**: storing values like `x = 5`
-- **Strings**: text in quotes like `"hello"`
-- **Lists**: ordered collections like `[1, 2, 3]`
-- **For loops**: repeating actions like `for item in my_list:`
-- **The `print()` function**: displaying output
-
-If any of these feel shaky, briefly review your earlier lessons first. This lesson will build naturally on all of them.
-
----
-
-## Part 1: What Is a Dictionary?
-
-### The Concept: Key-Value Pairs
-
-A **dictionary** is a collection that stores data as **key-value pairs**. Every single item inside a dictionary has two parts:
-
-- A **key** — the label or name you use to find the item (like a word in a real dictionary)
-- A **value** — the actual data attached to that key (like the definition of the word)
-
-**Analogy:** Imagine a school's attendance register:
-
-| Student Name (Key) | Present/Absent (Value) |
-|--------------------|------------------------|
-| Amina              | Present                |
-| Tunde              | Absent                 |
-| Chidi              | Present                |
-
-You look up a student by their **name** (key) to find their **status** (value). That's a dictionary.
-
-### The Four Collection Types in Python
-
-Python has four collection data types. It's important to know how they differ:
-
-| Collection  | Ordered? | Changeable? | Duplicates? |
-|-------------|----------|-------------|-------------|
-| List        | Yes      | Yes         | Yes         |
-| Tuple       | Yes      | No          | Yes         |
-| Set         | No       | No*         | No          |
-| **Dictionary** | **Yes** (Python 3.7+) | **Yes** | **No** |
-
-> **Note:** As of Python 3.7, dictionaries are **ordered**, meaning items stay in the order you add them. In Python 3.6 and earlier, dictionaries were unordered.
+- Explain what a loop is and why it is useful
+- Write a `while` loop with a proper condition and counter
+- Use `break` and `continue` to control loop behaviour
+- Add an `else` block to both `while` and `for` loops
+- Write a `for` loop that iterates over lists, strings, and ranges of numbers
+- Use `range()` with one, two, or three arguments
+- Loop through a string character by character
+- Write nested loops (a loop inside a loop)
+- Use the `pass` statement inside an empty loop
+- Convert a `range` to a list and slice it
+- Test membership in a `range` using `in`
+- Use `len()` to get the number of elements in a `range`
+- Build a practical mini-project using all three tools
 
 ---
 
-## Part 2: Creating a Dictionary
+## Prerequisite Concepts
 
-### How to Write a Dictionary
+Before we continue, let us quickly review ideas you have already learned. These concepts will appear throughout this lesson.
 
-Dictionaries are written with **curly brackets `{}`**. Inside the curly brackets, you write your key-value pairs separated by commas. Each key and its value are separated by a **colon `:`**.
+### Variables and Assignment
 
-**The syntax:**
+A variable stores a value. You set it with `=`.
+
 ```python
-my_dict = {
-    "key1": value1,
-    "key2": value2,
-    "key3": value3
-}
+i = 1       # i is a variable holding the integer 1
+name = "Adaeze"
 ```
 
-### Your First Dictionary — Simple Example
+### Conditions and Comparison Operators
+
+A **condition** is a question that Python answers with `True` or `False`. You already know these from the `if` statement lesson.
+
+| Operator | Meaning | Example | Result |
+|---|---|---|---|
+| `<` | Less than | `3 < 6` | `True` |
+| `>` | Greater than | `7 > 10` | `False` |
+| `==` | Equal to | `5 == 5` | `True` |
+| `!=` | Not equal to | `4 != 4` | `False` |
+| `<=` | Less than or equal | `6 <= 6` | `True` |
+| `>=` | Greater than or equal | `8 >= 9` | `False` |
+
+### The `print()` Function
+
+You use `print()` to display a value or message on the screen.
 
 ```python
-# A dictionary about a car
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-print(thisdict)
+print("Good morning Lagos!")
+print(42)
+```
+
+### Lists
+
+A list is an ordered collection of items.
+
+```python
+foods = ["jollof rice", "egusi soup", "suya"]
+```
+
+You already know all of this. Now let us put it to work inside loops!
+
+---
+
+## Section 1: What Is a Loop?
+
+### Why Does a Loop Exist?
+
+Imagine Emeka is a teacher at a secondary school in Abuja. He wants to print the name of every student in his class. The class has 30 students. Without a loop, he would have to write 30 separate `print()` lines. That is tedious, error-prone, and wastes time.
+
+A **loop** is an instruction that tells Python:
+
+> *"Run this block of code repeatedly. Keep going until I tell you to stop."*
+
+This is the core idea. Everything else in this lesson builds on top of it.
+
+---
+
+## Section 2: The `while` Loop
+
+### What Is a `while` Loop?
+
+A **`while` loop** checks a condition **before** every repetition. As long as the condition is `True`, the loop body keeps running. The moment the condition becomes `False`, the loop stops.
+
+Think of it like a security guard at a Lagos bank: *"While the queue has customers, keep serving the next person."*
+
+### The Syntax (Structure)
+
+```python
+while condition:
+    # code to repeat
+```
+
+- `while` — the keyword that starts the loop
+- `condition` — any True/False expression (just like in an `if` statement)
+- `:` — the colon that opens the loop body
+- indented code — the instructions that run on every repetition
+
+### Simple Example 1: Count from 1 to 5
+
+```python
+i = 1
+while i < 6:
+    print(i)
+    i += 1
 ```
 
 **Expected Output:**
 ```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
+1
+2
+3
+4
+5
 ```
 
-Let's break down every part:
-- `thisdict` — the variable name that holds the whole dictionary
-- `{` — opens the dictionary
-- `"brand"` — a **key** (it's a string, so it has quotes)
-- `:` — the separator between key and value
-- `"Ford"` — a **value** (also a string here)
-- `,` — separates one key-value pair from the next
-- `}` — closes the dictionary
+Let us go **line by line**:
 
-### Dictionaries Can Hold Many Data Types
+- `i = 1` — We create a variable `i` and start it at 1. This is called the **counter variable** or **loop variable**.
+- `while i < 6:` — Python checks: "Is `i` less than 6?" If yes, enter the loop. If no, skip it entirely.
+- `print(i)` — Print the current value of `i`.
+- `i += 1` — This means `i = i + 1`. We **increase** `i` by 1. This is called **incrementing** the counter.
+- After `i += 1`, Python goes back to `while i < 6:` and checks the condition again.
+- When `i` reaches 6, the condition `i < 6` becomes `False`, and the loop ends.
 
-The **values** in a dictionary can be any data type — strings, integers, booleans, lists, even other dictionaries!
+> **Very Important:** You **must** update the counter variable inside the loop (`i += 1`). If you forget, `i` stays at 1 forever, and the condition `i < 6` is always `True`. This creates an **infinite loop** — a loop that never stops. Your program will freeze!
+
+### Simple Example 2: Countdown from 5 to 1
+
+Let us count **down** this time:
 
 ```python
-student = {
-    "name": "Amina",        # string value
-    "age": 17,              # integer value
-    "is_enrolled": True,    # boolean value
-    "grades": [85, 90, 78]  # list value
-}
-print(student)
+i = 5
+while i > 0:
+    print(i)
+    i -= 1   # i -= 1 means i = i - 1 (decrement)
+print("Liftoff!")
 ```
 
 **Expected Output:**
 ```
-{'name': 'Amina', 'age': 17, 'is_enrolled': True, 'grades': [85, 90, 78]}
+5
+4
+3
+2
+1
+Liftoff!
 ```
 
-> **Think about this:** What would happen if you tried to store the same key twice? Try it mentally first, then see below.
+Notice: the `print("Liftoff!")` line is **not** indented, so it runs **after** the loop finishes.
 
-### Duplicate Keys Are Not Allowed
+> 💡 **Thinking Prompt:** What happens if you change `i = 5` to `i = 3`? How many times will the loop run?
 
-Dictionaries **cannot have two items with the same key**. If you try, the second value will silently overwrite the first one — Python will not warn you!
+---
+
+## Section 3: Controlling `while` Loops — `break`, `continue`, and `else`
+
+### 3.1 The `break` Statement
+
+The `break` keyword **immediately exits** the loop — even if the condition is still `True`. It is like an emergency exit.
+
+**Real-life analogy:** Imagine Ngozi is sampling bottles of groundnut oil in a warehouse. She checks each bottle. The moment she finds a bad one, she **breaks** — she stops checking and reports the problem immediately.
+
+#### Example: Stop the loop when `i` equals 3
 
 ```python
-# Danger: duplicate keys
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964,
-    "year": 2020    # "year" appears twice!
-}
-print(thisdict)
+i = 1
+while i < 6:
+    print(i)
+    if i == 3:
+        break
+    i += 1
 ```
 
 **Expected Output:**
 ```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 2020}
-```
-
-Notice `1964` is completely gone. The second `"year": 2020` **replaced** it silently. This is a very common beginner mistake — always double-check your keys!
-
-### Checking the Length of a Dictionary
-
-Use the built-in `len()` function to count how many items (key-value pairs) a dictionary has:
-
-```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-print(len(thisdict))
-```
-
-**Expected Output:**
-```
+1
+2
 3
 ```
 
-### Checking the Data Type
+**Line-by-line explanation:**
+- The loop starts with `i = 1` and counts up.
+- On each repetition, it prints `i`, then checks `if i == 3`.
+- When `i` becomes 3, Python hits `break` and immediately exits the loop.
+- The numbers 4 and 5 are never printed.
 
-From Python's perspective, dictionaries are objects of type `dict`. You can confirm this with `type()`:
-
-```python
-thisdict = {"brand": "Ford", "model": "Mustang", "year": 1964}
-print(type(thisdict))
-```
-
-**Expected Output:**
-```
-<class 'dict'>
-```
-
-### Creating a Dictionary with the `dict()` Constructor
-
-There's an alternative way to create a dictionary using the `dict()` built-in function. Instead of curly brackets and quotes for keys, you use keyword arguments:
-
-```python
-# Using dict() constructor
-person = dict(name="John", age=36, country="Norway")
-print(person)
-```
-
-**Expected Output:**
-```
-{'name': 'John', 'age': 36, 'country': 'Norway'}
-```
-
-> **Notice:** When using `dict()`, you do NOT put quotes around the key names. `name="John"` not `"name"="John"`.
-
-**Second example — a student record:**
-```python
-course = dict(title="Biology", code="BIO101", credits=3)
-print(course)
-```
-
-**Expected Output:**
-```
-{'title': 'Biology', 'code': 'BIO101', 'credits': 3}
-```
+> ⚠️ Notice that `i += 1` is **after** the `if` check. So when `i` is 3, Python prints 3, then hits `break`, and never reaches `i += 1`.
 
 ---
 
-## Part 3: Accessing Dictionary Items
+### 3.2 The `continue` Statement
 
-Now that you can create a dictionary, let's learn how to **read** its values.
+The `continue` keyword **skips the rest of the current repetition** and jumps back to check the condition again. It does not exit the loop — it just skips one turn.
 
-### Method 1 — Square Bracket Notation
+**Real-life analogy:** Amaka is reading through 10 exam papers. Whenever she sees a blank paper, she `continue`s — she skips it and moves on to the next one, without stopping the whole process.
 
-The most direct way to get a value is to write the dictionary name followed by the **key** in square brackets:
+#### Example: Skip number 3, print everything else from 1 to 5
 
 ```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-
-x = thisdict["model"]
-print(x)
+i = 0
+while i < 6:
+    i += 1
+    if i == 3:
+        continue
+    print(i)
 ```
 
 **Expected Output:**
 ```
-Mustang
+1
+2
+4
+5
+6
 ```
 
-**Explanation:** `thisdict["model"]` says: "go into `thisdict` and bring me the value whose key is `"model"`."
+**Careful study of this code:**
+- `i = 0` — We start at 0 this time.
+- `i += 1` — This is the **first line inside the loop**. It increments `i` before anything else.
+- `if i == 3: continue` — When `i` is 3, Python jumps back to `while i < 6:` without reaching `print(i)`.
+- All other values of `i` reach `print(i)` and get printed.
 
-**Second example:**
-```python
-# Getting the year
-print(thisdict["year"])
-```
+> 🔑 **Why does `i += 1` come before the `if` check here?** Because if `i += 1` were after `continue`, we would never increment `i` when `i == 3`. That would create an infinite loop! Always plan where your increment goes.
 
-**Expected Output:**
-```
-1964
-```
+---
 
-### Method 2 — The `.get()` Method
+### 3.3 The `else` Statement in a `while` Loop
 
-The `.get()` method does the same thing as square brackets, but it is **safer** for situations where you're not sure if the key exists:
+Python allows you to attach an `else` block to a `while` loop. The `else` block runs **once** — right after the loop condition becomes `False` (i.e., when the loop ends naturally).
 
-```python
-x = thisdict.get("model")
-print(x)
-```
+**Important rule:** The `else` block does **NOT** run if the loop ends with `break`.
 
-**Expected Output:**
-```
-Mustang
-```
-
-**Why is `.get()` safer?** If you use square brackets with a key that doesn't exist, Python raises a `KeyError` and crashes. With `.get()`, Python simply returns `None` (or a default value you specify), and your program keeps running.
+#### Example: Count from 1 to 5, then announce the end
 
 ```python
-# Square brackets — will CRASH if key doesn't exist
-# print(thisdict["color"])   # KeyError: 'color'
-
-# .get() — returns None safely
-print(thisdict.get("color"))
-```
-
-**Expected Output:**
-```
-None
-```
-
-You can also provide a **default value** as the second argument to `.get()`:
-
-```python
-print(thisdict.get("color", "Not specified"))
-```
-
-**Expected Output:**
-```
-Not specified
-```
-
-### Getting All the Keys — `.keys()`
-
-The `.keys()` method returns a special **view** of all the keys in the dictionary:
-
-```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-
-x = thisdict.keys()
-print(x)
-```
-
-**Expected Output:**
-```
-dict_keys(['brand', 'model', 'year'])
-```
-
-**Important:** This is a **live view**, not a copy. If you add a new key to the original dictionary, the keys view updates automatically:
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-x = car.keys()
-
-print(x)           # Before the change
-car["color"] = "white"
-print(x)           # After the change
-```
-
-**Expected Output:**
-```
-dict_keys(['brand', 'model', 'year'])
-dict_keys(['brand', 'model', 'year', 'color'])
-```
-
-> **Think about this:** Why would this "live view" behaviour be useful? Imagine you're monitoring a system where settings change often — you always want the latest list of keys without having to re-call the method.
-
-### Getting All the Values — `.values()`
-
-The `.values()` method returns a live view of all the **values** in the dictionary:
-
-```python
-thisdict = {"brand": "Ford", "model": "Mustang", "year": 1964}
-x = thisdict.values()
-print(x)
-```
-
-**Expected Output:**
-```
-dict_values(['Ford', 'Mustang', 1964])
-```
-
-Like `.keys()`, this is a live view that updates when the dictionary changes:
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-x = car.values()
-
-print(x)           # Before
-car["year"] = 2020
-print(x)           # After — notice 2020 is now there
-```
-
-**Expected Output:**
-```
-dict_values(['Ford', 'Mustang', 1964])
-dict_values(['Ford', 'Mustang', 2020])
-```
-
-### Getting All Key-Value Pairs — `.items()`
-
-The `.items()` method returns each key-value pair as a **tuple** inside a list-like view:
-
-```python
-thisdict = {"brand": "Ford", "model": "Mustang", "year": 1964}
-x = thisdict.items()
-print(x)
-```
-
-**Expected Output:**
-```
-dict_items([('brand', 'Ford'), ('model', 'Mustang'), ('year', 1964)])
-```
-
-Each item is a **tuple** — for example, `('brand', 'Ford')`. This format becomes extremely useful when you loop through dictionaries (covered in Part 8).
-
-This is also a live view:
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-x = car.items()
-
-print(x)           # Before
-car["color"] = "red"
-print(x)           # After — notice the new pair appears
-```
-
-**Expected Output:**
-```
-dict_items([('brand', 'Ford'), ('model', 'Mustang'), ('year', 1964)])
-dict_items([('brand', 'Ford'), ('model', 'Mustang'), ('year', 1964), ('color', 'red')])
-```
-
-### Checking if a Key Exists — the `in` Keyword
-
-Before accessing a key, you may want to check if it even exists. Use the `in` keyword:
-
-```python
-thisdict = {"brand": "Ford", "model": "Mustang", "year": 1964}
-
-if "model" in thisdict:
-    print("Yes, 'model' is one of the keys in the dictionary")
-```
-
-**Expected Output:**
-```
-Yes, 'model' is one of the keys in the dictionary
-```
-
-**Checking for a key that does NOT exist:**
-```python
-if "color" in thisdict:
-    print("color found")
+i = 1
+while i < 6:
+    print(i)
+    i += 1
 else:
-    print("color NOT found")
+    print("i is no longer less than 6")
 ```
 
 **Expected Output:**
 ```
-color NOT found
+1
+2
+3
+4
+5
+i is no longer less than 6
 ```
 
-> **Real-world use:** In a login system, before accessing `user["email"]`, you would first check `if "email" in user:` to prevent crashes.
+#### Example: The `else` block does NOT run after `break`
+
+```python
+i = 1
+while i < 6:
+    print(i)
+    if i == 3:
+        break
+    i += 1
+else:
+    print("This will NOT print because break was used!")
+```
+
+**Expected Output:**
+```
+1
+2
+3
+```
+
+The `else` block is skipped entirely because `break` ended the loop.
+
+> 💡 **Real-world use:** The `while-else` pattern is great for search tasks. Loop while searching; if found, `break`. The `else` block runs only if you finished searching without finding it — which means "not found."
 
 ---
 
-## Part 4: Changing Dictionary Items
+## Section 4: The `for` Loop
 
-Dictionaries are **mutable** — that means you can change, update, add, and remove items after creation.
+### What Is a `for` Loop?
 
-### Changing a Value by Key
+A **`for` loop** is used to **iterate** over a sequence. "Iterate" means to go through each item, one by one.
 
-To change a specific value, simply refer to the key and assign a new value:
+Think of it like Fatimah checking every stall at a market. She visits **each** stall — no more, no less — and does something at each one.
+
+A `for` loop works on:
+- Lists
+- Tuples
+- Strings (every character is treated as a single item)
+- Dictionaries
+- Sets
+- Ranges (we will cover this soon)
+
+The **key difference from `while`:** A `for` loop does not need you to manage a counter variable manually. Python automatically picks up the next item from the sequence on each turn.
+
+### The Syntax
 
 ```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
+for variable in sequence:
+    # code to run for each item
+```
 
-thisdict["year"] = 2018   # Update the value for key "year"
-print(thisdict)
+- `for` — keyword that starts the loop
+- `variable` — a name you choose; Python puts the current item here on each turn
+- `in` — keyword connecting the variable to the sequence
+- `sequence` — the list, string, or range to loop through
+- `:` — opens the loop body
+- indented code — runs once for every item
+
+### Simple Example 1: Loop through a list of Nigerian foods
+
+```python
+foods = ["jollof rice", "egusi soup", "suya", "puff puff"]
+for food in foods:
+    print(food)
 ```
 
 **Expected Output:**
 ```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 2018}
+jollof rice
+egusi soup
+suya
+puff puff
 ```
 
-**Explanation:** `thisdict["year"] = 2018` finds the key `"year"` in the dictionary and replaces its value with `2018`.
+**What is happening here?**
+- On Turn 1: Python sets `food = "jollof rice"` and runs `print(food)`.
+- On Turn 2: Python sets `food = "egusi soup"` and runs `print(food)`.
+- This continues until every item in the list has been visited.
+- The loop ends automatically. No `i += 1` needed!
 
-**Second example — updating a student's grade:**
+### Simple Example 2: Loop through names
+
 ```python
-student = {"name": "Tunde", "subject": "Maths", "score": 65}
-student["score"] = 78   # Tunde improved!
-print(student)
+names = ["Chidi", "Aisha", "Emeka", "Ngozi"]
+for name in names:
+    print("Hello,", name)
 ```
 
 **Expected Output:**
 ```
-{'name': 'Tunde', 'subject': 'Maths', 'score': 78}
-```
-
-### Using the `.update()` Method
-
-The `.update()` method lets you update one or more values at the same time. You pass it a dictionary with the key(s) you want to change:
-
-```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-
-thisdict.update({"year": 2020})
-print(thisdict)
-```
-
-**Expected Output:**
-```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 2020}
-```
-
-**Updating multiple values at once:**
-```python
-employee = {"name": "Grace", "department": "IT", "salary": 50000}
-employee.update({"department": "Engineering", "salary": 65000})
-print(employee)
-```
-
-**Expected Output:**
-```
-{'name': 'Grace', 'department': 'Engineering', 'salary': 65000}
-```
-
-> **Why use `.update()` over direct assignment?** When you want to update several keys at once, `.update()` is cleaner. Also, if you pass it a key that doesn't yet exist, it will **add** it as a new item — making it a versatile method.
-
----
-
-## Part 5: Adding Items to a Dictionary
-
-### Adding a New Key-Value Pair
-
-To add a completely new item to a dictionary, simply assign a value to a **new key** that doesn't exist yet:
-
-```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-
-thisdict["color"] = "red"   # Adding a brand new key-value pair
-print(thisdict)
-```
-
-**Expected Output:**
-```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 1964, 'color': 'red'}
-```
-
-**Explanation:** Since `"color"` didn't exist before, Python adds it as a new entry at the end of the dictionary.
-
-**Second example — adding items to a shopping cart:**
-```python
-cart = {"apples": 3, "bread": 1}
-cart["milk"] = 2      # Adding milk
-cart["eggs"] = 12     # Adding eggs
-print(cart)
-```
-
-**Expected Output:**
-```
-{'apples': 3, 'bread': 1, 'milk': 2, 'eggs': 12}
-```
-
-### Adding with `.update()`
-
-You can also use the `.update()` method to add new items. If the key already exists, it updates the value; if it doesn't exist, it adds a new entry:
-
-```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-
-thisdict.update({"color": "white"})   # "color" is new, so it gets added
-print(thisdict)
-```
-
-**Expected Output:**
-```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 1964, 'color': 'white'}
-```
-
-> **Remember the rule:** Direct assignment (`dict["key"] = value`) and `.update({"key": value})` both work for adding new items. The difference is `.update()` lets you add or update multiple keys at once.
-
----
-
-## Part 6: Removing Items from a Dictionary
-
-There are several ways to remove items from a dictionary. Let's cover all of them.
-
-### Method 1 — `.pop(key)` — Remove a Specific Key
-
-The `.pop()` method removes the item with the specified key and **returns** the removed value:
-
-```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-
-thisdict.pop("model")
-print(thisdict)
-```
-
-**Expected Output:**
-```
-{'brand': 'Ford', 'year': 1964}
-```
-
-You can also capture the removed value:
-
-```python
-removed = thisdict.pop("brand")
-print("Removed:", removed)
-print("Remaining:", thisdict)
-```
-
-**Expected Output:**
-```
-Removed: Ford
-Remaining: {'year': 1964}
-```
-
-### Method 2 — `.popitem()` — Remove the Last Inserted Item
-
-The `.popitem()` method removes the **last inserted** key-value pair. It returns that pair as a tuple:
-
-```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-
-thisdict.popitem()   # Removes ("year", 1964) — the last item
-print(thisdict)
-```
-
-**Expected Output:**
-```
-{'brand': 'Ford', 'model': 'Mustang'}
-```
-
-> **Note:** In Python 3.7 and later, `.popitem()` always removes the **last** inserted item. In older versions, it removed a random item.
-
-### Method 3 — `del` Keyword — Remove by Key or Delete the Whole Dictionary
-
-The `del` keyword can remove a specific item or delete the entire dictionary:
-
-**Removing a specific key:**
-```python
-thisdict = {"brand": "Ford", "model": "Mustang", "year": 1964}
-del thisdict["model"]
-print(thisdict)
-```
-
-**Expected Output:**
-```
-{'brand': 'Ford', 'year': 1964}
-```
-
-**Deleting the entire dictionary:**
-```python
-thisdict = {"brand": "Ford", "model": "Mustang", "year": 1964}
-del thisdict
-# print(thisdict)   # This would cause a NameError — thisdict no longer exists!
-```
-
-> **Warning:** After `del thisdict`, the variable `thisdict` no longer exists at all. Trying to use it will give a `NameError`. This is different from clearing it.
-
-### Method 4 — `.clear()` — Empty the Dictionary
-
-The `.clear()` method removes **all items** from the dictionary, but the dictionary variable itself still exists (it just becomes empty):
-
-```python
-thisdict = {"brand": "Ford", "model": "Mustang", "year": 1964}
-thisdict.clear()
-print(thisdict)
-```
-
-**Expected Output:**
-```
-{}
-```
-
-**Comparison of del vs clear:**
-```python
-# .clear() — dictionary still exists, but is empty
-my_dict = {"a": 1, "b": 2}
-my_dict.clear()
-print(my_dict)    # {} — empty but still exists
-
-# del — dictionary is completely gone
-my_dict2 = {"a": 1, "b": 2}
-del my_dict2
-# print(my_dict2) # NameError!
+Hello, Chidi
+Hello, Aisha
+Hello, Emeka
+Hello, Ngozi
 ```
 
 ---
 
-## Part 7: Looping Through a Dictionary
+## Section 5: Looping Through a String
 
-Looping (iterating) through a dictionary is one of the most commonly used operations in real programs.
+Strings are sequences of characters, so you can loop through them letter by letter.
 
-### Loop 1 — Loop Through Keys (Default Behaviour)
-
-When you use a `for` loop on a dictionary directly, Python loops through the **keys** by default:
+### Example: Print each letter in a city name
 
 ```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
+for letter in "Lagos":
+    print(letter)
+```
 
-for x in thisdict:
+**Expected Output:**
+```
+L
+a
+g
+o
+s
+```
+
+On each turn, `letter` holds the next character in the string `"Lagos"`. After the last character `"s"`, the loop ends.
+
+### Example: Count vowels in a word
+
+```python
+word = "Abuja"
+vowels = "aeiouAEIOU"
+count = 0
+
+for letter in word:
+    if letter in vowels:
+        count += 1
+
+print("Number of vowels:", count)
+```
+
+**Expected Output:**
+```
+Number of vowels: 3
+```
+
+(The vowels in "Abuja" are: A, u, a)
+
+> 💡 **Thinking Prompt:** What would happen if you change `"Abuja"` to `"Kano"`? How many vowels does "Kano" have? Try to predict before running the code.
+
+---
+
+## Section 6: `break` and `continue` in `for` Loops
+
+Just like in `while` loops, you can use `break` and `continue` inside `for` loops.
+
+### 6.1 `break` in a `for` Loop
+
+`break` exits the loop immediately when a condition is met.
+
+#### Example 1: Stop when you find "banana"
+
+```python
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)
+    if fruit == "banana":
+        break
+```
+
+**Expected Output:**
+```
+apple
+banana
+```
+
+The loop prints `"apple"`, then `"banana"`, then hits `break` and stops. `"cherry"` is never printed.
+
+#### Example 2: Break BEFORE printing
+
+```python
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    if fruit == "banana":
+        break
+    print(fruit)
+```
+
+**Expected Output:**
+```
+apple
+```
+
+Here, the `if` check comes **before** `print`. So when `fruit == "banana"`, Python breaks before ever printing `"banana"`.
+
+> 💡 **Thinking Prompt:** Why does Example 1 print "banana" but Example 2 does not? What changed?
+
+---
+
+### 6.2 `continue` in a `for` Loop
+
+`continue` skips the current item and moves to the next one.
+
+#### Example: Print all fruits except "banana"
+
+```python
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    if fruit == "banana":
+        continue
+    print(fruit)
+```
+
+**Expected Output:**
+```
+apple
+cherry
+```
+
+When `fruit == "banana"`, Python hits `continue`, skips `print(fruit)`, and immediately goes to the next item in the list — which is `"cherry"`.
+
+---
+
+## Section 7: The `range()` Function
+
+### Why Does `range()` Exist?
+
+Imagine you want to print the numbers from 1 to 1000. You definitely do not want to type out a list of 1000 numbers! The `range()` function solves this: it generates a sequence of numbers automatically.
+
+> **What is `range()`?**
+> `range()` is a built-in Python function that returns an **immutable sequence of numbers**. "Immutable" means the sequence cannot be changed after it is created. It has its own special data type, also called `range`.
+
+### The Syntax
+
+```python
+range(start, stop, step)
+```
+
+| Parameter | What it means | Is it required? | Default value |
+|---|---|---|---|
+| `start` | The first number in the sequence | Optional | `0` |
+| `stop` | The sequence ends **before** this number | Required | — |
+| `step` | How much to add each time | Optional | `1` |
+
+### 7.1 `range()` with One Argument
+
+When you call `range()` with only one number, that number is the **stop** value. The sequence starts at 0 and goes **up to but not including** the stop value.
+
+```python
+x = range(10)
+print(list(x))
+```
+
+**Expected Output:**
+```
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+> ⚠️ `range(10)` gives you numbers 0 to **9**, not 0 to 10! The stop value is **exclusive** — it is not included.
+
+> 💡 **Tip:** To display the contents of a `range`, we wrap it in `list()`. This converts it to a regular list that `print()` can show. You will learn more about this below.
+
+### 7.2 `range()` with Two Arguments
+
+When you call `range()` with two numbers, the first is **start** and the second is **stop**.
+
+```python
+x = range(3, 10)
+print(list(x))
+```
+
+**Expected Output:**
+```
+[3, 4, 5, 6, 7, 8, 9]
+```
+
+The sequence starts at 3 and goes up to **9** (not 10).
+
+### 7.3 `range()` with Three Arguments
+
+When you call `range()` with three numbers, the third is the **step** — how much to add each time.
+
+```python
+x = range(2, 30, 3)
+print(list(x))
+```
+
+**Expected Output:**
+```
+[2, 5, 8, 11, 14, 17, 20, 23, 26, 29]
+```
+
+Starting at 2, add 3 each time, stop before 30.
+
+### 7.4 Using `range()` in a `for` Loop
+
+This is the most common use of `range()`: to run a loop a specific number of times.
+
+#### Example 1: Print numbers 0 to 5
+
+```python
+for x in range(6):
     print(x)
 ```
 
 **Expected Output:**
 ```
-brand
-model
-year
+0
+1
+2
+3
+4
+5
 ```
 
-Only the **keys** are printed, not the values.
+#### Example 2: Print numbers 2 to 5 (using start and stop)
 
-### Loop 2 — Loop Through Values
-
-To print values, you have two options:
-
-**Option A — Use the key inside the loop:**
 ```python
-for x in thisdict:
-    print(thisdict[x])
-```
-
-**Expected Output:**
-```
-Ford
-Mustang
-1964
-```
-
-**Option B — Use `.values()` directly:**
-```python
-for x in thisdict.values():
+for x in range(2, 6):
     print(x)
 ```
 
 **Expected Output:**
 ```
-Ford
-Mustang
-1964
+2
+3
+4
+5
 ```
 
-### Loop 3 — Loop Through Keys with `.keys()`
-
-You can be explicit and loop through keys using `.keys()`:
+#### Example 3: Print even numbers from 0 to 20 (using step)
 
 ```python
-for x in thisdict.keys():
+for x in range(0, 21, 2):
     print(x)
 ```
 
 **Expected Output:**
 ```
-brand
-model
-year
+0
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
 ```
 
-### Loop 4 — Loop Through Both Keys and Values Together
-
-The most useful loop uses `.items()`, which gives you both the key **and** the value together in each iteration:
+#### Example 4: Count down using a negative step
 
 ```python
-for key, value in thisdict.items():
-    print(key, value)
+for x in range(10, 0, -1):
+    print(x)
 ```
 
 **Expected Output:**
 ```
-brand Ford
-model Mustang
-year 1964
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
 ```
 
-**Explanation:** Each time through the loop, Python unpacks the tuple `('brand', 'Ford')` into two variables: `key` gets `'brand'` and `value` gets `'Ford'`.
-
-**Real-world example — printing a formatted student report:**
-```python
-student = {
-    "name": "Chidi",
-    "subject": "Physics",
-    "score": 88,
-    "grade": "A"
-}
-
-for key, value in student.items():
-    print(f"{key}: {value}")
-```
-
-**Expected Output:**
-```
-name: Chidi
-subject: Physics
-score: 88
-grade: A
-```
-
-> **Thinking prompt:** What would happen if you used `for key, value in thisdict:` without `.items()`? Try to predict it, then test it — you'll get a `ValueError: too many values to unpack`.
+When the step is **negative**, the sequence counts **down**. Start must be greater than stop for this to work.
 
 ---
 
-## Part 8: Copying a Dictionary
+## Section 8: Advanced `range()` — Converting, Slicing, Membership, and Length
 
-### Why Can't You Just Use `=`?
+### 8.1 Converting a `range` to a List
 
-You might think `copy = original` would create a separate copy, but in Python, this does NOT create a true copy. It creates a **reference** — both variables point to the exact same object in memory. Changing one will change the other!
+The `range` object itself is not a list — it just represents the numbers. To display all the values at once, convert it to a list using `list()`.
 
 ```python
-original = {"a": 1, "b": 2}
-copy = original       # This is NOT a real copy — it's just another name
-
-copy["a"] = 999
-print(original)       # The original was also changed!
-print(copy)
+print(list(range(5)))
+print(list(range(1, 6)))
+print(list(range(5, 20, 3)))
 ```
 
 **Expected Output:**
 ```
-{'a': 999, 'b': 2}
-{'a': 999, 'b': 2}
+[0, 1, 2, 3, 4]
+[1, 2, 3, 4, 5]
+[5, 8, 11, 14, 17]
 ```
 
-This is a very common source of bugs for beginners!
+### 8.2 Slicing a `range`
 
-### Method 1 — `.copy()` — Create a True Copy
-
-The `.copy()` method creates a **new, independent** dictionary with the same items:
+You can access individual elements of a `range` using index notation (just like a list), and you can also slice it.
 
 ```python
-thisdict = {
-    "brand": "Ford",
-    "model": "Mustang",
-    "year": 1964
-}
-
-mydict = thisdict.copy()    # True independent copy
-
-mydict["year"] = 2024       # Change the copy
-print(thisdict)             # Original is unchanged
-print(mydict)               # Copy has the new value
+r = range(10)
+print(r[2])     # the item at index 2
+print(r[:3])    # a new range from index 0 up to (not including) 3
 ```
 
 **Expected Output:**
 ```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
-{'brand': 'Ford', 'model': 'Mustang', 'year': 2024}
+2
+range(0, 3)
 ```
 
-### Method 2 — `dict()` — Create a Copy Using the Constructor
+- `r[2]` gives you the **value** at position 2, which is `2` (since the range starts at 0).
+- `r[:3]` gives you a **new range object** — `range(0, 3)` — not a list.
 
-You can also pass an existing dictionary into `dict()` to create a copy:
+### 8.3 Testing Membership with `in`
+
+You can check whether a number is inside a `range` using the `in` operator.
 
 ```python
-thisdict = {"brand": "Ford", "model": "Mustang", "year": 1964}
-
-mydict = dict(thisdict)   # Creates a new, independent dictionary
-
-mydict["brand"] = "Toyota"
-print(thisdict)            # Original unchanged
-print(mydict)              # Copy has new value
+r = range(0, 10, 2)
+print(list(r))
+print(6 in r)
+print(7 in r)
 ```
 
 **Expected Output:**
 ```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
-{'brand': 'Toyota', 'model': 'Mustang', 'year': 1964}
+[0, 2, 4, 6, 8]
+True
+False
 ```
 
-> **Rule to remember:** If you need an independent copy of a dictionary, always use `.copy()` or `dict()`. Never use plain `=` for copying.
+- `6 in r` is `True` because 6 is in the sequence `[0, 2, 4, 6, 8]`.
+- `7 in r` is `False` because 7 is not in that sequence (we skip odd numbers with step 2).
+
+### 8.4 Getting the Length of a `range`
+
+Use `len()` to find out how many numbers are in a range.
+
+```python
+r = range(0, 10, 2)
+print(len(r))
+```
+
+**Expected Output:**
+```
+5
+```
+
+The range `[0, 2, 4, 6, 8]` has 5 numbers, so `len(r)` returns 5.
 
 ---
 
-## Part 9: Nested Dictionaries
+## Section 9: `else` in a `for` Loop
 
-### What Is a Nested Dictionary?
+Just like with `while`, you can add an `else` block to a `for` loop. It runs **once** after the loop has finished iterating through all items — but only if the loop was not ended by a `break`.
 
-A **nested dictionary** is a dictionary that contains other dictionaries as values. Think of it like a filing cabinet where each drawer (outer dictionary) contains folders (inner dictionaries) full of documents (data).
-
-**Real-world analogy:** A school database might have a dictionary of students, where each student's record is itself a dictionary.
-
-### Creating a Nested Dictionary — Method 1: Direct
+### Example 1: Normal completion — `else` runs
 
 ```python
-myfamily = {
-    "child1": {
-        "name": "Emil",
-        "year": 2004
-    },
-    "child2": {
-        "name": "Tobias",
-        "year": 2007
-    },
-    "child3": {
-        "name": "Linus",
-        "year": 2011
-    }
-}
-print(myfamily)
+for x in range(6):
+    print(x)
+else:
+    print("Finally finished!")
 ```
 
 **Expected Output:**
 ```
-{'child1': {'name': 'Emil', 'year': 2004}, 'child2': {'name': 'Tobias', 'year': 2007}, 'child3': {'name': 'Linus', 'year': 2011}}
+0
+1
+2
+3
+4
+5
+Finally finished!
 ```
 
-### Creating a Nested Dictionary — Method 2: From Existing Dictionaries
-
-You can also create separate dictionaries first, then combine them:
+### Example 2: Loop broken early — `else` does NOT run
 
 ```python
-child1 = {"name": "Emil", "year": 2004}
-child2 = {"name": "Tobias", "year": 2007}
-child3 = {"name": "Linus", "year": 2011}
-
-myfamily = {
-    "child1": child1,
-    "child2": child2,
-    "child3": child3
-}
-
-print(myfamily)
+for x in range(6):
+    if x == 3:
+        break
+    print(x)
+else:
+    print("Finally finished!")
 ```
 
 **Expected Output:**
 ```
-{'child1': {'name': 'Emil', 'year': 2004}, 'child2': {'name': 'Tobias', 'year': 2007}, 'child3': {'name': 'Linus', 'year': 2011}}
+0
+1
+2
 ```
 
-### Accessing Items in a Nested Dictionary
+The `else` block is skipped because `break` ended the loop at `x == 3`.
 
-To access a value deep inside a nested dictionary, you **chain** the key lookups:
-
-```python
-# Get "Emil" — the name of child1
-print(myfamily["child1"]["name"])
-```
-
-**Expected Output:**
-```
-Emil
-```
-
-**Step-by-step breakdown:**
-1. `myfamily["child1"]` → gives you `{"name": "Emil", "year": 2004}`
-2. `["name"]` → gives you `"Emil"`
-
-**More examples:**
-```python
-print(myfamily["child2"]["year"])   # Get the year of child2
-print(myfamily["child3"]["name"])   # Get the name of child3
-```
-
-**Expected Output:**
-```
-2007
-Linus
-```
-
-### Looping Through a Nested Dictionary
-
-```python
-for child_key, child_info in myfamily.items():
-    print(f"\n{child_key}:")
-    for detail_key, detail_value in child_info.items():
-        print(f"  {detail_key}: {detail_value}")
-```
-
-**Expected Output:**
-```
-child1:
-  name: Emil
-  year: 2004
-
-child2:
-  name: Tobias
-  year: 2007
-
-child3:
-  name: Linus
-  year: 2011
-```
-
-**Explanation of the double loop:**
-- The **outer loop** goes through each child (`child1`, `child2`, `child3`)
-- The **inner loop** goes through each detail inside each child's dictionary (`name`, `year`)
-
-> **Real-world use:** Nested dictionaries are the backbone of JSON data from APIs. When you call a weather API or a stock price API, the response is almost always a nested dictionary structure.
+> 💡 **Real-world use:** This pattern is common in search tasks. You loop through a list looking for something. If you find it, you `break`. The `else` block runs only if you went through the entire list and never found it.
 
 ---
 
-## Part 10: Dictionary Methods — The Complete Reference
+## Section 10: Nested Loops
 
-Python dictionaries come with many built-in methods. Here is every one of them explained clearly.
+A **nested loop** is a loop inside another loop. The inner loop runs **completely** for every single step of the outer loop.
 
-### 1. `.clear()` — Remove All Items
+**Real-life analogy:** Think of Damilola visiting every floor of a building in Lagos, and on each floor she knocks on every office door. For each floor (outer loop), she knocks on every door (inner loop).
 
-Empties the dictionary completely. The variable remains, but becomes `{}`.
-
-```python
-car = {"brand": "Ford", "model": "Mustang"}
-car.clear()
-print(car)
-```
-**Output:** `{}`
-
-### 2. `.copy()` — Return a Shallow Copy
-
-Creates an independent copy of the dictionary.
+### The Syntax
 
 ```python
-original = {"a": 1, "b": 2}
-backup = original.copy()
-backup["c"] = 3
-print(original)   # {"a": 1, "b": 2} — untouched
-print(backup)     # {"a": 1, "b": 2, "c": 3}
+for outer_item in outer_sequence:
+    for inner_item in inner_sequence:
+        # this code runs for every combination
 ```
 
-### 3. `dict.fromkeys(keys, value)` — Create a Dictionary from Keys
-
-Creates a new dictionary from a list of keys. All keys get the same value. If no value is given, `None` is used.
+### Example 1: Print combinations of colours and items
 
 ```python
-# Create a dict with all keys set to the same value
-keys = ("name", "age", "city")
-new_dict = dict.fromkeys(keys, "unknown")
-print(new_dict)
+colours = ["red", "green", "blue"]
+items = ["bag", "shoe"]
+
+for colour in colours:
+    for item in items:
+        print(colour, item)
 ```
 
 **Expected Output:**
 ```
-{'name': 'unknown', 'age': 'unknown', 'city': 'unknown'}
+red bag
+red shoe
+green bag
+green shoe
+blue bag
+blue shoe
 ```
 
-**Without a value — defaults to None:**
+For every colour (3 colours), Python goes through all items (2 items). Total combinations: 3 × 2 = 6 lines.
+
+### Example 2: Multiplication table for 3 using nested loops
+
 ```python
-result = dict.fromkeys(["a", "b", "c"])
-print(result)
+for i in range(1, 4):        # outer loop: i goes 1, 2, 3
+    for j in range(1, 6):    # inner loop: j goes 1, 2, 3, 4, 5
+        print(i, "x", j, "=", i * j)
+    print("---")             # printed after each inner loop finishes
 ```
 
 **Expected Output:**
 ```
-{'a': None, 'b': None, 'c': None}
-```
-
-**Real-world use:** Quickly initialise a dictionary with default values, like setting all test scores to 0.
-
-```python
-subjects = ["Maths", "English", "Science", "History"]
-scores = dict.fromkeys(subjects, 0)
-print(scores)
-```
-
-**Expected Output:**
-```
-{'Maths': 0, 'English': 0, 'Science': 0, 'History': 0}
-```
-
-### 4. `.get(key, default)` — Get Value Safely
-
-Returns the value for a key. Returns `None` (or your specified default) if the key doesn't exist. Prevents crashes.
-
-```python
-car = {"brand": "Ford", "year": 1964}
-print(car.get("brand"))             # Ford
-print(car.get("color"))             # None
-print(car.get("color", "Unknown"))  # Unknown
-```
-
-### 5. `.items()` — Get All Key-Value Pairs
-
-Returns a view of all key-value pairs as tuples. This is the primary tool for looping through a dictionary's contents.
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-print(car.items())
-```
-
-**Expected Output:**
-```
-dict_items([('brand', 'Ford'), ('model', 'Mustang'), ('year', 1964)])
-```
-
-### 6. `.keys()` — Get All Keys
-
-Returns a live view of all keys.
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-print(car.keys())
-```
-
-**Expected Output:**
-```
-dict_keys(['brand', 'model', 'year'])
-```
-
-### 7. `.pop(key, default)` — Remove and Return a Value
-
-Removes the specified key and returns its value. If the key is not found and no default is given, it raises a `KeyError`.
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-removed = car.pop("model")
-print(removed)   # Mustang
-print(car)       # {'brand': 'Ford', 'year': 1964}
-```
-
-**With a default (prevents crash if key missing):**
-```python
-result = car.pop("color", "Not found")
-print(result)    # Not found
-```
-
-### 8. `.popitem()` — Remove and Return the Last Item
-
-Removes and returns the **last inserted** key-value pair as a tuple.
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-item = car.popitem()
-print(item)    # ('year', 1964)
-print(car)     # {'brand': 'Ford', 'model': 'Mustang'}
-```
-
-### 9. `.setdefault(key, default)` — Get a Value or Set a Default
-
-Returns the value of a key. If the key does not exist, it **inserts** the key with the given default value and returns that default.
-
-```python
-car = {"brand": "Ford", "model": "Mustang"}
-
-# Key "model" already exists — returns its value
-x = car.setdefault("model", "Bronco")
-print(x)      # Mustang (original value kept)
-print(car)    # {'brand': 'Ford', 'model': 'Mustang'}
-
-# Key "color" does NOT exist — inserts it with the default
-y = car.setdefault("color", "white")
-print(y)      # white
-print(car)    # {'brand': 'Ford', 'model': 'Mustang', 'color': 'white'}
-```
-
-### 10. `.update(iterable)` — Add or Update Items
-
-Updates the dictionary with items from another dictionary or iterable of key-value pairs. Existing keys are updated; new keys are added.
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-car.update({"year": 2020, "color": "blue"})
-print(car)
-```
-
-**Expected Output:**
-```
-{'brand': 'Ford', 'model': 'Mustang', 'year': 2020, 'color': 'blue'}
-```
-
-### 11. `.values()` — Get All Values
-
-Returns a live view of all values.
-
-```python
-car = {"brand": "Ford", "model": "Mustang", "year": 1964}
-print(car.values())
-```
-
-**Expected Output:**
-```
-dict_values(['Ford', 'Mustang', 1964])
+1 x 1 = 1
+1 x 2 = 2
+1 x 3 = 3
+1 x 4 = 4
+1 x 5 = 5
+---
+2 x 1 = 2
+2 x 2 = 4
+2 x 3 = 6
+2 x 4 = 8
+2 x 5 = 10
+---
+3 x 1 = 3
+3 x 2 = 6
+3 x 3 = 9
+3 x 4 = 12
+3 x 5 = 15
+---
 ```
 
 ---
 
-## Part 11: Guided Practice Exercises
+## Section 11: The `pass` Statement in Loops
 
-Work through these carefully. Try each one yourself before looking at the solution.
+A `for` loop (or `while` loop) **cannot be empty**. If you write a loop with no body, Python will give you a `SyntaxError`. But sometimes, while you are planning your code, you want to create a loop body you have not written yet. The `pass` statement acts as a placeholder.
+
+```python
+for x in [0, 1, 2]:
+    pass
+```
+
+This runs without any output and without any errors. `pass` tells Python: "There is nothing to do here — just continue."
+
+> 💡 This is useful when you are building a program in stages. You sketch out the loop first with `pass`, then come back to fill in the body later.
 
 ---
 
-### Exercise 1: Build a Student Profile
+## Guided Practice Exercises
 
-**Objective:** Create and print a dictionary.
+### Exercise 1: The Patient Bus Driver
 
-**Scenario:** You are building a school database system. Store the following information about a student:
-- Name: Fatima
-- Age: 16
-- Class: JSS3
-- Subject favourite: Biology
-- Score: 92
+**Scenario:** Alhaji Musa drives a danfo bus on the Lagos–Ibadan expressway. He wants to track how many trips he has made. He will keep driving until he completes 5 trips.
+
+**Objective:** Use a `while` loop to simulate 5 bus trips.
 
 **Steps:**
-1. Create a dictionary called `student` with all five details.
-2. Print the entire dictionary.
-3. Print only the student's name.
-4. Print only the score.
+1. Create a variable `trips = 0`
+2. Write a `while` loop that runs as long as `trips < 5`
+3. Inside the loop, print the current trip number, then increment `trips`
+4. After the loop, print "All trips complete!"
+
+**Expected Output:**
+```
+Trip 1 in progress...
+Trip 2 in progress...
+Trip 3 in progress...
+Trip 4 in progress...
+Trip 5 in progress...
+All trips complete!
+```
 
 **Solution:**
-```python
-student = {
-    "name": "Fatima",
-    "age": 16,
-    "class": "JSS3",
-    "favourite_subject": "Biology",
-    "score": 92
-}
 
-print(student)
-print(student["name"])
-print(student["score"])
+```python
+trips = 0
+while trips < 5:
+    trips += 1
+    print("Trip", trips, "in progress...")
+else:
+    print("All trips complete!")
+```
+
+**Self-check:**
+- Did the loop run exactly 5 times?
+- What would happen if you changed the condition to `trips < 10`?
+- Did the `else` block print at the end?
+
+---
+
+### Exercise 2: Market Price Checker
+
+**Scenario:** Adaeze is at Wuse Market in Abuja checking prices of vegetables. She has a list of prices in Naira. She wants to print each price, but skip any price that is exactly 500 (she thinks it is a pricing error).
+
+**Objective:** Use a `for` loop with `continue` to skip a specific value.
+
+**Steps:**
+1. Create a list: `prices = [200, 350, 500, 420, 180, 500, 650]`
+2. Write a `for` loop over `prices`
+3. If the current price is 500, use `continue` to skip it
+4. Otherwise, print the price
+
+**Expected Output:**
+```
+200
+350
+420
+180
+650
+```
+
+**Solution:**
+
+```python
+prices = [200, 350, 500, 420, 180, 500, 650]
+
+for price in prices:
+    if price == 500:
+        continue
+    print(price)
+```
+
+**What-if challenge:** Change `continue` to `break`. What happens? Why?
+
+---
+
+### Exercise 3: Finding a Ripe Mango
+
+**Scenario:** Chukwuemeka is checking a crate of mangoes to find the first ripe one. Once he finds it, he stops — he does not need to check the rest.
+
+**Objective:** Use a `for` loop with `break` and the `for-else` pattern.
+
+**Steps:**
+1. Create a list: `mangoes = ["unripe", "unripe", "ripe", "unripe", "ripe"]`
+2. Write a `for` loop over `mangoes` with an index using `range(len(mangoes))`
+3. Print which position is being checked
+4. If the mango is "ripe", print a success message and `break`
+5. Add an `else` block that runs only if no ripe mango was found
+
+**Solution:**
+
+```python
+mangoes = ["unripe", "unripe", "ripe", "unripe", "ripe"]
+
+for i in range(len(mangoes)):
+    print("Checking mango at position", i)
+    if mangoes[i] == "ripe":
+        print("Found a ripe mango at position", i, "!")
+        break
+else:
+    print("No ripe mango found in this crate.")
 ```
 
 **Expected Output:**
 ```
-{'name': 'Fatima', 'age': 16, 'class': 'JSS3', 'favourite_subject': 'Biology', 'score': 92}
-Fatima
-92
+Checking mango at position 0
+Checking mango at position 1
+Checking mango at position 2
+Found a ripe mango at position 2 !
 ```
 
-**Self-check questions:**
-- What happens if you print `student["grade"]`?
-- How would you use `.get()` to print `student["grade"]` safely?
+**What-if challenge:** Change all mangoes to "unripe". Does the `else` block run now?
 
 ---
 
-### Exercise 2: Update and Add to a Dictionary
+## Mini Project: Nigerian JAMB Score Analyser
 
-**Objective:** Modify an existing dictionary.
+In this project, you will build a simple tool that analyses JAMB exam scores for a group of students. You will use `for` loops, `range()`, `if` statements, and loops with `break`.
 
-**Scenario:** Fatima's score has been updated to 95 after a remark. Also, the teacher wants to add her house (school house): "Blue House".
+### Stage 1: Setup — Define the Student Scores
 
 ```python
-student = {
-    "name": "Fatima",
-    "age": 16,
-    "score": 92
-}
+students = [
+    ("Emeka", 280),
+    ("Aisha", 195),
+    ("Chioma", 315),
+    ("Tunde", 150),
+    ("Ngozi", 260),
+    ("Yusuf", 330)
+]
+```
 
-# Step 1: Update the score
-student["score"] = 95
+Each item is a **tuple** containing a name and a score.
 
-# Step 2: Add the house
-student["house"] = "Blue House"
+**Expected Output:** (nothing yet — we are setting up)
 
-print(student)
+---
+
+### Stage 2: Print All Scores
+
+Use a `for` loop to print every student's name and score.
+
+```python
+print("=== JAMB Results ===")
+for name, score in students:
+    print(name, "->", score)
 ```
 
 **Expected Output:**
 ```
-{'name': 'Fatima', 'age': 16, 'score': 95, 'house': 'Blue House'}
+=== JAMB Results ===
+Emeka -> 280
+Aisha -> 195
+Chioma -> 315
+Tunde -> 150
+Ngozi -> 260
+Yusuf -> 330
 ```
-
-**What-if challenge:** Try the same using `.update()` instead of direct assignment.
 
 ---
 
-### Exercise 3: Loop Through a Dictionary
+### Stage 3: Classify Each Score
 
-**Objective:** Print a formatted report from a dictionary.
+Add a grade classification based on the score.
 
 ```python
-product = {
-    "name": "Laptop",
-    "brand": "TechCo",
-    "price": 450000,
-    "in_stock": True
-}
-
-print("=== Product Report ===")
-for key, value in product.items():
-    print(f"{key.capitalize()}: {value}")
+print("\n=== Score Classification ===")
+for name, score in students:
+    if score >= 300:
+        grade = "Excellent"
+    elif score >= 250:
+        grade = "Good"
+    elif score >= 200:
+        grade = "Pass"
+    else:
+        grade = "Below Cut-off"
+    print(name, ":", score, "->", grade)
 ```
 
 **Expected Output:**
 ```
-=== Product Report ===
-Name: Laptop
-Brand: TechCo
-Price: 450000
-In_stock: True
+=== Score Classification ===
+Emeka : 280 -> Good
+Aisha : 195 -> Below Cut-off
+Chioma : 315 -> Excellent
+Tunde : 150 -> Below Cut-off
+Ngozi : 260 -> Good
+Yusuf : 330 -> Excellent
 ```
-
-**Hint on `key.capitalize()`:** This turns `"name"` into `"Name"` for nicer display.
 
 ---
 
-### Exercise 4: Remove Items Safely
+### Stage 4: Calculate the Average Score
 
-**Scenario:** A hospital patient record needs cleanup. Remove the "temp_note" field safely and also remove the last added item.
+Use a `for` loop and `range()` to compute the average.
 
 ```python
-patient = {
-    "id": "P-001",
-    "name": "Emeka",
-    "condition": "Stable",
-    "temp_note": "To be updated"
-}
+total = 0
+for name, score in students:
+    total += score
 
-# Remove temp_note using .pop()
-removed = patient.pop("temp_note")
-print(f"Removed note: {removed}")
-print(patient)
-
-# Remove the last item using .popitem()
-last = patient.popitem()
-print(f"Last item removed: {last}")
-print(patient)
+average = total / len(students)
+print("\nAverage Score:", average)
 ```
 
 **Expected Output:**
 ```
-Removed note: To be updated
-{'id': 'P-001', 'name': 'Emeka', 'condition': 'Stable'}
-Last item removed: ('condition', 'Stable')
-{'id': 'P-001', 'name': 'Emeka'}
+Average Score: 255.0
 ```
 
 ---
 
-### Exercise 5: Working with Nested Dictionaries
+### Stage 5: Find the Top Scorer
 
-**Scenario:** A university stores records of multiple students.
+Loop through the students and track the highest score.
 
 ```python
-university = {
-    "student1": {"name": "Aisha", "dept": "Engineering", "gpa": 3.8},
-    "student2": {"name": "Kola", "dept": "Medicine", "gpa": 3.5},
-    "student3": {"name": "Ngozi", "dept": "Law", "gpa": 3.9}
-}
-
-# Print Kola's department
-print(university["student2"]["dept"])
-
-# Print all students and their GPAs
-for student_id, info in university.items():
-    print(f"{info['name']} — GPA: {info['gpa']}")
-```
-
-**Expected Output:**
-```
-Medicine
-Aisha — GPA: 3.8
-Kola — GPA: 3.5
-Ngozi — GPA: 3.9
-```
-
----
-
-## Part 12: Mini Project — Student Grade Book System
-
-This project brings together everything you have learned. You will build a simple grade book using dictionaries.
-
-### Project Overview
-
-You are building a grade book for a secondary school teacher. The system will:
-1. Store 3 students with their names, subjects, and scores
-2. Display all students and their scores
-3. Find the highest scoring student
-4. Add a new student
-5. Remove a student who has withdrawn
-
----
-
-### Stage 1: Setup — Create the Grade Book
-
-```python
-# The grade book — a dictionary of dictionaries
-gradebook = {
-    "student_1": {"name": "Amina", "subject": "Chemistry", "score": 88},
-    "student_2": {"name": "Babatunde", "subject": "Physics", "score": 75},
-    "student_3": {"name": "Chioma", "subject": "Biology", "score": 92}
-}
-
-print("=== Grade Book Created ===")
-print(gradebook)
-```
-
-**Milestone Output:**
-```
-=== Grade Book Created ===
-{'student_1': {'name': 'Amina', 'subject': 'Chemistry', 'score': 88}, ...}
-```
-
----
-
-### Stage 2: Display All Students
-
-```python
-print("\n=== All Students ===")
-for student_id, details in gradebook.items():
-    print(f"{details['name']} | {details['subject']} | Score: {details['score']}")
-```
-
-**Milestone Output:**
-```
-=== All Students ===
-Amina | Chemistry | Score: 88
-Babatunde | Physics | Score: 75
-Chioma | Biology | Score: 92
-```
-
----
-
-### Stage 3: Find the Highest Scorer
-
-```python
-print("\n=== Finding Top Student ===")
-
-top_student = None
+top_name = ""
 top_score = 0
 
-for student_id, details in gradebook.items():
-    if details["score"] > top_score:
-        top_score = details["score"]
-        top_student = details["name"]
+for name, score in students:
+    if score > top_score:
+        top_score = score
+        top_name = name
 
-print(f"Top student: {top_student} with a score of {top_score}")
+print("\nTop Scorer:", top_name, "with", top_score, "points")
 ```
 
-**Milestone Output:**
+**Expected Output:**
 ```
-=== Finding Top Student ===
-Top student: Chioma with a score of 92
-```
-
----
-
-### Stage 4: Add a New Student
-
-```python
-# Adding a new student
-gradebook["student_4"] = {"name": "Dele", "subject": "Maths", "score": 80}
-
-print("\n=== After Adding Dele ===")
-for student_id, details in gradebook.items():
-    print(f"{details['name']} | Score: {details['score']}")
-```
-
-**Milestone Output:**
-```
-=== After Adding Dele ===
-Amina | Score: 88
-Babatunde | Score: 75
-Chioma | Score: 92
-Dele | Score: 80
+Top Scorer: Yusuf with 330 points
 ```
 
 ---
 
-### Stage 5: Remove a Student Who Withdrew
+### Stage 6: Count Students Above Cut-off (using `range()`)
 
 ```python
-# Babatunde has withdrawn from school
-removed = gradebook.pop("student_2")
-print(f"\n{removed['name']} has been removed from the grade book.")
+cutoff = 200
+above_cutoff = 0
 
-print("\n=== Final Grade Book ===")
-for student_id, details in gradebook.items():
-    print(f"{details['name']} | {details['subject']} | Score: {details['score']}")
+for i in range(len(students)):
+    name, score = students[i]
+    if score >= cutoff:
+        above_cutoff += 1
+
+print("\nStudents above cut-off of", cutoff, ":", above_cutoff)
 ```
 
-**Final Output:**
+**Expected Output:**
 ```
-Babatunde has been removed from the grade book.
-
-=== Final Grade Book ===
-Amina | Chemistry | Score: 88
-Chioma | Biology | Score: 92
-Dele | Maths | Score: 80
-```
-
-**Optional enhancement ideas:**
-- Add a function to calculate the average score of all students
-- Allow the user to input student names with `input()`
-- Add a letter grade (A, B, C) based on the score
-
----
-
-## Part 13: Common Beginner Mistakes
-
-### Mistake 1 — Using `=` Instead of `.copy()`
-
-```python
-# WRONG — both variables point to the same dictionary
-original = {"a": 1}
-copy = original
-copy["b"] = 2
-print(original)   # {'a': 1, 'b': 2} — original was changed too!
-
-# CORRECT — use .copy()
-original = {"a": 1}
-copy = original.copy()
-copy["b"] = 2
-print(original)   # {'a': 1} — original is safe
-```
-
-### Mistake 2 — Duplicate Keys Silently Overwrite
-
-```python
-# WRONG — duplicate keys
-d = {"x": 10, "x": 20}
-print(d)   # {'x': 20} — first value was silently lost!
-
-# CORRECT — use unique keys
-d = {"x1": 10, "x2": 20}
-```
-
-### Mistake 3 — Accessing a Non-Existent Key with Square Brackets
-
-```python
-car = {"brand": "Toyota"}
-
-# WRONG — will crash with KeyError
-# print(car["color"])
-
-# CORRECT — use .get() for safety
-print(car.get("color"))            # None
-print(car.get("color", "Unknown")) # Unknown
-```
-
-### Mistake 4 — Confusing `.keys()` Return Type
-
-```python
-car = {"brand": "Ford", "year": 1964}
-keys = car.keys()
-
-# WRONG — this doesn't work directly on the view object
-# first_key = keys[0]   # TypeError: 'dict_keys' object is not subscriptable
-
-# CORRECT — convert to list first if you need indexing
-keys_list = list(car.keys())
-print(keys_list[0])   # brand
-```
-
-### Mistake 5 — Forgetting Colons in Nested Dictionaries
-
-```python
-# WRONG — missing colon after outer key
-# myfamily = {
-#     "child1" {         # SyntaxError!
-#         "name": "Emil"
-#     }
-# }
-
-# CORRECT — colon after every key, including outer keys
-myfamily = {
-    "child1": {          # Colon here!
-        "name": "Emil"
-    }
-}
-```
-
-### Mistake 6 — Modifying a Dictionary While Looping Through It
-
-```python
-scores = {"Amina": 90, "Tunde": 55, "Ngozi": 80}
-
-# WRONG — never add or remove items while looping!
-# for key in scores:
-#     if scores[key] < 60:
-#         del scores[key]   # RuntimeError: dictionary changed size during iteration
-
-# CORRECT — loop over a copy of the keys
-for key in list(scores.keys()):
-    if scores[key] < 60:
-        del scores[key]
-
-print(scores)  # {'Amina': 90, 'Ngozi': 80}
+Students above cut-off of 200 : 4
 ```
 
 ---
 
-## Part 14: Reflection Questions
+### Final Combined Output
 
-Think carefully about each of these. Try to answer before checking:
+```
+=== JAMB Results ===
+Emeka -> 280
+Aisha -> 195
+Chioma -> 315
+Tunde -> 150
+Ngozi -> 260
+Yusuf -> 330
 
-1. What is the difference between a dictionary and a list in Python?
-2. Why are duplicate keys not allowed in a dictionary?
-3. What is the difference between `.pop()` and `.popitem()`?
-4. When would you use `.get()` instead of square bracket notation?
-5. What is the difference between `del my_dict` and `my_dict.clear()`?
-6. What does "a live view" mean in the context of `.keys()`, `.values()`, and `.items()`?
-7. If you loop through a dictionary with `for x in my_dict:`, what does `x` contain?
-8. Why does `copy = original` not create a true independent copy of a dictionary?
-9. How would you access the value `"Linus"` from this dictionary: `{"child3": {"name": "Linus", "year": 2011}}`?
-10. In what real-world programming scenario would a nested dictionary be useful?
+=== Score Classification ===
+Emeka : 280 -> Good
+Aisha : 195 -> Below Cut-off
+Chioma : 315 -> Excellent
+Tunde : 150 -> Below Cut-off
+Ngozi : 260 -> Good
+Yusuf : 330 -> Excellent
+
+Average Score: 255.0
+
+Top Scorer: Yusuf with 330 points
+
+Students above cut-off of 200 : 4
+```
+
+**Extension Challenges:**
+- Add a loop that counts how many students scored "Excellent".
+- Use a `while` loop to let the user keep entering student names until they type "done".
+- Use `range(len(students) - 1, -1, -1)` to print the results in reverse order.
 
 ---
 
-## Part 15: Lesson Completion Checklist
+## Common Beginner Mistakes
 
-Review this checklist before moving to the next lesson. Check off each item you are confident about:
+### Mistake 1: Forgetting to Increment in a `while` Loop
 
-- [ ] I can create a dictionary using curly brackets `{}`
-- [ ] I can create a dictionary using the `dict()` constructor
-- [ ] I understand what key-value pairs are
-- [ ] I know that dictionaries do not allow duplicate keys
-- [ ] I can access a value using square bracket notation: `my_dict["key"]`
-- [ ] I can access a value safely using `.get()`
-- [ ] I can retrieve all keys using `.keys()`
-- [ ] I can retrieve all values using `.values()`
-- [ ] I can retrieve all key-value pairs using `.items()`
-- [ ] I can check if a key exists using the `in` keyword
-- [ ] I can change a value using direct assignment: `my_dict["key"] = new_value`
-- [ ] I can update values using `.update()`
-- [ ] I can add new items to a dictionary
-- [ ] I can remove items using `.pop()`, `.popitem()`, `del`, and `.clear()`
-- [ ] I understand the difference between `del` and `.clear()`
-- [ ] I can loop through keys, values, and key-value pairs
-- [ ] I can create a proper copy using `.copy()` or `dict()`
-- [ ] I understand why `copy = original` is not a true copy
-- [ ] I can create nested dictionaries
-- [ ] I can access nested dictionary values using chained keys
-- [ ] I know all 11 dictionary methods and what they do
-- [ ] I can use `dict.fromkeys()` to initialise a dictionary with default values
-- [ ] I have completed the mini project
+```python
+# WRONG — infinite loop!
+i = 1
+while i < 6:
+    print(i)
+    # i never changes! i stays at 1 forever
+
+# CORRECT
+i = 1
+while i < 6:
+    print(i)
+    i += 1   # always update the counter!
+```
+
+**How to spot it:** Your program prints the same number over and over and never stops. Press `Ctrl + C` to force-quit.
+
+---
+
+### Mistake 2: Off-by-One Error with `range()`
+
+```python
+# WRONG — only prints 1 to 4, not 1 to 5
+for i in range(1, 5):
+    print(i)
+
+# CORRECT — to include 5, stop must be 6
+for i in range(1, 6):
+    print(i)
+```
+
+**Rule to remember:** `range(start, stop)` includes `start` but **excludes** `stop`. If you want to include a number `n`, write `range(1, n + 1)`.
+
+---
+
+### Mistake 3: Wrong Indentation in Loop Body
+
+```python
+# WRONG — the print is outside the loop!
+for i in range(3):
+    pass
+print(i)   # this only runs once, after the loop
+
+# CORRECT — print is inside the loop
+for i in range(3):
+    print(i)   # this runs 3 times
+```
+
+In Python, **indentation is everything**. The loop body must be indented (4 spaces or 1 tab) consistently.
+
+---
+
+### Mistake 4: Expecting `continue` to Exit the Loop
+
+```python
+# WRONG thinking — continue does NOT exit the loop
+for i in range(5):
+    if i == 3:
+        continue   # this SKIPS 3, but the loop keeps going
+    print(i)
+
+# If you want to EXIT at 3, use break:
+for i in range(5):
+    if i == 3:
+        break
+    print(i)
+```
+
+---
+
+### Mistake 5: Confusing `range(n)` with a List
+
+```python
+# WRONG — range is not a list; you cannot do this directly
+r = range(5)
+print(r)   # Output: range(0, 5) — NOT [0, 1, 2, 3, 4]
+
+# CORRECT — convert to a list to see all values
+print(list(r))   # Output: [0, 1, 2, 3, 4]
+```
+
+---
+
+### Mistake 6: Empty `for` Loop Body
+
+```python
+# WRONG — this causes a SyntaxError
+for x in range(5):
+    # nothing here
+
+# CORRECT — use pass as a placeholder
+for x in range(5):
+    pass
+```
+
+---
+
+### Mistake 7: Expecting `else` to Run After `break`
+
+```python
+# WRONG expectation
+for x in range(5):
+    if x == 3:
+        break
+else:
+    print("This runs!")   # This does NOT run after break
+
+# The else block only runs if the loop completed WITHOUT break
+```
+
+---
+
+## Reflection Questions
+
+Take a moment to think through these questions. Try to answer them in your own words before checking your notes.
+
+1. What is the key difference between a `while` loop and a `for` loop?
+2. In a `while` loop, what happens if you forget to increment the counter variable?
+3. What does `break` do? How is it different from `continue`?
+4. What does `range(3, 15, 3)` produce? List the numbers without running the code.
+5. Why does `range(10)` give you numbers 0–9 and not 1–10?
+6. When does the `else` block in a loop run? When does it NOT run?
+7. In a nested loop, how many times does the inner loop run in total if the outer loop runs 4 times and the inner loop runs 3 times each?
+8. What is the purpose of the `pass` statement inside a loop?
+9. How do you check if the number 15 is in `range(0, 30, 5)` without converting it to a list?
+10. Why is `range()` more efficient than writing out a full list of numbers?
+
+---
+
+## Completion Checklist
+
+Before moving to the next lesson, confirm you can do all of these:
+
+- [ ] I can explain what a loop is in simple language
+- [ ] I can write a `while` loop with a counter that increments correctly
+- [ ] I can use `break` to exit a loop early
+- [ ] I can use `continue` to skip one iteration
+- [ ] I can attach an `else` block to both `while` and `for` loops and explain when it runs
+- [ ] I can write a `for` loop that iterates over a list
+- [ ] I can loop through the characters of a string
+- [ ] I can use `range()` with 1, 2, and 3 arguments
+- [ ] I can use a negative step in `range()` to count downward
+- [ ] I can convert a `range` to a list with `list()`
+- [ ] I can slice a `range` and access elements by index
+- [ ] I can test membership in a `range` using `in`
+- [ ] I can find the length of a `range` with `len()`
+- [ ] I can write a nested `for` loop and explain how it works
+- [ ] I can use `pass` in an empty loop body
+- [ ] I completed the JAMB Score Analyser mini-project
 
 ---
 
 ## Lesson Summary
 
-Congratulations on completing Lesson 14!
+Congratulations! You have just mastered Python's three fundamental looping tools. Here is a recap of everything we covered:
 
-Here is a quick summary of everything you have learned:
+**`while` loops** repeat a block of code as long as a condition is `True`. They require you to manage a counter variable manually. Always remember to increment the counter to avoid an infinite loop.
 
-**Dictionaries** store data as **key-value pairs** inside curly brackets `{}`. They are **ordered** (Python 3.7+), **mutable** (changeable), and do **not allow duplicate keys**.
+**`break`** immediately exits any loop. **`continue`** skips the current iteration and jumps to the next. Both work in `while` and `for` loops.
 
-| Task | How to do it |
-|------|-------------|
-| Create | `d = {"key": "value"}` or `dict(key="value")` |
-| Access | `d["key"]` or `d.get("key")` |
-| Get all keys | `d.keys()` |
-| Get all values | `d.values()` |
-| Get all pairs | `d.items()` |
-| Check key exists | `"key" in d` |
-| Change value | `d["key"] = new_value` |
-| Update | `d.update({"key": new_value})` |
-| Add new item | `d["new_key"] = value` |
-| Remove by key | `d.pop("key")` |
-| Remove last item | `d.popitem()` |
-| Delete key | `del d["key"]` |
-| Clear all | `d.clear()` |
-| Copy safely | `d.copy()` or `dict(d)` |
-| Loop keys | `for k in d:` |
-| Loop values | `for v in d.values():` |
-| Loop both | `for k, v in d.items():` |
-| Nested access | `d["outer"]["inner"]` |
-| Init with defaults | `dict.fromkeys(keys, default)` |
+**`else` in loops** runs once after the loop ends naturally, but is skipped if `break` was used. This is useful for "not found" scenarios.
 
-Dictionaries are one of the most important and most-used data structures in Python. Mastering them opens the door to working with APIs, JSON data, databases, web development, data science, and much more.
+**`for` loops** iterate over every item in a sequence (lists, strings, tuples, ranges) without needing a manual counter. Python handles the stepping automatically.
 
-In the next lesson, you will continue building on these skills as you learn about Python conditional statements and control flow!
+**`range()`** generates sequences of numbers. It takes 1, 2, or 3 arguments (`start`, `stop`, `step`). The stop value is always excluded. It supports indexing, slicing, membership testing with `in`, and length with `len()`.
+
+**Nested loops** are loops inside loops. The inner loop completes fully for each step of the outer loop.
+
+**`pass`** is a placeholder for an empty loop body, preventing `SyntaxError`.
 
 ---
 
-*Sources: W3Schools Python Dictionaries Tutorial (all 10 pages)*
+## Quick-Reference Card
+
+| Feature | Syntax | Notes |
+|---|---|---|
+| `while` loop | `while condition:` | Runs while condition is `True`; needs manual counter |
+| `for` loop | `for item in sequence:` | Iterates over every item automatically |
+| `break` | `break` | Immediately exits the loop |
+| `continue` | `continue` | Skips current iteration; continues to next |
+| Loop `else` | `else:` after loop | Runs after loop ends, NOT after `break` |
+| `range(n)` | `range(5)` → `0,1,2,3,4` | One argument: stop only; starts at 0 |
+| `range(a, b)` | `range(2, 6)` → `2,3,4,5` | Two arguments: start and stop |
+| `range(a, b, s)` | `range(0, 10, 2)` → `0,2,4,6,8` | Three arguments: start, stop, step |
+| Negative step | `range(5, 0, -1)` → `5,4,3,2,1` | Counts downward |
+| Convert range | `list(range(5))` | Shows all values in the range |
+| Test membership | `7 in range(0, 10, 2)` → `False` | Checks if a number is in the range |
+| Range length | `len(range(0, 10, 2))` → `5` | Count of numbers in the range |
+| Nested loops | `for x in ...: for y in ...:` | Inner loop runs fully for each outer iteration |
+| `pass` | `pass` | Placeholder for empty loop body |
+
+---
+
+*End of Lesson 14 — Next up: Python Functions*

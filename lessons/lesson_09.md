@@ -1,949 +1,1443 @@
 ---
 render_with_liquid: false
-title: "Lesson 09 – Python Booleans"
+title: "Lesson 09 – Python Tuples"
 nav_order: 9
 ---
 
-# Lesson 09 – Python Booleans
+# Lesson 09 – Python Tuples
 
 ---
 
 ## Lesson Introduction
 
-Imagine you are filling out a form and it asks: *"Are you 18 or older?"*  
-Your answer can only be one of two things: **Yes** or **No**.
+Welcome to Lesson 09! In this lesson you will learn about **tuples** — one of Python's most useful built-in data structures. You will discover what a tuple is, why it exists, how to create one, how to access and work with items inside it, how to loop through it, how to join tuples together, and which built-in methods belong to tuples.
 
-That is exactly what a **Boolean** is in Python.
+By the end of this lesson you will be able to:
 
-A **Boolean** is a special type of data that holds only **one of two possible values**:
+- Create tuples with any kind of data
+- Access items using index numbers and slicing
+- Update a tuple using Python's approved workarounds
+- Unpack a tuple into individual variables
+- Loop through tuples using `for` and `while` loops
+- Join and multiply tuples
+- Use the two tuple methods: `count()` and `index()`
+- Build a real-world mini project using tuples
 
-- `True`  ← means "yes", "correct", "on", or "it happened"
-- `False` ← means "no", "wrong", "off", or "it did not happen"
-
-The word "Boolean" comes from the name of a mathematician called **George Boole**, who invented a system of logic based entirely on true-or-false answers. Python (and almost every programming language) uses this idea constantly.
-
-You will use Booleans **every single day** as a programmer, because programs constantly need to make decisions:
-
-> *"Is the password correct? → True or False."*  
-> *"Is the student's score above 50? → True or False."*  
-> *"Is the shopping cart empty? → True or False."*
-
-By the end of this lesson, you will understand:
-- What Booleans are and why they exist
-- How Python evaluates expressions as `True` or `False`
-- How to use the `bool()` function
-- Which values Python considers `True` and which it considers `False`
-- How to write functions that return Boolean values
-- How to use Booleans with `if` statements to make decisions
+No prior knowledge of tuples is required. All you need is a basic understanding of Python variables and the `print()` function. If you have done the lessons on Lists, you will find tuples very familiar.
 
 ---
 
 ## Prerequisite Concepts
 
-Before we begin, let us quickly review two things you already know that will appear in this lesson.
+Before diving in, let's make sure you understand two foundational ideas.
 
-### Variables
+### What is a Variable?
 
-A variable is a named box that stores a value.
-
-```python
-x = 10
-name = "Ada"
-```
-
-### The `print()` Function
-
-`print()` displays a value on the screen.
-
-```python
-print("Hello")   # Output: Hello
-print(42)        # Output: 42
-```
-
-You already know these — great! Now let's build on them.
-
----
-
-## Part 1 – What Are Boolean Values?
-
-### The Two Boolean Values
-
-In Python, there are exactly **two Boolean values**, and they are written with a capital first letter:
-
-| Value   | Meaning                       |
-|---------|-------------------------------|
-| `True`  | Yes / Correct / It happened   |
-| `False` | No / Wrong / It did not happen |
-
-> ⚠️ **Critical beginner warning:** `True` and `False` must **always** start with a capital letter. Writing `true` or `false` (lowercase) will cause an error in Python.
-
-```python
-# ✅ Correct
-x = True
-y = False
-
-# ❌ Wrong — will cause a NameError!
-x = true
-y = false
-```
-
-### Storing Booleans in Variables
-
-You can store a Boolean value directly into a variable, just like you store a number or a string.
-
-```python
-is_raining = True
-has_ticket = False
-
-print(is_raining)    # Output: True
-print(has_ticket)    # Output: False
-```
-
-**Line-by-line explanation:**
-- `is_raining = True` — we create a variable called `is_raining` and store the Boolean `True` inside it
-- `has_ticket = False` — we create a variable called `has_ticket` and store `False` inside it
-- `print(is_raining)` — displays whatever is inside `is_raining`, which is `True`
-- `print(has_ticket)` — displays whatever is inside `has_ticket`, which is `False`
-
-**Expected Output:**
-```
-True
-False
-```
-
----
-
-## Part 2 – Boolean Values From Comparisons
-
-The most important way Booleans appear in Python is when you **compare two values**.
-
-### What is a Comparison?
-
-A comparison is a question you ask Python:  
-*"Is this bigger than that?"* or *"Are these two things equal?"*
-
-Python answers that question with `True` or `False`.
-
-### Comparison Operators
-
-These are the symbols Python uses for comparisons:
-
-| Symbol | Meaning                  | Example      | Result  |
-|--------|--------------------------|--------------|---------|
-| `>`    | Greater than             | `10 > 9`     | `True`  |
-| `<`    | Less than                | `10 < 9`     | `False` |
-| `==`   | Equal to                 | `10 == 10`   | `True`  |
-| `!=`   | Not equal to             | `5 != 3`     | `True`  |
-| `>=`   | Greater than or equal to | `10 >= 10`   | `True`  |
-| `<=`   | Less than or equal to    | `7 <= 5`     | `False` |
-
-> 💡 **Important distinction:** A single `=` assigns a value to a variable (`x = 5`). A double `==` checks if two things are equal (`x == 5`). These are completely different!
-
-### Example 1 – Simple comparisons printed directly
-
-```python
-print(10 > 9)
-print(10 == 9)
-print(10 < 9)
-```
-
-**Line-by-line explanation:**
-- `print(10 > 9)` — asks "Is 10 greater than 9?" → Yes → prints `True`
-- `print(10 == 9)` — asks "Is 10 equal to 9?" → No → prints `False`
-- `print(10 < 9)` — asks "Is 10 less than 9?" → No → prints `False`
-
-**Expected Output:**
-```
-True
-False
-False
-```
-
-> 🤔 **Thinking prompt:** What do you think `print(10 == 10)` would print? Try changing the second number and observe how the result changes.
-
-### Example 2 – Comparisons using variables
-
-```python
-a = 200
-b = 33
-
-print(a > b)
-print(a == b)
-print(b > a)
-```
-
-**Expected Output:**
-```
-True
-False
-False
-```
-
----
-
-## Part 3 – Using Booleans With `if` Statements
-
-Booleans become incredibly powerful when you combine them with `if` statements. An `if` statement lets your program **make a decision** based on whether something is `True` or `False`.
-
-### The Basic Structure of an `if` Statement
-
-```
-if  <something is True>:
-    do this
-else:
-    do that instead
-```
-
-Think of it like a traffic light:  
-- If the light is **green** (True) → you drive  
-- Otherwise (False) → you stop
-
-### Example – Check which variable is greater
-
-```python
-a = 200
-b = 33
-
-if b > a:
-    print("b is greater than a")
-else:
-    print("b is not greater than a")
-```
-
-**Line-by-line explanation:**
-- `a = 200` — stores 200 in variable `a`
-- `b = 33` — stores 33 in variable `b`
-- `if b > a:` — asks "Is 33 greater than 200?" → No → Python moves to the `else` block
-- `print("b is greater than a")` — this line is **skipped** because the condition was False
-- `else:` — this block runs when the `if` condition is False
-- `print("b is not greater than a")` — this line runs
-
-**Expected Output:**
-```
-b is not greater than a
-```
-
-> 🤔 **Thinking prompt:** What would happen if you changed `b = 33` to `b = 500`? Try it mentally first — then verify!
-
-### Example – Checking a student's score
-
-```python
-score = 75
-
-if score >= 50:
-    print("Student passed!")
-else:
-    print("Student failed.")
-```
-
-**Expected Output:**
-```
-Student passed!
-```
-
----
-
-## Part 4 – The `bool()` Function
-
-Python has a built-in function called `bool()` that converts **any value** into its Boolean equivalent (`True` or `False`).
-
-### What is a Function?
-
-A function is a named command that does a job. You **call** it by writing its name followed by parentheses `()`, and you put the value you want it to work on inside the parentheses.
-
-```
-bool( value )  →  returns True or False
-```
-
-### Example 1 – Evaluating a string and a number
-
-```python
-print(bool("Hello"))
-print(bool(15))
-```
-
-**Line-by-line explanation:**
-- `bool("Hello")` — asks "Does `"Hello"` have content?" → Yes → `True`
-- `bool(15)` — asks "Is 15 a non-zero number?" → Yes → `True`
-
-**Expected Output:**
-```
-True
-True
-```
-
-### Example 2 – Using variables with `bool()`
-
-```python
-x = "Hello"
-y = 15
-
-print(bool(x))
-print(bool(y))
-```
-
-**Expected Output:**
-```
-True
-True
-```
-
-The result is the same whether you pass the value directly or pass a variable that holds the value.
-
----
-
-## Part 5 – Most Values Are `True`
-
-Here is a very important rule to memorise:
-
-> **Almost every value in Python is `True` — as long as it is not empty, zero, or nothing.**
-
-### Values That Are `True`
-
-- Any **non-empty string**: `"hello"`, `"0"`, `"False"` (yes, even the string `"False"` is True!)
-- Any **non-zero number**: `1`, `-5`, `3.14`, `100`
-- Any **non-empty list, tuple, set, or dictionary**
-
-### Example – True values
-
-```python
-print(bool("abc"))
-print(bool(123))
-print(bool(["apple", "cherry", "banana"]))
-```
-
-**Expected Output:**
-```
-True
-True
-True
-```
-
-**Explanation:**
-- `"abc"` is a non-empty string → `True`
-- `123` is a non-zero number → `True`
-- `["apple", "cherry", "banana"]` is a non-empty list → `True`
-
-> 🤔 **Thinking prompt:** What do you think `bool("0")` returns? Remember — `"0"` is a **string** containing the character zero, not the number zero. It has content, so it is `True`!
-
----
-
-## Part 6 – Some Values Are `False`
-
-Even though most values are `True`, there is a small group of values that are always `False`:
-
-| Value      | Type       | Why it is False           |
-|------------|------------|---------------------------|
-| `False`    | Boolean    | It is `False` by definition |
-| `None`     | NoneType   | Represents "nothing"      |
-| `0`        | Integer    | Zero has no quantity       |
-| `0.0`      | Float      | Zero as a decimal          |
-| `""`       | String     | Empty string               |
-| `()`       | Tuple      | Empty tuple                |
-| `[]`       | List       | Empty list                 |
-| `{}`       | Dictionary | Empty dictionary           |
-
-### Example – All the False values
-
-```python
-print(bool(False))
-print(bool(None))
-print(bool(0))
-print(bool(""))
-print(bool(()))
-print(bool([]))
-print(bool({}))
-```
-
-**Expected Output:**
-```
-False
-False
-False
-False
-False
-False
-False
-```
-
-### Side-by-side comparison: True vs False
-
-```python
-# Non-empty string → True
-print(bool("hello"))    # True
-
-# Empty string → False
-print(bool(""))         # False
-
-# Non-zero number → True
-print(bool(42))         # True
-
-# Zero → False
-print(bool(0))          # False
-
-# Non-empty list → True
-print(bool([1, 2, 3]))  # True
-
-# Empty list → False
-print(bool([]))         # False
-```
-
-**Expected Output:**
-```
-True
-False
-True
-False
-True
-False
-```
-
-> 💡 **Real-world analogy:** Think of a cup of water. If the cup has any water in it at all, it is "True" (it has content). If the cup is completely empty, it is "False" (nothing inside).
-
-### Advanced: Objects With `__len__` Returning 0 Are Also `False`
-
-This is a more advanced concept, but worth knowing. If you create a custom object (class) that has a special method called `__len__` which returns `0`, Python will treat that object as `False`.
-
-```python
-class myclass():
-    def __len__(self):
-        return 0
-
-myobj = myclass()
-print(bool(myobj))
-```
-
-**Expected Output:**
-```
-False
-```
-
-**Explanation:**
-- `class myclass():` — creates a new type of object called `myclass`
-- `def __len__(self):` — defines a special method that tells Python "what is the length of this object?"
-- `return 0` — says the length is 0
-- `myobj = myclass()` — creates an instance (a copy) of that class
-- `bool(myobj)` — Python asks `__len__` for the size → gets 0 → returns `False`
-
-You don't need to fully understand classes yet — just know that this behaviour exists.
-
----
-
-## Part 7 – Functions That Return Boolean Values
-
-You can write your own functions that give back a `True` or `False` answer. This is extremely useful for creating reusable "yes or no" checks in your programs.
-
-### Example 1 – A function that returns True
-
-```python
-def myFunction():
-    return True
-
-print(myFunction())
-```
-
-**Line-by-line explanation:**
-- `def myFunction():` — defines a function called `myFunction`
-- `return True` — when the function is called, it sends back the value `True`
-- `print(myFunction())` — calls the function and prints whatever it returns
-
-**Expected Output:**
-```
-True
-```
-
-### Example 2 – Using a Boolean-returning function in an `if` statement
-
-```python
-def myFunction():
-    return True
-
-if myFunction():
-    print("YES!")
-else:
-    print("NO!")
-```
-
-**Line-by-line explanation:**
-- `if myFunction():` — calls the function; if it returns `True`, the `if` block runs
-- Since `myFunction()` returns `True`, Python executes `print("YES!")`
-
-**Expected Output:**
-```
-YES!
-```
-
-> 💡 **Real-world use case:** In a login system, you might have a function called `is_password_correct()` that returns `True` or `False`. Your program then does: `if is_password_correct(): allow_entry()`.
-
-### Example 3 – A more realistic Boolean function
-
-```python
-def is_adult(age):
-    if age >= 18:
-        return True
-    else:
-        return False
-
-print(is_adult(20))   # True
-print(is_adult(15))   # False
-```
-
-**Expected Output:**
-```
-True
-False
-```
-
----
-
-## Part 8 – Built-in Functions That Return Booleans
-
-Python comes with many built-in functions that automatically return `True` or `False`. One very useful one is `isinstance()`.
-
-### The `isinstance()` Function
-
-`isinstance(object, type)` checks whether a given value is of a specific data type. It returns `True` if it is, and `False` if it is not.
-
-```python
-isinstance( value, data_type )  →  True or False
-```
-
-### Example – Check if a variable is an integer
-
-```python
-x = 200
-print(isinstance(x, int))
-```
-
-**Line-by-line explanation:**
-- `x = 200` — stores the number 200 in `x`
-- `isinstance(x, int)` — asks "Is `x` an integer (`int`)?" → Yes → returns `True`
-- `print(...)` — displays the result
-
-**Expected Output:**
-```
-True
-```
-
-### Example – Testing different types
+A variable is a name you give to a piece of data so Python can remember it.
 
 ```python
 name = "Alice"
-score = 95
-price = 4.99
-
-print(isinstance(name, str))    # True  — name is a string
-print(isinstance(score, int))   # True  — score is an integer
-print(isinstance(price, float)) # True  — price is a float
-print(isinstance(name, int))    # False — name is NOT an integer
+age  = 25
+print(name)   # Alice
+print(age)    # 25
 ```
 
-**Expected Output:**
-```
-True
-True
-True
-False
-```
+### What is a List? (A quick refresher)
 
----
-
-## Guided Practice Exercises
-
-### Exercise 1 – Warm-Up: Print Boolean Results
-
-**Objective:** Practice reading comparison expressions and predicting their Boolean output.
-
-**Before running the code**, predict whether each line will print `True` or `False`:
+A list is an ordered collection of items written in **square brackets**:
 
 ```python
-print(5 > 3)
-print(10 == 10)
-print(7 < 2)
-print(4 != 4)
-print(100 >= 100)
-print(3 <= 2)
+fruits = ["apple", "banana", "cherry"]
+print(fruits)  # ['apple', 'banana', 'cherry']
+```
+
+Lists are **changeable** — you can add, remove, or update items freely. A tuple is similar but with one key difference: it is **unchangeable** (also called *immutable*). You will learn exactly what that means — and why it is useful — in the sections below.
+
+---
+
+## Section 1 – What Is a Tuple?
+
+### The Concept
+
+Imagine you are writing the GPS coordinates of your city. Latitude and longitude are fixed — they don't randomly change. Storing them in a tuple makes perfect sense, because a tuple **locks the data in place** so it cannot be accidentally modified.
+
+> **Think of a tuple like a sealed envelope.** Once you put things inside and seal it, nobody can add, remove, or swap the contents. You can still read what is inside, but the contents are protected.
+
+### The Technical Definition
+
+A **tuple** is a collection which is:
+
+- **Ordered** — the items have a fixed position (first, second, third…)
+- **Unchangeable (immutable)** — once created, you cannot add, remove, or change items
+- **Allows duplicate values** — the same value can appear more than once
+- Written with **round brackets** `( )`
+
+### Syntax
+
+```python
+my_tuple = ("item1", "item2", "item3")
+```
+
+### Your First Tuple
+
+```python
+mytuple = ("apple", "banana", "cherry")
+print(mytuple)
 ```
 
 **Expected Output:**
 ```
-True
-True
-False
-False
-True
-False
+('apple', 'banana', 'cherry')
 ```
 
-**Self-check:** Did your predictions match? If any surprised you, re-read the comparison operators table in Part 2.
+Notice the output shows **round brackets** `( )`. That tells you it is a tuple, not a list.
 
 ---
 
-### Exercise 2 – Student Pass/Fail Checker
+## Section 2 – Tuple Properties in Detail
 
-**Objective:** Use a Boolean comparison inside an `if` statement to make a decision.
+### 2.1 Ordered
 
-**Scenario:** A student scored 62 out of 100. The passing mark is 50.
+The items in a tuple are stored in a specific order, and that order never changes. "apple" will always be at position 0, "banana" at position 1, and so on.
+
+```python
+thistuple = ("apple", "banana", "cherry")
+print(thistuple[0])  # Always apple
+print(thistuple[1])  # Always banana
+```
+
+**Expected Output:**
+```
+apple
+banana
+```
+
+### 2.2 Unchangeable (Immutable)
+
+You cannot change, add, or remove items after the tuple has been created.
+
+```python
+thistuple = ("apple", "banana", "cherry")
+thistuple[1] = "kiwi"   # This will cause an ERROR
+```
+
+**Expected Output (Error):**
+```
+TypeError: 'tuple' object does not support item assignment
+```
+
+> **Why is immutability useful?** It protects important data. For example, if your program stores the days of the week as a tuple, you never want someone accidentally changing "Monday" to "Holiday". Immutability also makes tuples slightly faster than lists in Python, which matters in performance-critical code.
+
+### 2.3 Allows Duplicate Values
+
+Since tuples are indexed, items can be repeated.
+
+```python
+thistuple = ("apple", "banana", "cherry", "apple", "cherry")
+print(thistuple)
+```
+
+**Expected Output:**
+```
+('apple', 'banana', 'cherry', 'apple', 'cherry')
+```
+
+> **Think prompt:** Why would you want duplicates? Imagine recording the results of 5 coin tosses: `("heads", "tails", "heads", "heads", "tails")`. Duplicates are natural here.
+
+---
+
+## Section 3 – Creating Tuples
+
+### 3.1 Standard Way — Round Brackets
+
+```python
+thistuple = ("apple", "banana", "cherry")
+print(thistuple)
+```
+
+**Expected Output:**
+```
+('apple', 'banana', 'cherry')
+```
+
+### 3.2 Using the `tuple()` Constructor
+
+You can also create a tuple using the built-in `tuple()` function. Notice the **double round brackets** — the outer pair belongs to the function call, the inner pair belongs to the tuple.
+
+```python
+thistuple = tuple(("apple", "banana", "cherry"))
+print(thistuple)
+```
+
+**Expected Output:**
+```
+('apple', 'banana', 'cherry')
+```
+
+### 3.3 Creating a Tuple with Only One Item ⚠️
+
+This is a famous beginner trap! If you write one item without a trailing comma, Python will NOT treat it as a tuple — it will treat it as just a string wrapped in brackets.
+
+```python
+# WRONG — this is NOT a tuple
+thistuple = ("apple")
+print(type(thistuple))   # <class 'str'>
+
+# CORRECT — add a comma after the item
+thistuple = ("apple",)
+print(type(thistuple))   # <class 'tuple'>
+```
+
+**Expected Output:**
+```
+<class 'str'>
+<class 'tuple'>
+```
+
+> The trailing comma is the signal to Python: "Yes, I want a tuple, not just a parenthesized expression."
+
+### 3.4 Tuples Can Hold Any Data Type
+
+```python
+tuple1 = ("apple", "banana", "cherry")    # strings
+tuple2 = (1, 5, 7, 9, 3)                 # integers
+tuple3 = (True, False, False)             # booleans
+mixed  = ("abc", 34, True, 40, "male")   # mixed types
+```
+
+You can store anything in a tuple — text, numbers, booleans, or a mix of all of them.
+
+### 3.5 Checking the Data Type
+
+```python
+mytuple = ("apple", "banana", "cherry")
+print(type(mytuple))
+```
+
+**Expected Output:**
+```
+<class 'tuple'>
+```
+
+`type()` is a built-in Python function that tells you what kind of object something is. The result `<class 'tuple'>` confirms it is a tuple.
+
+### 3.6 Finding the Length of a Tuple
+
+```python
+thistuple = ("apple", "banana", "cherry")
+print(len(thistuple))
+```
+
+**Expected Output:**
+```
+3
+```
+
+`len()` counts the number of items inside the tuple.
+
+---
+
+## Section 4 – The Four Python Collection Types (Comparison)
+
+Python has four built-in collection types. Knowing the differences helps you pick the right one for each job.
+
+| Collection | Ordered? | Changeable? | Allows Duplicates? | Written With |
+|------------|----------|-------------|-------------------|--------------|
+| **List** | ✅ Yes | ✅ Yes | ✅ Yes | `[ ]` |
+| **Tuple** | ✅ Yes | ❌ No | ✅ Yes | `( )` |
+| **Set** | ❌ No | ❌ Items fixed* | ❌ No | `{ }` |
+| **Dictionary** | ✅ Yes (3.7+) | ✅ Yes | ❌ No (keys) | `{key: value}` |
+
+*You can add/remove set items, but individual items cannot be changed.
+
+**When to use a tuple instead of a list:**
+- When your data should never change (e.g., days of the week, GPS coordinates, RGB color values)
+- When you want a small performance boost
+- When you want to signal to other programmers: "Do not modify this data"
+
+---
+
+## Section 5 – Accessing Tuple Items
+
+### 5.1 Index Numbers
+
+Every item in a tuple has a numbered position called an **index**. Counting starts at **0**, not 1.
+
+```
+Tuple:  ("apple",  "banana",  "cherry")
+Index:      0          1          2
+```
+
+To access an item, write the tuple name followed by the index in square brackets `[ ]`:
+
+```python
+thistuple = ("apple", "banana", "cherry")
+print(thistuple[0])   # first item
+print(thistuple[1])   # second item
+print(thistuple[2])   # third item
+```
+
+**Expected Output:**
+```
+apple
+banana
+cherry
+```
+
+> **Think prompt:** What happens if you try `thistuple[3]` on a tuple of 3 items? Try it! You will get an `IndexError` because there is no item at position 3.
+
+### 5.2 Negative Indexing
+
+Negative indexing lets you count **from the end** of the tuple. `-1` is the last item, `-2` is the second-to-last, and so on.
+
+```
+Tuple:  ("apple",  "banana",  "cherry")
+Index:     -3         -2         -1
+```
+
+```python
+thistuple = ("apple", "banana", "cherry")
+print(thistuple[-1])   # last item
+print(thistuple[-2])   # second-to-last item
+```
+
+**Expected Output:**
+```
+cherry
+banana
+```
+
+> Negative indexing is very handy when you don't know how long a tuple is but you always need the last item.
+
+### 5.3 Slicing — Grabbing a Range of Items
+
+You can grab multiple items at once by specifying a **start** and **end** index separated by a colon `:`.
+
+**Important rule:** The start index is **included**, the end index is **excluded**.
+
+```python
+thistuple = ("apple", "banana", "cherry", "orange", "kiwi", "melon", "mango")
+print(thistuple[2:5])
+```
+
+This says: "Give me items starting at index 2 (cherry), up to but not including index 5 (kiwi)."
+
+**Expected Output:**
+```
+('cherry', 'orange', 'kiwi')
+```
+
+**Leaving out the start index** → Python starts from the very beginning:
+
+```python
+print(thistuple[:4])
+```
+
+**Expected Output:**
+```
+('apple', 'banana', 'cherry', 'orange')
+```
+
+**Leaving out the end index** → Python goes all the way to the end:
+
+```python
+print(thistuple[2:])
+```
+
+**Expected Output:**
+```
+('cherry', 'orange', 'kiwi', 'melon', 'mango')
+```
+
+### 5.4 Negative Index Slicing
+
+You can combine negative indexes with slicing:
+
+```python
+thistuple = ("apple", "banana", "cherry", "orange", "kiwi", "melon", "mango")
+print(thistuple[-4:-1])
+```
+
+This grabs items from index `-4` (orange) up to but not including index `-1` (mango).
+
+**Expected Output:**
+```
+('orange', 'kiwi', 'melon')
+```
+
+### 5.5 Checking if an Item Exists
+
+Use the `in` keyword to check whether a specific value is inside a tuple:
+
+```python
+thistuple = ("apple", "banana", "cherry")
+if "apple" in thistuple:
+    print("Yes, 'apple' is in the fruits tuple")
+```
+
+**Expected Output:**
+```
+Yes, 'apple' is in the fruits tuple
+```
+
+`in` returns `True` if the item is found, and `False` if it is not.
+
+```python
+# Second example
+thistuple = ("apple", "banana", "cherry")
+if "mango" in thistuple:
+    print("Found!")
+else:
+    print("Not found.")
+```
+
+**Expected Output:**
+```
+Not found.
+```
+
+---
+
+## Section 6 – Updating Tuples (Workarounds)
+
+Tuples are immutable — you cannot directly change, add, or remove items. But Python gives you approved workarounds.
+
+### 6.1 Changing a Value
+
+**The workaround:** Convert the tuple to a list → make your changes → convert it back to a tuple.
+
+```python
+x = ("apple", "banana", "cherry")
+y = list(x)        # Step 1: convert tuple to list
+y[1] = "kiwi"      # Step 2: change the item
+x = tuple(y)       # Step 3: convert list back to tuple
+
+print(x)
+```
+
+**Expected Output:**
+```
+('apple', 'kiwi', 'cherry')
+```
+
+**Line-by-line breakdown:**
+- `y = list(x)` — creates a new list `['apple', 'banana', 'cherry']`
+- `y[1] = "kiwi"` — replaces position 1 (banana) with kiwi
+- `x = tuple(y)` — converts the list back into a tuple and reassigns it to `x`
+
+### 6.2 Adding Items
+
+**Method 1: Convert to list, append, convert back**
+
+```python
+thistuple = ("apple", "banana", "cherry")
+y = list(thistuple)
+y.append("orange")
+thistuple = tuple(y)
+print(thistuple)
+```
+
+**Expected Output:**
+```
+('apple', 'banana', 'cherry', 'orange')
+```
+
+**Method 2: Add two tuples together (concatenation)**
+
+You can stick two tuples together using the `+` operator. To add just one new item, create a single-item tuple first (remember the trailing comma!):
+
+```python
+thistuple = ("apple", "banana", "cherry")
+y = ("orange",)          # single-item tuple — comma is essential!
+thistuple += y           # += means: thistuple = thistuple + y
+
+print(thistuple)
+```
+
+**Expected Output:**
+```
+('apple', 'banana', 'cherry', 'orange')
+```
+
+### 6.3 Removing Items
+
+**The workaround:** Convert to list → remove → convert back.
+
+```python
+thistuple = ("apple", "banana", "cherry")
+y = list(thistuple)
+y.remove("apple")
+thistuple = tuple(y)
+print(thistuple)
+```
+
+**Expected Output:**
+```
+('banana', 'cherry')
+```
+
+### 6.4 Deleting the Whole Tuple
+
+If you want to destroy the tuple entirely, use the `del` keyword:
+
+```python
+thistuple = ("apple", "banana", "cherry")
+del thistuple
+print(thistuple)   # This will raise an error — the tuple no longer exists
+```
+
+**Expected Output (Error):**
+```
+NameError: name 'thistuple' is not defined
+```
+
+> After `del`, the variable no longer exists. Trying to use it will cause a `NameError`.
+
+---
+
+## Section 7 – Unpacking Tuples
+
+### 7.1 What is Packing?
+
+When you create a tuple by assigning values to it, that is called **packing**:
+
+```python
+fruits = ("apple", "banana", "cherry")
+```
+
+You are "packing" three fruits into one variable.
+
+### 7.2 What is Unpacking?
+
+**Unpacking** is the reverse: you extract the values back out into separate variables.
+
+```python
+fruits = ("apple", "banana", "cherry")
+
+(green, yellow, red) = fruits
+
+print(green)    # apple
+print(yellow)   # banana
+print(red)      # cherry
+```
+
+**Expected Output:**
+```
+apple
+banana
+cherry
+```
+
+**Line-by-line breakdown:**
+- `(green, yellow, red) = fruits` — Python reads the tuple from left to right and assigns each item to the matching variable
+- `green` gets "apple", `yellow` gets "banana", `red` gets "cherry"
+
+> **Important:** The number of variables on the left must match the number of items in the tuple. If they don't match, Python will raise a `ValueError` — unless you use the asterisk trick below.
+
+### 7.3 Unpacking with an Asterisk `*` (Collect Extras)
+
+What if you have more items than variables? Use `*` to collect the "extra" items into a list.
+
+**Example 1 — Collect extras at the end:**
+
+```python
+fruits = ("apple", "banana", "cherry", "strawberry", "raspberry")
+
+(green, yellow, *red) = fruits
+
+print(green)    # apple
+print(yellow)   # banana
+print(red)      # ['cherry', 'strawberry', 'raspberry']
+```
+
+**Expected Output:**
+```
+apple
+banana
+['cherry', 'strawberry', 'raspberry']
+```
+
+`*red` tells Python: "Assign the first two items to `green` and `yellow`, and collect everything else into `red` as a list."
+
+**Example 2 — Collect extras in the middle:**
+
+```python
+fruits = ("apple", "mango", "papaya", "pineapple", "cherry")
+
+(green, *tropic, red) = fruits
+
+print(green)    # apple
+print(tropic)   # ['mango', 'papaya', 'pineapple']
+print(red)      # cherry
+```
+
+**Expected Output:**
+```
+apple
+['mango', 'papaya', 'pineapple']
+cherry
+```
+
+Python assigns the first item to `green`, the last item to `red`, and collects everything in between into `tropic`.
+
+> **Real-world use:** In data science, you might have a row of data like `(name, age, score1, score2, score3, final_score)`. You can unpack: `(name, age, *scores, final) = row` to easily separate the identifier, intermediate scores, and final score.
+
+---
+
+## Section 8 – Looping Through Tuples
+
+### 8.1 The `for` Loop
+
+The simplest way to visit every item in a tuple one by one:
+
+```python
+thistuple = ("apple", "banana", "cherry")
+for x in thistuple:
+    print(x)
+```
+
+**Expected Output:**
+```
+apple
+banana
+cherry
+```
+
+**Line-by-line breakdown:**
+- `for x in thistuple:` — on each round of the loop, Python takes the next item from the tuple and stores it in `x`
+- `print(x)` — prints the current item
+
+### 8.2 Looping Using Index Numbers
+
+Sometimes you need both the item AND its position. Use `range()` and `len()` together:
+
+```python
+thistuple = ("apple", "banana", "cherry")
+for i in range(len(thistuple)):
+    print(thistuple[i])
+```
+
+**Expected Output:**
+```
+apple
+banana
+cherry
+```
+
+**Breakdown:**
+- `len(thistuple)` returns `3`
+- `range(3)` produces the sequence `0, 1, 2`
+- On each loop, `i` takes the value `0`, then `1`, then `2`
+- `thistuple[i]` accesses the item at that index
+
+This is useful when you need to know the position of each item, for example:
+
+```python
+thistuple = ("apple", "banana", "cherry")
+for i in range(len(thistuple)):
+    print(f"Item {i}: {thistuple[i]}")
+```
+
+**Expected Output:**
+```
+Item 0: apple
+Item 1: banana
+Item 2: cherry
+```
+
+### 8.3 Using a `while` Loop
+
+A `while` loop keeps going as long as a condition is `True`. Here, we keep looping as long as `i` is less than the length of the tuple:
+
+```python
+thistuple = ("apple", "banana", "cherry")
+i = 0
+while i < len(thistuple):
+    print(thistuple[i])
+    i = i + 1
+```
+
+**Expected Output:**
+```
+apple
+banana
+cherry
+```
+
+**Breakdown:**
+- `i = 0` — start at index 0
+- `while i < len(thistuple):` — keep going while `i` is less than 3
+- `print(thistuple[i])` — print the current item
+- `i = i + 1` — move to the next index (this is essential — without it, the loop runs forever!)
+
+> **Think prompt:** What would happen if you forgot `i = i + 1`? The loop would run forever printing "apple". Always make sure a while loop has a way to stop.
+
+---
+
+## Section 9 – Joining Tuples
+
+### 9.1 Concatenating with `+`
+
+You can combine two or more tuples into one using the `+` operator:
+
+```python
+tuple1 = ("a", "b", "c")
+tuple2 = (1, 2, 3)
+
+tuple3 = tuple1 + tuple2
+print(tuple3)
+```
+
+**Expected Output:**
+```
+('a', 'b', 'c', 1, 2, 3)
+```
+
+The items from `tuple1` appear first, then the items from `tuple2`. The original tuples are unchanged.
+
+**Second example:**
+
+```python
+names = ("Alice", "Bob")
+scores = (95, 87)
+
+combined = names + scores
+print(combined)
+```
+
+**Expected Output:**
+```
+('Alice', 'Bob', 95, 87)
+```
+
+### 9.2 Multiplying with `*`
+
+You can repeat the contents of a tuple by multiplying it by a number:
+
+```python
+fruits = ("apple", "banana", "cherry")
+mytuple = fruits * 2
+
+print(mytuple)
+```
+
+**Expected Output:**
+```
+('apple', 'banana', 'cherry', 'apple', 'banana', 'cherry')
+```
+
+The entire tuple is repeated twice. This is useful when you need to create a repeating pattern quickly.
+
+**Another example:**
+
+```python
+signal = ("red", "green", "blue")
+repeated = signal * 3
+print(repeated)
+```
+
+**Expected Output:**
+```
+('red', 'green', 'blue', 'red', 'green', 'blue', 'red', 'green', 'blue')
+```
+
+> **Real-world use:** In image processing, RGB color values are stored as tuples like `(255, 0, 0)` for red. If you needed to create a row of 5 identical pixels, you could write `pixel = (255, 0, 0)` then `row = pixel * 5`.
+
+---
+
+## Section 10 – Tuple Methods
+
+Python tuples have only **two built-in methods**. This is intentional — since you can't change a tuple, most of the list methods (append, remove, sort…) simply don't exist for tuples.
+
+### 10.1 `count()` — How Many Times Does a Value Appear?
+
+`count(value)` returns how many times a specific value appears in the tuple.
+
+```python
+thistuple = ("apple", "banana", "cherry", "apple", "banana", "apple")
+result = thistuple.count("apple")
+print(result)
+```
+
+**Expected Output:**
+```
+3
+```
+
+"apple" appears 3 times.
+
+**Second example:**
+
+```python
+numbers = (1, 2, 3, 2, 4, 2, 5)
+print(numbers.count(2))    # How many 2s?
+print(numbers.count(9))    # How many 9s?
+```
+
+**Expected Output:**
+```
+3
+0
+```
+
+If the value is not in the tuple, `count()` returns `0` — it does not cause an error.
+
+> **Real-world use:** Imagine a tuple of survey responses: `responses = ("yes", "no", "yes", "yes", "no")`. You can count how many people said "yes" with `responses.count("yes")`.
+
+### 10.2 `index()` — Where is This Value?
+
+`index(value)` searches the tuple for a value and returns the **position (index)** of its **first** occurrence.
+
+```python
+thistuple = ("apple", "banana", "cherry")
+result = thistuple.index("cherry")
+print(result)
+```
+
+**Expected Output:**
+```
+2
+```
+
+"cherry" is at position 2.
+
+**Second example:**
+
+```python
+thistuple = ("apple", "banana", "cherry", "apple")
+print(thistuple.index("apple"))   # Returns position of FIRST "apple"
+```
+
+**Expected Output:**
+```
+0
+```
+
+Even though "apple" appears twice (at positions 0 and 3), `index()` only returns the position of the first one.
+
+> **Warning:** If you search for a value that is NOT in the tuple, Python raises a `ValueError`. Always make sure the value exists first (use `in` to check).
+
+```python
+thistuple = ("apple", "banana", "cherry")
+if "mango" in thistuple:
+    print(thistuple.index("mango"))
+else:
+    print("mango is not in the tuple")
+```
+
+**Expected Output:**
+```
+mango is not in the tuple
+```
+
+---
+
+## Section 11 – Guided Practice Exercises
+
+### Exercise 1 – Warm-Up: Student Record Tuple
+
+**Objective:** Create and access a tuple representing a student record.
+
+**Scenario:** A school stores each student's information as a tuple: name, age, grade, and city.
 
 **Steps:**
-1. Store the student's score in a variable
-2. Use an `if` statement to check if the score is 50 or above
-3. Print "Pass" if True, "Fail" if False
+
+1. Create a tuple called `student` with these values: `("Amara", 17, "Grade 11", "Lagos")`
+2. Print the full tuple
+3. Print just the student's name (index 0)
+4. Print the city using negative indexing
+5. Print the length of the tuple
+
+**Your code:**
 
 ```python
-student_score = 62
-passing_mark = 50
+student = ("Amara", 17, "Grade 11", "Lagos")
 
-if student_score >= passing_mark:
-    print("Result: Pass")
-else:
-    print("Result: Fail")
+print(student)
+print(student[0])
+print(student[-1])
+print(len(student))
 ```
 
 **Expected Output:**
 ```
-Result: Pass
+('Amara', 17, 'Grade 11', 'Lagos')
+Amara
+Lagos
+4
 ```
 
-**What-if challenge:** Change `student_score` to `45`. What happens now?
+**Self-check Questions:**
+- What index would give you "Grade 11"?
+- What would `student[-2]` return?
 
 ---
 
-### Exercise 3 – The `bool()` Explorer
+### Exercise 2 – Slice and Check
 
-**Objective:** Use `bool()` to test which values are truthy and which are falsy.
+**Objective:** Practice slicing and membership checking.
+
+**Scenario:** A weekly weather summary is stored as a tuple.
 
 ```python
-# Test these values one by one
-print(bool(1))        # Non-zero number
-print(bool(0))        # Zero
-print(bool("Python")) # Non-empty string
-print(bool(""))       # Empty string
-print(bool([1, 2]))   # Non-empty list
-print(bool([]))       # Empty list
-print(bool(None))     # None
+weather = ("Sunny", "Cloudy", "Rainy", "Sunny", "Windy", "Cloudy", "Sunny")
+```
+
+**Tasks:**
+1. Print the first three days
+2. Print the last two days using negative slicing
+3. Check if "Rainy" is in the tuple and print a message
+
+```python
+weather = ("Sunny", "Cloudy", "Rainy", "Sunny", "Windy", "Cloudy", "Sunny")
+
+print(weather[:3])
+print(weather[-2:])
+
+if "Rainy" in weather:
+    print("Pack an umbrella — rain is expected this week!")
 ```
 
 **Expected Output:**
 ```
-True
-False
-True
-False
-True
-False
-False
+('Sunny', 'Cloudy', 'Rainy')
+('Cloudy', 'Sunny')
+Pack an umbrella — rain is expected this week!
 ```
 
-**Self-check question:** Can you explain in your own words why `bool("")` returns `False` but `bool(" ")` (a space) returns `True`?
+**What-if challenge:** What would `weather[1:6:2]` return? (Hint: the third number in slicing is the "step".)
 
 ---
 
-### Exercise 4 – Is It a String?
+### Exercise 3 – Unpacking in Action
 
-**Objective:** Use `isinstance()` to check data types.
+**Objective:** Unpack a tuple representing a product listing.
+
+**Scenario:** An e-commerce database stores product info as a tuple.
 
 ```python
-def check_type(value):
-    if isinstance(value, str):
-        print(str(value) + " is a string → True")
-    else:
-        print(str(value) + " is NOT a string → False")
+product = ("Wireless Headphones", "Electronics", 49.99, "In Stock")
+```
 
-check_type("hello")
-check_type(42)
-check_type(3.14)
-check_type("100")
+**Tasks:**
+1. Unpack all four values into separate variables: `name`, `category`, `price`, `status`
+2. Print a formatted summary
+
+```python
+product = ("Wireless Headphones", "Electronics", 49.99, "In Stock")
+
+(name, category, price, status) = product
+
+print(f"Product: {name}")
+print(f"Category: {category}")
+print(f"Price: ${price}")
+print(f"Status: {status}")
 ```
 
 **Expected Output:**
 ```
-hello is a string → True
-42 is NOT a string → False
-3.14 is NOT a string → False
-100 is a string → True
+Product: Wireless Headphones
+Category: Electronics
+Price: $49.99
+Status: In Stock
 ```
-
-> 💡 Notice that `"100"` is a **string** (it has quotes), even though it looks like a number. `isinstance("100", str)` returns `True`.
 
 ---
 
-## Mini Project – Smart Access Control System
+### Exercise 4 – Loop and Summarise
 
-### Project Goal
+**Objective:** Loop through a tuple to calculate a total.
 
-Build a simple program that checks whether a person is allowed to enter a restricted area based on two conditions:
-1. They must be **18 or older**
-2. They must **have a valid pass**
+**Scenario:** A student's exam scores for the semester are stored in a tuple.
+
+```python
+scores = (72, 85, 91, 68, 79, 88)
+```
+
+**Tasks:**
+1. Loop through the tuple and print each score
+2. Calculate and print the total
+3. Calculate and print the average
+
+```python
+scores = (72, 85, 91, 68, 79, 88)
+
+total = 0
+
+for score in scores:
+    print(f"Score: {score}")
+    total += score
+
+average = total / len(scores)
+print(f"\nTotal: {total}")
+print(f"Average: {average:.1f}")
+```
+
+**Expected Output:**
+```
+Score: 72
+Score: 85
+Score: 91
+Score: 68
+Score: 79
+Score: 88
+
+Total: 483
+Average: 80.5
+```
+
+---
+
+### Exercise 5 – Using `count()` and `index()`
+
+**Objective:** Use both tuple methods on a real dataset.
+
+**Scenario:** Survey responses from 10 people who were asked their favourite season.
+
+```python
+responses = ("Summer", "Winter", "Summer", "Spring", "Summer",
+             "Autumn", "Winter", "Summer", "Spring", "Winter")
+```
+
+**Tasks:**
+1. Count how many people chose "Summer"
+2. Find the position of the first "Winter"
+3. Count how many chose "Autumn"
+
+```python
+responses = ("Summer", "Winter", "Summer", "Spring", "Summer",
+             "Autumn", "Winter", "Summer", "Spring", "Winter")
+
+summer_votes = responses.count("Summer")
+first_winter  = responses.index("Winter")
+autumn_votes  = responses.count("Autumn")
+
+print(f"Summer votes: {summer_votes}")
+print(f"First Winter at index: {first_winter}")
+print(f"Autumn votes: {autumn_votes}")
+```
+
+**Expected Output:**
+```
+Summer votes: 4
+First Winter at index: 1
+Autumn votes: 1
+```
+
+---
+
+## Section 12 – Mini Project: Student Grade Report
+
+This mini project combines everything you have learned into a realistic program.
+
+### Project Scenario
+
+You are building a simple student grade report system for a school. Each student's record is stored as a tuple. The program should display a formatted report, calculate the average, find the highest and lowest scores, and determine the student's grade.
 
 ### Stage 1 – Setup the Data
 
 ```python
-# Person's details
-person_name = "Amara"
-person_age = 22
-has_valid_pass = True
+# Student record tuple: (name, student_id, subject_scores)
+# Subject scores are stored as a nested tuple
+student_name = "Chidi Okafor"
+student_id   = "STU-2024-007"
+scores       = (78, 85, 92, 67, 88, 74, 91)
+subjects     = ("Mathematics", "English", "Physics", "Chemistry",
+                "Biology", "History", "Computer Science")
 ```
 
-**Milestone output:** Nothing printed yet — just data stored.
-
-### Stage 2 – Core Logic: Write the Check Functions
+**Milestone check:** Print the student name and the number of subjects:
 
 ```python
-def is_old_enough(age):
-    return age >= 18
-
-def has_access(age, valid_pass):
-    if is_old_enough(age) and valid_pass:
-        return True
-    else:
-        return False
+print(f"Student: {student_name}")
+print(f"Number of subjects: {len(scores)}")
 ```
 
-**Line-by-line explanation:**
-- `is_old_enough(age)` — returns `True` if age is 18 or above, otherwise `False`
-- `has_access(age, valid_pass)` — returns `True` only if **both** conditions are met: age ≥ 18 AND valid_pass is True
-- `and` — a logical operator that means "both must be True"
+**Expected Output:**
+```
+Student: Chidi Okafor
+Number of subjects: 7
+```
 
-### Stage 3 – Display the Result
+### Stage 2 – Build the Core Report
 
 ```python
-person_name = "Amara"
-person_age = 22
-has_valid_pass = True
+student_name = "Chidi Okafor"
+student_id   = "STU-2024-007"
+scores       = (78, 85, 92, 67, 88, 74, 91)
+subjects     = ("Mathematics", "English", "Physics", "Chemistry",
+                "Biology", "History", "Computer Science")
 
-def is_old_enough(age):
-    return age >= 18
+print("=" * 45)
+print(f"  STUDENT GRADE REPORT")
+print(f"  Name: {student_name}")
+print(f"  ID:   {student_id}")
+print("=" * 45)
 
-def has_access(age, valid_pass):
-    if is_old_enough(age) and valid_pass:
-        return True
-    else:
-        return False
+total = 0
+for i in range(len(subjects)):
+    print(f"  {subjects[i]:<22}: {scores[i]}")
+    total += scores[i]
+```
 
-# Check and display
-if has_access(person_age, has_valid_pass):
-    print(person_name + " is ALLOWED entry.")
+**Expected Output:**
+```
+=============================================
+  STUDENT GRADE REPORT
+  Name: Chidi Okafor
+  ID:   STU-2024-007
+=============================================
+  Mathematics           : 78
+  English               : 85
+  Physics               : 92
+  Chemistry             : 67
+  Biology               : 88
+  History               : 74
+  Computer Science      : 91
+```
+
+### Stage 3 – Enhancements (Statistics)
+
+```python
+# After the loop, add:
+average   = total / len(scores)
+
+# Sorting by converting to a list temporarily
+scores_list = list(scores)
+scores_list.sort()
+lowest  = scores_list[0]
+highest = scores_list[-1]
+
+print("-" * 45)
+print(f"  Total Score : {total}")
+print(f"  Average     : {average:.1f}")
+print(f"  Highest     : {highest}")
+print(f"  Lowest      : {lowest}")
+```
+
+**Expected Output:**
+```
+---------------------------------------------
+  Total Score : 575
+  Average     : 82.1
+  Highest     : 92
+  Lowest      : 67
+```
+
+### Stage 4 – Final Grade Assignment
+
+```python
+if average >= 90:
+    grade = "A"
+elif average >= 80:
+    grade = "B"
+elif average >= 70:
+    grade = "C"
+elif average >= 60:
+    grade = "D"
 else:
-    print(person_name + " is DENIED entry.")
+    grade = "F"
+
+print(f"  Final Grade : {grade}")
+print("=" * 45)
 ```
 
 **Expected Output:**
 ```
-Amara is ALLOWED entry.
+  Final Grade : B
+=============================================
 ```
 
-### Stage 4 – Test Different Scenarios
+### Full Project Code (All Stages Combined)
 
 ```python
-# Test 1: Too young, has pass
-print(bool(has_access(16, True)))    # False
+student_name = "Chidi Okafor"
+student_id   = "STU-2024-007"
+scores       = (78, 85, 92, 67, 88, 74, 91)
+subjects     = ("Mathematics", "English", "Physics", "Chemistry",
+                "Biology", "History", "Computer Science")
 
-# Test 2: Old enough, no pass
-print(bool(has_access(25, False)))   # False
+print("=" * 45)
+print("  STUDENT GRADE REPORT")
+print(f"  Name: {student_name}")
+print(f"  ID:   {student_id}")
+print("=" * 45)
 
-# Test 3: Old enough, has pass
-print(bool(has_access(30, True)))    # True
+total = 0
+for i in range(len(subjects)):
+    print(f"  {subjects[i]:<22}: {scores[i]}")
+    total += scores[i]
 
-# Test 4: Exactly 18, has pass
-print(bool(has_access(18, True)))    # True
+average   = total / len(scores)
+scores_list = list(scores)
+scores_list.sort()
+lowest  = scores_list[0]
+highest = scores_list[-1]
+
+print("-" * 45)
+print(f"  Total Score : {total}")
+print(f"  Average     : {average:.1f}")
+print(f"  Highest     : {highest}")
+print(f"  Lowest      : {lowest}")
+
+if average >= 90:
+    grade = "A"
+elif average >= 80:
+    grade = "B"
+elif average >= 70:
+    grade = "C"
+elif average >= 60:
+    grade = "D"
+else:
+    grade = "F"
+
+print(f"  Final Grade : {grade}")
+print("=" * 45)
 ```
 
-**Expected Output:**
+**Full Expected Output:**
 ```
-False
-False
-True
-True
+=============================================
+  STUDENT GRADE REPORT
+  Name: Chidi Okafor
+  ID:   STU-2024-007
+=============================================
+  Mathematics           : 78
+  English               : 85
+  Physics               : 92
+  Chemistry             : 67
+  Biology               : 88
+  History               : 74
+  Computer Science      : 91
+---------------------------------------------
+  Total Score : 575
+  Average     : 82.1
+  Highest     : 92
+  Lowest      : 67
+  Final Grade : B
+=============================================
 ```
 
-### Reflection Questions
+**Reflection Questions:**
+- Why was a tuple a good choice for `scores` and `subjects` in this project?
+- How would you modify the project to handle a second student?
+- What would happen if you stored the scores in a list instead?
 
-1. What would you need to change to allow entry from age 21 instead of 18?
-2. What would `has_access(18, False)` return and why?
-3. Can you add a third condition — for example, the person must also have a `membership_card`?
+**Optional Extension:** Add a feature that prints the subject where the student scored the highest, and the subject where they scored the lowest.
 
-### Optional Extension
+---
 
-Modify the program to check a list of multiple people:
+## Section 13 – Common Beginner Mistakes
+
+### Mistake 1 – Forgetting the Trailing Comma in a One-Item Tuple
 
 ```python
-visitors = [
-    {"name": "Tunde", "age": 17, "pass": True},
-    {"name": "Ngozi", "age": 25, "pass": True},
-    {"name": "Emeka", "age": 19, "pass": False},
-]
+# WRONG
+t = ("hello")
+print(type(t))   # <class 'str'>  ← Not a tuple!
 
-for visitor in visitors:
-    result = has_access(visitor["age"], visitor["pass"])
-    if result:
-        print(visitor["name"] + ": ALLOWED")
-    else:
-        print(visitor["name"] + ": DENIED")
+# CORRECT
+t = ("hello",)
+print(type(t))   # <class 'tuple'>  ← Correct!
 ```
 
-**Expected Output:**
+**Fix:** Always add a comma after the single item when creating a one-item tuple.
+
+---
+
+### Mistake 2 – Trying to Change a Tuple Directly
+
+```python
+# WRONG
+t = ("apple", "banana", "cherry")
+t[0] = "mango"   # TypeError!
 ```
-Tunde: DENIED
-Ngozi: ALLOWED
-Emeka: DENIED
+
+**Fix:** Convert to a list first, make changes, then convert back:
+
+```python
+t = list(t)
+t[0] = "mango"
+t = tuple(t)
+print(t)   # ('mango', 'banana', 'cherry')
 ```
 
 ---
 
-## Common Beginner Mistakes
-
-### Mistake 1 – Using lowercase `true` or `false`
+### Mistake 3 – Forgetting That Index Counting Starts at 0
 
 ```python
-# ❌ Wrong
-x = true   # NameError: name 'true' is not defined
-
-# ✅ Correct
-x = True
+t = ("a", "b", "c")
+print(t[1])   # Many beginners expect "a", but the answer is "b"
 ```
 
-**Why:** Python treats `True` and `False` as special keywords, and they must be written with an uppercase first letter. `true` is not a keyword — Python would look for a variable called `true` and fail.
+**Fix:** Remember — the **first** item is always at index `0`, not `1`.
 
 ---
 
-### Mistake 2 – Confusing `=` with `==`
+### Mistake 4 – Mismatched Unpacking Variables
 
 ```python
-# ❌ Wrong — this assigns 5 to x, not a comparison
-if x = 5:
-    print("equal")   # SyntaxError
-
-# ✅ Correct — this compares x to 5
-if x == 5:
-    print("equal")
+# WRONG — 3 items, only 2 variables
+t = ("apple", "banana", "cherry")
+(a, b) = t   # ValueError!
 ```
 
-**Why:** `=` sets a value. `==` checks if two values are equal.
-
----
-
-### Mistake 3 – Thinking `"False"` (as a string) is False
+**Fix:** Make sure the number of variables matches the number of tuple items, or use `*` to capture extras:
 
 ```python
-x = "False"
-print(bool(x))   # True!
-```
-
-**Why:** `"False"` is a **non-empty string**. Any non-empty string is `True`, even if the string happens to spell the word "False".
-
----
-
-### Mistake 4 – Forgetting the colon after `if` and `else`
-
-```python
-# ❌ Wrong
-if x > 5
-    print("big")
-
-# ✅ Correct
-if x > 5:
-    print("big")
+(a, *b) = t
+print(a)   # apple
+print(b)   # ['banana', 'cherry']
 ```
 
 ---
 
-### Mistake 5 – Using `bool()` when you just need a comparison
+### Mistake 5 – Using `index()` on a Non-Existent Value
 
 ```python
-# ❌ Unnecessary
-if bool(x > 5) == True:
-    print("big")
-
-# ✅ Simpler and cleaner
-if x > 5:
-    print("big")
+t = ("apple", "banana", "cherry")
+print(t.index("mango"))   # ValueError! "mango" is not in the tuple
 ```
 
-**Why:** `if` already evaluates the condition as a Boolean. You don't need to wrap it in `bool()` or compare it to `True`.
+**Fix:** Always check with `in` before using `index()`:
+
+```python
+if "mango" in t:
+    print(t.index("mango"))
+else:
+    print("mango is not in the tuple")
+```
 
 ---
 
-## Reflection Questions
+### Mistake 6 – Using Double Brackets Incorrectly with `tuple()`
 
-1. In your own words, what is a Boolean? What are the only two values it can have?
-2. What is the difference between `=` and `==` in Python?
-3. Name three values that Python evaluates as `False`.
-4. What does `bool("0")` return? Why?
-5. What does `isinstance(3.14, int)` return? Why?
-6. Why is it useful for a function to return a Boolean value?
-7. What does the word "truthy" mean when talking about Python values?
-8. If you have `x = []`, what does `bool(x)` return, and why?
+```python
+# WRONG
+t = tuple("apple", "banana")   # TypeError
+
+# CORRECT
+t = tuple(("apple", "banana"))  # Pass the items inside an inner set of brackets
+print(t)   # ('apple', 'banana')
+```
 
 ---
 
-## Completion Checklist
+## Section 14 – Reflection Questions
 
-Before moving to the next lesson, confirm that you can:
+Take a moment to test your understanding before moving on.
 
-- [ ] Explain what a Boolean is and name its two possible values
-- [ ] Write `True` and `False` correctly (with capital letters)
-- [ ] Use comparison operators (`>`, `<`, `==`, `!=`, `>=`, `<=`) to produce Boolean results
-- [ ] Use an `if`/`else` statement with a Boolean condition
-- [ ] Use the `bool()` function to convert a value to `True` or `False`
-- [ ] List at least five values that Python considers `False`
-- [ ] Write a simple function that returns `True` or `False`
-- [ ] Use `isinstance()` to check a variable's data type
-- [ ] Avoid the common beginner mistakes listed above
+1. What are the three key characteristics of a tuple?
+2. How is a tuple different from a list?
+3. What output do you expect from `("a", "b", "c")[1]`?
+4. If a tuple has 5 items, what index refers to the last item using negative indexing?
+5. Why must you add a trailing comma when creating a single-item tuple?
+6. What is "unpacking" a tuple?
+7. In what situation would you use `*` when unpacking a tuple?
+8. Name the two tuple methods and describe what each does.
+9. You have a tuple `t = (10, 20, 30, 40, 50)`. What does `t[1:4]` return?
+10. Why might you choose a tuple over a list when storing days of the week?
+
+---
+
+## Section 15 – Completion Checklist
+
+Check off each item as you complete it:
+
+- [ ] I can create a tuple using round brackets `( )`
+- [ ] I can create a tuple using the `tuple()` constructor
+- [ ] I know how to create a single-item tuple (with the trailing comma)
+- [ ] I can access items using positive and negative index numbers
+- [ ] I can slice a range of items from a tuple
+- [ ] I can check if a value exists in a tuple using `in`
+- [ ] I understand why tuples are immutable and how to work around it
+- [ ] I can unpack a tuple into separate variables
+- [ ] I can use `*` to capture extra items during unpacking
+- [ ] I can loop through a tuple using `for`, index-based `for`, and `while`
+- [ ] I can join two tuples using `+`
+- [ ] I can multiply a tuple using `*`
+- [ ] I can use `count()` to count how often a value appears
+- [ ] I can use `index()` to find the position of a value
+- [ ] I completed the mini project and understand each part
+- [ ] I can explain all six common beginner mistakes and how to fix them
 
 ---
 
 ## Lesson Summary
 
-In this lesson, you learned about **Booleans** — one of the most fundamental concepts in all of programming.
+Here is a compact reference of everything covered in this lesson:
 
-Here is a compact summary of everything covered:
+**Creating Tuples**
 
-**The two Boolean values:**
 ```python
-True   # yes, correct, something is there
-False  # no, wrong, nothing is there
+t = ("a", "b", "c")           # standard
+t = tuple(("a", "b", "c"))    # using constructor
+t = ("a",)                    # single-item (comma required!)
 ```
 
-**Comparisons return Booleans:**
+**Accessing Items**
+
 ```python
-print(10 > 9)    # True
-print(10 == 9)   # False
+t[0]        # first item
+t[-1]       # last item
+t[1:3]      # slice (index 1 included, 3 excluded)
+t[:2]       # from start to index 2
+t[2:]       # from index 2 to end
+"x" in t    # True if "x" is in the tuple
 ```
 
-**`if` statements use Booleans to make decisions:**
+**Updating (Workaround)**
+
 ```python
-if score >= 50:
-    print("Pass")
-else:
-    print("Fail")
+lst = list(t)     # convert to list
+lst[0] = "new"    # make changes
+t = tuple(lst)    # convert back
 ```
 
-**`bool()` converts any value to True or False:**
+**Unpacking**
+
 ```python
-bool("hello")  # True
-bool("")       # False
-bool(42)       # True
-bool(0)        # False
+(a, b, c) = t              # standard unpacking
+(a, *rest) = t             # star collects extras as a list
+(a, *middle, z) = t        # star in the middle
 ```
 
-**Most values are True. Falsy values include:**
-`False`, `None`, `0`, `""`, `()`, `[]`, `{}`
+**Looping**
 
-**Functions can return Booleans:**
 ```python
-def is_adult(age):
-    return age >= 18
+for item in t:             # direct loop
+for i in range(len(t)):    # index-based loop
 
-print(is_adult(20))   # True
-print(is_adult(15))   # False
+i = 0
+while i < len(t):          # while loop
+    print(t[i])
+    i += 1
 ```
 
-**`isinstance()` checks data types:**
+**Joining**
+
 ```python
-x = 200
-print(isinstance(x, int))    # True
-print(isinstance(x, str))    # False
+t3 = t1 + t2      # concatenate
+t2 = t1 * 3       # repeat 3 times
 ```
 
-Booleans are the foundation of **decision-making** in Python. Every `if` statement, every loop condition, and every logical check you ever write will rely on Boolean values. You are now ready to move forward to Python Operators, where you will learn even more powerful ways to combine and evaluate conditions.
+**Tuple Methods**
+
+```python
+t.count("value")   # count occurrences
+t.index("value")   # find first position
+```
+
+**The Four Python Collections**
+
+| | List | Tuple | Set | Dictionary |
+|---|---|---|---|---|
+| Ordered | ✅ | ✅ | ❌ | ✅ |
+| Changeable | ✅ | ❌ | ❌* | ✅ |
+| Duplicates | ✅ | ✅ | ❌ | ❌ |
+| Syntax | `[]` | `()` | `{}` | `{k:v}` |
+
+---
+
+*Great work completing Lesson 09! You now understand Python tuples from the ground up — what they are, why they exist, and how to use every feature they offer. In the next lesson, you will explore **Python Sets**, another collection type with its own unique rules.*

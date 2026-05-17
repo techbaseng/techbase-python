@@ -1,1538 +1,1392 @@
 ---
 render_with_liquid: false
-title: "Python If...Else – Conditional Statements Complete Guide"
+title: "Lesson 15 – Python Functions, Arguments, *args / **kwargs, and Scope"
 nav_order: 15
 ---
 
-# Lesson 15: Python If…Else — Making Decisions in Code
+# Lesson 15 – Python Functions, Arguments, \*args / \*\*kwargs, and Scope
 
 ---
 
-## 📌 Lesson Introduction
+## Lesson Introduction
 
-Every useful program makes **decisions**. Should we let this user log in? Is the temperature high enough to turn on the fan? Did the student pass or fail? Has the shopping cart exceeded the budget limit?
+Imagine you are baking a cake. Every time a customer orders one, you don't invent a brand-new recipe from scratch — you follow the **same recipe** each time, maybe swapping the flavour depending on what the customer wants. That recipe is a **function**.
 
-In real life, you make hundreds of decisions every day without even thinking about it: *"If it is raining, I'll take an umbrella. Otherwise, I won't."* Python lets you give your programs the same power — the ability to **look at a situation and choose what to do**.
+In Python, a **function** is a reusable block of code that you write once and run as many times as you need, with different values each time if required. Functions are the single most important building block of any real program. Without them, you would copy and paste the same code over and over — messy, error-prone, and hard to fix.
 
-This entire ability is built on one simple idea: **conditional statements**, and the most fundamental one is the `if` statement.
+This lesson covers **four closely connected topics** from the W3Schools Python tutorials, merged into one smooth, progressive lesson:
 
-By the end of this lesson, you will be able to:
-- Write `if` statements to run code only when a condition is true
-- Use `else` to handle the "otherwise" case
-- Use `elif` to handle multiple different conditions in sequence
-- Write compact one-line shorthand conditions
-- Combine multiple conditions with `and`, `or`, and `not`
-- Build nested `if` statements (decisions inside decisions)
-- Use the `pass` statement as a placeholder
-- Apply all of these in realistic exercises and a complete mini project
+| Topic | What You Will Learn |
+|---|---|
+| **Functions** | How to create and call functions |
+| **Arguments** | How to pass values into functions |
+| **\*args and \*\*kwargs** | How to handle an unknown number of arguments |
+| **Scope** | Where variables live and who can see them |
 
-Let's start from the very beginning.
+By the end of this lesson you will be able to write your own functions, pass data into them flexibly, and fully understand why variables sometimes seem to "disappear" — and why that is actually a good thing.
 
 ---
 
-## 🔑 Prerequisite Concepts
+## Prerequisite Concepts
 
-Before we dive in, let's quickly review a few things from earlier lessons that we'll use throughout this lesson.
+Before we begin, here are the concepts you must already understand. If any of these feel unfamiliar, take a few minutes to review them.
 
-### What is a Boolean?
+- **Variables** — storing a value in a name (e.g., `x = 5`)
+- **`print()`** — displaying output in the terminal
+- **Basic data types** — strings (`"hello"`), integers (`5`), floats (`3.14`), lists (`[1, 2, 3]`)
+- **`if` / `else`** — making decisions in code
+- **`for` loops** — repeating an action multiple times
 
-A **Boolean** is a value that is either `True` or `False` — nothing else. It is named after the mathematician George Boole.
-
-```python
-is_raining = True
-has_money = False
-
-print(is_raining)   # True
-print(has_money)    # False
-```
-
-### What are Comparison Operators?
-
-Comparison operators compare two values and produce a Boolean result (`True` or `False`):
-
-| Operator | Meaning | Example | Result |
-|---|---|---|---|
-| `==` | Equal to | `5 == 5` | `True` |
-| `!=` | Not equal to | `5 != 3` | `True` |
-| `>` | Greater than | `10 > 7` | `True` |
-| `<` | Less than | `3 < 8` | `True` |
-| `>=` | Greater than or equal to | `5 >= 5` | `True` |
-| `<=` | Less than or equal to | `4 <= 3` | `False` |
-
-```python
-print(10 > 5)    # True
-print(10 == 5)   # False
-print(10 != 5)   # True
-```
-
-**Output:**
-```
-True
-False
-True
-```
-
-These comparison results — `True` or `False` — are exactly what `if` statements use to decide what code to run.
+No prior experience with functions or scope is needed.
 
 ---
 
-## 🧠 Part 1: The `if` Statement
-
-### 1.1 What is an `if` Statement?
-
-An `if` statement says: **"Only run this block of code IF this condition is True."**
-
-If the condition is `False`, the code inside the `if` block is simply skipped.
-
-> **Real-life analogy:** Think of a bouncer at the door of a club. The bouncer checks your ID. **If** you are 18 or older → you get in. If not → nothing happens (you don't get in). The `if` statement works exactly like that bouncer.
-
-### 1.2 Syntax
-
-```
-if condition:
-    code to run if condition is True
-```
-
-Key rules:
-- The `if` keyword must be lowercase
-- The condition is followed by a **colon** `:`
-- The code to run **must be indented** (shifted right by 4 spaces or 1 tab)
-- Python uses **indentation** (whitespace) to define which lines belong inside the `if` block
-
-### 1.3 Your First `if` Statement
-
-```python
-a = 33
-b = 200
-
-if b > a:
-    print("b is greater than a")
-```
-
-**Output:**
-```
-b is greater than a
-```
-
-Let's trace through it:
-- `a = 33` and `b = 200`
-- The condition is `b > a`, which is `200 > 33`
-- `200 > 33` is `True`
-- Because the condition is `True`, Python runs the indented code: `print("b is greater than a")`
-
-What if the condition were `False`?
-
-```python
-a = 200
-b = 33
-
-if b > a:
-    print("b is greater than a")
-
-print("This line always runs")
-```
-
-**Output:**
-```
-This line always runs
-```
-
-Because `b > a` is `33 > 200` which is `False`, the `print("b is greater than a")` line is **skipped entirely**. The unindented line below always runs regardless.
+## Part 1 – Python Functions
 
 ---
 
-### 1.4 Indentation — The Most Important Rule
+### 1.1 What Is a Function?
 
-Python is unique: it uses **indentation** (blank space at the start of a line) to group code together. This is not optional — it is the rule.
+A **function** is a named, reusable block of code. You define it once, and then you can **call** (run) it as many times as you like from anywhere in your program.
 
-```python
-# ✅ CORRECT — the print is indented inside the if block
-score = 80
-if score >= 50:
-    print("You passed!")
-```
+**Real-world analogy:**  
+Think of a function like a vending machine button. The machine (your function) is built once. Every time someone pushes the button (calls the function), the machine does the same job and delivers a result.
 
-```python
-# ❌ WRONG — IndentationError
-score = 80
-if score >= 50:
-print("You passed!")    # no indent = error!
-```
+**Why do functions exist?**
 
-**Error:**
-```
-IndentationError: expected an indented block
-```
-
-> **Rule:** Everything that should run as part of the `if` block must be indented by the **same amount** — conventionally 4 spaces.
-
-You can have multiple lines inside an `if` block — they all just need the same indentation:
-
-```python
-score = 80
-if score >= 50:
-    print("Congratulations!")
-    print("You passed the exam.")
-    print("Keep up the good work!")
-
-print("End of report.")
-```
-
-**Output:**
-```
-Congratulations!
-You passed the exam.
-Keep up the good work!
-End of report.
-```
-
-The last line is unindented, so it always runs regardless of the condition.
+- **DRY principle** — "Don't Repeat Yourself." Write the logic once, use it everywhere.
+- **Readability** — Code broken into named functions is far easier to read and understand.
+- **Maintenance** — If a rule changes, you fix it in one place instead of hunting through hundreds of lines.
+- **Testing** — Small, focused functions are much easier to test and debug.
 
 ---
 
-## 🧠 Part 2: The `else` Statement
+### 1.2 Defining a Function
 
-### 2.1 What is `else`?
+In Python, you create a function using the `def` keyword.
 
-The `if` statement handles "what to do when the condition is True". But what about "what to do when the condition is False"? That's exactly what `else` is for.
-
-> **Real-life analogy:** "If it is raining, take an umbrella. **Else** (otherwise), wear sunglasses."
-
-### 2.2 `if...else` Syntax
-
-```
-if condition:
-    code to run if condition is True
-else:
-    code to run if condition is False
-```
-
-- `else` is written at the same indentation level as `if`
-- `else` also ends with a colon `:`
-- The code inside `else` must be indented
-
-### 2.3 Simple `if...else` Example
+**Syntax:**
 
 ```python
-a = 200
-b = 33
-
-if b > a:
-    print("b is greater than a")
-else:
-    print("b is not greater than a")
+def function_name():
+    # code that runs when the function is called
 ```
 
-**Output:**
-```
-b is not greater than a
-```
+**Breaking down the syntax line by line:**
 
-- `b > a` is `33 > 200` which is `False`
-- The `if` block is skipped
-- The `else` block runs instead: `print("b is not greater than a")`
-
-### 2.4 Another Example — Pass or Fail
-
-```python
-score = 72
-
-if score >= 50:
-    print("Result: PASS")
-else:
-    print("Result: FAIL")
-```
-
-**Output:**
-```
-Result: PASS
-```
-
-Change `score` to `40`:
-
-```python
-score = 40
-
-if score >= 50:
-    print("Result: PASS")
-else:
-    print("Result: FAIL")
-```
-
-**Output:**
-```
-Result: FAIL
-```
-
-Only one of the two blocks ever runs — never both. Python checks the condition, picks the matching path, and skips the other.
+| Part | What It Means |
+|---|---|
+| `def` | Short for "define" — tells Python you are creating a function |
+| `function_name` | The name you give your function (use lowercase and underscores) |
+| `()` | Parentheses — this is where inputs (arguments) will go later |
+| `:` | The colon signals the start of the function body |
+| Indented block | All code indented underneath belongs to this function |
 
 ---
 
-## 🧠 Part 3: The `elif` Statement
-
-### 3.1 What Problem Does `elif` Solve?
-
-Imagine you want to assign letter grades: A, B, C, D, or F. A simple `if...else` only gives you two options. For more options, you need `elif` (short for "**else if**").
-
-`elif` lets you check **another condition** if the previous `if` (or `elif`) condition was `False`.
-
-### 3.2 `elif` Syntax
-
-```
-if condition_1:
-    code if condition_1 is True
-elif condition_2:
-    code if condition_2 is True
-else:
-    code if none of the above are True
-```
-
-You can have **as many `elif` blocks as you need** between the `if` and the `else`.
-
-### 3.3 Basic `elif` Example
+### 1.3 Your First Function
 
 ```python
-a = 33
-b = 33
-
-if b > a:
-    print("b is greater than a")
-elif a == b:
-    print("a and b are equal")
+def say_hello():
+    print("Hello from inside a function!")
 ```
 
-**Output:**
-```
-a and b are equal
-```
-
-- `b > a` is `33 > 33` which is `False` → skip this block
-- `a == b` is `33 == 33` which is `True` → run this block
-
-### 3.4 `if...elif...else` — The Full Chain
-
-```python
-a = 200
-b = 33
-
-if b > a:
-    print("b is greater than a")
-elif a == b:
-    print("a and b are equal")
-else:
-    print("a is greater than b")
-```
-
-**Output:**
-```
-a is greater than b
-```
-
-- `b > a` → False (skip)
-- `a == b` → False (skip)
-- `else` → runs: `a is greater than b`
-
-### 3.5 Grade Assignment with Multiple `elif`
-
-This is one of the most common real-world uses of `elif` chains:
-
-```python
-score = 76
-
-if score >= 90:
-    grade = "A"
-elif score >= 80:
-    grade = "B"
-elif score >= 70:
-    grade = "C"
-elif score >= 60:
-    grade = "D"
-else:
-    grade = "F"
-
-print(f"Score: {score} → Grade: {grade}")
-```
-
-**Output:**
-```
-Score: 76 → Grade: C
-```
-
-Let's trace through this carefully:
-- `score >= 90` → `76 >= 90` → False → skip
-- `score >= 80` → `76 >= 80` → False → skip
-- `score >= 70` → `76 >= 70` → **True** → `grade = "C"` → **STOP checking further**
-- Python immediately stops checking the remaining `elif` and `else` blocks once a match is found
-
-> **Key insight:** Python checks `elif` conditions **from top to bottom** and stops as soon as one is True. The order matters! If you put `score >= 50` first, every passing score would match it and nothing more specific would ever be reached.
-
-### 3.6 Multiple `elif` — Season Identifier
-
-```python
-month = 7
-
-if month in (12, 1, 2):
-    season = "Winter"
-elif month in (3, 4, 5):
-    season = "Spring"
-elif month in (6, 7, 8):
-    season = "Summer"
-elif month in (9, 10, 11):
-    season = "Autumn"
-else:
-    season = "Invalid month"
-
-print(f"Month {month} is in {season}")
-```
-
-**Output:**
-```
-Month 7 is in Summer
-```
-
-> **Thinking Prompt:** What happens if you set `month = 13`? Try it and see which branch runs.
+> **Important:** Defining a function does **not** run it. It just stores the recipe. Nothing appears on screen yet.
 
 ---
 
-## 🧠 Part 4: Shorthand `if` (One-Liner)
+### 1.4 Calling a Function
 
-### 4.1 What is Shorthand `if`?
-
-Sometimes your condition and its action are very simple — just one line each. Python lets you write the entire `if` statement on a **single line**. This is called the **shorthand** or **ternary** form.
-
-### 4.2 One-Line `if`
-
-Standard form:
-```python
-a = 10
-b = 5
-if a > b:
-    print("a is greater than b")
-```
-
-Shorthand form (exact same logic, one line):
-```python
-a = 10
-b = 5
-if a > b: print("a is greater than b")
-```
-
-**Output (both):**
-```
-a is greater than b
-```
-
-You just put the action right after the colon on the same line.
-
-### 4.3 One-Line `if...else` — The Ternary Operator
-
-You can also write a complete `if...else` on one line using this structure:
-
-```
-value_if_true if condition else value_if_false
-```
+To actually **run** the function, you **call** it by writing its name followed by parentheses:
 
 ```python
-a = 2
-b = 330
+def say_hello():
+    print("Hello from inside a function!")
 
-print("A") if a > b else print("B")
+say_hello()
 ```
 
-**Output:**
+**Expected output:**
 ```
-B
+Hello from inside a function!
 ```
 
-Because `a > b` is `2 > 330` which is `False`, Python executes `print("B")`.
-
-### 4.4 Ternary with Three Options
-
-You can even chain a three-way decision in one line:
+You can call the same function multiple times:
 
 ```python
-a = 330
-b = 330
-
-print("A") if a > b else print("=") if a == b else print("B")
+say_hello()
+say_hello()
+say_hello()
 ```
 
-**Output:**
+**Expected output:**
 ```
-=
-```
-
-Reading this left to right:
-- `if a > b` → False → move to the `else` part
-- `if a == b` → True → `print("=")`
-
-### 4.5 Assigning Values with Ternary
-
-The ternary operator is very useful for assigning one of two values to a variable:
-
-```python
-age = 20
-status = "Adult" if age >= 18 else "Minor"
-print(status)
+Hello from inside a function!
+Hello from inside a function!
+Hello from inside a function!
 ```
 
-**Output:**
-```
-Adult
-```
-
-```python
-score = 45
-result = "Pass" if score >= 50 else "Fail"
-print(result)
-```
-
-**Output:**
-```
-Fail
-```
-
-> **When to use shorthand:** Use it for simple, readable one-liners. If the logic gets complex, switch back to the full multi-line form — readability always wins.
+> 💡 **Think about it:** What happens if you never call the function? Try removing `say_hello()` from the code. What do you see?
 
 ---
 
-## 🧠 Part 5: Logical Operators — Combining Conditions
+### 1.5 Why Indentation Matters
 
-### 5.1 Why Do We Need Logical Operators?
+Python uses **indentation** (spaces at the start of a line) to know which lines belong inside a function. This is not optional — it is the rule.
 
-Sometimes one condition isn't enough. You might need:
-- "If age is over 18 **AND** has a valid ID → let in"
-- "If temperature is below 0 **OR** above 40 → send a warning"
-- "If the user is **NOT** banned → allow login"
+```python
+def greet():
+    print("Line 1 – inside the function")
+    print("Line 2 – also inside the function")
 
-Python has three **logical operators** for exactly this:
+print("Line 3 – OUTSIDE the function, runs immediately")
+greet()
+```
 
-| Operator | Meaning | Returns True when... |
+**Expected output:**
+```
+Line 3 – OUTSIDE the function, runs immediately
+Line 1 – inside the function
+Line 2 – also inside the function
+```
+
+> 🧠 **Notice:** `Line 3` runs first because it is outside the function and sits at the top level of the program. `Line 1` and `Line 2` only run when `greet()` is called.
+
+---
+
+### 1.6 Common Beginner Mistake — Forgetting the Call
+
+```python
+# ❌ WRONG – defines the function but never calls it
+def show_score():
+    print("Your score is 100")
+
+# Nothing is printed because we forgot to call it!
+```
+
+**Corrected version:**
+
+```python
+# ✅ CORRECT
+def show_score():
+    print("Your score is 100")
+
+show_score()  # This line actually runs the function
+```
+
+**Expected output:**
+```
+Your score is 100
+```
+
+---
+
+### 1.7 Common Beginner Mistake — Indentation Error
+
+```python
+# ❌ WRONG – missing indentation inside function body
+def greet():
+print("Hello")  # IndentationError!
+```
+
+**Corrected version:**
+
+```python
+# ✅ CORRECT
+def greet():
+    print("Hello")  # 4 spaces of indentation
+```
+
+---
+
+### 1.8 The `pass` Statement
+
+Sometimes you want to create a function skeleton now and fill in the logic later. An empty function body causes a syntax error — use `pass` as a placeholder:
+
+```python
+def my_future_function():
+    pass  # Does nothing, but Python is happy
+
+my_future_function()  # No output, no error
+```
+
+This is common in professional development when planning out a project structure before writing all the logic.
+
+---
+
+## Part 2 – Arguments and Parameters
+
+---
+
+### 2.1 What Are Arguments?
+
+So far our functions do the exact same thing every time. But real functions need to work with **different data** each time — like a calculator that can add any two numbers, not just 2 + 2.
+
+**Parameters** and **arguments** let you pass information into a function.
+
+**The difference:**
+
+| Word | Meaning | Where |
 |---|---|---|
-| `and` | Both conditions must be True | **both** sides are True |
-| `or` | At least one condition must be True | **at least one** side is True |
-| `not` | Reverses the Boolean | the condition is False |
+| **Parameter** | The variable name listed in the function definition | Inside `def` parentheses |
+| **Argument** | The actual value you pass when calling the function | Inside the call parentheses |
+
+Think of a parameter as an empty slot, and an argument as the value you drop into that slot.
 
 ---
 
-### 5.2 The `and` Operator
+### 2.2 A Function with One Parameter
 
 ```python
-a = 200
-b = 33
-c = 500
+def greet_person(name):       # 'name' is the parameter
+    print("Hello, " + name + "!")
 
-if a > b and c > a:
-    print("Both conditions are True")
+greet_person("Alice")         # "Alice" is the argument
+greet_person("Bob")           # "Bob" is the argument
+greet_person("Dr. Johnson")   # "Dr. Johnson" is the argument
 ```
 
-**Output:**
+**Expected output:**
 ```
-Both conditions are True
+Hello, Alice!
+Hello, Bob!
+Hello, Dr. Johnson!
 ```
 
-- `a > b` → `200 > 33` → True
-- `c > a` → `500 > 200` → True
-- `True and True` → **True** → the block runs
+> 🧠 **What changed?** The same function ran three times. Each time, the `name` parameter held a different value. The function code never changed — only the input did.
 
-What if one is False?
+---
+
+### 2.3 A Function with Multiple Parameters
+
+You can define as many parameters as you need, separated by commas:
 
 ```python
-a = 200
-b = 33
-c = 100
+def describe_student(first_name, subject, grade):
+    print(first_name + " studies " + subject + " and scored " + str(grade) + "%.")
 
-if a > b and c > a:
-    print("Both conditions are True")
-else:
-    print("At least one condition is False")
+describe_student("Maria", "Maths", 94)
+describe_student("James", "Biology", 78)
 ```
 
-**Output:**
+**Expected output:**
 ```
-At least one condition is False
+Maria studies Maths and scored 94%.
+James studies Biology and scored 78%.
 ```
 
-- `a > b` → True
-- `c > a` → `100 > 200` → **False**
-- `True and False` → **False** → else block runs
+> **Note:** `str(grade)` converts the number `94` into the string `"94"` so it can be joined with the other strings using `+`. This is called **type conversion**.
 
-> **Rule for `and`:** If **any** part is False, the entire `and` expression is False.
+---
 
-**Real-world example:** Check if a student qualifies for an honour roll (score above 90 AND attendance above 95%):
+### 2.4 Positional Arguments
+
+When you pass arguments in order, Python matches them to parameters by **position**:
 
 ```python
-score = 92
-attendance = 97
+def show_order(item, quantity, price):
+    print(item + " × " + str(quantity) + " = £" + str(price))
 
-if score > 90 and attendance > 95:
-    print("Qualifies for Honour Roll")
-else:
-    print("Does not qualify for Honour Roll")
+show_order("Apples", 6, 3.00)
+# item = "Apples", quantity = 6, price = 3.00
 ```
 
-**Output:**
+**Expected output:**
 ```
-Qualifies for Honour Roll
+Apples × 6 = £3.0
+```
+
+> ⚠️ **Order matters!** If you mix up the order, you get incorrect results — or an error:
+
+```python
+show_order(6, "Apples", 3.00)   # quantity and item are swapped!
+```
+
+**Incorrect output:**
+```
+6 × Apples = £3.0
 ```
 
 ---
 
-### 5.3 The `or` Operator
+### 2.5 Keyword Arguments
+
+You can also pass arguments using the **parameter name** so order does not matter:
 
 ```python
-a = 200
-b = 33
-c = 500
+def show_order(item, quantity, price):
+    print(item + " × " + str(quantity) + " = £" + str(price))
 
-if a > b or a > c:
-    print("At least one condition is True")
+show_order(quantity=6, price=3.00, item="Apples")
 ```
 
-**Output:**
+**Expected output:**
 ```
-At least one condition is True
+Apples × 6 = £3.0
 ```
 
-- `a > b` → `200 > 33` → **True**
-- `a > c` → `200 > 500` → False
-- `True or False` → **True** → block runs
+Using keyword arguments makes your code **self-documenting** — anyone reading it knows exactly what each value means.
 
-`or` only needs **one** side to be True.
+---
 
-**Real-world example:** Trigger an alert if temperature is too cold or too hot:
+### 2.6 Default Parameter Values
+
+You can give a parameter a **default value**. If the caller does not provide that argument, the default is used automatically:
 
 ```python
-temperature = 42
+def greet(name, language="English"):
+    if language == "English":
+        print("Hello, " + name + "!")
+    elif language == "Spanish":
+        print("Hola, " + name + "!")
+    elif language == "French":
+        print("Bonjour, " + name + "!")
 
-if temperature < 0 or temperature > 40:
-    print("⚠️ Extreme temperature! Take action.")
-else:
-    print("Temperature is within normal range.")
+greet("Alice")               # uses default: English
+greet("Carlos", "Spanish")   # overrides default
+greet("Marie", "French")     # overrides default
 ```
 
-**Output:**
+**Expected output:**
 ```
-⚠️ Extreme temperature! Take action.
+Hello, Alice!
+Hola, Carlos!
+Bonjour, Marie!
 ```
 
-`or` truth table:
+> 💡 **Rule:** Parameters with defaults must come **after** parameters without defaults in the function definition.
 
-| A | B | A or B |
+```python
+# ❌ WRONG
+def greet(language="English", name):   # SyntaxError
+    pass
+
+# ✅ CORRECT
+def greet(name, language="English"):
+    pass
+```
+
+---
+
+### 2.7 Returning Values with `return`
+
+So far our functions have printed things. But often you want a function to **calculate** a result and **send it back** so your program can use it elsewhere.
+
+The `return` keyword sends a value back to wherever the function was called:
+
+```python
+def add(a, b):
+    result = a + b
+    return result
+
+total = add(10, 25)
+print("The total is:", total)
+```
+
+**Expected output:**
+```
+The total is: 35
+```
+
+**What happens line by line:**
+
+1. `add(10, 25)` is called — `a = 10`, `b = 25`
+2. Inside: `result = 10 + 25` → `result = 35`
+3. `return result` sends `35` back to the caller
+4. `total` receives the returned value `35`
+5. `print(...)` displays it
+
+> 🛑 **After `return`, the function stops.** Any code after `return` in the same function body will never run.
+
+```python
+def demo():
+    return "I am returned"
+    print("This line never runs!")  # unreachable code
+
+value = demo()
+print(value)
+```
+
+**Expected output:**
+```
+I am returned
+```
+
+---
+
+### 2.8 Practical Example — Temperature Converter
+
+```python
+def celsius_to_fahrenheit(celsius):
+    fahrenheit = (celsius * 9 / 5) + 32
+    return fahrenheit
+
+temp_c = 100
+temp_f = celsius_to_fahrenheit(temp_c)
+print(str(temp_c) + "°C = " + str(temp_f) + "°F")
+
+print(str(0) + "°C = " + str(celsius_to_fahrenheit(0)) + "°F")
+print(str(37) + "°C = " + str(celsius_to_fahrenheit(37)) + "°F")
+```
+
+**Expected output:**
+```
+100°C = 212.0°F
+0°C = 32.0°F
+37°C = 98.6°F
+```
+
+> 💡 **Real-world use:** Weather apps, scientific instruments, and cooking sites use this exact type of function. Write it once, use it everywhere.
+
+---
+
+### 2.9 Passing a List as an Argument
+
+Any data type can be passed as an argument, including lists:
+
+```python
+def show_fruits(fruits):
+    for fruit in fruits:
+        print("🍎 " + fruit)
+
+my_fruits = ["Apple", "Banana", "Mango", "Grape"]
+show_fruits(my_fruits)
+```
+
+**Expected output:**
+```
+🍎 Apple
+🍎 Banana
+🍎 Mango
+🍎 Grape
+```
+
+---
+
+## Part 3 – \*args and \*\*kwargs
+
+---
+
+### 3.1 The Problem: What If You Don't Know How Many Arguments There Will Be?
+
+Imagine writing a function that adds numbers. How many numbers should it accept? Two? Five? Twenty?
+
+If you hard-code three parameters, a caller who wants to sum six numbers is stuck. Python solves this with **arbitrary arguments**.
+
+---
+
+### 3.2 \*args — Arbitrary Positional Arguments
+
+Adding a single `*` before a parameter name tells Python: "collect all the extra positional arguments into a **tuple**."
+
+By convention, the name used is `*args`, but any name after `*` works.
+
+```python
+def add_all(*numbers):
+    total = 0
+    for n in numbers:
+        total = total + n
+    return total
+
+print(add_all(1, 2))
+print(add_all(1, 2, 3, 4, 5))
+print(add_all(10, 20, 30, 40, 50, 60))
+```
+
+**Expected output:**
+```
+3
+15
+210
+```
+
+**What is `numbers` here?** It is a **tuple** — an immutable, ordered collection of all the values passed in:
+
+```python
+def inspect_args(*items):
+    print(type(items))   # <class 'tuple'>
+    print(items)
+
+inspect_args("cat", "dog", "fish")
+```
+
+**Expected output:**
+```
+<class 'tuple'>
+('cat', 'dog', 'fish')
+```
+
+---
+
+### 3.3 \*args With Other Parameters
+
+`*args` can be combined with regular parameters. Regular parameters must come **before** `*args`:
+
+```python
+def show_menu(restaurant_name, *dishes):
+    print("Restaurant: " + restaurant_name)
+    print("Today's menu:")
+    for dish in dishes:
+        print("  - " + dish)
+
+show_menu("La Piazza", "Pasta", "Pizza", "Tiramisu", "Risotto")
+```
+
+**Expected output:**
+```
+Restaurant: La Piazza
+Today's menu:
+  - Pasta
+  - Pizza
+  - Tiramisu
+  - Risotto
+```
+
+> 🧠 **How it works:** `"La Piazza"` fills the `restaurant_name` parameter. Everything else — `"Pasta"`, `"Pizza"`, `"Tiramisu"`, `"Risotto"` — is collected into the `dishes` tuple.
+
+---
+
+### 3.4 \*\*kwargs — Arbitrary Keyword Arguments
+
+`**kwargs` does the same thing as `*args`, but for **keyword arguments** (name=value pairs). The double `**` collects them into a **dictionary**.
+
+By convention the name is `**kwargs` (keyword arguments), but you can use any name after `**`.
+
+```python
+def describe_person(**details):
+    print("Person Profile:")
+    for key, value in details.items():
+        print("  " + key + ": " + str(value))
+
+describe_person(name="Sarah", age=28, city="London", job="Engineer")
+```
+
+**Expected output:**
+```
+Person Profile:
+  name: Sarah
+  age: 28
+  city: London
+  job: Engineer
+```
+
+**What is `details` here?** It is a **dictionary**:
+
+```python
+def inspect_kwargs(**info):
+    print(type(info))   # <class 'dict'>
+    print(info)
+
+inspect_kwargs(colour="blue", size=12)
+```
+
+**Expected output:**
+```
+<class 'dict'>
+{'colour': 'blue', 'size': 12}
+```
+
+---
+
+### 3.5 \*\*kwargs — Practical Example: Product Builder
+
+```python
+def create_product(**specs):
+    print("=== New Product ===")
+    for spec, value in specs.items():
+        print(spec.capitalize() + ": " + str(value))
+    print()
+
+create_product(name="Laptop", brand="TechPro", ram="16GB", price=999.99)
+create_product(name="Headphones", brand="SoundWave", colour="Black", wireless=True)
+```
+
+**Expected output:**
+```
+=== New Product ===
+Name: Laptop
+Brand: TechPro
+Ram: 16GB
+Price: 999.99
+
+=== New Product ===
+Name: Headphones
+Brand: SoundWave
+Colour: Black
+Wireless: True
+```
+
+> 💡 **Real-world use:** Web frameworks like Flask and Django use `**kwargs` everywhere. When you create a database model or an HTML element with attributes, the framework accepts them as keyword arguments.
+
+---
+
+### 3.6 Combining Regular, \*args, and \*\*kwargs
+
+You can use all three together in one function. The order **must** be:
+
+```
+def function(regular_params, *args, **kwargs):
+```
+
+```python
+def full_order(table_number, *items, **extras):
+    print("Table " + str(table_number) + " ordered:")
+    for item in items:
+        print("  - " + item)
+    if extras:
+        print("  Special requests:")
+        for key, val in extras.items():
+            print("    " + key + ": " + str(val))
+
+full_order(7, "Pizza", "Salad", "Water", sauce="extra", gluten_free=True)
+```
+
+**Expected output:**
+```
+Table 7 ordered:
+  - Pizza
+  - Salad
+  - Water
+  Special requests:
+    sauce: extra
+    gluten_free: True
+```
+
+---
+
+### 3.7 The \* and \*\* Unpacking Operators in Function Calls
+
+The `*` and `**` can also be used when **calling** a function, to **unpack** a list or dictionary into separate arguments:
+
+```python
+def add(a, b, c):
+    return a + b + c
+
+numbers = [1, 2, 3]
+print(add(*numbers))   # unpacks list into: add(1, 2, 3)
+```
+
+**Expected output:**
+```
+6
+```
+
+```python
+def greet(name, language):
+    print("Hello " + name + " in " + language)
+
+settings = {"name": "Aiko", "language": "Japanese"}
+greet(**settings)   # unpacks dict into: greet(name="Aiko", language="Japanese")
+```
+
+**Expected output:**
+```
+Hello Aiko in Japanese
+```
+
+---
+
+### 3.8 Common Beginner Mistakes with \*args and \*\*kwargs
+
+**Mistake 1 — Wrong order:**
+
+```python
+# ❌ WRONG – **kwargs before *args
+def bad_func(**kwargs, *args):   # SyntaxError
+    pass
+
+# ✅ CORRECT – *args always before **kwargs
+def good_func(*args, **kwargs):
+    pass
+```
+
+**Mistake 2 — Treating \*args as a list (it's a tuple):**
+
+```python
+def my_func(*numbers):
+    numbers.append(99)   # AttributeError! Tuples don't have append
+
+# ✅ CORRECT – convert to list if you need to modify it
+def my_func(*numbers):
+    nums_list = list(numbers)
+    nums_list.append(99)
+    print(nums_list)
+
+my_func(1, 2, 3)
+```
+
+**Expected output:**
+```
+[1, 2, 3, 99]
+```
+
+---
+
+## Part 4 – Python Scope
+
+---
+
+### 4.1 What Is Scope?
+
+**Scope** describes **where in your code a variable is visible and accessible**. Not every variable can be seen from every part of a program — and this is intentional.
+
+**Why does scope exist?**  
+Imagine a huge program with hundreds of functions. If every variable was visible everywhere, any function could accidentally overwrite another function's `total` or `count`. Scope creates **walls** between different parts of code, preventing accidental interference.
+
+**Analogy:** Think of scope like rooms in a house. A lamp in your bedroom (local scope) only lights your bedroom. It does not light the kitchen. The main electricity supply (global scope) powers the entire house.
+
+Python has **four levels of scope**, remembered with the acronym **LEGB**:
+
+| Letter | Name | Where |
 |---|---|---|
-| True | True | **True** |
-| True | False | **True** |
-| False | True | **True** |
-| False | False | **False** |
+| **L** | Local | Inside the current function |
+| **E** | Enclosing | Inside an outer function (for nested functions) |
+| **G** | Global | At the top level of the file |
+| **B** | Built-in | Python's built-in names (e.g., `print`, `len`, `range`) |
+
+We will focus on Local and Global — the two you will encounter most.
 
 ---
 
-### 5.4 The `not` Operator
+### 4.2 Local Scope
 
-`not` **flips** a Boolean — it turns `True` into `False` and `False` into `True`.
-
-```python
-a = 33
-b = 200
-
-if not a > b:
-    print("a is NOT greater than b")
-```
-
-**Output:**
-```
-a is NOT greater than b
-```
-
-- `a > b` → `33 > 200` → False
-- `not False` → **True** → block runs
-
-Another example:
+A variable created **inside a function** is **local** — it only exists while the function is running, and it is invisible outside.
 
 ```python
-is_logged_in = False
+def my_function():
+    local_variable = "I only exist inside this function"
+    print(local_variable)
 
-if not is_logged_in:
-    print("Please log in to continue.")
+my_function()
+print(local_variable)   # NameError! local_variable doesn't exist here
 ```
 
-**Output:**
+**Expected output:**
 ```
-Please log in to continue.
+I only exist inside this function
+Traceback (most recent call last):
+  ...
+NameError: name 'local_variable' is not defined
 ```
 
-`not is_logged_in` is `not False` which is `True`, so the print runs.
+> 🧠 **Why?** When `my_function()` finishes, Python destroys all local variables. They are temporary — like writing on a whiteboard that gets erased when the meeting ends.
 
 ---
 
-### 5.5 Combining `and`, `or`, `not` Together
+### 4.3 Local Variables in Different Functions Don't Interfere
 
-You can combine all three in one condition. Python evaluates them in this precedence order: `not` first, then `and`, then `or`.
+Each function has its **own private workspace**. Two functions can both use a variable called `x` without conflict:
 
 ```python
-age = 25
-has_ticket = True
-is_vip = False
+def function_a():
+    x = 100
+    print("Inside function_a, x =", x)
 
-if age >= 18 and (has_ticket or is_vip):
-    print("Entry granted!")
-else:
-    print("Entry denied.")
+def function_b():
+    x = 999
+    print("Inside function_b, x =", x)
+
+function_a()
+function_b()
 ```
 
-**Output:**
+**Expected output:**
 ```
-Entry granted!
+Inside function_a, x = 100
+Inside function_b, x = 999
 ```
 
-- `age >= 18` → True
-- `has_ticket or is_vip` → `True or False` → True
-- `True and True` → **True** → entry granted
-
-> **Tip:** Use parentheses `( )` to make the grouping of your conditions obvious, just like in maths. This prevents surprises and makes your code easier to read.
+Both functions have their own `x`. They never interfere with each other. This is the power of local scope.
 
 ---
 
-## 🧠 Part 6: Nested `if` Statements
+### 4.4 Global Scope
 
-### 6.1 What is a Nested `if`?
-
-A **nested `if`** is an `if` statement that lives **inside** another `if` statement. When the outer condition is True, the inner condition is then also checked.
-
-> **Real-life analogy:** "If it's the weekend → if it's sunny → go to the beach." The second decision (sunny or not) only matters if the first decision (weekend) is already confirmed.
-
-### 6.2 Basic Nested `if` Example
+A variable created **outside all functions** is **global** — it is visible to all code in the file:
 
 ```python
-x = 41
+greeting = "Good morning"   # global variable
 
-if x > 10:
-    print("Above ten,")
-    if x > 20:
-        print("and also above 20!")
-    else:
-        print("but not above 20.")
+def say_it():
+    print(greeting)         # can READ the global variable
+
+def shout_it():
+    print(greeting.upper()) # can also READ it
+
+say_it()
+shout_it()
 ```
 
-**Output:**
+**Expected output:**
 ```
-Above ten,
-and also above 20!
-```
-
-Trace through:
-- `x > 10` → `41 > 10` → True → enter the outer block
-- `print("Above ten,")` → prints
-- `x > 20` → `41 > 20` → True → enter the inner block
-- `print("and also above 20!")` → prints
-
-Change `x = 15`:
-
-```python
-x = 15
-
-if x > 10:
-    print("Above ten,")
-    if x > 20:
-        print("and also above 20!")
-    else:
-        print("but not above 20.")
-```
-
-**Output:**
-```
-Above ten,
-but not above 20.
-```
-
-The inner `else` runs because `x > 20` is now False.
-
-Change `x = 5`:
-
-```python
-x = 5
-
-if x > 10:
-    print("Above ten,")
-    if x > 20:
-        print("and also above 20!")
-    else:
-        print("but not above 20.")
-```
-
-**Output:**
-```
-(nothing)
-```
-
-The outer condition `x > 10` is False, so nothing at all runs — including the inner `if`.
-
-### 6.3 Nested `if` — Practical Example: Login System
-
-```python
-username = "admin"
-password = "secret123"
-
-input_user = "admin"
-input_pass = "secret123"
-
-if input_user == username:
-    print("Username found.")
-    if input_pass == password:
-        print("Password correct. Welcome!")
-    else:
-        print("Wrong password. Access denied.")
-else:
-    print("Username not found. Access denied.")
-```
-
-**Output:**
-```
-Username found.
-Password correct. Welcome!
-```
-
-Change `input_pass = "wrongpass"`:
-
-**Output:**
-```
-Username found.
-Wrong password. Access denied.
-```
-
-Change `input_user = "hacker"`:
-
-**Output:**
-```
-Username not found. Access denied.
-```
-
-### 6.4 Three-Level Nested `if` — Ticket Pricing
-
-```python
-age = 25
-is_student = False
-is_member = True
-
-if age >= 60:
-    ticket_price = 5.00
-    category = "Senior"
-elif age < 12:
-    ticket_price = 3.00
-    category = "Child"
-else:
-    if is_student:
-        ticket_price = 8.00
-        category = "Student"
-    elif is_member:
-        ticket_price = 10.00
-        category = "Member"
-    else:
-        ticket_price = 15.00
-        category = "Regular Adult"
-
-print(f"Category: {category}")
-print(f"Ticket Price: ${ticket_price:.2f}")
-```
-
-**Output:**
-```
-Category: Member
-Ticket Price: $10.00
-```
-
-> **Thinking Prompt:** Change `age = 8` and trace through the code. Which branch runs? What is the price?
-
----
-
-## 🧠 Part 7: The `pass` Statement
-
-### 7.1 Why Does `pass` Exist?
-
-In Python, an `if` block **cannot be empty**. If you write an `if` with no code inside, Python will give you a `SyntaxError`.
-
-But there are times when:
-- You are writing your code structure first and filling in details later
-- You intentionally want a condition to do nothing (a placeholder)
-- You are testing and haven't decided what to put inside yet
-
-For all these situations, Python provides the `pass` statement — a keyword that means **"do nothing here"** and simply satisfies Python's requirement that the block must contain something.
-
-### 7.2 The Problem Without `pass`
-
-```python
-# ❌ This causes a SyntaxError — empty if block not allowed
-a = 33
-b = 200
-
-if b > a:
-    # TODO: handle this case later
-
-print("Done")
-```
-
-**Error:**
-```
-SyntaxError: expected an indented block after 'if' statement
-```
-
-### 7.3 The Solution — Using `pass`
-
-```python
-# ✅ CORRECT — pass acts as a placeholder
-a = 33
-b = 200
-
-if b > a:
-    pass    # nothing happens here — will be filled in later
-
-print("Done")
-```
-
-**Output:**
-```
-Done
-```
-
-The `pass` statement does nothing — it just prevents the empty-block error. The program continues normally to `print("Done")`.
-
-### 7.4 `pass` in `elif` and `else`
-
-```python
-score = 72
-
-if score >= 90:
-    print("Grade A")
-elif score >= 70:
-    pass    # placeholder — will add logging code later
-elif score >= 50:
-    print("Grade C")
-else:
-    print("Grade F")
-```
-
-**Output:**
-```
-(nothing)
-```
-
-The score `72` matches `score >= 70`, so `pass` runs — which does nothing — and the program ends.
-
-### 7.5 Real-World Use of `pass`
-
-`pass` is very common when writing a program's skeleton structure before filling in the details:
-
-```python
-user_role = "guest"
-
-if user_role == "admin":
-    pass    # TODO: show admin dashboard
-elif user_role == "editor":
-    pass    # TODO: show editor tools
-elif user_role == "guest":
-    print("Welcome, guest! Limited access only.")
-else:
-    pass    # TODO: handle unknown roles
-```
-
-**Output:**
-```
-Welcome, guest! Limited access only.
-```
-
-The code structure is in place; `pass` keeps it syntactically valid while you develop each branch.
-
----
-
-## 🛠️ Guided Practice Exercises
-
-### Exercise 1: Temperature Checker
-
-**Objective:** Use `if`, `elif`, and `else` to classify a temperature.
-
-**Scenario:** Build a simple weather advisory system.
-
-```python
-temperature = 38  # degrees Celsius
-
-if temperature > 40:
-    print("Extreme heat! Stay indoors and drink water.")
-elif temperature > 30:
-    print("Hot day. Stay hydrated.")
-elif temperature > 20:
-    print("Warm and comfortable.")
-elif temperature > 10:
-    print("Cool. A light jacket is recommended.")
-elif temperature > 0:
-    print("Cold. Wear a coat.")
-else:
-    print("Freezing! Below zero temperatures.")
-```
-
-**Expected Output:**
-```
-Hot day. Stay hydrated.
-```
-
-**What-if Challenge:** Run the code with temperatures of: `-5`, `5`, `15`, `25`, `35`, `45`. Confirm each message is correct.
-
-**Self-check Questions:**
-- How many `elif` branches are in this code?
-- What happens if two conditions could both be True? Which one runs?
-- Why must `temperature > 40` be checked before `temperature > 30`?
-
----
-
-### Exercise 2: Voting Eligibility Checker
-
-**Objective:** Combine `and`, `or`, `not` to validate multiple requirements.
-
-**Scenario:** A person can vote if they are 18 or older AND are a registered citizen.
-
-```python
-age = 20
-is_citizen = True
-is_registered = False
-
-print("=== Voting Eligibility Check ===")
-
-if age >= 18 and is_citizen:
-    if is_registered:
-        print("✅ You are eligible and registered to vote!")
-    else:
-        print("⚠️  You are eligible but NOT registered. Please register first.")
-else:
-    if not is_citizen:
-        print("❌ You must be a citizen to vote.")
-    elif age < 18:
-        print(f"❌ You must be at least 18. You are {age}.")
-    else:
-        print("❌ You do not meet voting requirements.")
-```
-
-**Expected Output:**
-```
-=== Voting Eligibility Check ===
-⚠️  You are eligible but NOT registered. Please register first.
-```
-
-**What-if Challenges:**
-- Change `is_registered = True`. What output do you get?
-- Change `age = 16`. What output do you get?
-- Change `is_citizen = False`. What output do you get?
-
----
-
-### Exercise 3: ATM Machine Simulation
-
-**Objective:** Use nested `if` statements with multiple conditions.
-
-**Scenario:** Simulate a simple ATM withdrawal.
-
-```python
-balance = 5000.00
-pin_correct = True
-withdrawal_amount = 2000
-
-print("=== ATM Machine ===")
-
-if pin_correct:
-    print("PIN accepted.")
-    if withdrawal_amount <= 0:
-        print("❌ Invalid amount. Enter a positive number.")
-    elif withdrawal_amount > balance:
-        print(f"❌ Insufficient funds. Your balance is ₦{balance:.2f}")
-    elif withdrawal_amount > 3000:
-        print("❌ Withdrawal limit is ₦3,000 per transaction.")
-    else:
-        balance -= withdrawal_amount
-        print(f"✅ Dispensing ₦{withdrawal_amount:.2f}")
-        print(f"   New balance: ₦{balance:.2f}")
-else:
-    print("❌ Incorrect PIN. Card retained.")
-```
-
-**Expected Output:**
-```
-=== ATM Machine ===
-PIN accepted.
-✅ Dispensing ₦2000.00
-   New balance: ₦3000.00
-```
-
-**What-if Challenges:**
-- Set `withdrawal_amount = 4000`. Which error runs?
-- Set `balance = 500`. Which error runs?
-- Set `pin_correct = False`. What happens?
-
----
-
-### Exercise 4: Shorthand Practice
-
-**Objective:** Rewrite conditions as one-liners.
-
-Rewrite these multi-line blocks as shorthand:
-
-**Problem 1:**
-```python
-x = 15
-
-# Long form
-if x > 10:
-    print("Greater")
-else:
-    print("Not greater")
-```
-
-**Shorthand solution:**
-```python
-x = 15
-print("Greater") if x > 10 else print("Not greater")
-```
-
-**Output:**
-```
-Greater
-```
-
-**Problem 2:** Assign a label based on a number.
-
-```python
-number = -5
-
-# Long form
-if number > 0:
-    label = "Positive"
-elif number < 0:
-    label = "Negative"
-else:
-    label = "Zero"
-print(label)
-```
-
-**Shorthand solution:**
-```python
-number = -5
-label = "Positive" if number > 0 else "Negative" if number < 0 else "Zero"
-print(label)
-```
-
-**Output:**
-```
-Negative
+Good morning
+GOOD MORNING
 ```
 
 ---
 
-## 🚀 Mini Project: Student Report Card Generator
+### 4.5 Can a Function Modify a Global Variable?
 
-Let's combine every concept from this lesson into one complete project.
-
-**Project Goal:** Build an interactive report card generator that takes a student's scores, assigns grades, and produces a formatted report with comments.
-
----
-
-### Stage 1: Setup — Define the Student Data
+By default, **reading** a global variable inside a function is fine. But **modifying** it is blocked — Python creates a new local variable instead:
 
 ```python
-student_name = "Adaeze Okonkwo"
-scores = {
-    "Mathematics":   78,
-    "English":       85,
-    "Science":       91,
-    "History":       62,
-    "Computer":      95,
-}
+counter = 0   # global
+
+def increment():
+    counter = counter + 1   # ❌ UnboundLocalError!
+
+increment()
 ```
 
+**Why the error?** Python sees `counter =` on the left side of `=` inside the function, assumes you mean a new **local** variable, then tries to read the (not-yet-created local) `counter` on the right side — and fails.
+
 ---
 
-### Stage 2: Grade and Comment Assignment Function
+### 4.6 The `global` Keyword
+
+To tell Python "I want to modify the actual global variable, not create a local one," use the `global` keyword:
 
 ```python
-def get_grade_and_comment(score):
-    if score >= 90:
-        grade = "A"
-        comment = "Excellent"
-    elif score >= 80:
-        grade = "B"
-        comment = "Very Good"
-    elif score >= 70:
-        grade = "C"
-        comment = "Good"
-    elif score >= 60:
-        grade = "D"
-        comment = "Pass"
-    elif score >= 50:
-        grade = "E"
-        comment = "Fair"
-    else:
-        grade = "F"
-        comment = "Fail — Needs Support"
-    return grade, comment
+counter = 0   # global
+
+def increment():
+    global counter             # declare intent to use the global
+    counter = counter + 1
+    print("Counter:", counter)
+
+increment()
+increment()
+increment()
+print("Final counter:", counter)
 ```
 
----
+**Expected output:**
+```
+Counter: 1
+Counter: 2
+Counter: 3
+Final counter: 3
+```
 
-### Stage 3: Calculate Statistics
+> ⚠️ **Use `global` sparingly.** Overusing `global` is considered bad practice because it makes code hard to trace and debug. The professional approach is to **pass values as arguments** and **return results** instead.
+
+**Professional alternative to `global`:**
 
 ```python
+# ❌ Using global (not ideal)
 total = 0
-highest_score = 0
-lowest_score = 100
-highest_subject = ""
-lowest_subject = ""
+def add_to_total(n):
+    global total
+    total += n
 
-for subject, score in scores.items():
-    total += score
-    if score > highest_score:
-        highest_score = score
-        highest_subject = subject
-    if score < lowest_score:
-        lowest_score = score
-        lowest_subject = subject
+# ✅ Better approach – pass and return
+def add_to_total(current_total, n):
+    return current_total + n
 
-average = total / len(scores)
+total = 0
+total = add_to_total(total, 5)
+total = add_to_total(total, 10)
+print(total)  # 15
 ```
 
 ---
 
-### Stage 4: Overall Performance Decision
+### 4.7 Local Takes Priority Over Global
+
+If a local variable and a global variable share the same name, the **local one wins inside the function**:
 
 ```python
-if average >= 80:
-    overall = "DISTINCTION"
-    overall_comment = "Outstanding performance!"
-elif average >= 65:
-    overall = "CREDIT"
-    overall_comment = "Good performance. Keep it up!"
-elif average >= 50:
-    overall = "PASS"
-    overall_comment = "Adequate performance. Room for improvement."
-else:
-    overall = "FAIL"
-    overall_comment = "Needs significant improvement."
+name = "Global Name"
 
-# Attendance bonus check
-attendance = 98
-if attendance >= 95 and overall != "FAIL":
-    attendance_note = "✅ Perfect attendance bonus applied."
-else:
-    attendance_note = "⚠️  Attendance below 95%. No bonus."
+def show_name():
+    name = "Local Name"   # this is a NEW local variable
+    print(name)
+
+show_name()
+print(name)   # global variable unchanged
+```
+
+**Expected output:**
+```
+Local Name
+Global Name
+```
+
+> 🧠 **Notice:** Assigning inside the function did NOT change the global `name`. The global is completely untouched.
+
+---
+
+### 4.8 The `nonlocal` Keyword (Bonus: Enclosing Scope)
+
+When you have a function **inside another function** (a nested function), the inner function can access the outer function's variables as **enclosing scope**. To modify them, use `nonlocal`:
+
+```python
+def outer():
+    message = "Hello from outer"
+
+    def inner():
+        nonlocal message
+        message = "Modified by inner"
+        print("Inner says:", message)
+
+    inner()
+    print("Outer says:", message)
+
+outer()
+```
+
+**Expected output:**
+```
+Inner says: Modified by inner
+Outer says: Modified by inner
+```
+
+> This is an advanced pattern. You will encounter it when learning about **closures** and **decorators** — but `nonlocal` follows exactly the same logic as `global`, just one level in.
+
+---
+
+### 4.9 Built-in Scope
+
+Python has many **built-in** names that are always available — like `print`, `len`, `range`, `type`, `int`, `str`, `list`. These live in the **built-in scope**, the outermost layer:
+
+```python
+print(len("Hello"))   # 'len' and 'print' are built-in
+print(type(42))       # 'type' is built-in
+```
+
+**Expected output:**
+```
+5
+<class 'int'>
+```
+
+> ⚠️ **Never shadow built-in names!** Don't create variables called `list`, `print`, `input`, `id`, etc. — this overwrites the built-in and causes confusing errors.
+
+```python
+# ❌ WRONG – never do this
+list = [1, 2, 3]       # You've now overwritten the built-in 'list'
+print(list([1,2,3]))   # TypeError – list is now just a list object, not a function
+
+# ✅ CORRECT – use a descriptive name
+my_list = [1, 2, 3]
 ```
 
 ---
 
-### Stage 5: Print the Report
+## Guided Practice Exercises
+
+---
+
+### Exercise 1 – Grading Function
+
+**Objective:** Write a function that takes a student's score and returns a letter grade.
+
+**Scenario:** A teacher needs a quick tool to convert any numeric score to a grade.
+
+**Steps:**
+
+1. Define a function called `get_grade` that accepts one parameter: `score`
+2. Inside, use `if / elif / else` to determine the grade:
+   - 90–100 → `"A"`
+   - 80–89 → `"B"`
+   - 70–79 → `"C"`
+   - 60–69 → `"D"`
+   - Below 60 → `"F"`
+3. Return the grade letter
+4. Call the function with at least five different scores and print each result
+
+**Hint:** Use `return` to send the grade back, then `print()` outside the function.
+
+**Solution:**
 
 ```python
-print("=" * 52)
-print("           STUDENT REPORT CARD")
-print("=" * 52)
-print(f"  Student:  {student_name}")
-print(f"  Attendance: {attendance}%")
-print("=" * 52)
-print(f"  {'SUBJECT':<16} {'SCORE':>6} {'GRADE':>6}  COMMENT")
-print("-" * 52)
+def get_grade(score):
+    if score >= 90:
+        return "A"
+    elif score >= 80:
+        return "B"
+    elif score >= 70:
+        return "C"
+    elif score >= 60:
+        return "D"
+    else:
+        return "F"
 
-for subject, score in scores.items():
-    grade, comment = get_grade_and_comment(score)
-    print(f"  {subject:<16} {score:>6} {grade:>6}  {comment}")
+scores = [95, 83, 72, 61, 45, 100, 59]
+for s in scores:
+    print("Score:", s, "→ Grade:", get_grade(s))
+```
 
-print("-" * 52)
-print(f"  {'TOTAL':<16} {total:>6}")
-print(f"  {'AVERAGE':<16} {average:>6.1f}")
-print("=" * 52)
-print(f"  Overall Result:  {overall}")
-print(f"  Comment:         {overall_comment}")
-print(f"  {attendance_note}")
-print(f"  Top Subject:     {highest_subject} ({highest_score})")
-print(f"  Weakest Subject: {lowest_subject} ({lowest_score})")
-print("=" * 52)
+**Expected output:**
+```
+Score: 95 → Grade: A
+Score: 83 → Grade: B
+Score: 72 → Grade: C
+Score: 61 → Grade: D
+Score: 45 → Grade: F
+Score: 100 → Grade: A
+Score: 59 → Grade: F
+```
+
+**Self-check questions:**
+- What grade does `get_grade(60)` return? Why?
+- What happens if you pass `get_grade(105)`? What should you do to handle that?
+
+---
+
+### Exercise 2 – Shopping Bill with \*args
+
+**Objective:** Use `*args` to calculate a total from any number of prices.
+
+**Scenario:** A checkout system needs to add up a variable number of item prices.
+
+```python
+def calculate_bill(customer_name, *prices):
+    total = sum(prices)
+    print("Customer: " + customer_name)
+    print("Items: " + str(len(prices)))
+    print("Total: £" + str(round(total, 2)))
+    print()
+
+calculate_bill("Alice", 4.99, 1.49, 7.25)
+calculate_bill("Bob", 12.99, 3.49, 8.00, 2.50, 1.99)
+calculate_bill("Carol", 35.00)
+```
+
+**Expected output:**
+```
+Customer: Alice
+Items: 3
+Total: £13.73
+
+Customer: Bob
+Items: 5
+Total: £28.97
+
+Customer: Carol
+Items: 1
+Total: £35.0
+```
+
+**What-if challenge:** What happens if you call `calculate_bill("Dave")` with no prices? Try it. Is the result sensible? How would you handle an empty bill?
+
+---
+
+### Exercise 3 – User Profile with \*\*kwargs
+
+**Objective:** Use `**kwargs` to build flexible user profiles.
+
+```python
+def create_profile(username, **attributes):
+    print("=== Profile: " + username + " ===")
+    for key, value in attributes.items():
+        print("  " + key.replace("_", " ").title() + ": " + str(value))
+    print()
+
+create_profile("coder99", age=22, city="Berlin", language="Python", years_experience=3)
+create_profile("data_queen", age=30, field="Data Science", tools=["pandas", "numpy", "sklearn"])
+```
+
+**Expected output:**
+```
+=== Profile: coder99 ===
+  Age: 22
+  City: Berlin
+  Language: Python
+  Years Experience: 3
+
+=== Profile: data_queen ===
+  Age: 30
+  Field: Data Science
+  Tools: ['pandas', 'numpy', 'sklearn']
 ```
 
 ---
 
-### Complete Final Output
+### Exercise 4 – Scope Experiment
 
-```
-====================================================
-           STUDENT REPORT CARD
-====================================================
-  Student:  Adaeze Okonkwo
-  Attendance: 98%
-====================================================
-  SUBJECT          SCORE  GRADE  COMMENT
-----------------------------------------------------
-  Mathematics         78      C  Good
-  English             85      B  Very Good
-  Science             91      A  Excellent
-  History             62      D  Pass
-  Computer            95      A  Excellent
-----------------------------------------------------
-  TOTAL              411
-  AVERAGE           82.2
-====================================================
-  Overall Result:  DISTINCTION
-  Comment:         Outstanding performance!
-  ✅ Perfect attendance bonus applied.
-  Top Subject:     Computer (95)
-  Weakest Subject: History (62)
-====================================================
+**Objective:** Understand what happens when local and global variables share a name.
+
+```python
+x = "I am global"
+
+def test_local():
+    x = "I am local"
+    print("Inside function:", x)
+
+test_local()
+print("Outside function:", x)
 ```
 
-**Reflection Questions:**
-- Which concept (`if`, `elif`, `else`, `and`, nested `if`) did the grade function use?
-- Why did we check `overall != "FAIL"` in the attendance bonus condition?
-- What would happen if all 5 subjects had a score of 40?
-- Can you add a **merit badge** that prints only if the student scored above 90 in at least 2 subjects?
+**Expected output:**
+```
+Inside function: I am local
+Outside function: I am global
+```
+
+**Questions:**
+- Did the function change the global `x`? Why not?
+- What would you add to the function to actually change the global `x`?
 
 ---
 
-## ⚠️ Common Beginner Mistakes
+## Mini Project – Student Report Generator
 
-### Mistake 1: Using `=` Instead of `==`
-
-```python
-# ❌ WRONG — single = is assignment, not comparison
-x = 5
-if x = 5:       # SyntaxError!
-    print("Five")
-
-# ✅ CORRECT — double == for comparison
-if x == 5:
-    print("Five")
-```
-
-**Output:**
-```
-Five
-```
+This project combines functions, arguments, `*args`, `**kwargs`, and scope into one realistic application.
 
 ---
 
-### Mistake 2: Forgetting the Colon `:`
+### Project Goal
 
-```python
-# ❌ WRONG — missing colon causes SyntaxError
-if x > 0
-    print("Positive")
-
-# ✅ CORRECT
-if x > 0:
-    print("Positive")
-```
+Build a **Student Report Generator** that:
+1. Accepts student data (name, scores for multiple subjects, personal notes)
+2. Calculates the average score
+3. Assigns a letter grade
+4. Prints a formatted report
 
 ---
 
-### Mistake 3: Wrong Indentation
+### Stage 1 – Helper Functions (Setup)
 
 ```python
-# ❌ WRONG — mixed indentation levels cause IndentationError
-x = 10
-if x > 5:
-    print("Greater")      # 4 spaces
-      print("than five")  # 6 spaces — mismatch!
+def calculate_average(*scores):
+    """Calculate the average of any number of scores."""
+    if len(scores) == 0:
+        return 0
+    return round(sum(scores) / len(scores), 1)
 
-# ✅ CORRECT — all lines in the same block have the same indentation
-if x > 5:
-    print("Greater")
-    print("than five")
+def get_grade(average):
+    """Convert an average score to a letter grade."""
+    if average >= 90:
+        return "A – Excellent"
+    elif average >= 80:
+        return "B – Good"
+    elif average >= 70:
+        return "C – Satisfactory"
+    elif average >= 60:
+        return "D – Needs Improvement"
+    else:
+        return "F – Unsatisfactory"
+
+# Test Stage 1
+avg = calculate_average(85, 90, 78, 92)
+print("Average:", avg)
+print("Grade:", get_grade(avg))
+```
+
+**Expected milestone output:**
+```
+Average: 86.2
+Grade: B – Good
 ```
 
 ---
 
-### Mistake 4: `elif` / `else` Without a Preceding `if`
+### Stage 2 – Report Builder (Core Logic)
 
 ```python
-# ❌ WRONG — else without if
-score = 80
-else:
-    print("Fail")   # SyntaxError — else must follow an if block
+def generate_report(student_name, *scores, **subject_scores):
+    """
+    Generate a full student report.
+    
+    student_name  : the student's name (str)
+    *scores       : optional raw scores as positional args
+    **subject_scores : subject name = score pairs as keyword args
+    """
+    print("=" * 40)
+    print("STUDENT REPORT")
+    print("=" * 40)
+    print("Name: " + student_name)
+    print()
 
-# ✅ CORRECT
-if score >= 50:
-    print("Pass")
-else:
-    print("Fail")
+    # Show subject-by-subject breakdown if provided
+    if subject_scores:
+        print("Subject Scores:")
+        all_scores = []
+        for subject, score in subject_scores.items():
+            print("  " + subject.capitalize() + ": " + str(score) + "%")
+            all_scores.append(score)
+        avg = calculate_average(*all_scores)
+
+    # Fall back to raw positional scores
+    elif scores:
+        print("Scores: " + str(scores))
+        avg = calculate_average(*scores)
+    else:
+        print("No scores provided.")
+        avg = 0
+
+    print()
+    print("Average Score: " + str(avg) + "%")
+    print("Final Grade:   " + get_grade(avg))
+    print("=" * 40)
+    print()
+
+# Test Stage 2
+generate_report("Emma Clarke",
+                maths=88, science=92, english=75, history=84, art=97)
+
+generate_report("Liam Patel",
+                maths=65, science=70, english=60, history=55, art=72)
+```
+
+**Expected milestone output:**
+```
+========================================
+STUDENT REPORT
+========================================
+Name: Emma Clarke
+
+Subject Scores:
+  Maths: 88%
+  Science: 92%
+  English: 75%
+  History: 84%
+  Art: 97%
+
+Average Score: 87.2%
+Final Grade:   B – Good
+========================================
+
+========================================
+STUDENT REPORT
+========================================
+Name: Liam Patel
+
+Subject Scores:
+  Maths: 65%
+  Science: 70%
+  English: 60%
+  History: 55%
+  Art: 72%
+
+Average Score: 64.4%
+Final Grade:   D – Needs Improvement
+========================================
 ```
 
 ---
 
-### Mistake 5: Wrong Order in `elif` Chains
+### Stage 3 – Batch Reporting (Final Output)
 
 ```python
-# ❌ WRONG — least specific condition first swallows everything
-score = 95
-if score >= 50:
-    print("Pass")    # This prints for ALL passing scores!
-elif score >= 90:
-    print("A")       # This NEVER runs — already caught above
+def print_class_summary(class_name, *student_reports):
+    """Print a summary table for all students."""
+    print()
+    print("CLASS SUMMARY: " + class_name)
+    print("-" * 40)
+    for student in student_reports:
+        name, avg = student
+        print("  {:<20} {:.1f}%  {}".format(name, avg, get_grade(avg)[:1]))
+    print("-" * 40)
+    print()
 
-# ✅ CORRECT — most specific condition first
-if score >= 90:
-    print("A")
-elif score >= 50:
-    print("Pass")
+# Full batch run
+students = [
+    ("Emma Clarke", 88, 92, 75, 84, 97),
+    ("Liam Patel", 65, 70, 60, 55, 72),
+    ("Sofia Nguyen", 95, 98, 91, 93, 96),
+    ("Marcus Webb", 72, 68, 80, 74, 78),
+]
+
+summaries = []
+for name, *scores in students:
+    avg = calculate_average(*scores)
+    summaries.append((name, avg))
+
+print_class_summary("Year 10 Science Group", *summaries)
 ```
 
-**Output of correct version:**
+**Expected final output:**
 ```
-A
+CLASS SUMMARY: Year 10 Science Group
+----------------------------------------
+  Emma Clarke         87.2%  B
+  Liam Patel          64.4%  D
+  Sofia Nguyen        94.6%  A
+  Marcus Webb         74.4%  C
+----------------------------------------
 ```
+
+**Reflection questions:**
+- Where is `calculate_average` defined, and why can all functions call it?
+- What scope does `class_name` belong to inside `print_class_summary`?
+- How would you modify the project to also calculate and print the class average?
+
+**Optional extensions:**
+- Add a `pass_fail` field based on whether the average is ≥ 60
+- Sort students from highest to lowest average before printing
+- Allow the teacher to add a custom comment per student using `**kwargs`
 
 ---
 
-### Mistake 6: Confusing `and` / `or` Logic
+## Common Beginner Mistakes — Full Summary
 
-```python
-# ❌ WRONG — thinking "not zero and not negative" means both conditions
-x = -5
-if x != 0 and x > 0:    # This means POSITIVE (not zero AND greater than zero)
-    print("Positive non-zero")
-else:
-    print("Zero or negative")   # This runs for x = -5
-
-# If you want "not zero OR not negative" — be explicit:
-if x != 0 or x > 0:
-    print("Non-zero or positive")
-```
-
----
-
-### Mistake 7: Empty `if` Block (Forgetting `pass`)
-
-```python
-# ❌ WRONG — empty block causes SyntaxError
-temperature = 25
-if temperature > 100:
-    # TODO: handle extreme heat
-print("Done")   # Python sees this and gets confused
-
-# ✅ CORRECT — use pass as a placeholder
-if temperature > 100:
-    pass    # intentionally empty for now
-print("Done")
-```
-
-**Output:**
-```
-Done
-```
+| Mistake | Example | Fix |
+|---|---|---|
+| Defining but not calling a function | `def greet(): print("Hi")` with no call | Add `greet()` after the definition |
+| Wrong indentation | `def f():` then `print(...)` at column 0 | Indent the body with 4 spaces |
+| Passing wrong number of arguments | `def add(a, b): ...` called as `add(1)` | Match the number of arguments to parameters |
+| Confusing `print` with `return` | Function prints but you try to store the result | Use `return` for values you need to use later |
+| Wrong order: \*\*kwargs before \*args | `def f(**kw, *ar)` | Must be `def f(*ar, **kw)` |
+| Modifying a global without `global` keyword | `count = 0` → `def f(): count += 1` | Add `global count` inside the function |
+| Shadowing built-in names | `list = [1,2,3]` | Use descriptive names like `my_list` |
+| Treating \*args as a list | `args.append(x)` | `args` is a tuple; convert with `list(args)` first |
+| Default parameter before non-default | `def f(x=1, y)` | Non-defaults must come first: `def f(y, x=1)` |
 
 ---
 
-## 💭 Reflection Questions
+## Reflection Questions
 
-Test your understanding before moving on:
-
-1. What is the difference between `=` and `==` in Python?
-2. Why does Python use **indentation** to define code blocks instead of curly braces `{ }`?
-3. In an `if...elif...else` chain, how many blocks can ever run at one time?
-4. What is the output of this code?
-   ```python
-   x = 50
-   if x > 100:
-       print("A")
-   elif x > 50:
-       print("B")
-   elif x == 50:
-       print("C")
-   else:
-       print("D")
-   ```
-5. What does `not True` evaluate to?
-6. When would you choose `and` over `or`?
-7. Write a one-line ternary expression that prints `"Even"` if a number is divisible by 2, else `"Odd"`.
-8. What is the purpose of the `pass` statement?
-9. Can an `if` statement exist inside another `if` statement? What is this called?
-10. Why is the order of `elif` conditions important? Give an example where the wrong order produces a bug.
+1. What is the difference between a **parameter** and an **argument**? Give your own example.
+2. When would you choose `*args` over a regular list parameter?
+3. When would `**kwargs` be more useful than a regular dictionary parameter?
+4. Why is it generally better to use `return` than `global`?
+5. A local variable has the same name as a global variable. Which one does the function use? Why?
+6. What does LEGB stand for, and in what order does Python search these scopes?
+7. What error do you get if you try to use a local variable outside its function?
+8. Why is it a bad idea to name your variable `list` or `print`?
 
 ---
 
-## ✅ Completion Checklist
+## Completion Checklist
 
-Before moving to the next lesson, confirm you can:
+Before moving on, confirm you can do all of the following:
 
-- [ ] Write a basic `if` statement that runs code only when a condition is True
-- [ ] Use `else` to handle the False case
-- [ ] Use `elif` for multiple alternative conditions
-- [ ] Correctly order `elif` conditions from most specific to least specific
-- [ ] Write shorthand one-line `if` and `if...else` expressions
-- [ ] Use the ternary form to assign a value based on a condition
-- [ ] Combine conditions with `and` (both must be True)
-- [ ] Combine conditions with `or` (at least one must be True)
-- [ ] Flip a Boolean with `not`
-- [ ] Write nested `if` statements (an `if` inside an `if`)
-- [ ] Use `pass` as a placeholder for empty blocks
-- [ ] Avoid the 7 common mistakes listed above
-- [ ] Complete all 4 guided exercises
-- [ ] Complete the Student Report Card mini project
+- [ ] Define and call a function using `def` and `()`
+- [ ] Pass one or more arguments to a function
+- [ ] Use both positional and keyword arguments
+- [ ] Set default parameter values
+- [ ] Use `return` to send a value back from a function
+- [ ] Use `*args` to accept a variable number of positional arguments
+- [ ] Use `**kwargs` to accept a variable number of keyword arguments
+- [ ] Combine regular parameters, `*args`, and `**kwargs` in the correct order
+- [ ] Explain the difference between local and global scope
+- [ ] Use the `global` keyword correctly (and know when NOT to)
+- [ ] Explain the LEGB rule
+- [ ] Avoid shadowing Python built-in names
 
 ---
 
-## 📋 Lesson Summary
+## Lesson Summary
 
-Here's everything from Lesson 15, condensed for quick review:
-
-**The `if` statement — run code only when True:**
-```python
-if condition:
-    code runs here
-```
-
-**The `else` — run code when condition is False:**
-```python
-if condition:
-    runs if True
-else:
-    runs if False
-```
-
-**The `elif` — check multiple conditions in order:**
-```python
-if condition_1:
-    runs if condition_1 is True
-elif condition_2:
-    runs if condition_2 is True (and condition_1 was False)
-else:
-    runs if nothing above matched
-```
-
-**Shorthand — one-liner forms:**
-```python
-if condition: action                            # one-line if
-print("A") if condition else print("B")        # one-line if/else
-x = "Yes" if condition else "No"               # ternary assignment
-```
-
-**Logical operators — combining conditions:**
-```python
-if a > 0 and b > 0:    # both must be True
-if a > 0 or b > 0:     # at least one must be True
-if not condition:       # reverses True/False
-```
-
-**Nested `if` — decisions inside decisions:**
-```python
-if outer_condition:
-    if inner_condition:
-        code runs only if BOTH are True
-```
-
-**`pass` — an empty placeholder:**
-```python
-if condition:
-    pass    # does nothing — prevents SyntaxError in empty blocks
-```
-
-**Key rules to always remember:**
-- Use `==` for comparison, `=` for assignment
-- Every `if` / `elif` / `else` line ends with a colon `:`
-- Code inside a block must be consistently indented
-- `elif` order matters — most specific conditions go first
-- `else` is optional; `elif` is optional; `if` is required
+| Concept | Key Point | Keyword |
+|---|---|---|
+| **Function definition** | Write once, run many times | `def` |
+| **Calling a function** | Execute the function by name + `()` | `function_name()` |
+| **Parameters** | Named slots in the function definition | `def f(param):` |
+| **Arguments** | Values passed when calling | `f(value)` |
+| **Positional args** | Matched by order | `f(1, 2)` |
+| **Keyword args** | Matched by name | `f(x=1, y=2)` |
+| **Default values** | Used when no argument provided | `def f(x=5):` |
+| **Return value** | Send a result back to the caller | `return` |
+| **\*args** | Collect extra positional args into a tuple | `*args` |
+| **\*\*kwargs** | Collect extra keyword args into a dict | `**kwargs` |
+| **Local scope** | Variable exists only inside its function | — |
+| **Global scope** | Variable exists at the top level | — |
+| **`global` keyword** | Modify a global variable from inside a function | `global x` |
+| **LEGB rule** | Python's scope search order | Local → Enclosing → Global → Built-in |
 
 ---
 
-*You are now ready for Lesson 16: Python While Loops!*
+> ✅ **You have completed Lesson 15.** You can now define reusable functions, pass any amount of data into them flexibly, and fully understand where your variables live in a Python program. These skills are the foundation of every real Python project — from data analysis scripts to web applications.

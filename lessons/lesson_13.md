@@ -1,1463 +1,1456 @@
 ---
 render_with_liquid: false
-title: "Lesson 13: Python Sets — Everything You Need to Know"
+title: "Lesson 13: Advanced Conditionals — Shorthand If, Logical Operators, Nested If, Pass, and Match"
 nav_order: 13
 ---
 
-# Lesson 13: Python Sets — Everything You Need to Know
+# Lesson 13: Advanced Conditionals — Shorthand If, Logical Operators, Nested If, Pass, and Match
 
 ---
 
 ## Lesson Introduction
 
-Welcome to Lesson 13! In this lesson, you will learn all about **Python Sets** — one of Python's four built-in collection types.
+Welcome to Lesson 13! So far you have been making decisions in Python using `if`, `elif`, and `else`. That is a great start. Now we are going to go deeper and discover five powerful tools that professional Python developers use every single day.
 
-By the end of this lesson, you will be able to:
-- Create and use sets
-- Understand what makes sets unique (no duplicates, no order, no index)
-- Access, add, and remove items from sets
-- Loop through sets
-- Join sets together using several powerful methods
-- Work with frozensets (the "frozen" version of a set)
-- Use all built-in set methods confidently
-- Complete exercises and a mini project using sets
+By the end of this lesson you will be able to:
 
-Even if you have never heard of the word "set" in programming before, **that is completely fine**. We will start from zero and build up to real-world usage step by step.
+- Write single-line `if` and `if/else` statements using Python shorthand
+- Use the ternary (conditional expression) pattern to assign values in one line
+- Combine multiple conditions with the logical operators `and`, `or`, and `not`
+- Write `if` statements inside other `if` statements (nested conditions)
+- Use the `pass` keyword as a safe placeholder when a code block is intentionally left empty
+- Use the `match` statement to compare a single value against many possible options cleanly
 
-> **Quick analogy before we start:** Think of a set like a bag of lottery balls. Each number appears only once. You cannot pull ball number 7 twice. You cannot look at ball "number 3 by position" — you just reach in and grab one. That is how Python sets work.
+These tools will make your code shorter, cleaner, and more professional — like the programs used to build Nigerian fintech apps, university portals, and school management systems.
 
 ---
 
-## Prerequisite Concepts
+## Prerequisite Concepts Recap
 
-Before we dive into sets, let us quickly review a few building blocks you should be comfortable with.
+Before we begin, let us quickly review what you already know:
 
-### What is a Collection?
+- **Variables** store values, for example: `score = 85`
+- **Booleans** are `True` or `False` values
+- **Comparison operators** compare values: `>`, `<`, `>=`, `<=`, `==`, `!=`
+- **`if` / `elif` / `else`** — You already know how to make decisions over multiple lines
 
-In Python, a **collection** is a single variable that holds multiple values at once. Instead of writing:
-
-```python
-fruit1 = "apple"
-fruit2 = "banana"
-fruit3 = "cherry"
-```
-
-You can store them together in one collection. Python has four main collection types:
-
-| Collection | Ordered? | Changeable? | Duplicates? |
-|------------|----------|-------------|-------------|
-| **List**   | Yes      | Yes         | Yes         |
-| **Tuple**  | Yes      | No          | Yes         |
-| **Set**    | No       | Items fixed* | No         |
-| **Dictionary** | Yes (Python 3.7+) | Yes | No (keys) |
-
-> \* In a set, you cannot *change* an existing item, but you *can* add or remove items.
-
-You do not need to master all four types to learn sets. Just know that sets have their own special rules.
-
-### What is a `for` Loop?
-
-A `for` loop lets you go through every item in a collection one by one.
-
-```python
-for x in ["apple", "banana"]:
-    print(x)
-```
-
-**Output:**
-```
-apple
-banana
-```
-
-We will use `for` loops to access items in sets later.
-
-### What is the `in` Keyword?
-
-The `in` keyword checks whether a value exists inside a collection. It returns `True` or `False`.
-
-```python
-print("apple" in ["apple", "banana"])
-```
-
-**Output:**
-```
-True
-```
+> **Quick reminder:** Every `if` block in Python must have at least one statement inside it. An empty block causes a `SyntaxError`. You will learn how `pass` solves this problem later in this lesson.
 
 ---
 
-## Part 1: What Is a Set?
+## Section 1: Shorthand If (One-Line If)
 
-### The Big Idea
+### What Is It and Why Does It Exist?
 
-A **set** is a collection that:
-1. **Has no fixed order** — you cannot predict which item comes first
-2. **Does not allow duplicates** — each value can appear only once
-3. **Does not use index numbers** — you cannot do `myset[0]`
+Normally when you write an `if` statement, you split it across two or more lines:
 
-### Why Do Sets Exist?
+```python
+score = 75
+if score >= 50:
+    print("You passed!")
+```
 
-Sets are incredibly useful when you want to:
-- Store a **unique list** of things (e.g., unique visitor IDs, unique words in a document)
-- Quickly **check if something exists** in a large collection
-- Compare two groups using **mathematical set operations** (union, intersection, difference)
+This is perfectly fine. But sometimes, when the condition and the action are very simple, Python allows you to write the entire thing on a single line. This is called a **shorthand if** or **one-line if**.
 
-Think of a guest list for an event: every name should appear only once, and you do not care what "position" each guest is in — you just want to know if someone is on the list.
+Think of it like this: instead of writing "If the weather is fine, go outside" in two separate sentences, you can say it in one breath.
+
+**Why use it?**
+- It saves lines of code when the logic is simple
+- It makes the code feel more natural for quick checks
+- It is widely used in real Python projects for short guards and checks
+
+> **Important rule:** You still need the colon (`:`) after the condition — even in a single line.
+
+### Syntax
+
+```
+if condition: action
+```
+
+### Example 1: Simple One-Line If
+
+```python
+a = 5
+b = 2
+if a > b: print("a is greater than b")
+```
+
+**Expected output:**
+```
+a is greater than b
+```
+
+**Breaking it down line by line:**
+- `a = 5` — we store the number 5 in a variable called `a`
+- `b = 2` — we store 2 in `b`
+- `if a > b:` — Python checks: is 5 greater than 2? Yes, it is `True`
+- `print("a is greater than b")` — this runs immediately because the condition was `True`
+
+> **Thinking prompt:** What would happen if `a = 1` and `b = 5`? Would anything be printed? Why not?
 
 ---
 
-## Part 2: Creating a Set
+## Section 2: Shorthand If...Else (The Ternary Operator / Conditional Expression)
 
-### Method 1 — Curly Brackets `{}`
+### What Is It and Why Does It Exist?
 
-Sets are written using **curly brackets** `{}`, with items separated by commas.
+A **ternary operator** (also called a **conditional expression**) lets you write a full `if/else` choice on a single line. You use it when you want Python to pick between two outcomes based on a condition.
+
+**Real-world analogy:** Think of it like asking "Will I order jollof rice or fried rice?" — you pick one based on what is available. In Python, you pick one value or action based on whether a condition is `True` or `False`.
+
+### Syntax for Printing
+
+```
+print(value_if_true) if condition else print(value_if_false)
+```
+
+### Example 2: One-Line If/Else Printing
 
 ```python
-fruits = {"apple", "banana", "cherry"}
-print(fruits)
+a = 2
+b = 330
+print("A") if a > b else print("B")
 ```
 
-**Output (order may vary each run):**
+**Expected output:**
 ```
-{'cherry', 'apple', 'banana'}
-```
-
-> **Important:** Notice the output order is different from the input order. Sets do **not** preserve insertion order. This is normal and expected.
-
-### Method 2 — The `set()` Constructor
-
-You can also create a set from a list using the `set()` function. Notice the **double round brackets** — the outer ones belong to `set()`, and the inner ones wrap your list.
-
-```python
-fruits = set(("apple", "banana", "cherry"))
-print(fruits)
+B
 ```
 
-**Output:**
-```
-{'cherry', 'banana', 'apple'}
-```
-
-> **Tip:** Use `set()` when you have data already stored in a list and you want to convert it to a set (for example, to remove duplicates instantly).
-
-### Micro Demo: Removing Duplicates Instantly with `set()`
-
-```python
-names = ["Alice", "Bob", "Alice", "Charlie", "Bob"]
-unique_names = set(names)
-print(unique_names)
-```
-
-**Output:**
-```
-{'Charlie', 'Alice', 'Bob'}
-```
-
-The duplicates are automatically removed. This is one of the most practical uses of sets!
+**Breaking it down:**
+- `a = 2`, `b = 330` — set up the two numbers
+- `a > b` — is 2 greater than 330? No. So the condition is `False`
+- Because it is `False`, Python runs `print("B")` (the `else` side)
 
 ---
 
-## Part 3: Set Properties in Detail
+### Syntax for Assigning a Value
 
-### 3.1 Unordered — No Fixed Position
+The ternary is even more powerful when you use it to **assign a value to a variable**:
 
-Every time you print a set, the items may appear in a different order. Python does not guarantee any particular sequence.
+```
+variable = value_if_true if condition else value_if_false
+```
+
+Think of this as: "Give me X if the condition is met, otherwise give me Y."
+
+### Example 3: Assigning a Value With Ternary
 
 ```python
-my_set = {"dog", "cat", "bird"}
-print(my_set)
-print(my_set)
+a = 10
+b = 20
+bigger = a if a > b else b
+print("Bigger is", bigger)
 ```
 
-**Output (may vary between runs):**
+**Expected output:**
 ```
-{'bird', 'cat', 'dog'}
-{'cat', 'dog', 'bird'}
+Bigger is 20
 ```
 
-> **Thinking prompt:** If sets have no order, how do we work with the items? We use loops and membership checks — which we will cover in Part 5.
+**Breaking it down:**
+- `a > b` checks if 10 > 20 → `False`
+- Since it is `False`, Python picks `b` (which is 20) and stores it in `bigger`
+- `print("Bigger is", bigger)` outputs the result
 
-### 3.2 No Duplicates Allowed
+### Example 4: Setting a Default Value
 
-If you add the same value twice, the set keeps only one copy.
+This is very common in real apps — if a user does not supply a name, you show "Guest" instead:
 
 ```python
-colours = {"red", "blue", "red", "green", "blue"}
-print(colours)
+username = ""
+display_name = username if username else "Guest"
+print("Welcome,", display_name)
 ```
 
-**Output:**
+**Expected output:**
 ```
-{'green', 'blue', 'red'}
-```
-
-`"red"` and `"blue"` were each added twice but appear only once.
-
-### 3.3 Special Rule: `True` and `1` Are the Same; `False` and `0` Are the Same
-
-In Python, `True` equals `1` and `False` equals `0` numerically. Sets treat them as duplicates:
-
-```python
-s = {"apple", "banana", True, 1, 2}
-print(s)
+Welcome, Guest
 ```
 
-**Output:**
-```
-{True, 2, 'banana', 'apple'}
-```
+**Breaking it down:**
+- `username = ""` — an empty string is **falsy** in Python (it evaluates as `False`)
+- `username if username` — since `username` is empty/falsy, this condition fails
+- Python picks `"Guest"` (the else side)
+- This pattern protects your app from crashing when a field is empty
 
-> `True` and `1` are the same value, so the set keeps only one. `True` was listed first, so it is kept.
-
-```python
-s2 = {"apple", False, 0, "cherry"}
-print(s2)
-```
-
-**Output:**
-```
-{False, 'cherry', 'apple'}
-```
-
-> `False` and `0` are treated as one value.
-
-### 3.4 Unchangeable Items
-
-Once you create a set, you **cannot change an existing item**. You cannot say "change 'apple' to 'mango'" directly. However, you *can* remove an item and add a new one.
-
-### 3.5 Mixed Data Types Are Allowed
-
-A set can hold strings, integers, booleans, and even floats — all in the same set.
-
-```python
-mixed = {"hello", 42, True, 3.14}
-print(mixed)
-```
-
-**Output:**
-```
-{True, 3.14, 42, 'hello'}
-```
-
-> **Note:** A set **cannot** contain mutable (changeable) objects like lists or other sets as items. That would cause an error.
+> **Thinking prompt:** What would happen if you set `username = "Amaka"`? What would be printed then?
 
 ---
 
-## Part 4: Set Length and Data Type
+### Example 5: Chained Ternary (Three Outcomes in One Line)
 
-### Getting the Number of Items — `len()`
-
-```python
-fruits = {"apple", "banana", "cherry"}
-print(len(fruits))
-```
-
-**Output:**
-```
-3
-```
-
-`len()` counts how many items are in the set.
-
-### Checking the Data Type — `type()`
+You can chain ternary expressions to get three possible outcomes:
 
 ```python
-my_set = {"apple", "banana"}
-print(type(my_set))
+a = 330
+b = 330
+print("A") if a > b else print("=") if a == b else print("B")
 ```
 
-**Output:**
+**Expected output:**
 ```
-<class 'set'>
+=
 ```
 
-This confirms Python sees it as a set object.
+**Breaking it down:**
+- First check: is `a > b`? (330 > 330) → `False`
+- Second check: is `a == b`? (330 == 330) → `True`
+- Since `True`, print `"="`
+
+> **Important note:** Chained ternaries can become hard to read. Use them only when the logic stays simple. For three or more conditions with complex logic, use a regular `if/elif/else` block.
+
+### When Should You Use Shorthand If?
+
+Use shorthand if and the ternary when:
+- The condition is very simple (one comparison)
+- The action is just one short statement
+- You want to assign one of two values to a variable
+- Readability is not sacrificed
+
+**Do NOT use it for complex multi-line logic** — regular `if/else` is cleaner in those cases.
 
 ---
 
-## Part 5: Accessing Set Items
+## Section 3: Logical Operators — `and`, `or`, `not`
 
-### The Key Rule: No Index Access
+### What Are Logical Operators and Why Do They Exist?
 
-Because sets are unordered, there is **no position 0, 1, or 2**. This means you **cannot** do:
+Imagine you are at a supermarket entrance in Lagos. The sign says: "You may enter if you are wearing a mask AND have your receipt." Both conditions must be true at the same time.
 
-```python
-# This will cause an ERROR!
-fruits = {"apple", "banana", "cherry"}
-print(fruits[0])   # ❌ TypeError: 'set' object is not subscriptable
-```
+Or another sign: "This lane is for senior citizens OR pregnant women." Only one needs to be true.
 
-So how do we work with the items? Two ways:
+**Logical operators** let you combine multiple conditions in a single `if` statement. Without them, you would need to nest `if` inside `if` for every extra condition — which gets messy quickly.
 
-### Method 1 — Loop Through with `for`
+Python has three logical operators:
 
-```python
-fruits = {"apple", "banana", "cherry"}
-
-for item in fruits:
-    print(item)
-```
-
-**Output (order may vary):**
-```
-cherry
-banana
-apple
-```
-
-Each item gets assigned to the variable `item` one at a time, and we print it.
-
-### Method 2 — Check Membership with `in`
-
-To ask "is this value in the set?", use `in`. This returns `True` or `False`.
-
-```python
-fruits = {"apple", "banana", "cherry"}
-
-print("banana" in fruits)
-print("mango" in fruits)
-```
-
-**Output:**
-```
-True
-False
-```
-
-### Checking with `not in`
-
-```python
-fruits = {"apple", "banana", "cherry"}
-
-print("mango" not in fruits)
-```
-
-**Output:**
-```
-True
-```
-
-> **Real-world use:** Imagine a set of banned usernames. When a new user registers, you check: `if new_username in banned_usernames:`. This runs extremely fast even with millions of entries — sets use a technique called **hashing** that makes lookups almost instant.
+| Operator | Meaning | Returns `True` when… |
+|----------|---------|----------------------|
+| `and` | Both must be true | Both conditions are `True` |
+| `or` | At least one must be true | At least one condition is `True` |
+| `not` | Reverses the result | The condition is `False` |
 
 ---
 
-## Part 6: Adding Items to a Set
+### 3.1 The `and` Operator
 
-### 6.1 Adding One Item — `.add()`
+`and` returns `True` **only** when **both** conditions are `True`. If either one is `False`, the whole expression is `False`.
 
-The `.add()` method adds **one item** to the set.
+**Real-world analogy:** You can only withdraw money from your account if (1) you have enough balance AND (2) your PIN is correct. Both must be true.
 
-```python
-fruits = {"apple", "banana", "cherry"}
-fruits.add("mango")
-print(fruits)
-```
-
-**Output:**
-```
-{'mango', 'banana', 'cherry', 'apple'}
-```
-
-> **What if you add a duplicate?** Nothing happens. The set stays the same.
+### Example 6: `and` — Both Conditions True
 
 ```python
-fruits = {"apple", "banana", "cherry"}
-fruits.add("apple")  # already exists
-print(fruits)
+a = 200
+b = 33
+c = 500
+if a > b and c > a:
+    print("Both conditions are True")
 ```
 
-**Output:**
+**Expected output:**
 ```
-{'cherry', 'banana', 'apple'}
+Both conditions are True
 ```
 
-No error, no change — the duplicate is simply ignored.
+**Breaking it down:**
+- `a > b` → is 200 > 33? → `True`
+- `c > a` → is 500 > 200? → `True`
+- `True and True` → `True` → the body runs
 
-### 6.2 Adding Multiple Items — `.update()`
+### Example 7: `and` — One Condition is False
 
-The `.update()` method adds **multiple items** from any iterable (a list, tuple, or even another set).
-
-**From a list:**
 ```python
-fruits = {"apple", "banana"}
-fruits.update(["mango", "grape", "cherry"])
-print(fruits)
+score = 85
+attendance = 60
+if score >= 50 and attendance >= 75:
+    print("Eligible for exam")
+else:
+    print("Not eligible — check attendance")
 ```
 
-**Output:**
+**Expected output:**
 ```
-{'mango', 'apple', 'banana', 'grape', 'cherry'}
-```
-
-**From another set:**
-```python
-set_a = {"apple", "banana"}
-set_b = {"cherry", "mango"}
-set_a.update(set_b)
-print(set_a)
+Not eligible — check attendance
 ```
 
-**Output:**
-```
-{'banana', 'cherry', 'apple', 'mango'}
-```
-
-**From a tuple:**
-```python
-colours = {"red", "blue"}
-colours.update(("green", "yellow"))
-print(colours)
-```
-
-**Output:**
-```
-{'red', 'green', 'blue', 'yellow'}
-```
-
-> **Summary:** Use `.add()` for one item, `.update()` for many items.
+**Breaking it down:**
+- `score >= 50` → 85 >= 50 → `True`
+- `attendance >= 75` → 60 >= 75 → `False`
+- `True and False` → `False` → the `else` block runs
 
 ---
 
-## Part 7: Removing Items from a Set
+### 3.2 The `or` Operator
 
-There are several ways to remove items from a set. Let us learn each one.
+`or` returns `True` if **at least one** condition is `True`. It only returns `False` when **all** conditions are `False`.
 
-### 7.1 `.remove(value)` — Remove a Specific Item
+**Real-world analogy:** You can get a student discount if you have a student ID OR if you show your school letter. Only one proof is enough.
 
-```python
-fruits = {"apple", "banana", "cherry"}
-fruits.remove("banana")
-print(fruits)
-```
-
-**Output:**
-```
-{'cherry', 'apple'}
-```
-
-> ⚠️ **Warning:** If the value does **not** exist, `.remove()` will raise a `KeyError`. Always be sure the item exists before using `.remove()`.
+### Example 8: `or` — At Least One True
 
 ```python
-fruits = {"apple", "cherry"}
-fruits.remove("banana")  # ❌ KeyError: 'banana'
+a = 200
+b = 33
+c = 500
+if a > b or a > c:
+    print("At least one of the conditions is True")
 ```
 
-### 7.2 `.discard(value)` — Safe Removal (No Error)
+**Expected output:**
+```
+At least one of the conditions is True
+```
 
-`.discard()` works exactly like `.remove()`, but if the item is not found, **it does nothing** instead of raising an error.
+**Breaking it down:**
+- `a > b` → 200 > 33 → `True`
+- `a > c` → 200 > 500 → `False`
+- `True or False` → `True` (only one needs to be true) → body runs
+
+### Example 9: Range Validation with `and`
+
+Checking that a score is valid (between 0 and 100):
 
 ```python
-fruits = {"apple", "banana", "cherry"}
-fruits.discard("banana")  # works fine
-fruits.discard("mango")   # item doesn't exist — no error!
-print(fruits)
+score = 85
+
+if score >= 0 and score <= 100:
+    print("Valid score")
+else:
+    print("Invalid score")
 ```
 
-**Output:**
+**Expected output:**
 ```
-{'cherry', 'apple'}
-```
-
-> **When to use `.discard()` vs `.remove()`:**
-> - Use `.remove()` when you are *sure* the item exists and want an error if it doesn't (to catch bugs).
-> - Use `.discard()` when it's OK if the item isn't there.
-
-### 7.3 `.pop()` — Remove a Random Item
-
-Since sets have no order, `.pop()` removes and returns **a random item**.
-
-```python
-fruits = {"apple", "banana", "cherry"}
-removed = fruits.pop()
-print("Removed:", removed)
-print("Remaining:", fruits)
-```
-
-**Output (varies — any item could be removed):**
-```
-Removed: cherry
-Remaining: {'apple', 'banana'}
-```
-
-> **Use case:** `.pop()` is useful when you want to process and remove items from a set one at a time (like a queue where order doesn't matter).
-
-### 7.4 `.clear()` — Remove All Items
-
-Empties the set completely but keeps the set object.
-
-```python
-fruits = {"apple", "banana", "cherry"}
-fruits.clear()
-print(fruits)
-```
-
-**Output:**
-```
-set()
-```
-
-> `set()` means an empty set. (Note: `{}` alone creates an empty *dictionary*, not a set — be careful!)
-
-### 7.5 `del` — Delete the Set Entirely
-
-The `del` keyword deletes the variable itself from memory.
-
-```python
-fruits = {"apple", "banana", "cherry"}
-del fruits
-print(fruits)   # ❌ NameError: name 'fruits' is not defined
-```
-
-After `del fruits`, the variable no longer exists at all.
-
-### Removal Method Comparison Table
-
-| Method         | What it does                         | Error if not found? |
-|----------------|--------------------------------------|---------------------|
-| `.remove(x)`   | Removes item x                       | Yes — `KeyError`    |
-| `.discard(x)`  | Removes item x if it exists          | No                  |
-| `.pop()`       | Removes and returns a random item    | Error if set empty  |
-| `.clear()`     | Removes all items                    | No                  |
-| `del setname`  | Deletes the set variable entirely    | No                  |
-
----
-
-## Part 8: Looping Through a Set
-
-You can use a `for` loop to visit every item in a set.
-
-### Basic Loop
-
-```python
-countries = {"Nigeria", "Ghana", "Kenya"}
-
-for country in countries:
-    print(country)
-```
-
-**Output (order may vary):**
-```
-Kenya
-Ghana
-Nigeria
-```
-
-### Loop with Condition
-
-```python
-numbers = {10, 25, 7, 42, 3, 18}
-
-for num in numbers:
-    if num > 10:
-        print(num, "is greater than 10")
-```
-
-**Output (order may vary):**
-```
-25 is greater than 10
-42 is greater than 10
-18 is greater than 10
-```
-
-### Loop to Build a New List from a Set
-
-```python
-words = {"hello", "world", "python"}
-upper_words = []
-
-for word in words:
-    upper_words.append(word.upper())
-
-print(upper_words)
-```
-
-**Output:**
-```
-['WORLD', 'HELLO', 'PYTHON']
-```
-
-> **Real-world use:** Loop through a set of unique product IDs, check each one in a database, and collect results.
-
----
-
-## Part 9: Joining Sets
-
-This is one of the most powerful features of sets. You can combine two or more sets using several methods, each doing something slightly different.
-
-### 9.1 `.union()` — All Items from Both Sets (No Duplicates)
-
-`union()` returns a **new set** containing every item from both sets, with duplicates removed.
-
-```python
-set1 = {"apple", "banana", "cherry"}
-set2 = {"cherry", "mango", "grape"}
-
-result = set1.union(set2)
-print(result)
-```
-
-**Output:**
-```
-{'grape', 'cherry', 'apple', 'mango', 'banana'}
-```
-
-Notice `"cherry"` appears only once even though it is in both sets.
-
-You can also use the `|` operator (pipe symbol) as a shortcut:
-
-```python
-result = set1 | set2
-print(result)
-```
-
-**Output:**
-```
-{'grape', 'cherry', 'apple', 'mango', 'banana'}
-```
-
-### 9.2 `.update()` — Join Into the Original Set
-
-Unlike `.union()`, `.update()` **modifies the original set in place** rather than returning a new one.
-
-```python
-set1 = {"apple", "banana"}
-set2 = {"cherry", "mango"}
-
-set1.update(set2)
-print(set1)
-```
-
-**Output:**
-```
-{'banana', 'cherry', 'apple', 'mango'}
-```
-
-> **Difference:** `union()` → creates a new set. `update()` → changes the existing set.
-
-### 9.3 `.intersection()` — Only Items in Both Sets
-
-`intersection()` returns only the items that appear in **all** sets being compared.
-
-```python
-set1 = {"apple", "banana", "cherry"}
-set2 = {"banana", "cherry", "mango"}
-
-result = set1.intersection(set2)
-print(result)
-```
-
-**Output:**
-```
-{'banana', 'cherry'}
-```
-
-Only `"banana"` and `"cherry"` exist in both sets.
-
-Shortcut using `&`:
-```python
-result = set1 & set2
-```
-
-### 9.4 `.intersection_update()` — Intersection In Place
-
-Like `.update()` vs `.union()`, this modifies the original set instead of returning a new one.
-
-```python
-set1 = {"apple", "banana", "cherry"}
-set2 = {"banana", "cherry", "mango"}
-
-set1.intersection_update(set2)
-print(set1)
-```
-
-**Output:**
-```
-{'banana', 'cherry'}
-```
-
-### 9.5 `.difference()` — Items in First Set but NOT in Second
-
-```python
-set1 = {"apple", "banana", "cherry"}
-set2 = {"banana", "cherry", "mango"}
-
-result = set1.difference(set2)
-print(result)
-```
-
-**Output:**
-```
-{'apple'}
-```
-
-Only `"apple"` is in `set1` but not in `set2`.
-
-Shortcut using `-`:
-```python
-result = set1 - set2
-```
-
-### 9.6 `.difference_update()` — Difference In Place
-
-```python
-set1 = {"apple", "banana", "cherry"}
-set2 = {"banana", "cherry"}
-
-set1.difference_update(set2)
-print(set1)
-```
-
-**Output:**
-```
-{'apple'}
-```
-
-### 9.7 `.symmetric_difference()` — Items in Either But NOT Both
-
-This gives you all items that are **unique to each set** — items that appear in only one of the two sets.
-
-```python
-set1 = {"apple", "banana", "cherry"}
-set2 = {"banana", "cherry", "mango"}
-
-result = set1.symmetric_difference(set2)
-print(result)
-```
-
-**Output:**
-```
-{'apple', 'mango'}
-```
-
-`"apple"` is only in `set1`. `"mango"` is only in `set2`. `"banana"` and `"cherry"` are in both, so they are excluded.
-
-Shortcut using `^`:
-```python
-result = set1 ^ set2
-```
-
-### 9.8 `.symmetric_difference_update()` — Symmetric Difference In Place
-
-```python
-set1 = {"apple", "banana", "cherry"}
-set2 = {"banana", "cherry", "mango"}
-
-set1.symmetric_difference_update(set2)
-print(set1)
-```
-
-**Output:**
-```
-{'apple', 'mango'}
-```
-
-### Visual Summary of Join Methods
-
-```
-set1 = {A, B, C}
-set2 = {B, C, D}
-
-union()                  → {A, B, C, D}   — everything
-intersection()           → {B, C}          — only shared items
-difference(set2)         → {A}             — in set1, not set2
-difference(set1)         → {D}             — in set2, not set1
-symmetric_difference()   → {A, D}          — unique to each
+Valid score
 ```
 
 ---
 
-## Part 10: Set Methods for Comparison
+### 3.3 The `not` Operator
 
-Beyond joining, sets have powerful comparison methods.
+`not` **reverses** the result of a condition. If something is `True`, `not` makes it `False`, and vice versa.
 
-### `.issubset()` — Is One Set Contained in Another?
+**Real-world analogy:** A door that opens only when the alarm is NOT active.
 
-```python
-set1 = {"banana", "cherry"}
-set2 = {"apple", "banana", "cherry", "mango"}
-
-print(set1.issubset(set2))
-```
-
-**Output:**
-```
-True
-```
-
-Every item in `set1` is also in `set2`, so `set1` is a subset of `set2`.
-
-### `.issuperset()` — Does One Set Contain All Items of Another?
+### Example 10: `not` — Reversing a Condition
 
 ```python
-print(set2.issuperset(set1))
+a = 33
+b = 200
+if not a > b:
+    print("a is NOT greater than b")
 ```
 
-**Output:**
+**Expected output:**
 ```
-True
-```
-
-### `.isdisjoint()` — Do the Sets Share No Items?
-
-```python
-set1 = {"apple", "banana"}
-set2 = {"cherry", "mango"}
-
-print(set1.isdisjoint(set2))
+a is NOT greater than b
 ```
 
-**Output:**
-```
-True
-```
-
-They share nothing in common, so they are "disjoint."
-
-```python
-set3 = {"apple", "grape"}
-print(set1.isdisjoint(set3))
-```
-
-**Output:**
-```
-False
-```
-
-`"apple"` is shared, so they are not disjoint.
-
-### `.copy()` — Make a Copy of a Set
-
-```python
-original = {"apple", "banana", "cherry"}
-copy_set = original.copy()
-copy_set.add("mango")
-
-print("Original:", original)
-print("Copy:", copy_set)
-```
-
-**Output:**
-```
-Original: {'cherry', 'apple', 'banana'}
-Copy: {'cherry', 'apple', 'banana', 'mango'}
-```
-
-The original is unchanged. This is important — if you just did `copy_set = original`, both variables would point to the **same** set object.
+**Breaking it down:**
+- `a > b` → 33 > 200 → `False`
+- `not False` → `True`
+- Since the overall result is `True`, the body runs
 
 ---
 
-## Part 11: Complete Set Methods Reference
+### 3.4 Truth Tables
 
-Here is a full reference table of all Python set methods:
+A **truth table** shows every possible combination of `True`/`False` and the result. This is exactly how Python evaluates your conditions internally.
 
-| Method                         | Description                                                        |
-|--------------------------------|--------------------------------------------------------------------|
-| `add(x)`                       | Adds one element to the set                                        |
-| `clear()`                      | Removes all elements                                               |
-| `copy()`                       | Returns a shallow copy of the set                                  |
-| `difference(set2)`             | Returns items in set but not in set2                               |
-| `difference_update(set2)`      | Removes items in set that also appear in set2                      |
-| `discard(x)`                   | Removes x if present (no error if not found)                       |
-| `intersection(set2)`           | Returns items present in both sets                                 |
-| `intersection_update(set2)`    | Keeps only items present in both sets                              |
-| `isdisjoint(set2)`             | Returns True if sets have no common items                          |
-| `issubset(set2)`               | Returns True if all items in this set are also in set2             |
-| `issuperset(set2)`             | Returns True if this set contains all items of set2                |
-| `pop()`                        | Removes and returns a random item                                  |
-| `remove(x)`                    | Removes x; raises KeyError if not found                            |
-| `symmetric_difference(set2)`   | Returns items in either set but not both                           |
-| `symmetric_difference_update(set2)` | Keeps only items that are unique to each set                  |
-| `union(set2)`                  | Returns all items from both sets                                   |
-| `update(iterable)`             | Adds all items from an iterable into this set                      |
+**`and` Truth Table:**
+
+| Condition 1 | Condition 2 | Result |
+|-------------|-------------|--------|
+| `True` | `True` | `True` |
+| `True` | `False` | `False` |
+| `False` | `True` | `False` |
+| `False` | `False` | `False` |
+
+**`or` Truth Table:**
+
+| Condition 1 | Condition 2 | Result |
+|-------------|-------------|--------|
+| `True` | `True` | `True` |
+| `True` | `False` | `True` |
+| `False` | `True` | `True` |
+| `False` | `False` | `False` |
 
 ---
 
-## Part 12: Frozenset — The Immutable Set
+### 3.5 Combining Multiple Operators
 
-### What Is a Frozenset?
+You can use `and`, `or`, and `not` together. Python evaluates them in this order: **`not` first, then `and`, then `or`**.
 
-A **frozenset** is a set that **cannot be changed at all** after creation. You cannot add items, remove items, or modify it in any way.
+To avoid confusion and make your code readable, use **parentheses** to group conditions.
 
-Think of it like a sealed envelope — once you seal it, nothing goes in or out.
-
-### Why Use Frozenset?
-
-- When you want the **protection of a set** (unique items, membership testing) but need **immutability**
-- Frozensets can be used as **dictionary keys** or as **items inside another set** (regular sets cannot do this!)
-- Useful when sharing data between functions and you want to ensure no one can accidentally change it
-
-### Creating a Frozenset
+### Example 11: Combined Operators with Parentheses
 
 ```python
-fruits = frozenset({"apple", "banana", "cherry"})
-print(fruits)
+temperature = 25
+is_raining = False
+is_weekend = True
+
+if (temperature > 20 and not is_raining) or is_weekend:
+    print("Great day for outdoor activities!")
 ```
 
-**Output:**
+**Expected output:**
 ```
-frozenset({'cherry', 'banana', 'apple'})
+Great day for outdoor activities!
 ```
 
-You can also create from a list:
+**Breaking it down:**
+- `temperature > 20` → `True`
+- `not is_raining` → `not False` → `True`
+- `True and True` → `True` (inside the parentheses)
+- `True or is_weekend` → `True or True` → `True`
+- Body runs
+
+### Example 12: Login Validation (Real-World Pattern)
 
 ```python
-numbers = frozenset([1, 2, 3, 4, 5])
-print(numbers)
+username = "Emeka"
+password = "secure123"
+is_verified = True
+
+if username and password and is_verified:
+    print("Login successful")
+else:
+    print("Login failed")
 ```
 
-**Output:**
+**Expected output:**
 ```
-frozenset({1, 2, 3, 4, 5})
-```
-
-### Frozenset Is Immutable — You Cannot Change It
-
-```python
-fruits = frozenset({"apple", "banana"})
-fruits.add("mango")   # ❌ AttributeError: 'frozenset' object has no attribute 'add'
+Login successful
 ```
 
-Any attempt to add, remove, or update a frozenset raises an error.
+**Breaking it down:**
+- `username` → `"Emeka"` is truthy (non-empty string → `True`)
+- `password` → `"secure123"` is truthy → `True`
+- `is_verified` → `True`
+- `True and True and True` → `True` → body runs
 
-### Frozenset Can Still Be Iterated and Tested
-
-Even though you cannot change it, you can still loop through it and check membership:
-
-```python
-fruits = frozenset({"apple", "banana", "cherry"})
-
-for item in fruits:
-    print(item)
-
-print("apple" in fruits)
-```
-
-**Output:**
-```
-apple
-banana
-cherry
-True
-```
-
-### Frozenset Supports Set Operations
-
-```python
-fs1 = frozenset({"apple", "banana", "cherry"})
-fs2 = frozenset({"banana", "mango"})
-
-print(fs1.union(fs2))
-print(fs1.intersection(fs2))
-print(fs1.difference(fs2))
-```
-
-**Output:**
-```
-frozenset({'cherry', 'banana', 'mango', 'apple'})
-frozenset({'banana'})
-frozenset({'cherry', 'apple'})
-```
-
-### Frozenset as a Dictionary Key
-
-This is something a regular set cannot do:
-
-```python
-# Using frozenset as a dictionary key
-regions = {
-    frozenset({"Lagos", "Abuja"}): "Nigeria",
-    frozenset({"Accra", "Kumasi"}): "Ghana"
-}
-print(regions)
-```
-
-**Output:**
-```
-{frozenset({'Abuja', 'Lagos'}): 'Nigeria', frozenset({'Kumasi', 'Accra'}): 'Ghana'}
-```
-
-### Set vs Frozenset — Quick Comparison
-
-| Feature           | `set`   | `frozenset` |
-|-------------------|---------|-------------|
-| Mutable           | Yes     | No          |
-| Allows duplicates | No      | No          |
-| Ordered           | No      | No          |
-| Hashable (usable as dict key) | No | Yes   |
-| Can use `.add()`  | Yes     | No          |
-| Supports `in`     | Yes     | Yes         |
-| Supports loops    | Yes     | Yes         |
+> **Thinking prompt:** What would happen if `password = ""`? An empty string is falsy — so the login would fail. This is exactly how login systems check credentials.
 
 ---
 
-## Part 13: Guided Practice Exercises
+## Section 4: Nested If Statements
 
-### Exercise 1: Creating and Inspecting a Set
+### What Is Nesting and Why Does It Exist?
 
-**Objective:** Create a set and explore its basic properties.
+A **nested `if`** is an `if` statement placed inside another `if` statement. This lets you check a condition, and then — only if that first condition passes — check an even more specific condition.
 
-**Scenario:** You are building a student attendance system. Store the names of students who attended class today.
+**Real-world analogy:** Imagine a security checkpoint at a government building in Abuja. First, the guard checks: "Do you have a valid ID?" (outer condition). Only if you pass that check does the guard ask: "Are you on the appointment list?" (inner condition). The second question is pointless without clearing the first.
 
-**Steps:**
-1. Create a set called `attended` with these names: `"Alice"`, `"Bob"`, `"Charlie"`, `"Alice"`, `"Diana"`, `"Bob"`
-2. Print the set
-3. Print the number of students who attended (using `len()`)
-4. Check if `"Charlie"` is in the set
-5. Check if `"Eve"` is in the set
-
-**Expected Output:**
-```
-{'Diana', 'Bob', 'Charlie', 'Alice'}
-4
-True
-False
-```
-
-**Solution:**
-```python
-attended = {"Alice", "Bob", "Charlie", "Alice", "Diana", "Bob"}
-print(attended)
-print(len(attended))
-print("Charlie" in attended)
-print("Eve" in attended)
-```
-
-**Self-check:** Did the output have 4 names even though 6 were provided? Good — sets removed the duplicates automatically!
-
----
-
-### Exercise 2: Adding and Removing Items
-
-**Objective:** Modify a set dynamically.
-
-**Scenario:** The school tuck-shop sells snacks. Update the menu set as items run out or get added.
-
-**Steps:**
-1. Start with: `menu = {"pies", "juice", "biscuits", "chips"}`
-2. Add `"water"` to the menu
-3. Add `"cake"` and `"yoghurt"` using one method call
-4. Remove `"chips"` safely (use `discard`)
-5. Try to remove `"soda"` (which doesn't exist) safely
-6. Print the final menu
-
-**Expected Output:**
-```
-{'pies', 'juice', 'water', 'biscuits', 'yoghurt', 'cake'}
-```
-
-**Solution:**
-```python
-menu = {"pies", "juice", "biscuits", "chips"}
-menu.add("water")
-menu.update(["cake", "yoghurt"])
-menu.discard("chips")
-menu.discard("soda")  # no error
-print(menu)
-```
-
-**What-if challenge:** What would happen if you used `.remove("soda")` instead of `.discard("soda")`?
-
----
-
-### Exercise 3: Looping Through a Set
-
-**Objective:** Use a `for` loop to process set items.
-
-**Scenario:** You have a set of exam scores for different subjects. Print each score and classify it.
+### Syntax
 
 ```python
-scores = {72, 45, 88, 55, 91, 63}
-
-for score in scores:
-    if score >= 70:
-        print(f"{score} — PASS")
+if outer_condition:
+    # this runs only if outer_condition is True
+    if inner_condition:
+        # this runs only if BOTH are True
     else:
-        print(f"{score} — FAIL")
+        # this runs if outer is True but inner is False
+else:
+    # this runs if outer_condition is False
 ```
 
-**Expected Output (order may vary):**
+---
+
+### Example 13: Basic Nested If
+
+```python
+x = 41
+
+if x > 10:
+    print("Above ten,")
+    if x > 20:
+        print("and also above 20!")
+    else:
+        print("but not above 20.")
 ```
-72 — PASS
-45 — FAIL
-88 — PASS
-55 — FAIL
-91 — PASS
-63 — FAIL
+
+**Expected output:**
+```
+Above ten,
+and also above 20!
+```
+
+**Breaking it down:**
+- `x > 10` → 41 > 10 → `True` → enter the outer block
+- `print("Above ten,")` runs
+- `x > 20` → 41 > 20 → `True` → enter the inner block
+- `print("and also above 20!")` runs
+
+> **Thinking prompt:** What would the output be if `x = 15`? The outer condition (> 10) is still true, but the inner (> 20) is false. So you would see "Above ten," and "but not above 20."
+
+---
+
+### Example 14: Age and Licence Check (Driving Eligibility)
+
+```python
+age = 25
+has_licence = True
+
+if age >= 18:
+    if has_licence:
+        print("You can drive")
+    else:
+        print("You need a licence")
+else:
+    print("You are too young to drive")
+```
+
+**Expected output:**
+```
+You can drive
+```
+
+**Breaking it down:**
+- `age >= 18` → 25 >= 18 → `True` → enter outer block
+- `has_licence` → `True` → enter inner block
+- `print("You can drive")` runs
+
+---
+
+### Example 15: Three Levels of Nesting (Student Eligibility)
+
+A university portal in Enugu checks three conditions before certifying a student:
+
+```python
+score = 85
+attendance = 90
+submitted = True
+
+if score >= 60:
+    if attendance >= 80:
+        if submitted:
+            print("Pass with good standing")
+        else:
+            print("Pass but missing assignment")
+    else:
+        print("Pass but low attendance")
+else:
+    print("Fail")
+```
+
+**Expected output:**
+```
+Pass with good standing
+```
+
+**Breaking it down:**
+- Level 1: `score >= 60` → 85 >= 60 → `True` → enter
+- Level 2: `attendance >= 80` → 90 >= 80 → `True` → enter
+- Level 3: `submitted` → `True` → enter
+- Output: "Pass with good standing"
+
+> **Thinking prompt:** Change `submitted = False`. What output do you get?
+
+---
+
+### 4.1 Nested If vs. Logical Operators — Which Should You Use?
+
+Sometimes you can express the same logic using `and` instead of nested `if`. Which is better?
+
+**Option A — Nested If:**
+
+```python
+temperature = 25
+is_sunny = True
+
+if temperature > 20:
+    if is_sunny:
+        print("Perfect beach weather!")
+```
+
+**Option B — Using `and`:**
+
+```python
+temperature = 25
+is_sunny = True
+
+if temperature > 20 and is_sunny:
+    print("Perfect beach weather!")
+```
+
+Both produce the same output:
+```
+Perfect beach weather!
+```
+
+**Rule of thumb:**
+- Use `and` when both conditions are simple and equally important
+- Use nested `if` when the inner logic is more complex, has its own `else`, or depends heavily on the outer condition
+
+---
+
+### Example 16: Grade with Extra Credit (Nested with elif)
+
+```python
+score = 92
+extra_credit = 5
+
+if score >= 90:
+    if extra_credit > 0:
+        print("A+ grade")
+    else:
+        print("A grade")
+elif score >= 80:
+    print("B grade")
+else:
+    print("C grade or below")
+```
+
+**Expected output:**
+```
+A+ grade
+```
+
+---
+
+## Section 5: The `pass` Statement
+
+### What Is `pass` and Why Does It Exist?
+
+In Python, every code block must contain at least one statement. If you write an `if` statement but leave the body empty, Python will throw a **`SyntaxError`** (a crash at startup).
+
+The `pass` keyword solves this. It is a **do-nothing placeholder** — it tells Python "yes, I know this block is here, I just haven't written the code for it yet."
+
+**Real-world analogy:** Think of `pass` as a "Coming Soon" sign on a shop front. The shop structure is built and the sign is there, but the goods have not arrived yet.
+
+---
+
+### Example 17: The Problem Without `pass`
+
+```python
+# This will CRASH with IndentationError or SyntaxError:
+a = 33
+b = 200
+
+if b > a:
+    # forgot to put code here!
+```
+
+Python does NOT allow an empty code block. You must put something.
+
+---
+
+### Example 18: Solving It with `pass`
+
+```python
+a = 33
+b = 200
+
+if b > a:
+    pass
+```
+
+**Expected output:**
+```
+(nothing — the program runs without error)
+```
+
+**Breaking it down:**
+- `b > a` → 200 > 33 → `True` → enter the block
+- `pass` → Python sees this, does absolutely nothing, and moves on
+- No crash, no error
+
+---
+
+### Example 19: Using `pass` During Development
+
+When you are planning a system — say, an Abuja transport fee calculator — you might sketch the structure first and fill it in later:
+
+```python
+age = 16
+
+if age < 18:
+    pass  # TODO: Add underage discount logic later
+else:
+    print("Full fare applies")
+```
+
+**Expected output:**
+```
+Full fare applies
+```
+
+This is extremely useful when building large programs. You outline all your conditions first, then fill them in one by one.
+
+---
+
+### 5.1 `pass` vs Comments — What Is the Difference?
+
+This is a common beginner confusion.
+
+```python
+# This CRASHES — a comment alone does not count as a statement:
+score = 85
+if score > 90:
+    # This is excellent
+```
+
+```python
+# This WORKS — pass is an actual statement:
+score = 85
+if score > 90:
+    pass  # This is excellent
+print("Score processed")
+```
+
+**Expected output:**
+```
+Score processed
+```
+
+**Key difference:**
+- A **comment** (`#`) is completely ignored by Python — it is for human readers only
+- `pass` is an **actual Python statement** that gets executed (it just does nothing)
+
+---
+
+### Example 20: `pass` in a Multi-Branch Statement
+
+```python
+value = 50
+
+if value < 0:
+    print("Negative value")
+elif value == 0:
+    pass  # Zero case — no special action needed right now
+else:
+    print("Positive value")
+```
+
+**Expected output:**
+```
+Positive value
+```
+
+---
+
+## Section 6: The `match` Statement
+
+### What Is `match` and Why Does It Exist?
+
+Imagine you have a variable — say, the number of a day of the week — and you want to do something different depending on which exact value it holds. You could write a long chain of `if/elif/elif/elif...` statements. But Python 3.10 introduced a much cleaner tool for this: the **`match` statement**.
+
+The `match` statement is like a professional menu system:
+- You present a value to the menu
+- Python compares it against each "option" (called a `case`)
+- When it finds a match, it runs that option's code
+- If nothing matches, you can provide a default
+
+**Real-world analogy:** Think of a USSD bank menu in Nigeria: Press 1 for Balance, Press 2 for Transfer, Press 3 for Airtime. Each number pressed triggers a specific action.
+
+> **Note:** `match` was introduced in Python 3.10. Make sure you are using Python 3.10 or newer to use this feature.
+
+---
+
+### Syntax
+
+```python
+match expression:
+    case value1:
+        # code block
+    case value2:
+        # code block
+    case _:
+        # default — runs if nothing else matched
+```
+
+**How it works step by step:**
+1. Python evaluates the `expression` once
+2. It compares that value against each `case`, from top to bottom
+3. When it finds a matching `case`, it runs that block and stops
+4. `_` (underscore) acts as the "catch-all" default — like `else`
+
+---
+
+### Example 21: Days of the Week
+
+```python
+day = 4
+match day:
+    case 1:
+        print("Monday")
+    case 2:
+        print("Tuesday")
+    case 3:
+        print("Wednesday")
+    case 4:
+        print("Thursday")
+    case 5:
+        print("Friday")
+    case 6:
+        print("Saturday")
+    case 7:
+        print("Sunday")
+```
+
+**Expected output:**
+```
+Thursday
+```
+
+**Breaking it down:**
+- `day = 4`
+- Python checks `case 1` → 4 ≠ 1 → skip
+- Python checks `case 2` → 4 ≠ 2 → skip
+- Python checks `case 3` → 4 ≠ 3 → skip
+- Python checks `case 4` → 4 == 4 → **match!**
+- `print("Thursday")` runs
+- Python stops checking further
+
+---
+
+### 6.1 Default Case with `_`
+
+If no `case` matches, Python does nothing by default. But you can add a catch-all case using `_` (underscore) — it matches anything that wasn't already matched.
+
+**Always place `_` last**, because it will match everything.
+
+### Example 22: Default with `_`
+
+```python
+day = 9
+match day:
+    case 6:
+        print("Today is Saturday")
+    case 7:
+        print("Today is Sunday")
+    case _:
+        print("Looking forward to the Weekend")
+```
+
+**Expected output:**
+```
+Looking forward to the Weekend
+```
+
+**Breaking it down:**
+- `day = 9`
+- `case 6` → 9 ≠ 6 → skip
+- `case 7` → 9 ≠ 7 → skip
+- `case _` → this matches everything → runs
+
+---
+
+### 6.2 Combining Multiple Values with `|` (OR in Match)
+
+You can check for more than one value in a single `case` using the pipe symbol `|`, which means "or" inside a `match` statement.
+
+### Example 23: Weekday vs Weekend
+
+```python
+day = 4
+match day:
+    case 1 | 2 | 3 | 4 | 5:
+        print("Today is a weekday")
+    case 6 | 7:
+        print("I love weekends!")
+```
+
+**Expected output:**
+```
+Today is a weekday
+```
+
+**Breaking it down:**
+- `day = 4`
+- `case 1 | 2 | 3 | 4 | 5` → does 4 match any of these? Yes! → runs
+
+---
+
+### 6.3 Guards — Adding `if` Conditions Inside `case`
+
+You can add extra conditions to a `case` using a **guard** — an `if` statement written right inside the case line. The case only matches if the value matches AND the guard condition is `True`.
+
+### Example 24: Weekday in a Specific Month
+
+```python
+month = 5
+day = 4
+match day:
+    case 1 | 2 | 3 | 4 | 5 if month == 4:
+        print("A weekday in April")
+    case 1 | 2 | 3 | 4 | 5 if month == 5:
+        print("A weekday in May")
+    case _:
+        print("No match")
+```
+
+**Expected output:**
+```
+A weekday in May
+```
+
+**Breaking it down:**
+- `day = 4`
+- First case: `day` is in 1–5 but `month == 4` → 5 ≠ 4 → guard fails → skip
+- Second case: `day` is in 1–5 AND `month == 5` → 5 == 5 → guard passes → **match!**
+- Output: "A weekday in May"
+
+---
+
+### 6.4 `match` vs `if/elif/else` — When Should You Use Which?
+
+| Situation | Use |
+|-----------|-----|
+| Comparing one variable against many specific exact values | `match` |
+| Checking ranges, complex logic, or combined conditions | `if/elif/else` |
+| Checking two or three conditions only | `if/elif/else` |
+| Building a menu system or command dispatcher | `match` |
+
+---
+
+## Guided Practice Exercises
+
+### Exercise 1: Transport Fare Calculator (Shorthand + Ternary)
+
+**Scenario:** You are building a quick bus fare checker for a Lagos ride-sharing app. If a passenger is a senior citizen (age 65 or above), they pay ₦200; otherwise they pay ₦500.
+
+**Objective:** Use the ternary operator to assign the correct fare.
+
+**Steps:**
+1. Store the passenger's age in a variable
+2. Use the ternary operator to assign the fare based on age
+3. Print the result
+
+**Solution:**
+
+```python
+age = 70
+fare = 200 if age >= 65 else 500
+print("Your fare is ₦", fare)
+```
+
+**Expected output:**
+```
+Your fare is ₦ 200
 ```
 
 **Self-check questions:**
-- Why might the output order differ when you run the code again?
-- How would you modify this to count the number of passes?
+- What would the output be if `age = 30`?
+- How would you extend this to also check if the passenger is a student (aged below 18)?
+
+**What-if challenge:** Add a third condition — students (under 18) pay ₦150. Use a chained ternary or convert to `if/elif/else`.
 
 ---
 
-### Exercise 4: Set Operations (Union, Intersection, Difference)
+### Exercise 2: Student Exam Eligibility (Logical Operators)
 
-**Objective:** Use set operations to compare two groups.
+**Scenario:** A university in Lagos requires a student to meet THREE conditions before sitting for an exam: a minimum score of 40, attendance of at least 75%, and all assignments submitted.
 
-**Scenario:** Two classes took an elective subject. Find out:
-- Who is in either class (union)
-- Who is in both classes (intersection)
-- Who is in Class A but not Class B (difference)
+**Objective:** Use `and` to check all three conditions at once.
+
+**Steps:**
+1. Store the three values as variables
+2. Write a single `if` using `and` to check all three
+3. Print an appropriate message for pass and fail
+
+**Solution:**
 
 ```python
-class_a = {"Alice", "Bob", "Charlie", "Diana"}
-class_b = {"Charlie", "Diana", "Eve", "Frank"}
+score = 55
+attendance = 80
+assignments_submitted = True
 
-# All students in either class
-all_students = class_a.union(class_b)
-print("All students:", all_students)
-
-# Students in both classes
-in_both = class_a.intersection(class_b)
-print("In both:", in_both)
-
-# Only in Class A
-only_a = class_a.difference(class_b)
-print("Only in Class A:", only_a)
-
-# Only in Class B
-only_b = class_b.difference(class_a)
-print("Only in Class B:", only_b)
-
-# Students unique to each class
-unique_each = class_a.symmetric_difference(class_b)
-print("Unique to each:", unique_each)
+if score >= 40 and attendance >= 75 and assignments_submitted:
+    print("Eligible to sit for the exam")
+else:
+    print("Not eligible. Check requirements.")
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
-All students: {'Charlie', 'Frank', 'Eve', 'Alice', 'Bob', 'Diana'}
-In both: {'Charlie', 'Diana'}
-Only in Class A: {'Alice', 'Bob'}
-Only in Class B: {'Frank', 'Eve'}
-Unique to each: {'Frank', 'Eve', 'Alice', 'Bob'}
+Eligible to sit for the exam
 ```
+
+**Self-check questions:**
+- What would happen if `attendance = 60`?
+- Why is `and` more appropriate here than `or`?
+
+**What-if challenge:** Change it so a student can ALSO be eligible if they have a letter from the Dean's office (`has_deans_letter = True`), even if they don't meet all three conditions. Which operator would you add?
 
 ---
 
-### Exercise 5: Frozenset Practice
+### Exercise 3: Bank Account Access Checker (Nested If)
 
-**Objective:** Create and use a frozenset.
+**Scenario:** A Nigerian bank app checks access in two stages. First: is the account active? If yes, it then checks: is the PIN correct?
 
-**Scenario:** A geography quiz app stores the capitals of African countries. Once set, the data should not change.
+**Objective:** Use nested `if` to model this two-stage check.
+
+**Steps:**
+1. Set `account_active` and `correct_pin` variables
+2. Write an outer `if` for account status
+3. Write an inner `if` for PIN verification
+4. Handle all four possible combinations with appropriate messages
+
+**Solution:**
 
 ```python
-ng_capitals = frozenset({"Abuja", "Lagos"})  # Abuja is capital; Lagos is largest city
-gh_capitals = frozenset({"Accra"})
+account_active = True
+correct_pin = False
 
-# Check
-print("Abuja" in ng_capitals)
-print(type(ng_capitals))
-
-# Attempt to modify — this will fail
-try:
-    ng_capitals.add("Kano")
-except AttributeError as e:
-    print(f"Error: {e}")
+if account_active:
+    if correct_pin:
+        print("Access granted. Welcome!")
+    else:
+        print("Wrong PIN. Please try again.")
+else:
+    print("Account is inactive. Contact your branch.")
 ```
 
-**Expected Output:**
+**Expected output:**
 ```
-True
-<class 'frozenset'>
-Error: 'frozenset' object has no attribute 'add'
+Wrong PIN. Please try again.
 ```
+
+**Self-check questions:**
+- What message appears when `account_active = False`?
+- Could you rewrite this using `and`? What would you lose?
 
 ---
 
-## Part 14: Mini Project — Unique Word Analyser
+### Exercise 4: Jollof Rice Order System with `match`
 
-### Project Brief
+**Scenario:** A popular bukka (restaurant) in Abuja takes orders by number. You are building their ordering system.
 
-You will build a tool that analyses text and gives statistics about unique words.
+**Objective:** Use `match` to print the correct dish based on the order number.
 
-**Scenario:** You work at a newspaper. Your editor wants a quick tool that takes a paragraph of text and tells her:
-- How many unique words it contains
-- Words unique to Paragraph A (not in Paragraph B)
-- Words shared between two paragraphs
-- All words across both paragraphs
+**Steps:**
+1. Set an order number variable
+2. Write a `match` statement with cases for dishes 1–4
+3. Add a default `_` case for invalid orders
+4. Add a lunch-hour guard for premium dishes
 
----
-
-### Stage 1: Setup — Split Text into Words
-
-First, let us turn a string into a set of unique lowercase words.
+**Solution:**
 
 ```python
-paragraph_a = "the cat sat on the mat and the cat was happy"
+order = 3
+is_lunch_hour = True
 
-# Step 1: Split the string into individual words
-words_a = paragraph_a.split()
-print("Word list:", words_a)
-
-# Step 2: Convert to a set to get unique words
-unique_a = set(words_a)
-print("Unique words:", unique_a)
-print("Count:", len(unique_a))
+match order:
+    case 1:
+        print("You ordered: Jollof Rice")
+    case 2:
+        print("You ordered: Fried Rice")
+    case 3 if is_lunch_hour:
+        print("You ordered: Egusi Soup (Lunch Special!)")
+    case 3:
+        print("You ordered: Egusi Soup")
+    case 4:
+        print("You ordered: Pepper Soup")
+    case _:
+        print("Invalid order number. Please choose 1–4.")
 ```
 
-**Output:**
+**Expected output:**
 ```
-Word list: ['the', 'cat', 'sat', 'on', 'the', 'mat', 'and', 'the', 'cat', 'was', 'happy']
-Unique words: {'and', 'on', 'sat', 'mat', 'cat', 'happy', 'was', 'the'}
-Count: 8
+You ordered: Egusi Soup (Lunch Special!)
 ```
 
-> `.split()` is a string method that splits a sentence into a list of words at each space.
+**Self-check questions:**
+- What prints if `order = 5`?
+- What prints if `order = 3` but `is_lunch_hour = False`?
 
 ---
 
-### Stage 2: Core Logic — Compare Two Paragraphs
+## Mini Project: Student Portal Decision System
 
-```python
-paragraph_a = "the cat sat on the mat and the cat was happy"
-paragraph_b = "the dog ran on the grass and the dog was tired"
+### Project Overview
 
-set_a = set(paragraph_a.split())
-set_b = set(paragraph_b.split())
-
-# All unique words across both
-all_words = set_a.union(set_b)
-
-# Words in both paragraphs
-shared = set_a.intersection(set_b)
-
-# Words only in paragraph A
-only_in_a = set_a.difference(set_b)
-
-# Words only in paragraph B
-only_in_b = set_b.difference(set_a)
-```
+You are building the core decision engine for a secondary school portal in Lagos. The system automatically determines a student's status, recommends actions, and directs them to the right handler based on their data.
 
 ---
 
-### Stage 3: Display Results
+### Stage 1: Basic Eligibility Check
+
+**Goal:** Determine if a student passed or failed using a one-line ternary.
 
 ```python
-print("=" * 40)
-print("UNIQUE WORD ANALYSIS REPORT")
-print("=" * 40)
-print(f"\nParagraph A has {len(set_a)} unique words.")
-print(f"Paragraph B has {len(set_b)} unique words.")
-print(f"\nTotal unique words across both: {len(all_words)}")
-print(f"Words shared by both: {shared}")
-print(f"Words only in Paragraph A: {only_in_a}")
-print(f"Words only in Paragraph B: {only_in_b}")
+student_name = "Chidinma"
+score = 68
+
+result = "Passed" if score >= 50 else "Failed"
+print(f"{student_name}: {result}")
 ```
 
-**Expected Output:**
+**Milestone output:**
 ```
-========================================
-UNIQUE WORD ANALYSIS REPORT
-========================================
-
-Paragraph A has 8 unique words.
-Paragraph B has 8 unique words.
-
-Total unique words across both: 13
-Words shared by both: {'the', 'and', 'was', 'on'}
-Words only in Paragraph A: {'sat', 'mat', 'cat', 'happy'}
-Words only in Paragraph B: {'dog', 'ran', 'grass', 'tired'}
+Chidinma: Passed
 ```
 
 ---
 
-### Stage 4: Enhancement — Wrap in a Function
+### Stage 2: Full Eligibility with Logical Operators
+
+**Goal:** Check score, attendance, and assignment completion together.
 
 ```python
-def analyse_texts(text_a, text_b):
-    set_a = set(text_a.lower().split())
-    set_b = set(text_b.lower().split())
+student_name = "Chidinma"
+score = 68
+attendance = 82
+assignments_done = True
 
-    print("=" * 45)
-    print("      UNIQUE WORD ANALYSIS REPORT")
-    print("=" * 45)
-    print(f"\nText A unique word count : {len(set_a)}")
-    print(f"Text B unique word count : {len(set_b)}")
-    print(f"\nShared words             : {set_a & set_b}")
-    print(f"Only in Text A           : {set_a - set_b}")
-    print(f"Only in Text B           : {set_b - set_a}")
-    print(f"All unique words combined: {len(set_a | set_b)}")
-    print("=" * 45)
-
-# Test it
-t1 = "Python is fast and Python is fun"
-t2 = "Java is fast and Java is verbose"
-
-analyse_texts(t1, t2)
+if score >= 50 and attendance >= 75 and assignments_done:
+    print(f"{student_name} is eligible to proceed to the next term.")
+else:
+    print(f"{student_name} has unmet requirements. Please see your teacher.")
 ```
 
-**Expected Output:**
+**Milestone output:**
 ```
-=============================================
-      UNIQUE WORD ANALYSIS REPORT
-=============================================
-
-Text A unique word count : 5
-Text B unique word count : 5
-
-Shared words             : {'fast', 'and', 'is'}
-Only in Text A           : {'python', 'fun'}
-Only in Text B           : {'java', 'verbose'}
-All unique words combined: 7
-=============================================
-```
-
-### Reflection Questions
-- What would happen if you passed the same text for both arguments?
-- How would you extend this to work with three paragraphs?
-- Can you make it case-sensitive? When would you want that?
-
-### Optional Extensions
-- Strip punctuation from words before adding to the set
-- Count how many sentences each paragraph has
-- Save the report to a `.txt` file
-
----
-
-## Part 15: Common Beginner Mistakes
-
-### Mistake 1: Using `{}` for an Empty Set
-
-```python
-# ❌ WRONG — this creates an empty DICTIONARY, not a set!
-empty = {}
-print(type(empty))   # <class 'dict'>
-
-# ✅ CORRECT — use set() for an empty set
-empty = set()
-print(type(empty))   # <class 'set'>
-```
-
-### Mistake 2: Trying to Access Items by Index
-
-```python
-# ❌ WRONG
-fruits = {"apple", "banana", "cherry"}
-print(fruits[0])   # TypeError!
-
-# ✅ CORRECT — loop through or check membership
-for item in fruits:
-    print(item)
-```
-
-### Mistake 3: Using `.remove()` When Not Sure Item Exists
-
-```python
-# ❌ RISKY — raises KeyError if "mango" isn't there
-fruits = {"apple", "banana"}
-fruits.remove("mango")
-
-# ✅ SAFE — use discard
-fruits.discard("mango")   # no error
-```
-
-### Mistake 4: Expecting a Fixed Order
-
-```python
-# ❌ ASSUMPTION — sets do not guarantee order
-items = {"z", "a", "m"}
-print(items)   # might print {'m', 'a', 'z'} — order unpredictable
-
-# ✅ If you need order, convert to a sorted list first:
-print(sorted(items))   # ['a', 'm', 'z']
-```
-
-### Mistake 5: Putting a List Inside a Set
-
-```python
-# ❌ WRONG — lists are mutable and cannot be set items
-bad_set = {[1, 2], [3, 4]}   # TypeError: unhashable type: 'list'
-
-# ✅ CORRECT — use tuples (immutable) instead
-good_set = {(1, 2), (3, 4)}
-print(good_set)   # {(1, 2), (3, 4)}
-```
-
-### Mistake 6: Confusing `.union()` and `.update()`
-
-```python
-set1 = {"a", "b"}
-set2 = {"c", "d"}
-
-# union() returns a NEW set — set1 is unchanged
-new_set = set1.union(set2)
-print(set1)    # {'a', 'b'}  — original unchanged
-print(new_set) # {'a', 'b', 'c', 'd'}
-
-# update() MODIFIES set1 in place — no new set is returned
-set1.update(set2)
-print(set1)    # {'a', 'b', 'c', 'd'}  — original changed!
+Chidinma is eligible to proceed to the next term.
 ```
 
 ---
 
-## Part 16: Reflection Questions
+### Stage 3: Grade Classification with Nested If
 
-Take a moment to think through these questions. Try to answer before looking back at the lesson.
+**Goal:** After confirming eligibility, determine the student's exact grade.
 
-1. What are the three key properties of a Python set?
-2. You have a list with 10,000 items and many duplicates. How would you instantly remove all duplicates?
-3. What is the difference between `.remove()` and `.discard()`?
-4. A friend says `{}` creates an empty set. Are they correct? Explain.
-5. When would you use a `frozenset` instead of a regular set?
-6. You have two sets of customer emails from two different marketing campaigns. How would you find emails that appear in both campaigns?
-7. What does `set1.symmetric_difference(set2)` return? Give an example.
-8. Can you put a list inside a set? What about a tuple?
+```python
+student_name = "Chidinma"
+score = 68
+attendance = 82
+assignments_done = True
+
+if score >= 50 and attendance >= 75 and assignments_done:
+    print(f"{student_name} is eligible.")
+    if score >= 80:
+        print("Grade: A — Excellent")
+    elif score >= 70:
+        print("Grade: B — Very Good")
+    elif score >= 60:
+        print("Grade: C — Good")
+    else:
+        print("Grade: D — Pass")
+else:
+    print(f"{student_name} does not meet requirements.")
+```
+
+**Milestone output:**
+```
+Chidinma is eligible.
+Grade: C — Good
+```
 
 ---
 
-## Part 17: Completion Checklist
+### Stage 4: Portal Menu with `match`
 
-Before moving to the next lesson, tick off each item:
+**Goal:** After classification, direct the student to the correct portal section based on their status code.
 
-- [ ] I understand what a Python set is and how it differs from a list
-- [ ] I can create a set using `{}` and `set()`
-- [ ] I know that sets have no duplicates, no fixed order, and no index
-- [ ] I can get the length of a set using `len()`
-- [ ] I can check if an item is in a set using `in` and `not in`
-- [ ] I can loop through a set using a `for` loop
-- [ ] I can add one item using `.add()` and multiple items using `.update()`
-- [ ] I know the difference between `.remove()` and `.discard()`
-- [ ] I can remove all items with `.clear()` and delete a set with `del`
-- [ ] I understand `union()`, `intersection()`, `difference()`, and `symmetric_difference()`
-- [ ] I know the difference between methods that return a new set and those that modify in place
-- [ ] I understand what a frozenset is and when to use it
-- [ ] I have completed at least two guided exercises
-- [ ] I have completed the mini project
+```python
+student_name = "Chidinma"
+status_code = 2  # 1=Honours, 2=Pass, 3=Probation, 4=Expelled
+
+match status_code:
+    case 1:
+        print(f"{student_name}: Congratulations! You are on the Honours List.")
+    case 2:
+        print(f"{student_name}: You passed. Collect your result slip from the office.")
+    case 3:
+        print(f"{student_name}: You are on academic probation. See your counsellor.")
+    case 4:
+        print(f"{student_name}: Account suspended. Visit the admin block.")
+    case _:
+        print(f"Unknown status code for {student_name}. Contact IT support.")
+```
+
+**Milestone output:**
+```
+Chidinma: You passed. Collect your result slip from the office.
+```
+
+---
+
+### Stage 5: Full Portal System
+
+**Goal:** Combine everything into one complete, working portal decision engine.
+
+```python
+student_name = "Chidinma"
+score = 68
+attendance = 82
+assignments_done = True
+has_fees_paid = True
+
+# Step 1: Quick status check using ternary
+quick_status = "Active" if has_fees_paid else "Fee Defaulter"
+print(f"Account Status: {quick_status}")
+
+# Step 2: Eligibility check using logical operators
+if score >= 50 and attendance >= 75 and assignments_done:
+    eligible = True
+    print(f"{student_name} meets all academic requirements.")
+else:
+    eligible = False
+    print(f"{student_name} does not meet requirements.")
+
+# Step 3: Nested grading (only if eligible)
+if eligible:
+    if score >= 80:
+        grade = "A"
+        status_code = 1
+    elif score >= 70:
+        grade = "B"
+        status_code = 2
+    elif score >= 60:
+        grade = "C"
+        status_code = 2
+    else:
+        grade = "D"
+        status_code = 3
+    print(f"Grade: {grade}")
+else:
+    status_code = 3
+
+# Step 4: Portal routing with match
+match status_code:
+    case 1:
+        print("Honours List — Certificate ready for collection.")
+    case 2:
+        print("Standard Pass — Collect result slip at the office.")
+    case 3:
+        print("On Probation — Visit your academic adviser.")
+    case _:
+        print("Status unclear — Contact administration.")
+```
+
+**Final output:**
+```
+Account Status: Active
+Chidinma meets all academic requirements.
+Grade: C
+Standard Pass — Collect result slip at the office.
+```
+
+**Reflection questions:**
+- Which section of the code handles the "what if fees are not paid" case? How would you expand it?
+- What would happen if `score = 40`? Trace through the code step by step.
+- Could you replace the nested grading `if/elif` with a `match` + guards? Try it!
+
+**Optional extension:** Add a `not` operator to show a warning if the student is NOT from the science department: `is_science = False`
+
+---
+
+## Common Beginner Mistakes
+
+### Mistake 1: Forgetting the Colon in Shorthand If
+
+**Wrong:**
+```python
+if a > b  print("yes")
+```
+
+**Correct:**
+```python
+if a > b: print("yes")
+```
+
+The colon is mandatory, even in one-line form.
+
+---
+
+### Mistake 2: Confusing `and` with `or`
+
+**Wrong logic:**
+```python
+# Trying to allow senior citizens or students
+age = 70
+if age >= 65 and age <= 18:  # This will NEVER be True!
+    print("Discount applies")
+```
+
+**Correct:**
+```python
+age = 70
+if age >= 65 or age <= 18:
+    print("Discount applies")
+```
+
+A person cannot be both 65+ AND 18 or younger at the same time. Use `or`.
+
+---
+
+### Mistake 3: Wrong Indentation in Nested If
+
+**Wrong:**
+```python
+if x > 10:
+print("Above 10")  # IndentationError — not indented!
+    if x > 20:
+        print("Above 20")
+```
+
+**Correct:**
+```python
+if x > 10:
+    print("Above 10")
+    if x > 20:
+        print("Above 20")
+```
+
+Every level of nesting requires exactly 4 spaces of indentation.
+
+---
+
+### Mistake 4: Leaving an Empty If Block Without `pass`
+
+**Wrong:**
+```python
+if age < 18:
+    # handle later
+```
+
+This crashes because a comment alone is not a valid Python statement.
+
+**Correct:**
+```python
+if age < 18:
+    pass  # handle later
+```
+
+---
+
+### Mistake 5: Putting the Default `_` Case First in `match`
+
+**Wrong:**
+```python
+match day:
+    case _:
+        print("Unknown day")  # This runs IMMEDIATELY — other cases never checked
+    case 1:
+        print("Monday")
+```
+
+**Correct:**
+```python
+match day:
+    case 1:
+        print("Monday")
+    case _:
+        print("Unknown day")  # Always last
+```
+
+The `_` case is a catch-all. Place it LAST, just like `else`.
+
+---
+
+### Mistake 6: Using `=` Instead of `==` in Conditions
+
+**Wrong:**
+```python
+if score = 85:  # SyntaxError — this is assignment, not comparison
+    print("Pass")
+```
+
+**Correct:**
+```python
+if score == 85:  # == is comparison
+    print("Pass")
+```
+
+---
+
+### Mistake 7: Over-Nesting When `and` Would Be Cleaner
+
+**Harder to read:**
+```python
+if is_active:
+    if has_funds:
+        if is_verified:
+            print("Transaction approved")
+```
+
+**Cleaner:**
+```python
+if is_active and has_funds and is_verified:
+    print("Transaction approved")
+```
+
+Use `and` when all conditions are at the same level of importance and there are no separate `else` branches needed.
+
+---
+
+## Reflection Questions
+
+1. You need to assign "Day" or "Night" to a variable based on whether `hour` is less than 18. Write this using the ternary operator in one line.
+
+2. A hospital system approves treatment only if: the patient has insurance (`has_insurance = True`) AND the doctor has confirmed the diagnosis (`doctor_confirmed = True`) OR the case is an emergency (`is_emergency = True`). Write the `if` condition using logical operators with parentheses.
+
+3. What is the difference between `pass` and a `#` comment inside an `if` block? When do you actually need `pass`?
+
+4. If you have a variable `command` that can be `"start"`, `"stop"`, `"pause"`, or anything else, which is cleaner — a `match` statement or an `if/elif/else` chain? Why?
+
+5. Trace this code manually and write down the output:
+```python
+x = 15
+y = 15
+result = "X wins" if x > y else "Tie" if x == y else "Y wins"
+print(result)
+```
+
+---
+
+## Completion Checklist
+
+Before moving to the next lesson, confirm you can:
+
+- [ ] Write a one-line `if` statement using shorthand syntax
+- [ ] Write a ternary expression to choose between two values
+- [ ] Use `and` to require all conditions to be true
+- [ ] Use `or` to require at least one condition to be true
+- [ ] Use `not` to reverse a condition
+- [ ] Write an `if` inside another `if` (nested)
+- [ ] Explain when to prefer nested `if` over `and`
+- [ ] Use `pass` to safely create an empty `if` block
+- [ ] Explain why a comment alone cannot replace `pass`
+- [ ] Write a `match` statement with multiple `case` options
+- [ ] Add a default `_` case at the bottom of a `match`
+- [ ] Combine multiple values in one `case` using `|`
+- [ ] Add a guard (`if`) inside a `case`
+- [ ] Identify common mistakes and know how to fix them
 
 ---
 
 ## Lesson Summary
 
-Excellent work completing Lesson 13! Here is everything you learned:
+In this lesson you expanded far beyond basic `if/else` into the full toolkit of Python conditional programming:
 
-**What is a Set?**
-A Python set is an unordered collection with no duplicate values and no index. Items cannot be changed directly, but the set can grow or shrink.
+**Shorthand If** — Write simple one-line `if` and `if/else` statements when the logic is short and readable.
 
-**Creating Sets:**
-Use `{item1, item2}` or `set(iterable)`. An empty set must be created with `set()` — not `{}`.
+**Ternary (Conditional Expression)** — Choose between two values or actions in a single line using `value_if_true if condition else value_if_false`.
 
-**Accessing Items:**
-You cannot use `set[0]`. Instead, loop with `for`, or check membership with `in` / `not in`.
+**Logical Operators** — Combine conditions with `and` (both must be true), `or` (at least one must be true), and `not` (reverse the result). Use parentheses for clarity.
 
-**Adding Items:**
-`.add(x)` for one item. `.update(iterable)` for many items from any collection.
+**Nested If** — Place `if` statements inside other `if` statements when decisions depend on each other. Prefer `and` for flat conditions; use nesting when inner logic needs its own `else`.
 
-**Removing Items:**
-`.remove(x)` raises an error if not found. `.discard(x)` is silent. `.pop()` removes a random item. `.clear()` empties the set. `del setname` deletes it entirely.
+**`pass` Statement** — A safe, do-nothing placeholder that prevents `SyntaxError` in empty code blocks. Essential during development when sketching program structure.
 
-**Joining Sets:**
-`.union()` → all items. `.intersection()` → shared items. `.difference()` → items in one but not other. `.symmetric_difference()` → items unique to each set.
+**`match` Statement (Python 3.10+)** — A clean, readable alternative to long `if/elif` chains when comparing one variable against many exact values. Supports multiple values per case (`|`), a default case (`_`), and guards (inline `if` conditions).
 
-**Frozenset:**
-An immutable version of a set. Created with `frozenset()`. Cannot be modified. Can be used as a dictionary key or as an item in another set.
-
-**Real-World Uses:**
-Removing duplicates, membership testing, finding common or unique elements between datasets, building keyword filters, and tracking unique visitors or events.
+Together, these tools give you precise, expressive control over how your Python programs make decisions — from a quick one-liner in a ride-hailing app to a full multi-stage portal system for a Nigerian university.
 
 ---
 
-> **Up next: Lesson 14 — Python Dictionaries.** You will learn how to store key-value pairs, the most powerful Python collection for representing real-world data like records, settings, and lookups.
+## Quick Reference Card
+
+| Feature | Syntax | When to Use |
+|---------|--------|-------------|
+| Shorthand if | `if condition: action` | Simple one-action check |
+| Ternary | `val1 if condition else val2` | Choose between two values/actions |
+| `and` | `cond1 and cond2` | Both must be true |
+| `or` | `cond1 or cond2` | At least one must be true |
+| `not` | `not condition` | Reverse a condition |
+| Nested if | `if a:` then inside `if b:` | Inner check depends on outer |
+| `pass` | `if cond: pass` | Empty block placeholder |
+| `match` basic | `match x: case y: ...` | One value vs many exact options |
+| `match` default | `case _:` | Fallback for unmatched values |
+| `match` multiple | `case 1 \| 2 \| 3:` | Multiple values, one action |
+| `match` guard | `case x if condition:` | Value match + extra check |

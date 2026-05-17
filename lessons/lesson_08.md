@@ -1,1670 +1,1964 @@
 ---
 render_with_liquid: false
-title: "Lesson 08 – Python Strings"
+title: "Lesson 08 – Python Lists Advanced: Looping, Comprehensions, Sorting, Copying, Joining & Methods"
 nav_order: 8
 ---
 
-# Lesson 08 – Python Strings
+# Lesson 08 – Python Lists Advanced: Looping, Comprehensions, Sorting, Copying, Joining & Methods
 
 ---
 
 ## Lesson Introduction
 
-Welcome to one of the most exciting lessons in this Python course! In this lesson, you will learn everything about **strings** — the way Python works with text.
+Welcome to **Lesson 08** — one of the most practically powerful lessons in your Python journey.
 
-Almost every real-world program deals with text: names, messages, addresses, product descriptions, usernames, and so much more. When your Python program reads a user's name, displays a greeting, formats a receipt, or processes a form, it is working with strings. This makes understanding strings absolutely essential.
+In earlier lessons you learned what a list is, how to create one, and how to read or change items inside it. Now you are going to learn **how to do things with entire lists** — how to move through every item automatically, how to build brand-new lists from scratch in one line, how to put lists in order, how to make safe copies, how to combine two lists together, and how to use Python's built-in list toolbox.
 
-By the end of this lesson, you will be able to:
+By the end of this lesson you will be able to:
 
-- Create strings using single and double quotes
-- Store strings in variables and display them
-- Write multiline strings that span several lines
-- Access individual characters inside a string using their position number (index)
-- Slice out portions of a string using start and end positions
-- Use negative indexing to count from the end of a string
-- Modify strings using built-in methods: `upper()`, `lower()`, `strip()`, `replace()`, `split()`
-- Join (concatenate) two strings together using `+`
-- Format strings using f-strings to insert variable values neatly inside text
-- Use escape characters to include special symbols like `\n`, `\t`, `\\`, `\"` inside strings
-- Check if a word or character exists inside a string using `in` and `not in`
-- Use Python's full library of string methods including `find()`, `count()`, `startswith()`, `endswith()`, `join()`, `isdigit()`, `isalpha()`, and many more
+- Loop through every item in a list automatically using `for` and `while`
+- Build new lists in one elegant line using **list comprehensions**
+- Sort a list alphabetically, numerically, in reverse, or using a custom rule
+- Copy a list safely so changes to one copy do not accidentally affect the other
+- Join two or more lists together
+- Use all of Python's built-in list methods (`append`, `remove`, `pop`, `count`, `index`, and more)
+- Build a realistic mini-project combining all of these skills
+
+There is **no assumed prior knowledge** beyond knowing that a list is a collection of items written in square brackets. Every new term will be explained from scratch.
 
 ---
 
-## Prerequisite Concepts
+## Prerequisite Concepts (Read This First)
 
-Before diving in, let's briefly recap what you already know — these ideas will come up frequently:
+Before diving in, let's make sure you are comfortable with three small ideas that appear constantly in this lesson.
 
-**Variables** — A variable is a named container that holds a value. You learned about these in Lesson 04. For example:
+### What Is a List? (Quick Reminder)
+
+A **list** in Python is a container that holds multiple values in a specific order. Each value has a numbered position called an **index**, starting from `0`.
 
 ```python
-city = "Lagos"
+fruits = ["apple", "banana", "cherry"]
+#          index 0   index 1   index 2
 ```
 
-Here, `city` is the variable name and `"Lagos"` is the string value stored inside it.
+You can access one item by writing `fruits[0]` (gives `"apple"`).
 
-**`print()` function** — You already know how to display output using `print()`. We will use it constantly in this lesson.
+### What Is a Loop?
 
-**Data types** — You learned in Lesson 06 that Python has different types of data: integers (whole numbers), floats (decimal numbers), and strings (text). A string is the data type for text.
+A **loop** is a Python instruction that says: *"repeat these lines of code multiple times automatically."*
 
-If any of these feel unfamiliar, please review Lessons 04–06 before continuing.
+Without loops, to print three fruits you would write:
+
+```python
+print(fruits[0])
+print(fruits[1])
+print(fruits[2])
+```
+
+That is only 3 lines. But what if you had 1 000 fruits? Loops solve this problem.
+
+### What Is a Function / Method?
+
+A **function** is a saved block of code with a name. You run it by writing its name followed by `()`.
+
+A **method** is a function that belongs to a specific thing (like a list). You call it with a dot:
+
+```python
+fruits.sort()    # .sort() is a method that belongs to the list called fruits
+```
+
+You will learn many list methods throughout this lesson.
 
 ---
 
-## Section 1 — What Is a String?
+## Part 1 — Looping Through a List
 
-### Why do we need strings?
+### 1.1 What Is Looping and Why Do We Need It?
 
-Computers are very good at working with numbers. But the real world is full of text — names, sentences, addresses, product names, error messages, and much more. Python uses a special data type called a **string** to store and work with text.
+**The problem without loops:**
 
-**Analogy:** Think of a string like a necklace made of beads. Each bead is one character (letter, number, space, or symbol). The whole necklace put together is your string.
+Imagine you have a shopping list with 50 items and you want to print all of them. Writing 50 individual `print()` lines is slow, messy, and impractical. If you add item 51 later, you have to add another line manually.
 
-### What is a string, exactly?
+**The solution — a loop:**
 
-A **string** in Python is a sequence of characters (letters, digits, spaces, punctuation symbols) enclosed in either single quotes (`'`) or double quotes (`"`).
+A loop says: *"Go through every item in this list, one at a time, and do something with each one."* The loop adjusts automatically no matter how many items the list contains.
 
-Both of the following are exactly the same:
-
-```python
-'Eko Atlantic'
-"Eko Atlantic"
-```
-
-Python treats them identically. You choose whichever quote style is more convenient for your specific situation.
-
-### Creating your first string
-
-```python
-print("Hello")
-print('Hello')
-```
-
-**Expected output in browser:**
-```
-Hello
-Hello
-```
-
-Both lines print exactly the same result. Python does not care whether you use single or double quotes, as long as you use the same type at both the opening and closing of the string.
+**Real-world analogy:** Think of a cashier at a supermarket. They don't have separate instructions for each product on the conveyor belt. They have one rule: *"scan the item, enter the price, move to the next one."* That one rule loops over every product automatically. Python loops work the same way.
 
 ---
 
-### 1.1 – Quotes Inside Strings
+### 1.2 The `for` Loop — Looping Directly Through Items
 
-Sometimes you need to include a quote character as part of the text itself. For example: *It's raining* — that apostrophe is inside the string.
+The most common way to loop through a list in Python is the `for` loop. It reads almost like plain English.
 
-**The rule:** Use a different quote type on the outside from the one inside the string.
+**Syntax:**
 
 ```python
-print("It's alright")          # single quote inside, double quotes outside
-print("He is called 'Johnny'") # single quotes inside double quotes
-print('He is called "Johnny"') # double quotes inside single quotes
+for variable_name in list_name:
+    # do something with variable_name
 ```
 
-**Expected output:**
-```
-It's alright
-He is called 'Johnny'
-He is called "Johnny"
+- `variable_name` is a temporary label you make up — it holds one item from the list at a time.
+- `in list_name` tells Python which list to go through.
+- The indented block below runs once **for each item**.
+
+**Example 1 — Print every fruit:**
+
+```python
+fruits = ["apple", "banana", "cherry"]
+
+for x in fruits:
+    print(x)
 ```
 
-> 💡 **Tip:** If your text contains an apostrophe (like *It's* or *Lagos's*), wrap the whole string in double quotes so there's no confusion.
+**Expected Output:**
+```
+apple
+banana
+cherry
+```
+
+**What happened, step by step?**
+
+| Loop Turn | What `x` holds | What gets printed |
+|-----------|----------------|-------------------|
+| 1st       | `"apple"`      | `apple`           |
+| 2nd       | `"banana"`     | `banana`          |
+| 3rd       | `"cherry"`     | `cherry`          |
+
+After the 3rd turn, the list has no more items, so the loop ends automatically.
+
+> 💡 **Tip:** The variable name `x` is just a convention. You could write `for fruit in fruits:` or `for item in fruits:` — any name works. Pick something readable.
+
+**Example 2 — Do something with each item:**
+
+```python
+temperatures = [22, 18, 30, 25, 17]
+
+for temp in temperatures:
+    print(temp + 273)    # Convert Celsius to Kelvin
+```
+
+**Expected Output:**
+```
+295
+291
+303
+298
+290
+```
+
+> 🤔 **Think about it:** What would happen if you added a 6th temperature to the list? Would you need to change the loop?
 
 ---
 
-### 1.2 – Assigning a String to a Variable
+### 1.3 The `for` Loop with `range()` and Index Numbers
 
-You can store a string inside a variable using the `=` sign:
+Sometimes you need to know **which position** (index) you are at, not just the value. This is useful when you want to change items inside the list or when you need to show numbered output.
+
+**`range(len(list_name))` explained:**
+
+- `len(fruits)` counts how many items are in the list. For `["apple","banana","cherry"]` it returns `3`.
+- `range(3)` produces the numbers `0, 1, 2` — exactly the valid index positions.
+- So the loop visits index 0, then 1, then 2.
+
+**Example 3 — Print with index numbers:**
 
 ```python
-city = "Abuja"
-print(city)
+fruits = ["apple", "banana", "cherry"]
+
+for i in range(len(fruits)):
+    print(i, fruits[i])
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-Abuja
+0 apple
+1 banana
+2 cherry
 ```
 
-Let's break this down line by line:
-- `city` — this is the **variable name**. You can choose any name you like (as long as it follows Python naming rules).
-- `=` — this is the **assignment operator**. It tells Python: "store the value on the right inside the variable on the left."
-- `"Abuja"` — this is the **string value** being stored.
-- `print(city)` — this tells Python to display whatever is stored in `city`.
+**Example 4 — Number a shopping list starting from 1:**
+
+```python
+shopping = ["milk", "eggs", "bread", "butter"]
+
+for i in range(len(shopping)):
+    print(str(i + 1) + ". " + shopping[i])
+```
+
+**Expected Output:**
+```
+1. milk
+2. eggs
+3. bread
+4. butter
+```
+
+> 💡 **Note:** We write `i + 1` because indexes start at 0, but humans count from 1.
 
 ---
 
-### 1.3 – Multiline Strings
+### 1.4 The `while` Loop — Looping with a Condition
 
-What if your text is too long for one line? Python lets you write strings that span multiple lines using **triple quotes** — either `"""` (three double quotes) or `'''` (three single quotes).
+A `while` loop keeps repeating as long as a condition is `True`. It is another way to loop through a list when you want fine control over how the loop moves.
 
-```python
-address = """No. 14 Broad Street,
-Lagos Island,
-Lagos State,
-Nigeria."""
-print(address)
-```
-
-**Expected output:**
-```
-No. 14 Broad Street,
-Lagos Island,
-Lagos State,
-Nigeria.
-```
-
-The line breaks in your code are preserved exactly as you typed them. This is very useful for:
-- Long messages
-- Email templates
-- Multi-paragraph text
-- Documentation strings inside functions
-
-You can also use three single quotes:
+**Syntax:**
 
 ```python
-menu = '''Today's menu:
-Jollof Rice - ₦1,500
-Egusi Soup - ₦2,000
-Fried Plantain - ₦500'''
-print(menu)
+i = 0
+while i < len(list_name):
+    # do something with list_name[i]
+    i += 1    # MUST increase i each time, or the loop runs forever!
 ```
 
-**Expected output:**
-```
-Today's menu:
-Jollof Rice - ₦1,500
-Egusi Soup - ₦2,000
-Fried Plantain - ₦500
+**Example 5 — Print every fruit with a `while` loop:**
+
+```python
+fruits = ["apple", "banana", "cherry"]
+
+i = 0
+while i < len(fruits):
+    print(fruits[i])
+    i += 1
 ```
 
-> 🤔 **Thinking Prompt:** What happens if you forget to close the triple quotes? Try it and observe the error Python gives you.
+**Expected Output:**
+```
+apple
+banana
+cherry
+```
+
+**Step-by-step trace:**
+
+| Step | `i` value | Condition `i < 3` | What prints | After `i += 1` |
+|------|-----------|-------------------|-------------|----------------|
+| 1    | 0         | True              | apple       | i = 1          |
+| 2    | 1         | True              | banana      | i = 2          |
+| 3    | 2         | True              | cherry      | i = 3          |
+| 4    | 3         | **False** → STOP  | —           | —              |
+
+> ⚠️ **Common Beginner Mistake — Forgetting `i += 1`:**
+> ```python
+> # WRONG — this runs forever (infinite loop)!
+> i = 0
+> while i < len(fruits):
+>     print(fruits[i])
+>     # forgot to write i += 1
+> ```
+> Always make sure your `while` loop has a line that eventually makes the condition `False`.
 
 ---
 
-## Section 2 — Strings Are Arrays (Indexed Characters)
+### 1.5 The `break` Statement — Exiting a Loop Early
 
-### Why does this matter?
+`break` immediately exits the loop, even if there are more items left.
 
-This is a very important concept. Python treats a string as an ordered list of characters. Each character has a position number called an **index**. This means you can access any individual character by referring to its index number.
-
-**Real-world analogy:** Imagine you have the name "AMAKA" written on 5 separate cards, placed in a row. Each card has a number starting from 0. So the card with "A" is card 0, "M" is card 1, "A" is card 2, "K" is card 3, and "A" is card 4. This is exactly how Python indexes a string.
-
-```
-String:  A  M  A  K  A
-Index:   0  1  2  3  4
-```
-
-**Important:** In Python, counting always starts from **0**, not 1. The first character is at index 0.
-
-### Accessing a character by index
-
-You use square brackets `[]` after the variable name, with the index number inside:
+**Example 6 — Stop when you find "banana":**
 
 ```python
-name = "AMAKA"
-print(name[0])   # first character
-print(name[1])   # second character
-print(name[4])   # fifth (last) character
+fruits = ["apple", "banana", "cherry"]
+
+for x in fruits:
+    if x == "banana":
+        break
+    print(x)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-A
-M
-A
+apple
 ```
 
-Let's trace through each line:
-- `name[0]` → looks at position 0 → finds `'A'` → prints `A`
-- `name[1]` → looks at position 1 → finds `'M'` → prints `M`
-- `name[4]` → looks at position 4 → finds `'A'` → prints `A`
-
-### Another example with a Nigerian phrase
-
-```python
-greeting = "Ekabo"
-print(greeting[0])  # E
-print(greeting[2])  # a
-```
-
-**Expected output:**
-```
-E
-a
-```
-
-> 🤔 **Thinking Prompt:** What happens if you try `greeting[10]` when the string only has 5 characters? Try it. Python will raise an `IndexError`. This tells you the index is out of range (doesn't exist).
+The loop printed `apple`, then hit `banana` and stopped. `cherry` was never reached.
 
 ---
 
-### 2.1 – String Length with `len()`
+### 1.6 The `continue` Statement — Skipping One Item
 
-The `len()` function counts the total number of characters in a string and returns that number. Spaces count too!
+`continue` skips the rest of the current loop turn and jumps to the next item.
 
-```python
-food = "Jollof Rice"
-print(len(food))
-```
-
-**Expected output:**
-```
-11
-```
-
-Why 11? Let's count: `J-o-l-l-o-f- -R-i-c-e` = 11 characters, including the space in the middle.
+**Example 7 — Skip "banana", print everything else:**
 
 ```python
-name = "Babatunde Okonkwo"
-print(len(name))
+fruits = ["apple", "banana", "cherry"]
+
+for x in fruits:
+    if x == "banana":
+        continue
+    print(x)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-17
+apple
+cherry
 ```
 
-`len()` is incredibly useful in real programs. For example: checking if a password is at least 8 characters long, or verifying that a phone number has exactly 11 digits.
+> 🤔 **Think about it:** What is the difference between `break` and `continue`? `break` **ends** the loop entirely. `continue` only **skips** the current item and keeps going.
 
 ---
 
-### 2.2 – Looping Through a String
+### 1.7 `for` Loop with `else`
 
-Because a string is an ordered sequence of characters, you can use a `for` loop to visit each character one by one. (You will study `for` loops in detail in a later lesson, but here's a preview.)
+Python has an unusual but useful feature: you can add an `else` block to a `for` loop. The `else` block runs **after the loop finishes normally** (i.e., it did NOT exit via `break`).
 
-```python
-city = "KANO"
-for letter in city:
-    print(letter)
-```
-
-**Expected output:**
-```
-K
-A
-N
-O
-```
-
-What happened here:
-- The `for` loop picks up one character at a time from the string `"KANO"`
-- Each time through the loop, the variable `letter` holds the current character
-- `print(letter)` displays that character
-
-This is useful for processing text character by character — for example, counting vowels or checking for specific letters.
-
----
-
-### 2.3 – Checking if a Word Is IN a String
-
-You can check whether a particular word, letter, or phrase exists inside a string using the `in` keyword. It returns `True` or `False`.
+**Example 8:**
 
 ```python
-message = "The best things in life are free!"
-print("free" in message)
-print("expensive" in message)
+fruits = ["apple", "banana", "cherry"]
+
+for x in fruits:
+    print(x)
+else:
+    print("Loop finished!")
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-True
-False
-```
-
-You can also use this in an `if` statement to make decisions:
-
-```python
-receipt = "Order: Suya, Malt, Puff Puff"
-if "Suya" in receipt:
-    print("Suya is on the receipt.")
-```
-
-**Expected output:**
-```
-Suya is on the receipt.
-```
-
-### Checking if a word is NOT in a string
-
-Use `not in` to check whether something is **absent**:
-
-```python
-order = "Eba and Egusi Soup"
-print("Semovita" not in order)
-```
-
-**Expected output:**
-```
-True
-```
-
-Because "Semovita" is not part of the string `"Eba and Egusi Soup"`, the result is `True` (it is indeed NOT there).
-
----
-
-## Section 3 — Slicing Strings
-
-### What is slicing?
-
-Slicing means cutting out a specific portion of a string — like slicing a piece of suya from a full skewer. You tell Python where to start and where to stop, and it returns only that part of the string.
-
-### The slice syntax
-
-```
-string_variable[start : end]
-```
-
-- `start` = the index where the slice begins (the character **at** this position IS included)
-- `end` = the index where the slice stops (the character **at** this position is **NOT** included)
-
-### Example: Basic slice
-
-```python
-name = "Babatunde"
-print(name[0:4])
-```
-
-**Expected output:**
-```
-Baba
-```
-
-Let's trace this carefully:
-```
-B  a  b  a  t  u  n  d  e
-0  1  2  3  4  5  6  7  8
-```
-- Start at index 0 → `B`
-- End at index 4 → stop just before `t`
-- So the result is `B`, `a`, `b`, `a` → `"Baba"`
-
-### Another example
-
-```python
-city = "Lagos Island"
-print(city[6:12])
-```
-
-**Expected output:**
-```
-Island
+apple
+banana
+cherry
+Loop finished!
 ```
 
 ---
 
-### 3.1 – Slicing from the Start (Omitting Start Index)
+### Part 1 — Practice Exercise
 
-If you leave out the start index, Python assumes you want to start from the very beginning (index 0):
+**Scenario:** You are a teacher and you have a list of student test scores. Write a program that:
+1. Prints every score
+2. Prints how many scores are above 50
 
 ```python
-food = "Jollof Rice"
-print(food[:6])
+scores = [45, 72, 88, 33, 91, 50, 67]
+
+count_pass = 0
+
+for score in scores:
+    print(score)
+    if score > 50:
+        count_pass += 1
+
+print("Students who passed:", count_pass)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-Jollof
+45
+72
+88
+33
+91
+50
+67
+Students who passed: 4
 ```
 
-This is the same as writing `food[0:6]`.
+> 🔍 **Self-check:** Why is 50 not counted as a pass? Because the condition is `> 50` (strictly greater than), not `>= 50`.
 
 ---
 
-### 3.2 – Slicing to the End (Omitting End Index)
+## Part 2 — List Comprehension
 
-If you leave out the end index, Python slices all the way to the last character:
+### 2.1 What Is a List Comprehension?
+
+A **list comprehension** is a special Python syntax that creates a brand-new list in a single line of code.
+
+**Without comprehension** (the "old way"):
 
 ```python
-food = "Jollof Rice"
-print(food[7:])
+fruits = ["apple", "banana", "cherry"]
+newlist = []
+
+for x in fruits:
+    newlist.append(x)
+
+print(newlist)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-Rice
+['apple', 'banana', 'cherry']
 ```
 
-This is the same as writing `food[7:11]` (since the string has 11 characters, index 11 is just past the end).
+**With comprehension** (the "new way"):
+
+```python
+fruits = ["apple", "banana", "cherry"]
+newlist = [x for x in fruits]
+
+print(newlist)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry']
+```
+
+Both produce identical results. The comprehension is shorter, faster, and once you understand it, easier to read.
 
 ---
 
-### 3.3 – Negative Indexing
-
-Python also lets you count from the **end** of the string using negative numbers. The last character is always at index `-1`, the second to last at `-2`, and so on.
+### 2.2 The Anatomy of a List Comprehension
 
 ```
-B  a  b  a  t  u  n  d  e
--9 -8 -7 -6 -5 -4 -3 -2 -1
+newlist = [expression   for item in iterable   if condition]
+              ↑               ↑                      ↑
+         What to put    Where to get items     Optional filter
+         in the list    (a list, range, etc.)
 ```
 
-```python
-name = "Babatunde"
-print(name[-1])    # last character
-print(name[-3])    # third from the end
-```
+- **expression** — What each item in the new list looks like (could be the item itself, a modified version, etc.)
+- **for item in iterable** — Loop through every item from a list, range, or other collection
+- **if condition** — (Optional) Only include items that pass this test
 
-**Expected output:**
-```
-e
-d
-```
-
-You can also slice using negative indexes:
-
-```python
-name = "Babatunde"
-print(name[-4:-1])
-```
-
-**Expected output:**
-```
-und
-```
-
-**Breakdown:**
-- `-4` points to `u`
-- `-1` points to `e`, but we stop just **before** it
-- So we get `u`, `n`, `d` → `"und"`
-
-> 🤔 **Thinking Prompt:** Try `name[-9:]` — what do you expect? What about `name[:-1]`?
+Think of it like a sentence: *"Give me [expression] for each [item] in [iterable], but only if [condition]."*
 
 ---
 
-### 3.4 – Slice Summary Table
+### 2.3 Comprehension Without a Condition (Simple Filter)
 
-| Syntax | What it does |
+**Example 9 — Copy a list:**
+
+```python
+fruits = ["apple", "banana", "cherry", "kiwi", "mango"]
+newlist = [x for x in fruits]
+print(newlist)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry', 'kiwi', 'mango']
+```
+
+---
+
+### 2.4 Comprehension With a Condition (`if` Filter)
+
+**Example 10 — Only fruits whose name contains the letter "a":**
+
+```python
+fruits = ["apple", "banana", "cherry", "kiwi", "mango"]
+newlist = [x for x in fruits if "a" in x]
+print(newlist)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'mango']
+```
+
+**Example 11 — Only numbers less than 5 from a range:**
+
+```python
+newlist = [x for x in range(10) if x < 5]
+print(newlist)
+```
+
+**Expected Output:**
+```
+[0, 1, 2, 3, 4]
+```
+
+> 🤔 **Think about it:** `range(10)` produces 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. The condition `x < 5` keeps only 0 through 4.
+
+**Example 12 — Exclude one item:**
+
+```python
+fruits = ["apple", "banana", "cherry", "kiwi", "mango"]
+newlist = [x for x in fruits if x != "apple"]
+print(newlist)
+```
+
+**Expected Output:**
+```
+['banana', 'cherry', 'kiwi', 'mango']
+```
+
+---
+
+### 2.5 Transforming Items (Modifying the Expression)
+
+The **expression** part does not have to be just `x`. You can apply any transformation.
+
+**Example 13 — Convert all fruits to UPPERCASE:**
+
+```python
+fruits = ["apple", "banana", "cherry"]
+newlist = [x.upper() for x in fruits]
+print(newlist)
+```
+
+**Expected Output:**
+```
+['APPLE', 'BANANA', 'CHERRY']
+```
+
+**Example 14 — Double every number in a list:**
+
+```python
+numbers = [1, 2, 3, 4, 5]
+doubled = [x * 2 for x in numbers]
+print(doubled)
+```
+
+**Expected Output:**
+```
+[2, 4, 6, 8, 10]
+```
+
+**Real-world use case:** A data analyst might use this to convert a column of temperatures from Celsius to Fahrenheit in one line:
+
+```python
+celsius = [0, 10, 20, 30, 40]
+fahrenheit = [(c * 9/5) + 32 for c in celsius]
+print(fahrenheit)
+```
+
+**Expected Output:**
+```
+[32.0, 50.0, 68.0, 86.0, 104.0]
+```
+
+---
+
+### 2.6 Conditional Expression Inside the Expression (`if...else` in the Expression)
+
+You can also use an `if/else` directly inside the expression part (not the filter part) to choose between two values for each item.
+
+**Syntax:**
+
+```python
+newlist = [value_if_true if condition else value_if_false  for item in iterable]
+```
+
+**Example 15 — Replace "banana" with "orange", keep everything else:**
+
+```python
+fruits = ["apple", "banana", "cherry"]
+newlist = [x if x != "banana" else "orange" for x in fruits]
+print(newlist)
+```
+
+**Expected Output:**
+```
+['apple', 'orange', 'cherry']
+```
+
+**Explained:** For each `x` in the list:
+- If `x` is NOT "banana" → keep `x` as-is
+- If `x` IS "banana" → replace it with `"orange"`
+
+**Example 16 — Label numbers as "even" or "odd":**
+
+```python
+numbers = [1, 2, 3, 4, 5, 6]
+labels = ["even" if n % 2 == 0 else "odd" for n in numbers]
+print(labels)
+```
+
+**Expected Output:**
+```
+['odd', 'even', 'odd', 'even', 'odd', 'even']
+```
+
+---
+
+### 2.7 Using `range()` as the Iterable
+
+You can use `range()` instead of an existing list to generate values on the fly.
+
+**Example 17 — Squares of numbers 1 through 5:**
+
+```python
+squares = [x ** 2 for x in range(1, 6)]
+print(squares)
+```
+
+**Expected Output:**
+```
+[1, 4, 9, 16, 25]
+```
+
+---
+
+### 2.8 Common Beginner Mistake — Confusing the Two `if` Positions
+
+There are **two places** an `if` can go in a comprehension, and they do different things:
+
+```python
+# FILTER if — goes AFTER the for clause, NO else allowed here
+[x for x in fruits if x != "banana"]        # Removes banana from results
+
+# EXPRESSION if — goes BEFORE the for clause, MUST have else
+[x if x != "banana" else "orange" for x in fruits]  # Replaces banana with orange
+```
+
+> ⚠️ **Wrong — trying to use else with a filter if:**
+> ```python
+> # WRONG — SyntaxError
+> [x for x in fruits if x != "banana" else "orange"]
+> ```
+> Move the `if/else` to the expression part (before `for`) when you need an else.
+
+---
+
+### Part 2 — Practice Exercise
+
+**Scenario:** You have a list of product prices. Create a new list that:
+1. Includes only prices greater than 10
+2. Applies a 10% discount to each qualifying price
+
+```python
+prices = [5.99, 15.00, 8.50, 22.00, 3.75, 12.99]
+
+discounted = [round(p * 0.9, 2) for p in prices if p > 10]
+print(discounted)
+```
+
+**Expected Output:**
+```
+[13.5, 19.8, 11.69]
+```
+
+> 🔍 **Self-check:** Why are 5.99, 8.50, and 3.75 missing from the result?
+
+---
+
+## Part 3 — Sorting a List
+
+### 3.1 What Does Sorting Mean and Why Does It Matter?
+
+**Sorting** means arranging the items in a list in a specific order — most commonly alphabetical (A to Z) or numerical (smallest to largest).
+
+**Why sort?**
+
+- A doctor needs patient records sorted by last name.
+- A store needs products sorted by price (cheapest first).
+- A teacher needs exam scores sorted highest to lowest.
+- A search engine needs results sorted by relevance.
+
+Python gives you two main tools for sorting:
+- `.sort()` — **modifies the original list** (in-place sort)
+- `sorted()` — **creates a new sorted list**, leaving the original unchanged
+
+---
+
+### 3.2 The `.sort()` Method — Sort the Original List
+
+`.sort()` rearranges the items inside the list permanently.
+
+**Example 18 — Sort strings alphabetically:**
+
+```python
+thislist = ["orange", "mango", "kiwi", "pineapple", "banana"]
+thislist.sort()
+print(thislist)
+```
+
+**Expected Output:**
+```
+['banana', 'kiwi', 'mango', 'orange', 'pineapple']
+```
+
+**Example 19 — Sort numbers from smallest to largest:**
+
+```python
+thislist = [100, 50, 65, 82, 23]
+thislist.sort()
+print(thislist)
+```
+
+**Expected Output:**
+```
+[23, 50, 65, 82, 100]
+```
+
+> 💡 **Remember:** `.sort()` changes the list itself. After calling it, the original order is **gone**.
+
+---
+
+### 3.3 Sort in Descending Order with `reverse=True`
+
+Add `reverse=True` to sort from largest to smallest (numbers) or Z to A (strings).
+
+**Example 20 — Sort strings Z to A:**
+
+```python
+thislist = ["orange", "mango", "kiwi", "pineapple", "banana"]
+thislist.sort(reverse=True)
+print(thislist)
+```
+
+**Expected Output:**
+```
+['pineapple', 'orange', 'mango', 'kiwi', 'banana']
+```
+
+**Example 21 — Sort numbers largest to smallest:**
+
+```python
+thislist = [100, 50, 65, 82, 23]
+thislist.sort(reverse=True)
+print(thislist)
+```
+
+**Expected Output:**
+```
+[100, 82, 65, 50, 23]
+```
+
+---
+
+### 3.4 Case-Insensitive Sorting with `key=str.lower`
+
+By default, Python sorts uppercase letters before lowercase letters (because uppercase letters have lower ASCII values). This can cause surprising results.
+
+**Example 22 — Default sort (case-sensitive, uppercase first):**
+
+```python
+thislist = ["banana", "Orange", "Kiwi", "cherry"]
+thislist.sort()
+print(thislist)
+```
+
+**Expected Output:**
+```
+['Kiwi', 'Orange', 'banana', 'cherry']
+```
+
+`Kiwi` and `Orange` appear first because Python sees capital letters as "smaller."
+
+**Example 23 — Case-insensitive sort:**
+
+```python
+thislist = ["banana", "Orange", "Kiwi", "cherry"]
+thislist.sort(key=str.lower)
+print(thislist)
+```
+
+**Expected Output:**
+```
+['banana', 'cherry', 'Kiwi', 'Orange']
+```
+
+**How `key=str.lower` works:** Before comparing any two items, Python temporarily converts them to lowercase just for the comparison. The original capitalisation is kept in the final list — only the sorting logic uses lowercase.
+
+---
+
+### 3.5 Custom Sort Functions with `key=`
+
+You can pass any function to `key=` to control how sorting decisions are made. The function receives each item and returns a value; Python sorts by those returned values.
+
+**Example 24 — Sort strings by their length (shortest first):**
+
+```python
+def my_func(e):
+    return len(e)
+
+thislist = ["banana", "kiwi", "pineapple", "apple"]
+thislist.sort(key=my_func)
+print(thislist)
+```
+
+**Expected Output:**
+```
+['kiwi', 'apple', 'banana', 'pineapple']
+```
+
+`len("kiwi")` = 4, `len("apple")` = 5, `len("banana")` = 6, `len("pineapple")` = 9 — so sorted by those lengths.
+
+**Example 25 — Sort a list of numbers by their distance from 50:**
+
+```python
+def distance_from_50(n):
+    return abs(n - 50)
+
+numbers = [100, 50, 65, 23, 48]
+numbers.sort(key=distance_from_50)
+print(numbers)
+```
+
+**Expected Output:**
+```
+[50, 48, 65, 23, 100]
+```
+
+> 💡 `abs()` returns the absolute value — the distance from zero, always positive. So `abs(23 - 50)` = `abs(-27)` = `27`.
+
+---
+
+### 3.6 The `.reverse()` Method — Flip the List Order
+
+`.reverse()` simply flips the list backwards. It does NOT sort — it just reverses whatever order the items are currently in.
+
+**Example 26:**
+
+```python
+fruits = ["banana", "Orange", "Kiwi", "cherry"]
+fruits.reverse()
+print(fruits)
+```
+
+**Expected Output:**
+```
+['cherry', 'Kiwi', 'Orange', 'banana']
+```
+
+---
+
+### 3.7 The `sorted()` Built-in Function — Sort Without Changing the Original
+
+`sorted()` returns a **new sorted list** and leaves the original list unchanged.
+
+**Example 27:**
+
+```python
+original = [100, 50, 65, 82, 23]
+new_sorted = sorted(original)
+
+print("Original:", original)
+print("Sorted:  ", new_sorted)
+```
+
+**Expected Output:**
+```
+Original: [100, 50, 65, 82, 23]
+Sorted:   [23, 50, 65, 82, 100]
+```
+
+> 🤔 **When to use `.sort()` vs `sorted()`?**
+> - Use `.sort()` when you want to permanently sort the original list.
+> - Use `sorted()` when you want to keep the original list intact and work with a sorted copy.
+
+---
+
+### Part 3 — Practice Exercise
+
+**Scenario:** You run a small bookshop. You have a list of book prices. Display them sorted from cheapest to most expensive, and separately from most expensive to cheapest.
+
+```python
+prices = [12.99, 7.50, 24.00, 3.99, 18.75, 9.00]
+
+prices.sort()
+print("Cheapest to most expensive:", prices)
+
+prices.sort(reverse=True)
+print("Most expensive to cheapest:", prices)
+```
+
+**Expected Output:**
+```
+Cheapest to most expensive: [3.99, 7.5, 9.0, 12.99, 18.75, 24.0]
+Most expensive to cheapest: [24.0, 18.75, 12.99, 9.0, 7.5, 3.99]
+```
+
+---
+
+## Part 4 — Copying a List
+
+### 4.1 The Problem with Direct Assignment
+
+This is one of the most important and surprising concepts for beginners. Many new Python learners make a critical mistake here.
+
+**Example 28 — The Dangerous Mistake:**
+
+```python
+list1 = ["apple", "banana", "cherry"]
+list2 = list1          # THIS IS NOT A COPY — it's a second name for the SAME list
+
+list2.append("date")
+
+print(list1)           # Expected ['apple','banana','cherry'] — SURPRISE!
+print(list2)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry', 'date']
+['apple', 'banana', 'cherry', 'date']
+```
+
+**Why?** When you write `list2 = list1`, Python does NOT create a new list. Instead, `list2` becomes another label pointing to the **exact same list in memory**. Any change made via `list2` is also visible via `list1`, because they are the same object.
+
+**Analogy:** Imagine a house and two keys. If you give your friend a copy of your house key (same lock), they can enter your house. If they move the furniture, you'll find it moved too. `list2 = list1` is like giving your friend a key — not a separate identical house.
+
+To get a **separate identical house**, you need to actually **build a copy**.
+
+---
+
+### 4.2 Copying with the `.copy()` Method
+
+**Example 29 — Safe copy with `.copy()`:**
+
+```python
+list1 = ["apple", "banana", "cherry"]
+list2 = list1.copy()       # Creates a REAL independent copy
+
+list2.append("date")
+
+print(list1)               # Original — unchanged
+print(list2)               # Copy — has the new item
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry']
+['apple', 'banana', 'cherry', 'date']
+```
+
+Now `list1` and `list2` are completely independent. Changes to one do not affect the other.
+
+---
+
+### 4.3 Copying with the `list()` Constructor
+
+Another clean and readable way to copy a list is to pass it to the built-in `list()` function:
+
+**Example 30:**
+
+```python
+list1 = ["apple", "banana", "cherry"]
+list2 = list(list1)        # Creates a new list with the same contents
+
+list2[0] = "mango"
+
+print(list1)               # Unchanged
+print(list2)               # Modified copy
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry']
+['mango', 'banana', 'cherry']
+```
+
+---
+
+### 4.4 Copying with Slice Notation `[:]`
+
+A third common approach is the **full slice**. Slicing always returns a new list.
+
+**Example 31:**
+
+```python
+list1 = ["apple", "banana", "cherry"]
+list2 = list1[:]           # Full slice = entire list as a new copy
+
+list2.remove("banana")
+
+print(list1)
+print(list2)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry']
+['apple', 'cherry']
+```
+
+---
+
+### 4.5 Summary — Three Ways to Copy a List
+
+| Method | Code | Creates independent copy? |
+|--------|------|---------------------------|
+| `.copy()` | `list2 = list1.copy()` | ✅ Yes |
+| `list()` | `list2 = list(list1)` | ✅ Yes |
+| Slice `[:]` | `list2 = list1[:]` | ✅ Yes |
+| Direct assignment | `list2 = list1` | ❌ No — same object! |
+
+> 💡 **When does copying matter in real life?** In data science, you often need to process a dataset without destroying the original. A researcher might copy their raw data before cleaning it, so the original stays intact for verification.
+
+---
+
+### Part 4 — Practice Exercise
+
+**Scenario:** You have a roster of students. You want to create a "backup" roster before making changes.
+
+```python
+original_roster = ["Alice", "Bob", "Charlie", "Diana"]
+backup_roster = original_roster.copy()
+
+# Enroll a new student in the working copy
+original_roster.append("Eve")
+
+print("Current roster:", original_roster)
+print("Backup roster: ", backup_roster)
+```
+
+**Expected Output:**
+```
+Current roster: ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve']
+Backup roster:  ['Alice', 'Bob', 'Charlie', 'Diana']
+```
+
+---
+
+## Part 5 — Joining / Concatenating Lists
+
+### 5.1 What Is Joining?
+
+**Joining** (also called **concatenating**) two or more lists means combining them into one single list. All items from both lists appear together.
+
+**Real-world example:** You manage two warehouses. Warehouse A has one inventory list, Warehouse B has another. To get the combined inventory, you join the two lists.
+
+---
+
+### 5.2 Method 1 — The `+` Operator
+
+The simplest way to join two lists is to add them with `+`:
+
+**Example 32:**
+
+```python
+list1 = ["a", "b", "c"]
+list2 = [1, 2, 3]
+
+list3 = list1 + list2
+print(list3)
+```
+
+**Expected Output:**
+```
+['a', 'b', 'c', 1, 2, 3]
+```
+
+> 💡 This creates a **new combined list**. `list1` and `list2` are unchanged.
+
+**Example 33 — Joining three lists:**
+
+```python
+fruits = ["apple", "banana"]
+veggies = ["carrot", "spinach"]
+grains = ["rice", "oats"]
+
+all_foods = fruits + veggies + grains
+print(all_foods)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'carrot', 'spinach', 'rice', 'oats']
+```
+
+---
+
+### 5.3 Method 2 — The `.extend()` Method
+
+`.extend()` adds all items from one list **directly into another list** (modifies the first list in place):
+
+**Example 34:**
+
+```python
+list1 = ["a", "b", "c"]
+list2 = [1, 2, 3]
+
+list1.extend(list2)
+print(list1)
+```
+
+**Expected Output:**
+```
+['a', 'b', 'c', 1, 2, 3]
+```
+
+> 🤔 **What is the difference between `+` and `.extend()`?**
+> - `+` creates a **brand new list**, leaving both originals unchanged.
+> - `.extend()` **modifies** `list1` by adding items from `list2` into it.
+
+**Example 35 — Adding a tuple to a list with `.extend()`:**
+
+`.extend()` accepts any iterable (list, tuple, set, range, etc.), not just lists:
+
+```python
+list1 = ["apple", "banana", "cherry"]
+tuple1 = ("kiwi", "orange")
+
+list1.extend(tuple1)
+print(list1)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry', 'kiwi', 'orange']
+```
+
+---
+
+### 5.4 Method 3 — A Loop with `.append()`
+
+You can also join lists manually using a loop:
+
+**Example 36:**
+
+```python
+list1 = ["a", "b", "c"]
+list2 = [1, 2, 3]
+
+for x in list2:
+    list1.append(x)
+
+print(list1)
+```
+
+**Expected Output:**
+```
+['a', 'b', 'c', 1, 2, 3]
+```
+
+> 💡 This works but `.extend()` is more concise and faster. Use the loop approach when you need to filter or transform items during the join.
+
+---
+
+### 5.5 Joining Summary
+
+| Method | Code | Modifies original? | Use when |
+|--------|------|--------------------|----------|
+| `+` operator | `c = a + b` | ❌ No | You want a new list |
+| `.extend()` | `a.extend(b)` | ✅ Yes (adds to `a`) | You want to grow one list |
+| Loop + `.append()` | `for x in b: a.append(x)` | ✅ Yes | You need to filter/transform during join |
+
+---
+
+### Part 5 — Practice Exercise
+
+**Scenario:** You manage two event guest lists. Combine them into one master list.
+
+```python
+vip_guests = ["Alice", "Bob", "Charlie"]
+general_guests = ["Diana", "Eve", "Frank"]
+
+# Method 1: using +
+master_list = vip_guests + general_guests
+print("Master list:", master_list)
+
+# Method 2: using .extend()
+vip_guests.extend(general_guests)
+print("VIP list extended:", vip_guests)
+```
+
+**Expected Output:**
+```
+Master list: ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank']
+VIP list extended: ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank']
+```
+
+---
+
+## Part 6 — All Python List Methods
+
+Python lists come with a powerful built-in toolbox of methods. Here is a complete reference guide for every method, with explanations and examples.
+
+### Overview Table
+
+| Method | What It Does |
 |--------|-------------|
-| `s[2:5]` | Characters from index 2 up to (not including) 5 |
-| `s[:5]` | Characters from the start up to (not including) 5 |
-| `s[2:]` | Characters from index 2 to the end |
-| `s[-3:-1]` | Third and second characters from the end |
-| `s[:]` | The entire string (a copy) |
+| `append()` | Adds one item to the end |
+| `clear()` | Removes all items |
+| `copy()` | Returns a copy of the list |
+| `count()` | Counts how many times a value appears |
+| `extend()` | Adds all items from another iterable to the end |
+| `index()` | Returns the index of the first occurrence of a value |
+| `insert()` | Inserts an item at a specified position |
+| `pop()` | Removes and returns the item at a specified index |
+| `remove()` | Removes the first occurrence of a specified value |
+| `reverse()` | Reverses the order of the list |
+| `sort()` | Sorts the list |
 
 ---
 
-## Section 4 — Modifying Strings
+### 6.1 `append()` — Add One Item to the End
 
-### An important note first
+**What it does:** Adds a single item to the very end of the list.
 
-In Python, **strings are immutable** — this means you cannot change a string after it is created. The string `"Lagos"` will always be `"Lagos"`. However, you can create a *new* string that is a modified version of the original and store it in the same (or a different) variable. Python provides many built-in **methods** for this purpose.
+**Syntax:** `list.append(item)`
 
-**What is a method?** A method is a function that belongs to a specific type of object. String methods are functions built into every string. You call them using the **dot notation**: `variable_name.method_name()`.
+**Example 37:**
+
+```python
+thislist = ["apple", "banana", "cherry"]
+thislist.append("orange")
+print(thislist)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry', 'orange']
+```
+
+> ⚠️ **Common mistake:** Appending a list inside a list:
+> ```python
+> thislist.append(["orange", "grape"])
+> # This adds ONE item that is itself a list: ['apple', 'banana', 'cherry', ['orange', 'grape']]
+> # Use .extend() if you want to add multiple items separately
+> ```
 
 ---
 
-### 4.1 – `upper()` — Convert to Uppercase
+### 6.2 `clear()` — Remove All Items
 
-The `upper()` method returns a new string where all letters have been converted to UPPERCASE.
+**What it does:** Empties the list completely. The list object still exists, it just has no items.
 
-```python
-city = "lagos"
-print(city.upper())
-```
+**Syntax:** `list.clear()`
 
-**Expected output:**
-```
-LAGOS
-```
-
-Nothing happened to the original variable `city` — it still contains `"lagos"`. The method returned a new string. To save the result, assign it:
+**Example 38:**
 
 ```python
-city = "lagos"
-city_upper = city.upper()
-print(city_upper)
+thislist = ["apple", "banana", "cherry"]
+thislist.clear()
+print(thislist)
 ```
 
-**Real-world use:** Converting user names to uppercase before comparing, so that "amaka", "Amaka", and "AMAKA" are treated as the same name.
-
----
-
-### 4.2 – `lower()` — Convert to Lowercase
-
-The `lower()` method returns a new string where all letters are in lowercase:
-
-```python
-name = "CHUKWUEMEKA ONYEKACHI"
-print(name.lower())
+**Expected Output:**
 ```
-
-**Expected output:**
-```
-chukwuemeka onyekachi
-```
-
-**Real-world use:** Storing emails in lowercase so that "User@Gmail.com" and "user@gmail.com" match correctly.
-
----
-
-### 4.3 – `strip()` — Remove Extra Whitespace
-
-Whitespace is invisible space characters (spaces, tabs) at the beginning or end of a string. It often appears when users type input carelessly. The `strip()` method removes these automatically.
-
-```python
-name = "   Ngozi   "
-print(name.strip())
-```
-
-**Expected output:**
-```
-Ngozi
-```
-
-Notice that the spaces around the word have been removed, but the letters themselves are untouched.
-
-You can also use:
-- `lstrip()` — removes whitespace from the **left** side only
-- `rstrip()` — removes whitespace from the **right** side only
-
-```python
-name = "   Ngozi   "
-print(name.lstrip())   # "Ngozi   "
-print(name.rstrip())   # "   Ngozi"
-```
-
-**Real-world use:** Cleaning up form input data before saving it to a database.
-
----
-
-### 4.4 – `replace()` — Replace Part of a String
-
-The `replace()` method searches for a specific word or character and replaces it with something else. It returns a new string.
-
-```python
-slogan = "Lagos is the best city in Africa"
-print(slogan.replace("Lagos", "Abuja"))
-```
-
-**Expected output:**
-```
-Abuja is the best city in Africa
-```
-
-Nothing was permanently changed — the original variable `slogan` still holds the original text. The method returned a modified copy.
-
-Another example:
-
-```python
-order = "I want pounded yam and egusi soup"
-updated = order.replace("pounded yam", "eba")
-print(updated)
-```
-
-**Expected output:**
-```
-I want eba and egusi soup
+[]
 ```
 
 ---
 
-### 4.5 – `split()` — Split a String into Parts
+### 6.3 `copy()` — Return a Copy
 
-The `split()` method divides a string into multiple pieces and returns them as a **list** (a collection of items). You tell it what character to split on — the **separator**.
+Already covered in Part 4. Quick reminder:
 
-```python
-states = "Lagos,Abuja,Kano,Ibadan,Enugu"
-print(states.split(","))
-```
-
-**Expected output:**
-```
-['Lagos', 'Abuja', 'Kano', 'Ibadan', 'Enugu']
-```
-
-Python found each comma and used it as a cutting point. The result is a list of five strings.
-
-By default (if you don't give a separator), `split()` splits on any whitespace:
+**Example 39:**
 
 ```python
-sentence = "Eko  o ni baje"
-print(sentence.split())
+thislist = ["apple", "banana", "cherry"]
+mylist = thislist.copy()
+print(mylist)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-['Eko', 'o', 'ni', 'baje']
-```
-
-**Real-world use:** Reading a CSV (comma-separated values) file, breaking up a full name into first name and last name, parsing command-line arguments.
-
----
-
-## Section 5 — Concatenating Strings
-
-### What is concatenation?
-
-**Concatenation** means joining two or more strings together to create one longer string. Think of it like linking train carriages together. In Python, you use the `+` operator to concatenate strings.
-
-```python
-first = "Babatunde"
-last = "Okonkwo"
-full_name = first + " " + last
-print(full_name)
-```
-
-**Expected output:**
-```
-Babatunde Okonkwo
-```
-
-Let's trace this:
-- `first` contains `"Babatunde"`
-- `" "` is a string containing just one space
-- `last` contains `"Okonkwo"`
-- `first + " " + last` joins all three → `"Babatunde Okonkwo"`
-
-Notice that Python does not add a space automatically. You must include the space as a separate string `" "` between the name parts.
-
-### Another concatenation example
-
-```python
-greeting = "Good morning"
-name = "Mama Ngozi"
-message = greeting + ", " + name + "!"
-print(message)
-```
-
-**Expected output:**
-```
-Good morning, Mama Ngozi!
+['apple', 'banana', 'cherry']
 ```
 
 ---
 
-### 5.1 – You Cannot Concatenate a String and a Number Directly
+### 6.4 `count()` — Count Occurrences of a Value
 
-This is one of the most common beginner mistakes. If you try to join a string and a number using `+`, Python will raise a `TypeError`.
+**What it does:** Returns how many times a specific value appears in the list.
 
-```python
-age = 25
-# WRONG:
-# print("My age is " + age)  # This will cause an error!
+**Syntax:** `list.count(value)`
 
-# CORRECT:
-print("My age is " + str(age))
-```
-
-**Expected output:**
-```
-My age is 25
-```
-
-The `str()` function converts a number to a string so that it can be joined with other strings. You learned about this in the casting lesson!
-
----
-
-## Section 6 — Formatting Strings (f-strings)
-
-### Why do we need string formatting?
-
-Imagine you want to print a personalised greeting like: *"Welcome, Adaeze! You have 3 new messages."* The name and number of messages will change depending on the user. Building this message using `+` (concatenation) is possible but awkward:
+**Example 40:**
 
 ```python
-name = "Adaeze"
-messages = 3
-print("Welcome, " + name + "! You have " + str(messages) + " new messages.")
+thislist = [1, 4, 2, 9, 7, 8, 9, 3, 1]
+print(thislist.count(9))
 ```
 
-This works but is clunky and easy to get wrong. Python offers a much cleaner solution: **f-strings** (formatted string literals).
-
-### How f-strings work
-
-An f-string is created by putting the letter `f` immediately before the opening quote. Inside the string, you can embed variable names or expressions inside **curly braces `{}`**. Python will automatically replace `{variable}` with the value of that variable.
-
-```python
-name = "Adaeze"
-messages = 3
-print(f"Welcome, {name}! You have {messages} new messages.")
-```
-
-**Expected output:**
-```
-Welcome, Adaeze! You have 3 new messages.
-```
-
-Clean, simple, and easy to read!
-
-### More f-string examples
-
-```python
-food = "Jollof Rice"
-price = 1500
-print(f"Today's special: {food} costs ₦{price}.")
-```
-
-**Expected output:**
-```
-Today's special: Jollof Rice costs ₦1500.
-```
-
----
-
-### 6.1 – F-strings Can Do Arithmetic
-
-You can put calculations directly inside the curly braces:
-
-```python
-quantity = 4
-unit_price = 500
-print(f"Total cost: ₦{quantity * unit_price}")
-```
-
-**Expected output:**
-```
-Total cost: ₦2000
-```
-
-Python evaluates the expression `quantity * unit_price` (which is `4 * 500 = 2000`) and inserts the result into the string.
-
----
-
-### 6.2 – The Older `.format()` Method
-
-Before f-strings were introduced in Python 3.6, programmers used the `.format()` method. You will still see this in older codebases, so it is important to recognise it.
-
-```python
-name = "Emeka"
-age = 22
-print("My name is {} and I am {} years old.".format(name, age))
-```
-
-**Expected output:**
-```
-My name is Emeka and I am 22 years old.
-```
-
-The `{}` are placeholders. Python replaces them in order with the values passed to `.format()`. F-strings are generally preferred in modern Python because they are more readable, but both approaches work correctly.
-
----
-
-## Section 7 — Escape Characters
-
-### What is an escape character?
-
-Sometimes you need to include a character inside a string that Python would normally misinterpret. For example, how do you include a double quote inside a double-quoted string? Python would see the second `"` and think the string has ended.
-
-The solution is to use **escape characters**. An escape character is a backslash `\` followed by a specific letter. The backslash tells Python: "the next character is special — treat it differently."
-
-### The most important escape characters
-
-| Escape Code | What it produces |
-|-------------|-----------------|
-| `\"` | A double quote mark |
-| `\'` | A single quote (apostrophe) |
-| `\\` | A literal backslash |
-| `\n` | A new line (line break) |
-| `\t` | A horizontal tab (indentation) |
-| `\r` | Carriage return |
-
----
-
-### 7.1 – `\"` — Include a Double Quote
-
-```python
-print("She said, \"Eko o ni baje!\"")
-```
-
-**Expected output:**
-```
-She said, "Eko o ni baje!"
-```
-
-The `\"` tells Python: this `"` is part of the text, not the end of the string.
-
----
-
-### 7.2 – `\'` — Include an Apostrophe
-
-```python
-print('It\'s a beautiful day in Lagos.')
-```
-
-**Expected output:**
-```
-It's a beautiful day in Lagos.
-```
-
-(Alternatively, you could just use double quotes on the outside: `"It's a beautiful day in Lagos."` — and then no escape is needed.)
-
----
-
-### 7.3 – `\\` — Include a Backslash
-
-This is useful for file paths on Windows:
-
-```python
-print("File path: C:\\Users\\Babatunde\\Documents")
-```
-
-**Expected output:**
-```
-File path: C:\Users\Babatunde\Documents
-```
-
-Each `\\` produces a single `\` in the output.
-
----
-
-### 7.4 – `\n` — New Line
-
-```python
-print("Name: Adaeze\nCity: Enugu\nCountry: Nigeria")
-```
-
-**Expected output:**
-```
-Name: Adaeze
-City: Enugu
-Country: Nigeria
-```
-
-The `\n` causes Python to move to a new line at that exact point.
-
----
-
-### 7.5 – `\t` — Tab (Indent)
-
-```python
-print("Item\t\tPrice")
-print("Suya\t\t₦500")
-print("Puff Puff\t₦200")
-```
-
-**Expected output:**
-```
-Item		Price
-Suya		₦500
-Puff Puff	₦200
-```
-
-The `\t` inserts a tab space, which is useful for aligning text in columns.
-
----
-
-## Section 8 — String Methods Reference
-
-Python has a very rich library of string methods. You have already learned `upper()`, `lower()`, `strip()`, `replace()`, and `split()`. Here is a comprehensive tour of all the important ones.
-
-### 8.1 – `capitalize()` — Capitalise the First Letter
-
-```python
-name = "ngozi adaeze"
-print(name.capitalize())
-```
-
-**Expected output:**
-```
-Ngozi adaeze
-```
-
-Only the very first letter of the entire string is capitalised. All other letters become lowercase.
-
----
-
-### 8.2 – `title()` — Capitalise the First Letter of Every Word
-
-```python
-name = "babatunde okonkwo abubakar"
-print(name.title())
-```
-
-**Expected output:**
-```
-Babatunde Okonkwo Abubakar
-```
-
-This is very useful for formatting names and headings.
-
----
-
-### 8.3 – `count()` — Count How Many Times a Word or Letter Appears
-
-```python
-sentence = "Jollof rice is the best rice in all of Africa"
-print(sentence.count("rice"))
-```
-
-**Expected output:**
+**Expected Output:**
 ```
 2
 ```
 
-The word "rice" appears twice in the sentence, so `count()` returns `2`. This method is case-sensitive — "Rice" and "rice" are counted separately.
+**Real-world use:** A weather analyst might count how many days in a month the temperature exceeded 30°C.
+
+```python
+temps = [28, 31, 33, 29, 35, 30, 33, 32, 31, 33]
+print("Days above 30:", temps.count(31) + temps.count(32) + temps.count(33) + temps.count(35))
+```
+
+> 💡 For more complex counting conditions, use a loop or comprehension instead.
 
 ---
 
-### 8.4 – `find()` — Find the Position of a Substring
+### 6.5 `extend()` — Add Items from Another Iterable
 
-`find()` searches for a word or character inside a string and returns the **index** (position number) where it first appears. If the word is not found, it returns `-1`.
+Already covered in Part 5. Quick reminder:
 
-```python
-text = "My name is Amaka Obi"
-print(text.find("Amaka"))
-print(text.find("Tunde"))
-```
-
-**Expected output:**
-```
-11
--1
-```
-
-`"Amaka"` starts at index 11. `"Tunde"` is not in the string, so `-1` is returned.
-
----
-
-### 8.5 – `index()` — Like `find()` but Raises an Error if Not Found
-
-`index()` works like `find()` but instead of returning `-1` when the word is not found, it raises a `ValueError` error. Use `find()` when you're not sure if the word exists; use `index()` when you are sure it exists.
+**Example 41:**
 
 ```python
-text = "I love suya"
-print(text.index("suya"))
+thislist = ["apple", "banana", "cherry"]
+thislist.extend(["kiwi", "orange"])
+print(thislist)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-7
+['apple', 'banana', 'cherry', 'kiwi', 'orange']
 ```
 
 ---
 
-### 8.6 – `startswith()` and `endswith()` — Check the Start or End
+### 6.6 `index()` — Find the Position of a Value
+
+**What it does:** Returns the **index** (position) of the first occurrence of a specified value.
+
+**Syntax:** `list.index(value)`
+
+**Example 42:**
 
 ```python
-email = "adaeze@gmail.com"
-print(email.startswith("adaeze"))   # True
-print(email.endswith(".com"))        # True
-print(email.endswith(".ng"))         # False
+thislist = ["apple", "banana", "cherry"]
+print(thislist.index("cherry"))
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-True
-True
-False
+2
 ```
 
-These are incredibly useful for validating data — for example, checking if an email address ends with `.com` or `.ng`.
+**Example 43 — Search within a range:**
+
+You can optionally pass a start and end position: `list.index(value, start, end)`
+
+```python
+fruits = ["apple", "banana", "cherry", "banana", "kiwi"]
+print(fruits.index("banana"))       # First banana is at index 1
+print(fruits.index("banana", 2))    # Search from index 2 onwards — finds banana at index 3
+```
+
+**Expected Output:**
+```
+1
+3
+```
+
+> ⚠️ **Common mistake:** If the value does not exist, `.index()` raises a `ValueError`. Use this carefully or check first with `if value in list`.
 
 ---
 
-### 8.7 – `isdigit()` — Check if All Characters Are Numbers
+### 6.7 `insert()` — Add an Item at a Specific Position
+
+**What it does:** Inserts an item at the index you specify. All existing items at and after that index shift one position to the right.
+
+**Syntax:** `list.insert(index, item)`
+
+**Example 44:**
 
 ```python
-phone = "08012345678"
-print(phone.isdigit())
-
-code = "A12B"
-print(code.isdigit())
+thislist = ["apple", "banana", "cherry"]
+thislist.insert(1, "orange")
+print(thislist)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-True
-False
+['apple', 'orange', 'banana', 'cherry']
 ```
 
-Returns `True` only if every character in the string is a digit (0–9). Very useful for validating phone numbers or ID numbers.
+`"orange"` was inserted at index 1. `"banana"` moved from index 1 to index 2. `"cherry"` moved from index 2 to index 3.
 
----
-
-### 8.8 – `isalpha()` — Check if All Characters Are Letters
+**Example 45 — Insert at the beginning:**
 
 ```python
-name = "Babatunde"
-print(name.isalpha())    # True (only letters)
-
-mixed = "Lagos123"
-print(mixed.isalpha())   # False (contains digits)
+thislist = ["banana", "cherry"]
+thislist.insert(0, "apple")
+print(thislist)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-True
-False
-```
-
----
-
-### 8.9 – `isalnum()` — Check if All Characters Are Letters or Numbers
-
-```python
-username = "user123"
-print(username.isalnum())   # True
-
-with_space = "user 123"
-print(with_space.isalnum()) # False (contains a space)
-```
-
-**Expected output:**
-```
-True
-False
-```
-
----
-
-### 8.10 – `isspace()` — Check if the String is Only Spaces
-
-```python
-blank = "   "
-print(blank.isspace())   # True
-
-not_blank = "  a  "
-print(not_blank.isspace())  # False
-```
-
-**Expected output:**
-```
-True
-False
+['apple', 'banana', 'cherry']
 ```
 
 ---
 
-### 8.11 – `join()` — Join a List of Strings into One String
+### 6.8 `pop()` — Remove and Return an Item by Index
 
-`join()` is the opposite of `split()`. It takes a **list** of strings and joins them together into one string, with a separator of your choice placed between each item.
+**What it does:** Removes the item at the specified index and **returns** it (so you can use the removed item). If no index is given, it removes and returns the **last** item.
 
-```python
-states = ["Lagos", "Abuja", "Kano", "Enugu"]
-result = ", ".join(states)
-print(result)
-```
+**Syntax:** `list.pop(index)` or `list.pop()`
 
-**Expected output:**
-```
-Lagos, Abuja, Kano, Enugu
-```
-
-The string `", "` is the separator — it is placed between each item from the list.
-
-Another example using a hyphen:
+**Example 46 — Pop the last item:**
 
 ```python
-parts = ["08", "01", "234", "5678"]
-phone = "-".join(parts)
-print(phone)
+thislist = ["apple", "banana", "cherry"]
+removed = thislist.pop()
+print("Removed:", removed)
+print("List now:", thislist)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-08-01-234-5678
+Removed: cherry
+List now: ['apple', 'banana']
+```
+
+**Example 47 — Pop a specific index:**
+
+```python
+thislist = ["apple", "banana", "cherry"]
+removed = thislist.pop(1)
+print("Removed:", removed)
+print("List now:", thislist)
+```
+
+**Expected Output:**
+```
+Removed: banana
+List now: ['apple', 'cherry']
+```
+
+> 💡 **Real-world use:** `pop()` is commonly used in "stack" data structures — like a pile of plates where you always take from the top. Each `pop()` removes the most recently added item.
+
+---
+
+### 6.9 `remove()` — Remove an Item by Value
+
+**What it does:** Finds the **first occurrence** of the specified value and removes it. Unlike `pop()`, you give it a **value**, not an index.
+
+**Syntax:** `list.remove(value)`
+
+**Example 48:**
+
+```python
+thislist = ["apple", "banana", "cherry"]
+thislist.remove("banana")
+print(thislist)
+```
+
+**Expected Output:**
+```
+['apple', 'cherry']
+```
+
+**Example 49 — Removes only the FIRST occurrence:**
+
+```python
+thislist = ["apple", "banana", "cherry", "banana"]
+thislist.remove("banana")
+print(thislist)
+```
+
+**Expected Output:**
+```
+['apple', 'cherry', 'banana']
+```
+
+Only the first `"banana"` was removed. The second one remains.
+
+> ⚠️ **Common mistake:** If the value does not exist in the list, `remove()` raises a `ValueError`. Check first with `if value in list` if you are not sure.
+
+---
+
+### 6.10 `reverse()` — Reverse the List In-Place
+
+Already covered in Part 3. Quick reminder:
+
+**Example 50:**
+
+```python
+fruits = ["apple", "banana", "cherry"]
+fruits.reverse()
+print(fruits)
+```
+
+**Expected Output:**
+```
+['cherry', 'banana', 'apple']
 ```
 
 ---
 
-### 8.12 – `zfill()` — Pad a String with Zeros
+### 6.11 `sort()` — Sort the List In-Place
 
-`zfill()` fills the left side of a string with zeros until it reaches the specified total length:
+Already covered in Part 3. Quick reminder:
 
-```python
-number = "7"
-print(number.zfill(4))
-```
-
-**Expected output:**
-```
-0007
-```
-
-Useful when you need IDs or codes with a fixed number of digits — like student ID: `"0042"`.
-
----
-
-### 8.13 – `center()`, `ljust()`, `rjust()` — Align Text
-
-These methods add padding (spaces) to align text within a given width.
+**Example 51:**
 
 ```python
-name = "Amaka"
-print(name.center(15))   # Centres text in 15 characters
-print(name.ljust(15))    # Aligns to the left
-print(name.rjust(15))    # Aligns to the right
+cars = ["Ford", "BMW", "Volvo"]
+cars.sort()
+print(cars)
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-     Amaka     
-Amaka          
-          Amaka
+['BMW', 'Ford', 'Volvo']
 ```
 
 ---
 
-### 8.14 – `swapcase()` — Swap Upper and Lower Case
+### 6.12 Method Chaining — Can You Chain List Methods?
+
+Most list methods return `None` (they modify in place), so you **cannot** chain them like string methods. This is a common beginner mistake:
 
 ```python
-text = "Lagos Is GREAT"
-print(text.swapcase())
+# WRONG — .sort() returns None, so you'd be printing None
+result = thislist.sort()
+print(result)      # Prints: None
 ```
-
-**Expected output:**
-```
-lAGOS iS great
-```
-
-Every uppercase letter becomes lowercase and vice versa.
-
----
-
-### Complete String Methods Quick Reference
-
-| Method | What it does |
-|--------|-------------|
-| `upper()` | All letters UPPERCASE |
-| `lower()` | All letters lowercase |
-| `capitalize()` | First letter of string capitalised |
-| `title()` | First letter of every word capitalised |
-| `strip()` | Remove whitespace from both ends |
-| `lstrip()` | Remove whitespace from left only |
-| `rstrip()` | Remove whitespace from right only |
-| `replace(old, new)` | Replace all occurrences of `old` with `new` |
-| `split(sep)` | Split into a list using `sep` as the separator |
-| `join(list)` | Join list items into one string |
-| `find(sub)` | Return index of first occurrence (or -1) |
-| `index(sub)` | Return index of first occurrence (error if not found) |
-| `count(sub)` | Count how many times `sub` appears |
-| `startswith(sub)` | True if string starts with `sub` |
-| `endswith(sub)` | True if string ends with `sub` |
-| `isdigit()` | True if all characters are digits |
-| `isalpha()` | True if all characters are letters |
-| `isalnum()` | True if all characters are letters or digits |
-| `isspace()` | True if all characters are whitespace |
-| `zfill(width)` | Pad with zeros on the left |
-| `center(width)` | Centre the string in a field of given width |
-| `ljust(width)` | Left-align in a field of given width |
-| `rjust(width)` | Right-align in a field of given width |
-| `swapcase()` | Swap upper and lower case letters |
-
----
-
-## Section 9 — Guided Practice Exercises
-
-### Exercise 1 — Student Name Formatter
-
-**Objective:** Use string methods to clean and format a student's name properly.
-
-**Scenario:** A school system receives student name input that may have inconsistent capitalisation and extra spaces. You need to clean it up.
-
-**Steps:**
-
-1. Store the messy name in a variable
-2. Use `strip()` to remove extra whitespace
-3. Use `title()` to capitalise each word properly
-4. Print the cleaned name
-5. Print the length of the cleaned name
-6. Print just the first name (assume first name ends before the first space — hint: use `split()`)
-
-**Starter code:**
 
 ```python
-raw_name = "  chioma adannaya okonkwo  "
-
-# Step 1: Strip whitespace
-clean_name = raw_name.strip()
-
-# Step 2: Title case
-formatted_name = clean_name.title()
-
-# Step 3: Print the formatted name
-print(formatted_name)
-
-# Step 4: Print its length
-print(len(formatted_name))
-
-# Step 5: Split and get first name
-parts = formatted_name.split()
-first_name = parts[0]
-print("First name:", first_name)
-```
-
-**Expected output:**
-```
-Chioma Adannaya Okonkwo
-23
-First name: Chioma
-```
-
-**Self-check questions:**
-- Why did we `strip()` before `title()`? Does the order matter?
-- What would `parts[2]` give you?
-- What happens if you call `split()` without any argument?
-
----
-
-### Exercise 2 — Receipt Generator
-
-**Objective:** Use f-strings and string concatenation to generate a formatted receipt.
-
-**Scenario:** Mama Ngozi's shop in Yaba Market needs a Python program to print a simple receipt.
-
-**Steps:**
-
-1. Store three items, their quantities, and unit prices in variables
-2. Calculate the total for each item
-3. Calculate the overall total
-4. Use f-strings to print a formatted receipt
-
-```python
-item1 = "Garri"
-qty1 = 2
-price1 = 800
-
-item2 = "Palm Oil"
-qty2 = 1
-price2 = 1200
-
-item3 = "Stockfish"
-qty3 = 3
-price3 = 600
-
-total1 = qty1 * price1
-total2 = qty2 * price2
-total3 = qty3 * price3
-grand_total = total1 + total2 + total3
-
-print("=" * 30)
-print("MAMA NGOZI'S SHOP - YABA")
-print("=" * 30)
-print(f"{item1:<15} x{qty1}  ₦{total1}")
-print(f"{item2:<15} x{qty2}  ₦{total2}")
-print(f"{item3:<15} x{qty3}  ₦{total3}")
-print("-" * 30)
-print(f"{'TOTAL':<15}      ₦{grand_total}")
-print("=" * 30)
-```
-
-**Expected output:**
-```
-==============================
-MAMA NGOZI'S SHOP - YABA
-==============================
-Garri           x2  ₦1600
-Palm Oil        x1  ₦1200
-Stockfish       x3  ₦1800
-------------------------------
-TOTAL                ₦4600
-==============================
-```
-
-> 💡 **New concept in this exercise:** `f"{item1:<15}"` means "print `item1` in a space that is 15 characters wide, aligned to the LEFT". This is a formatting shortcut inside f-strings that helps create neat columns. The `*` operator used with a string (like `"=" * 30`) repeats the string 30 times.
-
-**Self-check questions:**
-- What is the value of `grand_total`?
-- What does `"=" * 30` produce?
-- How would you change the receipt to show prices in full naira with kobo (decimals)?
-
----
-
-### Exercise 3 — Phone Number Validator
-
-**Objective:** Use string methods to validate a Nigerian phone number.
-
-**Scenario:** A registration form collects phone numbers. You need to check whether the input looks like a valid Nigerian number: starts with `"0"`, contains only digits, and is exactly 11 characters long.
-
-```python
-phone = "08012345678"
-
-# Validation checks
-correct_length = len(phone) == 11
-starts_correctly = phone.startswith("0")
-only_digits = phone.isdigit()
-
-if correct_length and starts_correctly and only_digits:
-    print(f"✓ '{phone}' is a valid Nigerian phone number.")
-else:
-    print(f"✗ '{phone}' is NOT a valid phone number.")
-    if not correct_length:
-        print(f"  → It has {len(phone)} digits. It should have 11.")
-    if not starts_correctly:
-        print("  → It should start with 0.")
-    if not only_digits:
-        print("  → It should contain only digits.")
-```
-
-**Expected output (valid number):**
-```
-✓ '08012345678' is a valid Nigerian phone number.
-```
-
-Try changing `phone` to `"0801234"` and run again:
-
-```
-✗ '0801234' is NOT a valid phone number.
-  → It has 7 digits. It should have 11.
-```
-
-**Self-check questions:**
-- What does `and` mean when combining conditions?
-- What happens if the phone number contains a hyphen like `"0801-234-5678"`?
-
----
-
-## Section 10 — Mini Project: Student Profile Generator
-
-**Project description:** Build a Python program that generates a neat, formatted student profile card. This project combines everything you have learned in this lesson.
-
-**Skills covered:** String creation, variables, `upper()`, `title()`, `strip()`, f-strings, `len()`, `replace()`, slicing, escape characters.
-
-### Stage 1 — Store Raw Data
-
-```python
-# Raw student data (as it might come from a form)
-raw_full_name = "  adaeze chioma obi  "
-raw_email = "ADAEZE.OBI@UNILAG.EDU.NG"
-raw_phone = "08054321987"
-state_of_origin = "Anambra"
-level = 200
-gpa = 4.52
-department = "Computer Science"
-```
-
-**Milestone checkpoint:** At this point you should have 7 variables with raw data. Nothing is printed yet.
-
-### Stage 2 — Clean and Format the Data
-
-```python
-# Clean and format
-full_name = raw_full_name.strip().title()       # "Adaeze Chioma Obi"
-email = raw_email.lower()                       # "adaeze.obi@unilag.edu.ng"
-first_name = full_name.split()[0]              # "Adaeze"
-initials = full_name[0] + full_name.split()[1][0] + full_name.split()[2][0]  # "ACO"
-student_id = "CSC" + raw_phone[-4:].zfill(6)  # "CSC001987"
-```
-
-**Milestone checkpoint:** Print each cleaned variable to verify it looks correct before moving on.
-
-### Stage 3 — Generate the Profile Card
-
-```python
-separator = "=" * 45
-
-print(separator)
-print("       UNIVERSITY OF LAGOS")
-print("       STUDENT PROFILE CARD")
-print(separator)
-print(f"  Full Name    : {full_name}")
-print(f"  Student ID   : {student_id}")
-print(f"  Initials     : {initials}")
-print(f"  Department   : {department}")
-print(f"  Level        : {level}L")
-print(f"  State        : {state_of_origin}")
-print(f"  Email        : {email}")
-print(f"  Phone        : {raw_phone}")
-print(f"  GPA          : {gpa}")
-print(separator)
-print(f"  Welcome, {first_name}! Keep up the great work.")
-print(separator)
-```
-
-**Expected final output:**
-```
-=============================================
-       UNIVERSITY OF LAGOS
-       STUDENT PROFILE CARD
-=============================================
-  Full Name    : Adaeze Chioma Obi
-  Student ID   : CSC001987
-  Initials     : ACO
-  Department   : Computer Science
-  Level        : 200L
-  State        : Anambra
-  Email        : adaeze.obi@unilag.edu.ng
-  Phone        : 08054321987
-  GPA          : 4.52
-=============================================
-  Welcome, Adaeze! Keep up the great work.
-=============================================
-```
-
-### Stage 4 — Reflection Questions
-
-1. How did slicing help extract the last 4 digits of the phone number?
-2. Why did we use `.lower()` on the email address?
-3. What does `full_name.split()[1][0]` do exactly? Break it down step by step.
-4. How would you modify the program to display the GPA as a percentage instead?
-
-### Optional Extension Challenge
-
-- Add a check: if GPA is above 4.5, add the line `"  Status: FIRST CLASS DISTINCTION"` to the card.
-- Add the student's year of admission by subtracting the level from the current year.
-- Use `replace()` to mask part of the phone number for privacy: show `"0805***1987"`.
-
----
-
-## Section 11 — Common Beginner Mistakes
-
-### Mistake 1 — Mismatched Quotes
-
-**Wrong:**
-```python
-name = "Adaeze'   # Error! Started with double quote, ended with single
-```
-
-**Correct:**
-```python
-name = "Adaeze"
-# OR
-name = 'Adaeze'
-```
-
-Always use the **same** quote type at both ends.
-
----
-
-### Mistake 2 — Off-By-One Indexing
-
-**Wrong thinking:** "The first character is at index 1."
-
-**Correct:** The first character is ALWAYS at index **0** in Python.
-
-```python
-name = "Kola"
-print(name[0])  # Correct: K
-print(name[1])  # This is the SECOND character: o
+# CORRECT — sort first, then print the list itself
+thislist.sort()
+print(thislist)
 ```
 
 ---
 
-### Mistake 3 — Forgetting the End Index is Exclusive
+## Part 7 — List Exercises (Practice Section)
 
-When slicing `[2:5]`, you get characters at index 2, 3, 4 — but **NOT** 5.
+The following exercises are inspired by the W3Schools Python Lists exercises. Work through each one, attempt it yourself, then check the solution.
+
+---
+
+### Exercise 1 — Print the Second Item
+
+**Task:** Print the second item in the list `fruits = ["apple", "banana", "cherry"]`.
 
 ```python
-text = "Lagos"
-print(text[1:4])  # 'ago' — NOT 'agos'
+fruits = ["apple", "banana", "cherry"]
+print(fruits[1])
+```
+
+**Expected Output:**
+```
+banana
 ```
 
 ---
 
-### Mistake 4 — Trying to Concatenate a String and a Number
+### Exercise 2 — Change the Third Item
 
-**Wrong:**
+**Task:** Change the third item in the list `fruits` from `"cherry"` to `"watermelon"`.
+
 ```python
-age = 25
-print("I am " + age + " years old")   # TypeError!
+fruits = ["apple", "banana", "cherry"]
+fruits[2] = "watermelon"
+print(fruits)
 ```
 
-**Correct:**
-```python
-age = 25
-print("I am " + str(age) + " years old")   # Works!
-# OR use an f-string:
-print(f"I am {age} years old")             # Better!
+**Expected Output:**
 ```
-
----
-
-### Mistake 5 — Thinking `replace()` Changes the Original String
-
-**Wrong thinking:** "After `a.replace('H', 'J')`, the variable `a` now contains the modified string."
-
-**Correct:** `replace()` returns a NEW string. The original is unchanged unless you reassign:
-
-```python
-a = "Hello"
-a.replace("H", "J")  # Does nothing useful — result is discarded!
-print(a)              # Still prints: Hello
-
-# Correct way:
-a = a.replace("H", "J")
-print(a)              # Now prints: Jello
+['apple', 'banana', 'watermelon']
 ```
 
 ---
 
-### Mistake 6 — Forgetting `f` Before an F-String
+### Exercise 3 — Find the Length
 
-**Wrong:**
+**Task:** Print the number of items in the list `fruits`.
+
 ```python
-name = "Emeka"
-print("Hello, {name}")   # Prints: Hello, {name}  (literally)
+fruits = ["apple", "banana", "cherry"]
+print(len(fruits))
 ```
 
-**Correct:**
-```python
-name = "Emeka"
-print(f"Hello, {name}")  # Prints: Hello, Emeka
+**Expected Output:**
 ```
-
-Without the `f` prefix, Python treats `{name}` as plain text, not a variable reference.
-
----
-
-### Mistake 7 — Case Sensitivity in `find()` and `in`
-
-String operations are **case-sensitive**. `"Lagos"` and `"lagos"` are different strings!
-
-```python
-city = "Lagos"
-print("lagos" in city)         # False! (lowercase 'l')
-print("Lagos" in city)         # True
-print(city.find("lagos"))      # -1 (not found)
-```
-
-To search case-insensitively, convert both strings to the same case first:
-
-```python
-print("lagos" in city.lower())   # True
+3
 ```
 
 ---
 
-## Reflection Questions
+### Exercise 4 — Add an Item
 
-Think carefully about these before moving on:
+**Task:** Use the correct method to add `"orange"` to the list `fruits`.
 
-1. In your own words, what is a Python string? How is it different from a number?
-2. Why does Python start indexing at 0 instead of 1? Can you think of any real-world system that also counts from zero?
-3. What is the difference between `find()` and `index()`? When would you choose one over the other?
-4. Explain the difference between `split()` and `join()` — how are they opposites of each other?
-5. You have a variable `phone = "080 123 45678"`. What steps would you take to clean it so it only contains digits and is ready for validation?
-6. Why are f-strings considered better than concatenation using `+`? Can you think of a situation where `+` might still be useful?
-7. What does "strings are immutable" mean? How does this affect how you use string methods?
+```python
+fruits = ["apple", "banana", "cherry"]
+fruits.append("orange")
+print(fruits)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry', 'orange']
+```
+
+---
+
+### Exercise 5 — Remove an Item
+
+**Task:** Use the correct method to remove `"banana"` from the list.
+
+```python
+fruits = ["apple", "banana", "cherry"]
+fruits.remove("banana")
+print(fruits)
+```
+
+**Expected Output:**
+```
+['apple', 'cherry']
+```
+
+---
+
+### Exercise 6 — Loop and Print
+
+**Task:** Use a `for` loop to print every item in the list.
+
+```python
+fruits = ["apple", "banana", "cherry"]
+for x in fruits:
+    print(x)
+```
+
+**Expected Output:**
+```
+apple
+banana
+cherry
+```
+
+---
+
+### Exercise 7 — Sort Alphabetically
+
+**Task:** Use the correct method to sort the list `cars` alphabetically.
+
+```python
+cars = ["Porsche", "BMW", "Volvo", "Audi"]
+cars.sort()
+print(cars)
+```
+
+**Expected Output:**
+```
+['Audi', 'BMW', 'Porsche', 'Volvo']
+```
+
+---
+
+### Exercise 8 — Copy a List
+
+**Task:** Use the correct method to copy the list `fruits` into a variable called `mylist`.
+
+```python
+fruits = ["apple", "banana", "cherry"]
+mylist = fruits.copy()
+print(mylist)
+```
+
+**Expected Output:**
+```
+['apple', 'banana', 'cherry']
+```
+
+---
+
+## Part 8 — Mini Project: Student Grade Manager
+
+### Project Overview
+
+You will build a **Student Grade Manager** that stores student names and their exam scores, then uses all the skills from this lesson to analyse and display results.
+
+**Skills used:** loops, list comprehension, sorting, copying, joining, and list methods.
+
+---
+
+### Stage 1 — Setup: Create Your Data
+
+```python
+# Student names and their scores
+students = ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank"]
+scores   = [72, 45, 88, 91, 33, 67]
+```
+
+---
+
+### Stage 2 — Loop Through and Display Results
+
+```python
+print("=== Grade Report ===")
+for i in range(len(students)):
+    print(students[i] + ": " + str(scores[i]))
+```
+
+**Expected Output:**
+```
+=== Grade Report ===
+Alice: 72
+Bob: 45
+Charlie: 88
+Diana: 91
+Eve: 33
+Frank: 67
+```
+
+---
+
+### Stage 3 — Use List Comprehension to Identify Passing Students
+
+A passing score is 50 or above.
+
+```python
+passing = [students[i] for i in range(len(students)) if scores[i] >= 50]
+failing = [students[i] for i in range(len(students)) if scores[i] < 50]
+
+print("\nPassing students:", passing)
+print("Failing students:", failing)
+```
+
+**Expected Output:**
+```
+Passing students: ['Alice', 'Charlie', 'Diana', 'Eve...']
+Failing students: ['Bob', 'Eve']
+```
+
+Wait — let's check: Eve scored 33, so she fails. Bob scored 45, so he fails. Let's verify:
+
+```
+Alice 72 ✅  Bob 45 ❌  Charlie 88 ✅  Diana 91 ✅  Eve 33 ❌  Frank 67 ✅
+```
+
+```
+Passing students: ['Alice', 'Charlie', 'Diana', 'Frank']
+Failing students: ['Bob', 'Eve']
+```
+
+---
+
+### Stage 4 — Sort the Scores (Keep a Copy of Original)
+
+```python
+scores_copy = scores.copy()
+scores_copy.sort()
+
+print("\nScores lowest to highest:", scores_copy)
+print("Original scores unchanged:", scores)
+```
+
+**Expected Output:**
+```
+Scores lowest to highest: [33, 45, 67, 72, 88, 91]
+Original scores unchanged: [72, 45, 88, 91, 33, 67]
+```
+
+---
+
+### Stage 5 — Add a New Class and Join Lists
+
+A new class of students just joined. Join the two groups.
+
+```python
+new_students = ["Grace", "Hank"]
+new_scores   = [80, 55]
+
+all_students = students + new_students
+all_scores   = scores + new_scores
+
+print("\nAll students:", all_students)
+print("All scores:  ", all_scores)
+```
+
+**Expected Output:**
+```
+All students: ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Hank']
+All scores:   [72, 45, 88, 91, 33, 67, 80, 55]
+```
+
+---
+
+### Stage 6 — Final Summary Using Methods
+
+```python
+print("\n=== Summary ===")
+print("Total students:", len(all_students))
+print("Highest score: ", max(all_scores))
+print("Lowest score:  ", min(all_scores))
+print("Top scorer:    ", all_students[all_scores.index(max(all_scores))])
+print("Needs support: ", all_students[all_scores.index(min(all_scores))])
+```
+
+**Expected Output:**
+```
+=== Summary ===
+Total students: 8
+Highest score:  91
+Lowest score:   33
+Top scorer:     Diana
+Needs support:  Eve
+```
+
+---
+
+### Stage 7 — Complete Project Code
+
+```python
+# ===== Student Grade Manager =====
+
+students = ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank"]
+scores   = [72, 45, 88, 91, 33, 67]
+
+# --- Grade Report ---
+print("=== Grade Report ===")
+for i in range(len(students)):
+    print(students[i] + ": " + str(scores[i]))
+
+# --- Pass/Fail ---
+passing = [students[i] for i in range(len(students)) if scores[i] >= 50]
+failing = [students[i] for i in range(len(students)) if scores[i] < 50]
+
+print("\nPassing students:", passing)
+print("Failing students:", failing)
+
+# --- Sorted Copy ---
+scores_copy = scores.copy()
+scores_copy.sort()
+print("\nScores (sorted):", scores_copy)
+
+# --- Join New Class ---
+new_students = ["Grace", "Hank"]
+new_scores   = [80, 55]
+
+all_students = students + new_students
+all_scores   = scores + new_scores
+
+# --- Summary ---
+print("\n=== Summary ===")
+print("Total students:", len(all_students))
+print("Highest score: ", max(all_scores))
+print("Lowest score:  ", min(all_scores))
+print("Top scorer:    ", all_students[all_scores.index(max(all_scores))])
+print("Needs support: ", all_students[all_scores.index(min(all_scores))])
+```
+
+> 🚀 **Optional Extension Challenges:**
+> - Calculate and display the **class average**.
+> - Add a **letter grade** (A, B, C, D, F) next to each score using a comprehension.
+> - Sort students by score from highest to lowest and display a ranked leaderboard.
+
+---
+
+## Part 9 — Common Beginner Mistakes (Full Reference)
+
+| Mistake | Wrong Code | Why It's Wrong | Correct Code |
+|---------|-----------|----------------|-------------|
+| Modifying list while looping | `for x in lst: lst.remove(x)` | Skips items because list shrinks | Loop over a copy: `for x in lst.copy()` |
+| Forgetting `i += 1` in while | `while i < len(lst): print(lst[i])` | Infinite loop | Add `i += 1` inside the loop |
+| `=` instead of `.copy()` | `b = a` | Both point to same list | `b = a.copy()` |
+| Appending a list instead of extending | `a.append([1,2])` | Adds `[1,2]` as one nested item | `a.extend([1,2])` |
+| Sorting returns `None` | `result = lst.sort(); print(result)` | `.sort()` returns `None` | `lst.sort(); print(lst)` |
+| `.index()` on missing value | `lst.index("x")` when x not in lst | Raises `ValueError` | Check first: `if "x" in lst:` |
+| `if/else` in wrong comprehension position | `[x for x in lst if x != "a" else "b"]` | `SyntaxError` | `[x if x != "a" else "b" for x in lst]` |
+| Forgetting `range()` vs `len()` | `for i in len(lst):` | `len()` returns an int, not iterable | `for i in range(len(lst)):` |
+
+---
+
+## Part 10 — Reflection Questions
+
+Think through each of these questions. Try to answer them without looking at your notes first.
+
+1. What is the difference between a `for` loop and a `while` loop? When would you prefer one over the other?
+
+2. In a list comprehension, where does the `if` filter go? Where does the `if/else` expression go? Why can't they be in the same place?
+
+3. Why does `list2 = list1` not create a true copy? What actually happens in memory?
+
+4. What is the difference between `.sort()` and `sorted()`? When would you use each one?
+
+5. What is the difference between `.append()` and `.extend()`? What happens if you append a list instead of extending?
+
+6. You call `.pop()` on a list with no argument. What happens? What does it return?
+
+7. If you call `.sort()` on a list and then try to print the return value, what do you see? Why?
+
+8. Can you think of a real-world scenario where you would need to: (a) loop through a list, (b) copy a list, (c) join two lists?
 
 ---
 
 ## Completion Checklist
 
-Before you move on to the next lesson, make sure you can confidently tick each item:
+Before moving to the next lesson, make sure you can confidently tick off each item:
 
-- [ ] I can create strings using single quotes, double quotes, and triple quotes
-- [ ] I understand that Python starts counting character positions from index 0
-- [ ] I can access an individual character using its index: `name[0]`
-- [ ] I can find the length of a string using `len()`
-- [ ] I can slice a string using `[start:end]` syntax
-- [ ] I understand that the end index in a slice is NOT included
-- [ ] I can use negative indexing to count from the end of a string
-- [ ] I can convert a string to uppercase with `.upper()` and lowercase with `.lower()`
-- [ ] I can remove whitespace using `.strip()`
-- [ ] I can replace text using `.replace(old, new)`
-- [ ] I can split a string into a list using `.split()`
-- [ ] I can join strings using the `+` operator (and I know I must convert numbers with `str()` first)
-- [ ] I can use f-strings to insert variable values into text
-- [ ] I can use escape characters like `\n`, `\t`, `\\`, `\"`
-- [ ] I can check if a word is inside a string using `in` and `not in`
-- [ ] I know at least 5 additional string methods beyond the basics
-- [ ] I completed all three guided exercises and the mini project
+- [ ] I can loop through a list using a `for` loop
+- [ ] I can loop through a list using a `while` loop with an index
+- [ ] I understand what `break` and `continue` do inside a loop
+- [ ] I can write a basic list comprehension without a condition
+- [ ] I can write a list comprehension with an `if` filter
+- [ ] I can write a list comprehension with an `if/else` in the expression
+- [ ] I can sort a list alphabetically and numerically with `.sort()`
+- [ ] I can sort in reverse order with `reverse=True`
+- [ ] I can perform a case-insensitive sort with `key=str.lower`
+- [ ] I understand the difference between `.sort()` and `sorted()`
+- [ ] I know why `list2 = list1` is NOT a copy
+- [ ] I can make a safe copy using `.copy()`, `list()`, or `[:]`
+- [ ] I can join two lists using `+` and `.extend()`
+- [ ] I know what every list method does: `append`, `clear`, `copy`, `count`, `extend`, `index`, `insert`, `pop`, `remove`, `reverse`, `sort`
+- [ ] I completed the Student Grade Manager mini-project
 
 ---
 
 ## Lesson Summary
 
-In this lesson, you took a deep dive into Python strings — one of the most used data types in all of programming. Here is a concise recap:
+Here is a quick-reference summary of everything covered in Lesson 08:
 
-**What a string is:** A string is an ordered sequence of characters enclosed in single, double, or triple quotes. Python treats each character in a string like an item in an indexed list, starting from position 0.
-
-**Accessing characters:** Use square brackets with an index to access any character: `name[0]` gives the first character. Use negative indexes to count from the end: `name[-1]` gives the last character.
-
-**Slicing:** Use `[start:end]` to extract a portion. The start index is included but the end index is not. Omit start to begin from position 0; omit end to go to the last character.
-
-**Checking membership:** Use `in` to check if a substring exists (`"a" in "Amaka"` → `True`). Use `not in` for the opposite.
-
-**Modifying strings:** Strings are immutable — methods return new strings rather than changing the original. Key methods: `upper()`, `lower()`, `strip()`, `replace()`, `split()`, `title()`, `capitalize()`, `count()`, `find()`, `startswith()`, `endswith()`, `join()`, `isdigit()`, `isalpha()`.
-
-**Concatenation:** Join strings with `+`. Numbers must be converted with `str()` first.
-
-**F-strings:** The cleanest way to embed variable values inside strings. Prefix the string with `f` and use `{variable_name}` inside. You can also put expressions inside the braces.
-
-**Escape characters:** Use `\n` for newline, `\t` for tab, `\\` for backslash, `\"` for double quote inside a double-quoted string.
-
----
-
-## Quick Reference Card
+### Looping
 
 ```python
-# Creating strings
-s = "Hello, Lagos!"
-s = 'Hello, Lagos!'
-s = """Multi
-line"""
+# for loop — direct
+for x in mylist:
+    print(x)
 
-# Accessing characters
-s[0]        # First character
-s[-1]       # Last character
-s[2:5]      # Characters from index 2 to 4
-s[:4]       # First 4 characters
-s[4:]       # Everything from index 4 onwards
+# for loop — by index
+for i in range(len(mylist)):
+    print(mylist[i])
 
-# Key functions and methods
-len(s)               # Number of characters
-s.upper()            # ALL CAPS
-s.lower()            # all lowercase
-s.title()            # Title Case
-s.strip()            # Remove leading/trailing spaces
-s.replace("a", "b")  # Replace 'a' with 'b'
-s.split(",")         # Split by comma → list
-",".join(list)       # Join list items with commas
-s.find("word")       # Index of first occurrence (-1 if absent)
-s.count("a")         # Count occurrences
-s.startswith("La")   # True/False
-s.endswith(".ng")    # True/False
-s.isdigit()          # True if all digits
-s.isalpha()          # True if all letters
+# while loop
+i = 0
+while i < len(mylist):
+    print(mylist[i])
+    i += 1
+```
 
-# Concatenation
-full = "Babatunde" + " " + "Okonkwo"
+### List Comprehension
 
-# F-strings
-name = "Emeka"
-age = 30
-msg = f"My name is {name} and I am {age} years old."
+```python
+# Basic
+newlist = [x for x in mylist]
 
-# Escape characters
-"\n"   # New line
-"\t"   # Tab
-"\\"   # Backslash
-"\""   # Double quote
+# With filter
+newlist = [x for x in mylist if x != "apple"]
 
-# Check membership
-"Abuja" in "Abuja is the capital"   # True
-"Kano" not in "Lagos and Abuja"     # True
+# With transformation
+newlist = [x.upper() for x in mylist]
+
+# With if/else in expression
+newlist = [x if x != "banana" else "orange" for x in mylist]
+```
+
+### Sorting
+
+```python
+mylist.sort()                    # A to Z, smallest to largest
+mylist.sort(reverse=True)        # Z to A, largest to smallest
+mylist.sort(key=str.lower)       # Case-insensitive sort
+sorted_copy = sorted(mylist)     # Returns new list, original unchanged
+mylist.reverse()                 # Reverses current order
+```
+
+### Copying
+
+```python
+copy1 = mylist.copy()    # Method 1
+copy2 = list(mylist)     # Method 2
+copy3 = mylist[:]        # Method 3
+# NEVER: copy4 = mylist  ← this is NOT a copy!
+```
+
+### Joining
+
+```python
+combined = list1 + list2         # New list
+list1.extend(list2)              # Adds list2 into list1
+```
+
+### All List Methods
+
+```python
+mylist.append(item)              # Add to end
+mylist.clear()                   # Empty the list
+mylist.copy()                    # Return a copy
+mylist.count(value)              # Count occurrences
+mylist.extend(iterable)          # Add all from iterable
+mylist.index(value)              # Find position of value
+mylist.insert(index, item)       # Insert at position
+mylist.pop(index)                # Remove and return by index
+mylist.remove(value)             # Remove first occurrence by value
+mylist.reverse()                 # Reverse in place
+mylist.sort()                    # Sort in place
 ```
 
 ---
 
-*End of Lesson 08 — Python Strings*
-
-*Next Lesson: Lesson 09 — Python Booleans*
+> 🎉 **Congratulations!** You have completed Lesson 08. You now have a complete toolkit for working with Python lists at a professional level. In the next lesson, you will explore **Python Tuples** — a close cousin of the list with some important differences.
