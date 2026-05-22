@@ -1,241 +1,275 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html><html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Python Programming — Techbase STEM Academy</title>
-<meta name="description" content="Free beginner Python course. 10 lessons from your first program to building real projects. By Techbase, Ibadan, Nigeria.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#030507;--ink1:#0b0f14;--ink2:#141920;--rim:#232d3a;--rim2:#2e3d50;--fog:#8494ab;--mist:#bdc8d6;--snow:#eef2f7;--c:#3b82f6;--cg:rgba(59,130,246,.12);--D:'Unbounded',sans-serif;--B:'Instrument Sans',sans-serif;--M:'JetBrains Mono',monospace}
+:root{--bg:#f8fafc;--surface:#fff;--s2:#f1f5f9;--border:#e2e8f0;--border2:#cbd5e1;--text:#0f172a;--t2:#334155;--muted:#64748b;--light:#94a3b8;--D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace;--sh:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);--sh2:0 4px 12px rgba(0,0,0,.1),0 16px 48px rgba(0,0,0,.08)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--ink);color:var(--snow);font-family:var(--B);font-size:16px;line-height:1.7;overflow-x:hidden}
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;mix-blend-mode:overlay}
-nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:200;background:rgba(11,15,20,.8);backdrop-filter:blur(24px) saturate(1.6);border:1px solid var(--rim);border-radius:100px;padding:0 1.5rem;height:52px;display:flex;align-items:center;justify-content:space-between;gap:2.5rem;width:min(900px,calc(100vw - 2rem));box-shadow:0 4px 40px rgba(0,0,0,.5)}
-.nav-logo{font-family:var(--D);font-weight:700;font-size:.75rem;letter-spacing:.06em;color:var(--snow);text-decoration:none;white-space:nowrap}
-.nav-logo em{font-style:normal;color:#10b981}
-.nav-links{list-style:none;display:flex;gap:1.8rem}
-.nav-links a{color:var(--fog);font-size:.8rem;text-decoration:none;transition:color .2s}
-.nav-links a:hover{color:var(--snow)}
-.hero{min-height:100svh;display:flex;align-items:center;padding:100px 2rem 80px;position:relative;overflow:hidden}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--rim) 1px,transparent 1px),linear-gradient(90deg,var(--rim) 1px,transparent 1px);background-size:60px 60px;opacity:.22;mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,black 10%,transparent 100%)}
-.blob{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px)}
-.wrap{max-width:1180px;margin:0 auto;padding:0 2rem}
-.badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-radius:100px;padding:.3rem 1rem;font-family:var(--M);font-size:.68rem;letter-spacing:.1em;color:var(--c);margin-bottom:1.8rem}
-.badge-pip{width:6px;height:6px;border-radius:50%;background:var(--c);animation:pip 2.2s ease-in-out infinite}
-@keyframes pip{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
-h1{font-family:var(--D);font-weight:900;font-size:clamp(2.8rem,7vw,6rem);line-height:.95;letter-spacing:-.03em;margin-bottom:1.3rem;animation:rise .7s .1s both}
-.grad{background:linear-gradient(135deg,var(--c),#06b6d4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero-sub{font-size:1rem;color:var(--fog);line-height:1.8;max-width:540px;margin-bottom:2rem;animation:rise .7s .2s both}
-.hero-sub code{font-family:var(--M);color:var(--c);font-size:.88em}
-.hero-stats{display:flex;gap:3rem;margin-bottom:2rem;animation:rise .7s .3s both}
-.stat-n{font-family:var(--D);font-weight:700;font-size:1.9rem;color:var(--c);display:block;line-height:1}
-.stat-l{font-size:.72rem;color:var(--fog);letter-spacing:.1em;text-transform:uppercase}
-.btn-row{display:flex;gap:.85rem;flex-wrap:wrap;animation:rise .7s .4s both}
-.btn-p{display:inline-flex;align-items:center;gap:.5rem;background:var(--c);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;padding:.85rem 1.8rem;border-radius:100px;text-decoration:none;transition:transform .25s,box-shadow .25s;letter-spacing:.03em;white-space:nowrap}
-.btn-p:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(59,130,246,.35)}
-.btn-g{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--snow);font-family:var(--D);font-weight:600;font-size:.75rem;padding:.85rem 1.8rem;border-radius:100px;text-decoration:none;border:1px solid var(--rim2);transition:border-color .2s,background .2s;letter-spacing:.03em;white-space:nowrap}
-.btn-g:hover{border-color:var(--fog);background:var(--ink2)}
-@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.ticker-wrap{border-top:1px solid var(--rim);border-bottom:1px solid var(--rim);background:var(--ink1);overflow:hidden;padding:.75rem 0}
-.ticker{display:flex;white-space:nowrap;animation:scroll 28s linear infinite}
-.ti{font-family:var(--M);font-size:.72rem;color:var(--fog);padding:0 2.5rem;display:flex;align-items:center;gap:1rem}
-.ti::after{content:'·';color:var(--rim2)}
-.ti em{font-style:normal;color:var(--c)}
-@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.sec{padding:5rem 0;position:relative;z-index:1}
-.sec-div{border-top:1px solid var(--rim)}
-.slbl{font-family:var(--M);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--c);margin-bottom:.9rem;display:flex;align-items:center;gap:.6rem}
-.slbl::before{content:'//';opacity:.4}
-.sec-h2{font-family:var(--D);font-weight:700;font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-.02em;line-height:1.15}
-.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:4.5rem;align-items:start}
-.about-text h2{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,2.8vw,2rem);letter-spacing:-.02em;margin-bottom:1rem;line-height:1.2}
-.about-text p{color:var(--fog);margin-bottom:1rem;line-height:1.8;font-size:.95rem}
-.learn-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-top:.5rem}
-.learn-list li{display:flex;align-items:flex-start;gap:.7rem;font-size:.9rem;color:var(--mist)}
-.learn-list li::before{content:'→';color:var(--c);font-family:var(--M);flex-shrink:0;margin-top:2px;font-size:.8rem}
-.tc{background:var(--ink1);border:1px solid var(--rim);border-radius:20px;overflow:hidden}
-.tc-head{padding:.9rem 1.5rem;border-bottom:1px solid var(--rim);font-family:var(--M);font-size:.7rem;color:var(--fog);display:flex;align-items:center;gap:.45rem}
+body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;line-height:1.7;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;padding:0 2rem}
+.nav-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.nav-logo{font-family:var(--D);font-weight:700;font-size:1rem;color:var(--text);text-decoration:none}
+.nav-logo em{font-style:normal;color:#0d9488}
+.nav-links{list-style:none;display:flex;align-items:center;gap:1.8rem}
+.nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.hero{padding:100px 2rem 70px;background:var(--hero-bg);position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:50px 50px;opacity:.5;mask-image:radial-gradient(ellipse 90% 90% at 50% 50%,black 0%,transparent 100%)}
+.hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:5rem;align-items:center}
+.wrap{max-width:1200px;margin:0 auto;padding:0 2rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;border-radius:100px;padding:.28rem 1rem;font-family:var(--M);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem;border:1px solid;font-weight:500}
+h1{font-family:var(--D);font-weight:700;font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.05;letter-spacing:-.03em;color:var(--text);margin-bottom:1.2rem;animation:rise .6s .1s both}
+.hero-sub{font-size:1rem;color:var(--muted);max-width:520px;line-height:1.8;margin-bottom:2rem;animation:rise .6s .2s both}
+.hero-sub code{font-family:var(--M);font-size:.88em;background:var(--s2);border:1px solid var(--border2);padding:.1rem .4rem;border-radius:4px}
+.hero-stats{display:flex;gap:2.5rem;margin-bottom:2rem;animation:rise .6s .3s both}
+.stat-n{font-family:var(--D);font-weight:700;font-size:1.9rem;display:block;line-height:1}
+.stat-l{font-size:.7rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:.1rem}
+.btn-row{display:flex;gap:.75rem;flex-wrap:wrap;animation:rise .6s .4s both}
+.btn-p{display:inline-flex;align-items:center;gap:.5rem;color:#fff;font-family:var(--D);font-weight:600;font-size:.875rem;padding:.8rem 1.6rem;border-radius:10px;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.btn-p:hover{transform:translateY(-2px)}
+.btn-g{display:inline-flex;align-items:center;gap:.5rem;background:var(--surface);color:var(--t2);font-family:var(--D);font-weight:600;font-size:.875rem;padding:.8rem 1.6rem;border-radius:10px;text-decoration:none;border:1.5px solid var(--border2);transition:border-color .2s,box-shadow .2s}
+.btn-g:hover{border-color:var(--light);box-shadow:var(--sh)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* PREVIEW CARD (right side of hero) */
+.prev-card{background:#0f172a;border-radius:16px;overflow:hidden;box-shadow:var(--sh2);animation:rise .6s .5s both}
+.pc-bar{padding:.75rem 1rem;background:#1e293b;display:flex;align-items:center;gap:.4rem}
 .dot{width:9px;height:9px;border-radius:50%}.dr{background:#ff5f57}.dy{background:#febc2e}.dg{background:#28c840}
-.tc-row{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--rim);transition:background .15s}
-.tc-row:last-child{border-bottom:none}.tc-row:hover{background:var(--ink2)}
-.tc-name{font-weight:600;font-size:.88rem}.tc-info{font-size:.78rem;color:var(--fog)}
-.tc-link{font-family:var(--M);font-size:.68rem;color:#4d9fff;text-decoration:none;opacity:.75;transition:opacity .2s}
+.pc-tab{margin-left:.5rem;font-family:var(--M);font-size:.65rem;color:#64748b}
+.pc-body{padding:1.3rem 1.5rem;font-family:var(--M);font-size:.78rem;line-height:2;color:#e2e8f0}
+/* TICKER */
+.ticker-wrap{overflow:hidden;padding:.65rem 0}
+.ticker{display:flex;white-space:nowrap;animation:scroll 30s linear infinite}
+.ti{font-family:var(--M);font-size:.72rem;padding:0 2rem}
+.ti em{font-style:normal}
+.ti::after{content:'·';margin-left:2rem;opacity:.3}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* SECTIONS */
+.sec{padding:5rem 0}
+.sec-div{border-top:1px solid var(--border)}
+.sec-white{background:var(--surface)}
+.slbl{font-family:var(--M);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem;font-weight:500}
+.sec-h2{font-family:var(--D);font-weight:700;font-size:clamp(1.8rem,3vw,2.4rem);letter-spacing:-.025em;line-height:1.15;color:var(--text)}
+/* ABOUT 2-COL */
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:4.5rem;align-items:start}
+.about-text h2{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,2.8vw,2rem);letter-spacing:-.02em;margin-bottom:1rem;line-height:1.2;color:var(--text)}
+.about-text p{color:var(--muted);margin-bottom:.9rem;line-height:1.8;font-size:.95rem}
+.learn-list{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-top:.5rem}
+.learn-list li{display:flex;align-items:flex-start;gap:.7rem;font-size:.9rem;color:var(--t2)}
+.learn-list li::before{content:'✓';font-family:var(--M);flex-shrink:0;margin-top:2px;font-size:.8rem;font-weight:700}
+/* TOOLS CARD */
+.tc{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--sh)}
+.tc-head{padding:.85rem 1.4rem;border-bottom:1px solid var(--border);font-family:var(--M);font-size:.7rem;color:var(--muted);display:flex;align-items:center;gap:.4rem;background:var(--s2)}
+.tc-row{display:flex;align-items:center;justify-content:space-between;padding:.95rem 1.4rem;border-bottom:1px solid var(--border);transition:background .15s}
+.tc-row:last-child{border-bottom:none}.tc-row:hover{background:var(--s2)}
+.tc-name{font-weight:600;font-size:.88rem;color:var(--text)}
+.tc-info{font-size:.78rem;color:var(--muted)}
+.tc-link{font-family:var(--M);font-size:.68rem;color:#0284c7;text-decoration:none;opacity:.75;transition:opacity .2s}
 .tc-link:hover{opacity:1}
+/* PHASE DIVIDER */
 .phase-div{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1rem}
-.phase-div span{font-family:var(--M);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fog);white-space:nowrap}
-.phase-div::after{content:'';flex:1;height:1px;background:var(--rim)}
-.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--rim);border:1px solid var(--rim);border-radius:20px;overflow:hidden}
-.lc{background:var(--ink1);padding:1.2rem 1.5rem;display:flex;align-items:flex-start;gap:.9rem;text-decoration:none;position:relative;transition:background .2s}
-.lc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2.5px;background:var(--c);transform:scaleY(0);transform-origin:bottom;transition:transform .22s}
-.lc:hover{background:var(--ink2)}.lc:hover::before{transform:scaleY(1)}
-.lnum{font-family:var(--M);font-size:.64rem;color:var(--c);background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.22);padding:.15rem .5rem;border-radius:5px;flex-shrink:0;margin-top:3px;letter-spacing:.04em}
-.ltitle{font-size:.87rem;color:var(--mist);line-height:1.45;transition:color .2s}
-.lc:hover .ltitle{color:var(--snow)}
-.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;position:relative}
-.steps-row::before{content:'';position:absolute;top:27px;left:12.5%;right:12.5%;height:1px;background:linear-gradient(90deg,var(--c),#fde047,#38bdf8,var(--c));opacity:.3}
-.step-item{text-align:center;padding:0 .5rem}
-.step-circle{width:54px;height:54px;border-radius:50%;border:1px solid var(--rim);background:var(--ink2);display:flex;align-items:center;justify-content:center;font-family:var(--M);font-size:.78rem;color:var(--c);margin:0 auto 1rem;transition:border-color .2s,box-shadow .2s;position:relative;z-index:1}
-.step-item:hover .step-circle{border-color:var(--c);box-shadow:0 0 20px rgba(59,130,246,.18)}
-.step-item h3{font-family:var(--D);font-weight:600;font-size:.85rem;margin-bottom:.4rem}
-.step-item p{font-size:.82rem;color:var(--fog);line-height:1.6}
-footer{border-top:1px solid var(--rim);background:var(--ink1);padding:3rem 2.5rem;position:relative;z-index:1}
-.fi{max-width:1180px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:2.5rem}
-.fb{font-family:var(--D);font-weight:700;font-size:1rem;color:var(--c)}
-.fb p{font-family:var(--B);font-weight:400;font-size:.8rem;color:var(--fog);margin-top:.3rem;line-height:1.6}
-.fl-head{font-family:var(--D);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--fog);margin-bottom:.8rem}
+.phase-div span{font-family:var(--M);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap;font-weight:500}
+.phase-div::after{content:'';flex:1;height:1px;background:var(--border)}
+/* LESSON GRID */
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);border:1.5px solid var(--border);border-radius:16px;overflow:hidden}
+.lc{background:var(--surface);padding:1.15rem 1.4rem;display:flex;align-items:flex-start;gap:.85rem;text-decoration:none;transition:background .18s;position:relative}
+.lc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;transform:scaleY(0);transform-origin:bottom;transition:transform .2s}
+.lc:hover{background:var(--s2)}.lc:hover::before{transform:scaleY(1)}
+.lnum{font-family:var(--M);font-size:.63rem;padding:.15rem .5rem;border-radius:5px;border:1px solid;flex-shrink:0;margin-top:3px;font-weight:500}
+.ltitle{font-size:.875rem;color:var(--t2);line-height:1.45;transition:color .18s}
+.lc:hover .ltitle{color:var(--text)}
+/* STEPS */
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem;position:relative}
+.steps-row::before{content:'';position:absolute;top:26px;left:calc(12.5% + 1rem);right:calc(12.5% + 1rem);height:1.5px;opacity:.25;background:linear-gradient(90deg,#0d9488,#3b82f6,#f59e0b,#0d9488)}
+.step{text-align:center}
+.step-n{width:52px;height:52px;border-radius:50%;background:var(--surface);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--M);font-size:.8rem;font-weight:500;margin:0 auto 1.1rem;transition:border-color .2s,box-shadow .2s;position:relative;z-index:1}
+.step h3{font-family:var(--D);font-weight:600;font-size:.93rem;margin-bottom:.4rem;color:var(--text)}
+.step p{font-size:.83rem;color:var(--muted);line-height:1.65}
+/* FOOTER */
+footer{background:var(--text);color:rgba(255,255,255,.65);padding:4rem 2rem 2rem}
+.fi{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.1)}
+.fb{font-family:var(--D);font-weight:700;font-size:1.1rem;color:#fff;margin-bottom:.4rem}
+.fb p{font-family:var(--B);font-weight:400;font-size:.82rem;margin-top:.3rem;line-height:1.65}
+.fl-h{font-family:var(--D);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1rem}
 .fl{list-style:none;display:flex;flex-direction:column;gap:.45rem}
-.fl a{color:var(--fog);font-size:.82rem;text-decoration:none;transition:color .2s}
-.fl a:hover{color:var(--snow)}
-.fc{font-size:.75rem;color:var(--fog);line-height:1.9}
-.fc strong{color:var(--mist)}
-.sr{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
+.fl a{color:rgba(255,255,255,.6);font-size:.84rem;text-decoration:none;transition:color .2s}
+.fl a:hover{color:#fff}
+.f-bot{max-width:1200px;margin:1.5rem auto 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:rgba(255,255,255,.4)}
+/* SCROLL REVEAL */
+.sr{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
 .sr.in{opacity:1;transform:none}
-@media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:2.5rem}.steps-row{grid-template-columns:1fr 1fr}.steps-row::before{display:none}.nav-links{display:none}}
-@media(max-width:540px){.steps-row{grid-template-columns:1fr}.lesson-grid{grid-template-columns:1fr}h1{font-size:2.5rem}}
-</style>
-</head>
-<body>
-<nav>
-  <a href="https://techbaseng.github.io" class="nav-logo">TECH<em>BASE</em> ACADEMY</a>
-  <ul class="nav-links">
-    <li><a href="#lessons">Lessons</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="https://techbaseng.github.io">← All Courses</a></li>
-    <li><a href="https://github.com/techbaseng/techbase-python" target="_blank">GitHub ↗</a></li>
-  </ul>
-</nav>
+/* RESPONSIVE */
+@media(max-width:960px){.hero-inner{grid-template-columns:1fr}.about-grid{grid-template-columns:1fr;gap:2.5rem}.steps-row{grid-template-columns:1fr 1fr;gap:1.5rem}.steps-row::before{display:none}.fi{grid-template-columns:1fr 1fr;gap:2rem}.nav-links li:not(.keep){display:none}}
+@media(max-width:600px){.hero-inner{grid-template-columns:1fr}.lesson-grid{grid-template-columns:1fr}.steps-row{grid-template-columns:1fr}h1{font-size:2rem}.fi{grid-template-columns:1fr}}
 
-<section class="hero">
-  <div class="hero-grid"></div>
-  <div class="blob" style="width:550px;height:550px;background:radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 70%);top:5%;left:55%"></div>
-  <div class="blob" style="width:350px;height:350px;background:radial-gradient(circle,rgba(6,182,212,.06) 0%,transparent 70%);bottom:15%;left:5%"></div>
-  <div class="wrap" style="position:relative;z-index:1;width:100%">
-    <div class="badge"><span class="badge-pip"></span>FREE COURSE · IBADAN, NIGERIA · BEGINNER</div>
-    <h1><span class="grad">Python</span><br>Programming</h1>
-    <p class="hero-sub">Learn the world's most beginner-friendly programming language. From your first <code>print()</code> statement to building real programs — <strong style="color:var(--snow)">10 lessons</strong>, zero prerequisites.</p>
+:root{--c:#059669;--hero-bg:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 50%,#f0fdf4 100%)}
+.eyebrow{color:#059669;background:rgba(5,150,105,.07);border-color:rgba(5,150,105,.2)}
+.stat-n{color:#059669}.slbl{color:#059669}
+.step-n{color:#059669}.step:hover .step-n{border-color:#059669;box-shadow:0 0 0 4px rgba(5,150,105,.1)}
+.lc::before{background:#059669}.lnum{color:#059669;background:rgba(5,150,105,.07);border-color:rgba(5,150,105,.2)}
+.btn-p{background:#059669;box-shadow:0 4px 14px rgba(5,150,105,.3)}.btn-p:hover{box-shadow:0 8px 24px rgba(5,150,105,.4)}
+.ticker-wrap{background:#ecfdf5;border-top:1px solid #a7f3d0;border-bottom:1px solid #a7f3d0}
+.ti{color:#065f46}.ti em{color:#059669}.fb{color:#059669}
+</style></head><body>
+<nav><div class="nav-inner">
+  <a href="https://techbaseng.github.io" class="nav-logo"><em>Techbase</em> Academy</a>
+  <ul class="nav-links">
+    <li class="keep"><a href="#lessons">Lessons</a></li><li><a href="#about">About</a></li>
+    <li><a href="https://techbaseng.github.io">← All Courses</a></li>
+    <li class="keep"><a href="lessons/lesson_01.html" style="color:#059669;font-weight:600">Start Course →</a></li>
+  </ul>
+</div></nav>
+<section class="hero"><div class="hero-grid"></div>
+<div class="hero-inner">
+  <div>
+    <div class="eyebrow">Free Course · Beginner → Advanced · Ibadan, Nigeria</div>
+    <h1>Python<br>Programming</h1>
+    <p class="hero-sub">From variables and loops to NumPy, Pandas, Matplotlib, machine learning, algorithms and databases — <strong>45 lessons</strong> taking you from absolute zero to data science professional.</p>
     <div class="hero-stats">
-      <div><span class="stat-n">10</span><span class="stat-l">Lessons</span></div>
-      <div><span class="stat-n">100%</span><span class="stat-l">Free</span></div>
-      <div><span class="stat-n">0</span><span class="stat-l">Prerequisites</span></div>
+      <div><span class="stat-n">45</span><span class="stat-l">Lessons</span></div>
+      <div><span class="stat-n">7</span><span class="stat-l">Phases</span></div>
+      <div><span class="stat-n">Free</span><span class="stat-l">Always</span></div>
     </div>
     <div class="btn-row">
-      <a href="lessons/lesson_01.md" class="btn-p">Start Lesson 01 →</a>
-      <a href="#lessons" class="btn-g">View All 10 Lessons</a>
+      <a href="lessons/lesson_01.html" class="btn-p">Start Lesson 01 →</a>
+      <a href="#lessons" class="btn-g">View All 45 Lessons</a>
     </div>
   </div>
-</section>
-
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker">
-    <span class="ti"><em>print()</em> output</span><span class="ti"><em>variables</em> data types</span><span class="ti"><em>input()</em> user input</span><span class="ti"><em>if/else</em> conditions</span><span class="ti"><em>for loops</em> iteration</span><span class="ti"><em>functions</em> reusable code</span><span class="ti"><em>lists</em> collections</span><span class="ti"><em>dictionaries</em> key-value pairs</span><span class="ti"><em>files</em> file I/O</span>
-    <span class="ti"><em>print()</em> output</span><span class="ti"><em>variables</em> data types</span><span class="ti"><em>input()</em> user input</span><span class="ti"><em>if/else</em> conditions</span><span class="ti"><em>for loops</em> iteration</span><span class="ti"><em>functions</em> reusable code</span><span class="ti"><em>lists</em> collections</span><span class="ti"><em>dictionaries</em> key-value pairs</span><span class="ti"><em>files</em> file I/O</span>
+  <div class="prev-card">
+    <div class="pc-bar"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span><span class="pc-tab">analysis.py</span></div>
+    <div class="pc-body">
+      <div style="color:#64748b"># Lesson 29 — Pandas Data Analysis</div>
+      <div><span style="color:#c084fc">import</span> <span style="color:#38bdf8">pandas</span> <span style="color:#c084fc">as</span> pd</div>
+      <div><span style="color:#c084fc">import</span> <span style="color:#38bdf8">matplotlib.pyplot</span> <span style="color:#c084fc">as</span> plt</div>
+      <div>&nbsp;</div>
+      <div>df = pd.<span style="color:#38bdf8">read_csv</span>(<span style="color:#86efac">'scores.csv'</span>)</div>
+      <div style="color:#64748b"># Clean and analyse</div>
+      <div>df.<span style="color:#38bdf8">dropna</span>(inplace=<span style="color:#fb923c">True</span>)</div>
+      <div><span style="color:#e2e8f0">avg</span> = df[<span style="color:#86efac">'score'</span>].<span style="color:#38bdf8">mean</span>()</div>
+      <div><span style="color:#38bdf8">print</span>(<span style="color:#86efac">f"Average: </span><span style="color:#34d399">{avg:.2f}</span><span style="color:#86efac">"</span>)</div>
+      <div>df.<span style="color:#38bdf8">plot</span>(kind=<span style="color:#86efac">'bar'</span>)</div>
+      <div>plt.<span style="color:#38bdf8">show</span>()</div>
+    </div>
   </div>
-</div>
-
+</div></section>
+<div class="ticker-wrap" aria-hidden="true"><div class="ticker">
+  <span class="ti"><em>def</em> functions</span><span class="ti"><em>for</em> loops</span><span class="ti"><em>class</em> OOP</span><span class="ti"><em>numpy</em> arrays</span><span class="ti"><em>pandas</em> dataframes</span><span class="ti"><em>matplotlib</em> charts</span><span class="ti"><em>sklearn</em> ML</span><span class="ti"><em>recursion</em> DSA</span><span class="ti"><em>MySQL</em> databases</span><span class="ti"><em>MongoDB</em> NoSQL</span>
+  <span class="ti"><em>def</em> functions</span><span class="ti"><em>for</em> loops</span><span class="ti"><em>class</em> OOP</span><span class="ti"><em>numpy</em> arrays</span><span class="ti"><em>pandas</em> dataframes</span><span class="ti"><em>matplotlib</em> charts</span><span class="ti"><em>sklearn</em> ML</span><span class="ti"><em>recursion</em> DSA</span><span class="ti"><em>MySQL</em> databases</span><span class="ti"><em>MongoDB</em> NoSQL</span>
+</div></div>
 <main>
-<section class="sec" id="about">
-<div class="wrap">
-<div class="about-grid sr">
+<section class="sec" id="about"><div class="wrap"><div class="about-grid sr">
   <div class="about-text">
     <div class="slbl">About This Course</div>
-    <h2>Write code that<br>solves real problems.</h2>
-    <p>Python is one of the world's most popular programming languages. It is used in data science, web development, automation, artificial intelligence, and much more.</p>
-    <p>Designed by <strong style="color:var(--snow)">Babatunde Awoyemi</strong> at Techbase Consultant Services, Ibadan. 10 lessons taking you from absolute zero to confidently building your own Python programs.</p>
+    <h2>From zero to data science.</h2>
+    <p>Python is the world's most beginner-friendly programming language — and also the most powerful for data science, automation and machine learning. This single course takes you from your first variable all the way to building ML models and querying databases.</p>
+    <p>Designed by <strong>Babatunde Awoyemi</strong>, Techbase Consultant Services, Ibadan. 45 lessons, 7 phases, completely free.</p>
     <ul class="learn-list">
-      <li>How to write and run Python programs</li>
-      <li>Variables, data types, and operators</li>
-      <li>User input and formatted output</li>
-      <li>Conditions and loops for program flow</li>
-      <li>Functions and code reusability</li>
-      <li>Lists, tuples, and dictionaries</li>
-      <li>Reading and writing files</li>
-      <li>Build a complete, practical project</li>
+      <li>Variables, data types, strings, lists, tuples, sets and dicts</li>
+      <li>Functions, OOP, decorators, lambdas and generators</li>
+      <li>File handling, error handling, modules and packages</li>
+      <li>NumPy arrays, Pandas DataFrames and data cleaning</li>
+      <li>Matplotlib and Seaborn for data visualisation</li>
+      <li>Machine learning with scikit-learn</li>
+      <li>Data structures, algorithms, MySQL and MongoDB</li>
     </ul>
   </div>
   <div class="tc">
-    <div class="tc-head"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span>&nbsp;&nbsp;tools_you_need.py</div>
-    <div class="tc-row"><div><div class="tc-name">Python 3.x</div><div class="tc-info">Run Python programs</div></div><a href="https://python.org/downloads" class="tc-link" target="_blank">↗ Download</a></div>
-    <div class="tc-row"><div><div class="tc-name">VS Code</div><div class="tc-info">Write your code</div></div><a href="https://code.visualstudio.com" class="tc-link" target="_blank">↗ Download</a></div>
-    <div class="tc-row"><div><div class="tc-name">Replit</div><div class="tc-info">Online editor — no install needed</div></div><a href="https://replit.com" class="tc-link" target="_blank">↗ Use online</a></div>
-    <div class="tc-row"><div><div class="tc-name">Python Tutor</div><div class="tc-info">Visualize code execution</div></div><a href="https://pythontutor.com" class="tc-link" target="_blank">↗ Visualize</a></div>
-    <div class="tc-row"><div><div class="tc-name">Next: Web Dev</div><div class="tc-info">After completing this course</div></div><a href="https://techbaseng.github.io/techbase-html/" class="tc-link">↗ Learn HTML</a></div>
+    <div class="tc-head"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span>&nbsp;&nbsp;tools_needed.txt</div>
+    <div class="tc-row"><div><div class="tc-name">Python 3.x</div><div class="tc-info">The language runtime</div></div><a href="https://www.python.org/downloads/" class="tc-link" target="_blank">↗ Download</a></div>
+    <div class="tc-row"><div><div class="tc-name">VS Code</div><div class="tc-info">Python extension included</div></div><a href="https://code.visualstudio.com" class="tc-link" target="_blank">↗ Download</a></div>
+    <div class="tc-row"><div><div class="tc-name">Jupyter Notebooks</div><div class="tc-info">For data science phases</div></div><a href="https://jupyter.org" class="tc-link" target="_blank">↗ Install</a></div>
+    <div class="tc-row"><div><div class="tc-name">No prerequisites</div><div class="tc-info">This is a standalone course</div></div><span class="tc-link">Start at lesson 01</span></div>
+    <div class="tc-row"><div><div class="tc-name">pip packages</div><div class="tc-info">numpy · pandas · matplotlib · sklearn</div></div><span class="tc-link">Covered in lessons</span></div>
   </div>
+</div></div></section>
+<section class="sec sec-div sec-white" id="lessons"><div class="wrap">
+  <div class="sr"><div class="slbl">Course Content</div><h2 class="sec-h2">45 Lessons · 7 Phases</h2></div>
+  <div class="phase-div sr"><span>Phase 1 — Python Basics (01–06)</span></div>
+<div class="lesson-grid sr">
+  <a href="lessons/lesson_01.html" class="lc"><span class="lnum">01</span><span class="ltitle">Introduction to Python: What It Is, How to Set It Up, and How to Use It</span></a>
+  <a href="lessons/lesson_02.html" class="lc"><span class="lnum">02</span><span class="ltitle">Python Comments and Variables</span></a>
+  <a href="lessons/lesson_03.html" class="lc"><span class="lnum">03</span><span class="ltitle">Python Data Types, Numbers, Casting, and Booleans</span></a>
+  <a href="lessons/lesson_04.html" class="lc"><span class="lnum">04</span><span class="ltitle">Python Strings: From Basics to Formatting Mastery</span></a>
+  <a href="lessons/lesson_05.html" class="lc"><span class="lnum">05</span><span class="ltitle">Python String Methods, Operators, Arithmetic &amp; Assignment Operators</span></a>
+  <a href="lessons/lesson_06.html" class="lc"><span class="lnum">06</span><span class="ltitle">Python Operators: Comparison, Logical, Identity, Membership, Bitwise &amp; Precedence</span></a>
 </div>
+<div class="phase-div sr"><span>Phase 2 — Data Structures &amp; Conditions (07–14)</span></div>
+<div class="lesson-grid sr">
+  <a href="lessons/lesson_07.html" class="lc"><span class="lnum">07</span><span class="ltitle">Python Lists: Create, Access, Change, Add &amp; Remove</span></a>
+  <a href="lessons/lesson_08.html" class="lc"><span class="lnum">08</span><span class="ltitle">Python Lists Advanced: Looping, Comprehensions, Sorting, Copying &amp; Methods</span></a>
+  <a href="lessons/lesson_09.html" class="lc"><span class="lnum">09</span><span class="ltitle">Python Tuples</span></a>
+  <a href="lessons/lesson_10.html" class="lc"><span class="lnum">10</span><span class="ltitle">Python Sets — The Collection That Hates Duplicates</span></a>
+  <a href="lessons/lesson_11.html" class="lc"><span class="lnum">11</span><span class="ltitle">Python Dictionaries — From Zero to Real-World Mastery</span></a>
+  <a href="lessons/lesson_12.html" class="lc"><span class="lnum">12</span><span class="ltitle">Python Dictionary Methods &amp; If/Elif/Else Conditions</span></a>
+  <a href="lessons/lesson_13.html" class="lc"><span class="lnum">13</span><span class="ltitle">Advanced Conditionals — Shorthand If, Nested If, Match</span></a>
+  <a href="lessons/lesson_14.html" class="lc"><span class="lnum">14</span><span class="ltitle">Python While Loops, For Loops, and the range() Function</span></a>
 </div>
-</section>
-
-<section class="sec sec-div" id="lessons">
-<div class="wrap">
-  <div class="sr" style="margin-bottom:.5rem">
-    <div class="slbl">Course Content</div>
-    <h2 class="sec-h2">10 Lessons</h2>
-  </div>
-
-  <div class="phase-div sr"><span>Phase 1 — Foundations (01–04)</span></div>
-  <div class="lesson-grid sr">
-    <a href="lessons/lesson_01.md" class="lc"><span class="lnum">01</span><span class="ltitle">Introduction to Python — what it is, setup, your first program</span></a>
-    <a href="lessons/lesson_02.md" class="lc"><span class="lnum">02</span><span class="ltitle">Variables & Data Types — strings, integers, floats, booleans</span></a>
-    <a href="lessons/lesson_03.md" class="lc"><span class="lnum">03</span><span class="ltitle">User Input & Output — input(), print(), f-strings, formatting</span></a>
-    <a href="lessons/lesson_04.md" class="lc"><span class="lnum">04</span><span class="ltitle">Operators — arithmetic, comparison, logical, assignment operators</span></a>
-  </div>
-
-  <div class="phase-div sr"><span>Phase 2 — Control Flow (05–07)</span></div>
-  <div class="lesson-grid sr">
-    <a href="lessons/lesson_05.md" class="lc"><span class="lnum">05</span><span class="ltitle">Conditions — if, elif, else</span></a>
-    <a href="lessons/lesson_06.md" class="lc"><span class="lnum">06</span><span class="ltitle">Loops — for, while, range(), break, continue</span></a>
-    <a href="lessons/lesson_07.md" class="lc"><span class="lnum">07</span><span class="ltitle">Functions — defining, calling, parameters, return values</span></a>
-  </div>
-
-  <div class="phase-div sr"><span>Phase 3 — Data Structures (08–09)</span></div>
-  <div class="lesson-grid sr">
-    <a href="lessons/lesson_08.md" class="lc"><span class="lnum">08</span><span class="ltitle">Lists & Tuples — creating, indexing, slicing, looping, methods</span></a>
-    <a href="lessons/lesson_09.md" class="lc"><span class="lnum">09</span><span class="ltitle">Dictionaries — key-value pairs, adding, updating, looping</span></a>
-  </div>
-
-  <div class="phase-div sr"><span>Phase 4 — Capstone (10)</span></div>
-  <div class="lesson-grid sr">
-    <a href="lessons/lesson_10.md" class="lc"><span class="lnum">10</span><span class="ltitle">Mini Project — Student Grade Calculator</span></a>
-  </div>
+<div class="phase-div sr"><span>Phase 3 — Functions, OOP &amp; Files (15–23)</span></div>
+<div class="lesson-grid sr">
+  <a href="lessons/lesson_15.html" class="lc"><span class="lnum">15</span><span class="ltitle">Python Functions, Arguments, *args / **kwargs, and Scope</span></a>
+  <a href="lessons/lesson_16.html" class="lc"><span class="lnum">16</span><span class="ltitle">Python Decorators, Lambda Functions, Recursion, and Generators</span></a>
+  <a href="lessons/lesson_17.html" class="lc"><span class="lnum">17</span><span class="ltitle">Iterators, Modules, Dates, and Math in Python</span></a>
+  <a href="lessons/lesson_18.html" class="lc"><span class="lnum">18</span><span class="ltitle">JSON, RegEx, PIP, Error Handling, and String Formatting in Python</span></a>
+  <a href="lessons/lesson_19.html" class="lc"><span class="lnum">19</span><span class="ltitle">Python None, User Input, Virtual Environments, and Arrays</span></a>
+  <a href="lessons/lesson_20.html" class="lc"><span class="lnum">20</span><span class="ltitle">Python OOP: Classes, Objects, __init__, and self</span></a>
+  <a href="lessons/lesson_21.html" class="lc"><span class="lnum">21</span><span class="ltitle">Python OOP — Class Properties, Methods, Inheritance &amp; Polymorphism</span></a>
+  <a href="lessons/lesson_22.html" class="lc"><span class="lnum">22</span><span class="ltitle">Python Encapsulation, Inner Classes, and File Handling</span></a>
+  <a href="lessons/lesson_23.html" class="lc"><span class="lnum">23</span><span class="ltitle">Python File Write, Create, and Delete</span></a>
 </div>
-</section>
+<div class="phase-div sr"><span>Phase 4 — NumPy &amp; Data Science (24–31)</span></div>
+<div class="lesson-grid sr">
+  <a href="lessons/lesson_24.html" class="lc"><span class="lnum">24</span><span class="ltitle">Introduction to NumPy: Arrays, Indexing, and Slicing</span></a>
+  <a href="lessons/lesson_25.html" class="lc"><span class="lnum">25</span><span class="ltitle">NumPy Deep Dive: Data Types, Shape, Reshape, Iterating, and Joining</span></a>
+  <a href="lessons/lesson_26.html" class="lc"><span class="lnum">26</span><span class="ltitle">NumPy Array Operations: Splitting, Searching, Sorting, Filtering &amp; Random</span></a>
+  <a href="lessons/lesson_27.html" class="lc"><span class="lnum">27</span><span class="ltitle">NumPy Random Distributions, Permutations, Seaborn &amp; Universal Functions</span></a>
+  <a href="lessons/lesson_28.html" class="lc"><span class="lnum">28</span><span class="ltitle">NumPy ufuncs — Arithmetic, Rounding, Logs &amp; Summations</span></a>
+  <a href="lessons/lesson_29.html" class="lc"><span class="lnum">29</span><span class="ltitle">Introduction to Pandas — Data Analysis with Python</span></a>
+  <a href="lessons/lesson_30.html" class="lc"><span class="lnum">30</span><span class="ltitle">Pandas — Analyzing DataFrames and Cleaning Data</span></a>
+  <a href="lessons/lesson_31.html" class="lc"><span class="lnum">31</span><span class="ltitle">Pandas Correlations, Plotting &amp; Introduction to Matplotlib</span></a>
+</div>
+<div class="phase-div sr"><span>Phase 5 — Visualisation &amp; Machine Learning (32–35)</span></div>
+<div class="lesson-grid sr">
+  <a href="lessons/lesson_32.html" class="lc"><span class="lnum">32</span><span class="ltitle">Matplotlib: Markers, Lines, Labels, Grids, Subplots, Scatter &amp; Bar Charts</span></a>
+  <a href="lessons/lesson_33.html" class="lc"><span class="lnum">33</span><span class="ltitle">Matplotlib Histograms, Pie Charts &amp; Machine Learning Statistics</span></a>
+  <a href="lessons/lesson_34.html" class="lc"><span class="lnum">34</span><span class="ltitle">Percentiles, Distributions, Normal Distribution &amp; Linear Regression</span></a>
+  <a href="lessons/lesson_35.html" class="lc"><span class="lnum">35</span><span class="ltitle">Python Machine Learning — Regression, Scaling, Train/Test &amp; Decision Trees</span></a>
+</div>
+<div class="phase-div sr"><span>Phase 6 — DSA &amp; Algorithms (36–39)</span></div>
+<div class="lesson-grid sr">
+  <a href="lessons/lesson_36.html" class="lc"><span class="lnum">36</span><span class="ltitle">Python DSA — Lists, Searching &amp; Bubble Sort</span></a>
+  <a href="lessons/lesson_37.html" class="lc"><span class="lnum">37</span><span class="ltitle">Sorting Algorithms: Selection, Insertion, Quicksort, Counting &amp; Radix Sort</span></a>
+  <a href="lessons/lesson_38.html" class="lc"><span class="lnum">38</span><span class="ltitle">Merge Sort, Stacks, Queues, Linked Lists &amp; Hash Tables</span></a>
+  <a href="lessons/lesson_39.html" class="lc"><span class="lnum">39</span><span class="ltitle">Trees, Binary Trees, Binary Search Trees, AVL Trees, and Graphs</span></a>
+</div>
+<div class="phase-div sr"><span>Phase 7 — Databases &amp; Reference (40–45)</span></div>
+<div class="lesson-grid sr">
+  <a href="lessons/lesson_40.html" class="lc"><span class="lnum">40</span><span class="ltitle">Python and MySQL — Databases, Tables, Drop Table &amp; Inserting Data</span></a>
+  <a href="lessons/lesson_41.html" class="lc"><span class="lnum">41</span><span class="ltitle">Python MySQL — Querying, Filtering, Sorting, Modifying &amp; Joining Data</span></a>
+  <a href="lessons/lesson_42.html" class="lc"><span class="lnum">42</span><span class="ltitle">Python and MongoDB — Databases, Collections &amp; Finding Data</span></a>
+  <a href="lessons/lesson_43.html" class="lc"><span class="lnum">43</span><span class="ltitle">Python MongoDB — Querying, Sorting, Updating &amp; Deleting Documents</span></a>
+  <a href="lessons/lesson_44.html" class="lc"><span class="lnum">44</span><span class="ltitle">Python Built-in Reference: Functions, String, List, Dict, Tuple &amp; Set Methods</span></a>
+  <a href="lessons/lesson_45.html" class="lc"><span class="lnum">45</span><span class="ltitle">Python How-Tos, Examples, Exercises, Study Plan &amp; Interview Prep</span></a>
+</div>
 
-<section class="sec sec-div">
-<div class="wrap sr">
-  <div class="slbl" style="margin-bottom:1rem">How It Works</div>
-  <h2 class="sec-h2" style="margin-bottom:3rem">Learn at your own pace.</h2>
+</div></section>
+<section class="sec sec-div"><div class="wrap sr">
+  <div class="slbl">How It Works</div><h2 class="sec-h2" style="margin-bottom:3rem">Learn at your own pace.</h2>
   <div class="steps-row">
-    <div class="step-item"><div class="step-circle">01</div><h3>Start Here</h3><p>Read this overview page to understand all 10 lessons and what you'll build.</p></div>
-    <div class="step-item"><div class="step-circle">02</div><h3>Open Lesson 01</h3><p>Click the first card above or the hero button. No installation needed to begin.</p></div>
-    <div class="step-item"><div class="step-circle">03</div><h3>Read & Practice</h3><p>Each lesson explains a concept with code examples and ends with hands-on exercises.</p></div>
-    <div class="step-item"><div class="step-circle">04</div><h3>Progress Forward</h3><p>Move to the next lesson whenever you're ready. No deadlines, no pressure.</p></div>
+    <div class="step"><div class="step-n">01</div><h3>No Prerequisites</h3><p>Python is the ideal first language. Start at lesson 01 with zero coding experience.</p></div>
+    <div class="step"><div class="step-n">02</div><h3>Run Every Example</h3><p>Open a terminal and type every code snippet as you read — Python rewards practice.</p></div>
+    <div class="step"><div class="step-n">03</div><h3>Install Packages</h3><p>When you reach NumPy (lesson 24), the lessons will guide you through <code style="font-size:.8em;background:#f1f5f9;padding:.1rem .35rem;border-radius:4px">pip install</code>.</p></div>
+    <div class="step"><div class="step-n">04</div><h3>Complete Lesson 45</h3><p>The final lesson is a full reference, interview prep guide and study plan.</p></div>
   </div>
-</div>
-</section>
+</div></section>
 </main>
-
 <footer>
   <div class="fi">
-    <div class="fb">TECHBASE ACADEMY<p>Ibadan, Nigeria · Free STEM Education</p></div>
-    <div>
-      <p class="fl-head">This Course</p>
-      <ul class="fl">
-        <li><a href="#lessons">All 10 Lessons</a></li>
-        <li><a href="https://github.com/techbaseng/techbase-python" target="_blank">GitHub Repo ↗</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="fl-head">Next Steps</p>
-      <ul class="fl">
-        <li><a href="https://techbaseng.github.io/techbase-html/">HTML →</a></li>
-        <li><a href="https://techbaseng.github.io/techbase-css/">CSS →</a></li>
-        <li><a href="https://techbaseng.github.io">← All Courses</a></li>
-      </ul>
-    </div>
-    <div class="fc"><strong>MIT License</strong><br>© 2025 Techbase Consultant Services<br>Made with ❤️ in Ibadan, Nigeria</div>
+    <div><div class="fb">Python Programming</div><p>Part of the Techbase STEM Academy free course series. Ibadan, Nigeria.</p></div>
+    <div><p class="fl-h">Lessons</p><ul class="fl"><li><a href="#lessons">All 45 Lessons</a></li><li><a href="https://github.com/techbaseng/techbase-python" target="_blank">GitHub Repo</a></li></ul></div>
+    <div><p class="fl-h">Related</p><ul class="fl"><li><a href="https://techbaseng.github.io/techbase-scratch/">← Scratch</a></li><li><a href="https://techbaseng.github.io/techbase-robotics/">Robotics →</a></li></ul></div>
+    <div><p class="fl-h">Academy</p><ul class="fl"><li><a href="https://techbaseng.github.io">← All Courses</a></li><li><a href="https://techbasengr.com.ng" target="_blank">Website</a></li></ul></div>
   </div>
+  <div class="f-bot"><span>© 2025 Techbase Consultant Services</span><span>MIT License · Made with ❤️ in Ibadan</span></div>
 </footer>
 <script>const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.07});document.querySelectorAll('.sr').forEach(el=>io.observe(el));</script>
-</body>
-</html>
+</body></html>
