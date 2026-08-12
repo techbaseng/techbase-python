@@ -1,258 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lesson 33: Lesson 33 – Matplotlib Histograms, Pie Charts &amp; Machine Learning Statistics — Techbase Python</title>
-<meta name="description" content="Lesson 33 – Matplotlib Histograms, Pie Charts &amp; Machine Learning Statistics">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --acc:#059669;--acc-d:#047857;--acc-pale:#ecfdf5;
-  --acc-b:rgba(5,150,105,.25);--acc-sh:rgba(5,150,105,.28);
-  --bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--t2:#334155;--muted:#64748b;
-  --D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+:root{--acc:#059669;--acd:#047857;--acp:#ecfdf5;--acb:rgba(5,150,105,.22);--acs:rgba(5,150,105,.28);--bg:#f8fafc;--sf:#fff;--br:#e2e8f0;--tx:#0f172a;--t2:#334155;--mu:#64748b;--D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
-
-/* NAV */
-.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);
-  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:58px;
-  display:flex;align-items:center;padding:0 1.5rem;gap:1rem;justify-content:space-between}
-.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.l-nav-back{font-size:.8rem;color:var(--muted);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+body{background:var(--bg);color:var(--tx);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
+.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);height:58px;display:flex;align-items:center;padding:0 1.5rem;justify-content:space-between}
+.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--tx);text-decoration:none}
+.l-nav-back{font-size:.8rem;color:var(--mu);text-decoration:none;font-weight:500;transition:color .2s}
 .l-nav-back:hover{color:var(--acc)}
-.l-nav-label{font-family:var(--M);font-size:.68rem;color:var(--muted)}
-
-/* PROGRESS */
-.progress-wrap{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--border)}
-.progress-bar{height:100%;background:var(--acc);transition:width .4s ease;width:0%}
-
-/* HERO */
-.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--border)}
-.l-hero-inner{max-width:860px;margin:0 auto}
-.l-badge{display:inline-flex;align-items:center;gap:.4rem;border-radius:100px;padding:.2rem .85rem;
-  font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
-  color:var(--acc);background:var(--acc-pale);border:1px solid var(--acc-b);margin-bottom:.8rem}
-.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);
-  letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
-.l-hero-sub{font-size:.95rem;color:var(--muted);margin-bottom:1rem}
-
-/* WELCOME BOX */
-.welcome-box{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.5rem 1.8rem;max-width:860px;margin:1.5rem auto 0}
-.welcome-box h2{font-family:var(--D);font-weight:700;font-size:1.05rem;margin-bottom:.6rem}
-.welcome-box p,.welcome-box li{font-size:.9rem;line-height:1.8;opacity:.93}
-.welcome-box ul{margin-left:1.2rem;margin-top:.5rem}
-.welcome-meta{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
-.welcome-meta span{background:rgba(255,255,255,.18);border-radius:6px;padding:.2rem .75rem;
-  font-family:var(--M);font-size:.68rem;font-weight:500}
-
-/* PHASE */
-.phase{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;
-  margin-bottom:1.5rem;overflow:hidden;transition:opacity .3s,transform .3s,filter .3s}
-.phase.locked{opacity:.35;pointer-events:none;filter:blur(1.5px)}
-.phase-header{padding:1rem 1.4rem;background:#f0fdf6;
-  border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:default}
-.phase-num{font-family:var(--M);font-size:.7rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--acc)}
-.phase-title{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--text);
-  flex:1;margin:0 .8rem}
-.phase-check{width:26px;height:26px;border-radius:50%;background:var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;
-  transition:background .3s,color .3s}
-.phase-check.done{background:#10b981;color:#fff}
-.phase-body{padding:1.6rem 1.8rem}
-
-/* RICH CONTENT STYLES */
+.l-nav-lbl{font-family:var(--M);font-size:.68rem;color:var(--mu)}
+.pw{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--br)}
+.pb{height:100%;background:linear-gradient(90deg,var(--acc),var(--acd));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%;position:relative}
+.pb::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:inherit;filter:brightness(1.4);animation:pg 1.5s ease-in-out infinite}
+@keyframes pg{0%,100%{opacity:1}50%{opacity:.35}}
+.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--br)}
+.l-hero-in{max-width:860px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;border-radius:100px;padding:.22rem .9rem;font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--acc);background:var(--acp);border:1.5px solid var(--acb);margin-bottom:.85rem}
+.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
+.l-hero-sub{font-size:.9rem;color:var(--mu)}
+.wb{background:#fff;border:1.5px solid var(--acb);border-left:5px solid var(--acc);border-radius:14px;padding:1.4rem 1.6rem;max-width:860px;margin:1.5rem auto 0;box-shadow:0 2px 12px var(--acs)}
+.wb h2{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--acd);margin-bottom:.6rem}
+.wb p,.wb li{font-size:.92rem;line-height:1.85;color:var(--t2)}
+.wb ul{margin-left:1.2rem;margin-top:.4rem}
+.wm{display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap}
+.wm span{background:var(--acp);color:var(--acd);border:1px solid var(--acb);border-radius:7px;padding:.22rem .7rem;font-family:var(--M);font-size:.68rem;font-weight:600}
+.phase{background:var(--sf);border:1.5px solid var(--br);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;transition:opacity .35s,filter .35s,transform .35s}
+.phase.locked{opacity:.28;pointer-events:none;filter:blur(2px);transform:scale(.99)}
+.ph{padding:1rem 1.4rem;background:#f0fdf6;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:.8rem}
+.pn{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.pt{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--tx);flex:1}
+.pc{width:26px;height:26px;border-radius:50%;background:var(--br);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:background .3s,transform .4s}
+.pc.done{background:#10b981;color:#fff;transform:scale(1.15) rotate(360deg)}
+.pb2{padding:1.6rem 1.8rem}
 .v2-p{margin-bottom:1rem;font-size:.95rem;color:var(--t2);line-height:1.85}
-.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--text);
-  margin:1.6rem 0 .5rem;padding-top:.2rem;border-top:2px solid var(--acc-pale)}
-.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1.1rem 0 .4rem}
-.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.9rem;color:var(--muted);margin:.8rem 0 .3rem}
+.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--tx);margin:1.6rem 0 .5rem;border-top:2px solid var(--acp);padding-top:.4rem}
+.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1rem 0 .35rem}
+.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.88rem;color:var(--mu);margin:.7rem 0 .3rem}
 .v2-ul,.v2-ol{margin:.6rem 0 1rem 1.4rem;font-size:.93rem;color:var(--t2);line-height:1.9}
 .v2-ul li,.v2-ol li{margin-bottom:.3rem}
-.v2-bq{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 10px 10px 0;
-  padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
+.v2-bq{border-left:4px solid var(--acc);background:var(--acp);border-radius:0 10px 10px 0;padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
 .v2-bq p{margin:0;color:inherit}
-.v2-bq strong{font-style:normal}
-.v2-hr{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
-.v2-table-wrap{overflow-x:auto;margin:1rem 0}
+.v2-hr{border:none;border-top:1px solid var(--br);margin:1.2rem 0}
+.v2-table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--br)}
 .v2-table{width:100%;border-collapse:collapse;font-size:.87rem}
-.v2-table th{background:var(--acc-pale);color:#064e3b;font-family:var(--D);
-  font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--acc-b)}
-.v2-table td{padding:8px 12px;border:1px solid var(--border);color:var(--t2);vertical-align:top}
-.v2-table tr:nth-child(even) td{background:#f8fafc}
-.v2-table code{background:var(--acc-pale);color:var(--acc);border-radius:4px;
-  padding:1px 5px;font-family:var(--M);font-size:.8em}
-.phase-body code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-.phase-body a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
-.phase-body strong{color:var(--text)}
-
-/* CODE BLOCKS */
-.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.v2-table th{background:var(--acp);color:#064e3b;font-family:var(--D);font-weight:700;padding:10px 12px;text-align:left;border-bottom:2px solid var(--acb)}
+.v2-table td{padding:8px 12px;border-bottom:1px solid var(--br);color:var(--t2);vertical-align:top}
+.v2-table tr:last-child td{border:none}
+.v2-table tr:hover td{background:var(--acp)}
+.pb2 code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.pb2 a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
+.pb2 strong{color:var(--tx)}
+.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .v2-code-bar{background:#1e293b;padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem}
 .v2-dot{width:10px;height:10px;border-radius:50%}
 .v2-dot.r{background:#ff5f57}.v2-dot.y{background:#febc2e}.v2-dot.g{background:#28c840}
-.v2-code-lang{margin-left:.6rem;font-family:var(--M);font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em}
+.v2-code-lang{margin-left:.5rem;font-family:var(--M);font-size:.62rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;flex:1}
+.copy-btn{background:rgba(255,255,255,.08);color:#94a3b8;border:none;border-radius:6px;padding:.25rem .65rem;font-family:var(--M);font-size:.65rem;cursor:pointer;transition:background .2s,color .2s}
+.copy-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.copy-btn.copied{background:#10b981;color:#fff}
 .v2-code-body{background:#0f172a;padding:1.3rem 1.5rem;overflow-x:auto}
 .v2-code-body pre{margin:0}
-.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.9;color:#e2e8f0;
-  white-space:pre;background:transparent;padding:0;border-radius:0}
-
-/* TASK BOX */
-.task-box{background:#d1fae5;border:2px dashed #059669;
-  border-radius:12px;padding:1rem 1.3rem;margin:1.4rem 0}
-.task-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-.task-box p,.task-body{font-size:.92rem;color:#064e3b;line-height:1.8}
-.task-box code{background:rgba(0,0,0,.08);border-radius:4px;padding:1px 6px;
-  font-family:var(--M);font-size:.82em}
-
-/* UNLOCK BUTTON */
-.unlock-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);
-  color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;
-  padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;
-  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acc-sh);margin-top:1.2rem}
-.unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acc-sh)}
-
-/* BUILD IT */
+.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.95;color:#e2e8f0;white-space:pre;background:transparent;padding:0;border-radius:0}
+.task-box{background:#d1fae5;border:2px dashed #059669;border-radius:12px;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.task-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.task-body{font-size:.93rem;color:#064e3b;line-height:1.85}
+.task-body code{background:rgba(0,0,0,.1);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.chal-box{background:linear-gradient(135deg,#ecfdf5 0%,#fff 100%);border:2px solid var(--acc);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem}
+.chal-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acd);margin-bottom:.6rem}
+.chal-body{font-size:.95rem;color:var(--tx);line-height:1.85}
+.chal-body code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 5px;font-family:var(--M);font-size:.82em}
+.reveal-btn{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--acd);font-family:var(--D);font-weight:700;font-size:.85rem;padding:.6rem 1.2rem;border-radius:8px;border:2px solid var(--acc);cursor:pointer;transition:background .2s,color .2s;margin:.6rem 0}
+.reveal-btn:hover{background:var(--acc);color:#fff}
+.reveal-content{display:none;margin-top:.6rem;animation:fi .3s ease}
+.reveal-content.open{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .build-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:16px;padding:1.6rem;margin:2rem 0;display:none}
-.build-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
-.build-name{font-family:var(--D);font-weight:700;font-size:1.1rem;color:#14532d;margin-bottom:.5rem}
-.build-desc{font-size:.9rem;color:#166534;margin-bottom:1.2rem;line-height:1.75}
-.build-desc code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
-.build-desc strong{color:#14532d}
-
-/* GITHUB ACCORDION */
-.gh-acc{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
-.gh-acc-head{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none}
-.gh-acc-body{display:none;padding:1.2rem;border-top:1px solid var(--border)}
-.gh-acc-body.open{display:block}
-.gh-step{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
-.gh-step-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;
-  font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;margin-top:2px}
-.gh-step p{font-size:.88rem;color:var(--t2);line-height:1.7}
-.gh-step code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-
-/* SESSION END */
-.session-end{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
-.session-end.visible{display:block}
-.session-end h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
-.session-end ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.session-end li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
-.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);
-  color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;
-  padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;
-  border:1.5px solid var(--border);transition:border-color .2s,color .2s}
+.build-box.visible{display:block;animation:fi .4s ease}
+.build-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+.build-name{font-family:var(--D);font-weight:700;font-size:1.15rem;color:#14532d;margin-bottom:.6rem}
+.build-req{font-size:.93rem;color:#166534;line-height:1.8;margin-bottom:.8rem}
+.build-req code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.build-req strong{color:#14532d}
+.gh-acc{border:1.5px solid var(--br);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.gh-hd{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none;transition:background .2s}
+.gh-hd:hover{background:#f1f5f9}
+.gh-bd{display:none;padding:1.2rem;border-top:1px solid var(--br)}
+.gh-bd.open{display:block;animation:fi .25s ease}
+.gh-st{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
+.gh-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.gh-st p{font-size:.88rem;color:var(--t2);line-height:1.7}
+.gh-st code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.gh-nop{background:#fef3c7;border:1.5px solid #fde68a;border-radius:10px;padding:1rem 1.2rem;font-size:.9rem;color:#78350f;line-height:1.75;margin-bottom:1rem}
+.se{background:linear-gradient(135deg,var(--acc),var(--acd));color:#fff;border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
+.se.visible{display:block;animation:fi .4s ease}
+.se h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
+.se ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.se li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
+.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--sf);color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;border:1.5px solid var(--br);transition:border-color .2s,color .2s}
 .ln-btn:hover{border-color:var(--acc);color:var(--acc)}
 .ln-btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .ln-btn.primary:hover{opacity:.9}
-.lesson-nav{display:flex;align-items:center;justify-content:space-between;
-  padding-top:2rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
-.lesson-footer{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;
-  color:var(--muted);border-top:1px solid var(--border);background:var(--surface)}
+.ln{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
+.ub{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acs);margin-top:1.2rem}
+.ub:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acs)}
+.ub:active{transform:scale(.97)}
+#toast{position:fixed;bottom:90px;right:1.5rem;z-index:999;background:#1e293b;color:#fff;border-radius:10px;padding:.75rem 1.2rem;font-family:var(--D);font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#go-top{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;border:none;cursor:pointer;font-size:1.15rem;box-shadow:0 4px 16px var(--acs);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s,box-shadow .2s;pointer-events:none}
+#go-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#go-top:hover{box-shadow:0 8px 24px var(--acs);transform:translateY(-2px)}
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;display:none}
+.lf{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;color:var(--mu);border-top:1px solid var(--br);background:var(--sf)}
 </style>
 </head>
 <body>
 <nav class="l-nav">
   <a href="../index.html" class="l-nav-logo">⚡ Techbase Python</a>
-  <span class="l-nav-label">Lesson 33 of 45</span>
+  <span class="l-nav-lbl">Lesson 33 of 45</span>
   <a href="../index.html" class="l-nav-back">← All Lessons</a>
 </nav>
-<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
-
-<div class="l-hero">
-  <div class="l-hero-inner">
-    <div class="l-badge">Python · Lesson 33</div>
-    <h1>Lesson 33 – Matplotlib Histograms, Pie Charts &amp; Machine Learning Statistics</h1>
-    <div class="l-hero-sub">9 phases · Build: Project Overview</div>
-  </div>
-</div>
-
-<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
-  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="welcome-box">
-  <h2>👋 Welcome to Lesson 33</h2>
-  <div style="font-size:.9rem;line-height:1.85;opacity:.93"><p class="v2-p">In this lesson you will learn how to <strong>visualise data</strong> using two powerful chart types — <strong>histograms</strong> and <strong>pie charts</strong> — and then step into the exciting world of <strong>Machine Learning (ML)</strong> statistics by mastering <strong>mean</strong>, <strong>median</strong>, <strong>mode</strong>, <strong>standard deviation</strong>, and <strong>percentiles</strong>.</p>
-<p class="v2-p">These are not just academic ideas. Every time a business analyses customer ages, a scientist measures temperature variation, or a developer builds a recommendation engine, they use the exact tools you will learn here.</p>
-<p class="v2-p">By the end of this lesson you will be able to:</p>
-<ul class="v2-ul"><li>Draw and customise histograms with Matplotlib</li><li>Draw and customise pie charts with Matplotlib</li><li>Understand what Machine Learning is and why statistics power it</li><li>Calculate mean, median, and mode</li><li>Calculate standard deviation and variance</li><li>Use NumPy and SciPy to perform all these calculations in Python</li></ul>
-<blockquote class="v2-bq"><p class="v2-p"><strong>No prior statistics knowledge is needed.</strong> Every concept is taught from scratch with plain English explanations.</p></blockquote>
-<hr class="v2-hr"></div>
-  <div class="welcome-meta">
-    <span>📚 9 phases</span>
-    <span>🏗️ Project Overview</span>
-  </div>
+<div class="pw"><div class="pb" id="pbar"></div></div>
+<div class="l-hero"><div class="l-hero-in">
+  <div class="badge">Python · Lesson 33</div>
+  <h1>Lesson 33 – Matplotlib Histograms, Pie Charts &amp; Machine Learning Statistics</h1>
+  <div class="l-hero-sub">9 phases &nbsp;·&nbsp; Build: Project Overview</div>
 </div></div>
-</section>
-
-<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
-<div class="phase" id="phase1">
-  <div class="phase-header">
-    <div class="phase-num">Phase 1 of 9</div>
-    <div class="phase-title">Lesson Introduction</div>
-    <div class="phase-check" id="chk1"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">In this lesson you will learn how to <strong>visualise data</strong> using two powerful chart types — <strong>histograms</strong> and <strong>pie charts</strong> — and then step into the exciting world of <strong>Machine Learning (ML)</strong> statistics by mastering <strong>mean</strong>, <strong>median</strong>, <strong>mode</strong>, <strong>standard deviation</strong>, and <strong>percentiles</strong>.</p>
+<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--br)">
+  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="wb"><h2>👋 Welcome to Lesson 33</h2><div style="font-size:.92rem;line-height:1.85;color:var(--t2)"><p class="v2-p">In this lesson you will learn how to <strong>visualise data</strong> using two powerful chart types — <strong>histograms</strong> and <strong>pie charts</strong> — and then step into the exciting world of <strong>Machine Learning (ML)</strong> statistics by mastering <strong>mean</strong>, <strong>median</strong>, <strong>mode</strong>, <strong>standard deviation</strong>, and <strong>percentiles</strong>.</p>
 <p class="v2-p">These are not just academic ideas. Every time a business analyses customer ages, a scientist measures temperature variation, or a developer builds a recommendation engine, they use the exact tools you will learn here.</p>
 <p class="v2-p">By the end of this lesson you will be able to:</p>
 <ul class="v2-ul"><li>Draw and customise histograms with Matplotlib</li><li>Draw and customise pie charts with Matplotlib</li><li>Understand what Machine Learning is and why statistics power it</li><li>Calculate mean, median, and mode</li><li>Calculate standard deviation and variance</li><li>Use NumPy and SciPy to perform all these calculations in Python</li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>No prior statistics knowledge is needed.</strong> Every concept is taught from scratch with plain English explanations.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(1)">Start Lesson ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase2">
-  <div class="phase-header">
-    <div class="phase-num">Phase 2 of 9</div>
-    <div class="phase-title">Prerequisite Concepts</div>
-    <div class="phase-check" id="chk2"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Before we begin, here is a quick checkpoint of the tools we will use.</p>
+<hr class="v2-hr"></div><div class="wm"><span>📚 9 phases</span><span>🏗️ Project Overview</span><span>🐍 GitHub Repo</span></div></div></div>
+</section>
+<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
+<div class="phase" id="phase1"><div class="ph"><div class="pn">Phase 1/9</div><div class="pt">Lesson Introduction</div><div class="pc" id="chk1"></div></div><div class="pb2"><p class="v2-p">In this lesson you will learn how to <strong>visualise data</strong> using two powerful chart types — <strong>histograms</strong> and <strong>pie charts</strong> — and then step into the exciting world of <strong>Machine Learning (ML)</strong> statistics by mastering <strong>mean</strong>, <strong>median</strong>, <strong>mode</strong>, <strong>standard deviation</strong>, and <strong>percentiles</strong>.</p>
+<p class="v2-p">These are not just academic ideas. Every time a business analyses customer ages, a scientist measures temperature variation, or a developer builds a recommendation engine, they use the exact tools you will learn here.</p>
+<p class="v2-p">By the end of this lesson you will be able to:</p>
+<ul class="v2-ul"><li>Draw and customise histograms with Matplotlib</li><li>Draw and customise pie charts with Matplotlib</li><li>Understand what Machine Learning is and why statistics power it</li><li>Calculate mean, median, and mode</li><li>Calculate standard deviation and variance</li><li>Use NumPy and SciPy to perform all these calculations in Python</li></ul>
+<blockquote class="v2-bq"><p class="v2-p"><strong>No prior statistics knowledge is needed.</strong> Every concept is taught from scratch with plain English explanations.</p></blockquote>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(1)">Start Lesson ✓</button></div></div>
+<div class="phase locked" id="phase2"><div class="ph"><div class="pn">Phase 2/9</div><div class="pt">Prerequisite Concepts</div><div class="pc" id="chk2"></div></div><div class="pb2"><p class="v2-p">Before we begin, here is a quick checkpoint of the tools we will use.</p>
 <h3 class="v2-h3">What is Matplotlib?</h3>
 <p class="v2-p">Matplotlib is a Python library that lets you draw charts and graphs. Think of it as graph paper + coloured pens, but controlled entirely by code.</p>
 <p class="v2-p">Install it if needed:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>pip install matplotlib</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>pip install matplotlib</code></pre></div></div>
 <h3 class="v2-h3">What is NumPy?</h3>
 <p class="v2-p">NumPy is a Python library for fast number crunching. It can store lists of numbers in special structures called <strong>arrays</strong> and calculate things like averages instantly.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>pip install numpy</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>pip install numpy</code></pre></div></div>
 <h3 class="v2-h3">What is SciPy?</h3>
 <p class="v2-p">SciPy builds on NumPy and adds advanced scientific tools — including the ability to find the <strong>mode</strong> of a dataset.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>pip install scipy</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>pip install scipy</code></pre></div></div>
 <h3 class="v2-h3">What is a Dataset?</h3>
 <p class="v2-p">A dataset is simply a collection of values — for example, the ages of 100 people, or the scores of 50 students.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase3">
-  <div class="phase-header">
-    <div class="phase-num">Phase 3 of 9</div>
-    <div class="phase-title">Part 1 — Matplotlib Histograms</div>
-    <div class="phase-check" id="chk3"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase3"><div class="ph"><div class="pn">Phase 3/9</div><div class="pt">Part 1 — Matplotlib Histograms</div><div class="pc" id="chk3"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is a Histogram?</h3>
 <p class="v2-p">A <strong>histogram</strong> is a type of bar chart that shows how <strong>frequently values appear within ranges (called bins)</strong>.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Analogy:</strong> Imagine you asked 100 classmates how many hours they sleep per night. Some said 5, some said 7, some said 9. A histogram groups those answers into ranges — "5–6 hours", "7–8 hours", "9–10 hours" — and draws a bar showing how many people fall in each range.</p></blockquote>
@@ -262,7 +168,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Bar Chart</th><th>Histogram</th></tr></thead><tbody><tr><td>Compares separate categories (e.g., apples vs oranges)</td><td>Shows frequency of a <em>range</em> of continuous values</td></tr><tr><td>Bars have gaps between them</td><td>Bars are touching (no gaps) — showing continuity</td></tr></tbody></table></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Your First Histogram</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 # Create a list of 250 random ages between 0 and 130
@@ -277,10 +183,10 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Understanding <code>np.random.normal()</code></h3>
 <p class="v2-p">This function creates <strong>normally distributed</strong> (bell-curve) data. Three arguments control it:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>np.random.normal(mean, standard_deviation, count)</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>np.random.normal(mean, standard_deviation, count)</code></pre></div></div>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Argument</th><th>Meaning</th><th>Example</th></tr></thead><tbody><tr><td><code>mean</code></td><td>The central value — where data clusters</td><td><code>170</code> (heights cluster around 170 cm)</td></tr><tr><td><code>standard_deviation</code></td><td>How spread out the data is</td><td><code>10</code> (most values are within 10 cm of 170)</td></tr><tr><td><code>count</code></td><td>How many numbers to generate</td><td><code>250</code> data points</td></tr></tbody></table></div>
 <p class="v2-p"><strong>Quick demo — narrow vs wide spread:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 narrow = np.random.normal(50, 2, 200)   # tightly packed around 50
@@ -303,7 +209,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Controlling the Number of Bins</h3>
 <p class="v2-p"><strong>Bins</strong> are the ranges that your data is grouped into. More bins = more detail. Fewer bins = simpler picture.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 x = np.random.normal(170, 10, 250)
@@ -311,7 +217,7 @@ x = np.random.normal(170, 10, 250)
 plt.hist(x, bins=5)   # only 5 groups
 plt.title(&quot;5 Bins&quot;)
 plt.show()</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>plt.hist(x, bins=30)  # 30 groups — much more detail
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>plt.hist(x, bins=30)  # 30 groups — much more detail
 plt.title(&quot;30 Bins&quot;)
 plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output (5 bins):</strong> Just 5 wide bars — you can see the general shape but not the fine detail.</p>
@@ -319,13 +225,13 @@ plt.show()</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Rule of thumb:</strong> A good starting point for bin count is roughly the square root of your data count. For 250 data points → about 15–16 bins.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Common Beginner Mistake: Forgetting <code>plt.show()</code></h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — chart never appears
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — chart never appears
 import matplotlib.pyplot as plt
 import numpy as np
 x = np.random.normal(100, 15, 100)
 plt.hist(x)
 # Missing plt.show()!</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># CORRECT
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># CORRECT
 import matplotlib.pyplot as plt
 import numpy as np
 x = np.random.normal(100, 15, 100)
@@ -334,22 +240,8 @@ plt.show()  # ✅ This line opens the chart window</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Real-World Use of Histograms</h3>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Field</th><th>Example</th></tr></thead><tbody><tr><td><strong>Medicine</strong></td><td>Distribution of patient blood pressure readings</td></tr><tr><td><strong>Education</strong></td><td>Distribution of exam scores across a class</td></tr><tr><td><strong>Manufacturing</strong></td><td>Distribution of product weights to check quality</td></tr><tr><td><strong>Finance</strong></td><td>Distribution of daily stock price changes</td></tr><tr><td><strong>Machine Learning</strong></td><td>Checking if your dataset's values are evenly spread</td></tr></tbody></table></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Matplotlib Histograms</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase4">
-  <div class="phase-header">
-    <div class="phase-num">Phase 4 of 9</div>
-    <div class="phase-title">Part 2 — Matplotlib Pie Charts</div>
-    <div class="phase-check" id="chk4"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Matplotlib Histograms</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase4"><div class="ph"><div class="pn">Phase 4/9</div><div class="pt">Part 2 — Matplotlib Pie Charts</div><div class="pc" id="chk4"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is a Pie Chart?</h3>
 <p class="v2-p">A <strong>pie chart</strong> is a circle divided into slices. Each slice represents a <strong>proportion (share)</strong> of the whole.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Analogy:</strong> Imagine a pizza cut into 4 slices — one person gets 2 slices, another gets 1, and two others get half a slice each. A pie chart shows exactly that kind of proportional split.</p></blockquote>
@@ -357,7 +249,7 @@ plt.show()  # ✅ This line opens the chart window</code></pre></div></div>
 <ul class="v2-ul"><li>Perfect for showing <strong>part-to-whole relationships</strong> (e.g., what percentage of sales came from each product)</li><li>Easy to understand at a glance</li><li>Used in business reports, surveys, budgets, and research</li></ul>
 <hr class="v2-hr">
 <h3 class="v2-h3">Your First Pie Chart</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 
@@ -370,7 +262,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Adding Labels to a Pie Chart</h3>
 <p class="v2-p">Without labels, a pie chart is hard to interpret. Let's add them:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 labels = [&quot;Apples&quot;, &quot;Bananas&quot;, &quot;Cherries&quot;, &quot;Dates&quot;]
@@ -381,7 +273,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Starting Angle: <code>startangle</code></h3>
 <p class="v2-p">By default, the first slice starts at the 3 o'clock position (right side). You can rotate the start:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 labels = [&quot;Apples&quot;, &quot;Bananas&quot;, &quot;Cherries&quot;, &quot;Dates&quot;]
@@ -393,7 +285,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Exploding a Slice</h3>
 <p class="v2-p">You can "pull out" one slice to highlight it:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 labels = [&quot;Apples&quot;, &quot;Bananas&quot;, &quot;Cherries&quot;, &quot;Dates&quot;]
@@ -403,14 +295,14 @@ plt.pie(y, labels=labels, explode=explode, startangle=90)
 plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong> The "Apples" slice is visually separated from the rest of the pie, drawing the viewer's attention to it.</p>
 <p class="v2-p"><strong>Understanding the <code>explode</code> list:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>explode = [0.2, 0, 0, 0]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>explode = [0.2, 0, 0, 0]
 #          ^    ^  ^  ^
 #     Apples  Bananas  Cherries  Dates
 # 0.2 = pull out, 0 = stay in place</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 Try <code>explode = [0.2, 0.1, 0, 0]</code> — both Apples and Bananas will be pulled out!</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Adding Shadows</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 labels = [&quot;Apples&quot;, &quot;Bananas&quot;, &quot;Cherries&quot;, &quot;Dates&quot;]
@@ -421,7 +313,7 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong> The pie chart now has a subtle shadow beneath it, giving it a 3D-like appearance.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Custom Colors</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 labels = [&quot;Apples&quot;, &quot;Bananas&quot;, &quot;Cherries&quot;, &quot;Dates&quot;]
@@ -432,7 +324,7 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong> Each slice now uses your specified colours: red for Apples, yellow for Bananas, etc.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Showing Percentages: <code>autopct</code></h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 labels = [&quot;Apples&quot;, &quot;Bananas&quot;, &quot;Cherries&quot;, &quot;Dates&quot;]
@@ -444,7 +336,7 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong> Each slice now shows its percentage, e.g., <code>35.0%</code>, <code>25.0%</code>, <code>25.0%</code>, <code>15.0%</code>.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Adding a Legend</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 labels = [&quot;Apples&quot;, &quot;Bananas&quot;, &quot;Cherries&quot;, &quot;Dates&quot;]
@@ -455,7 +347,7 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong> A coloured legend box appears beside the chart, labelled "Fruits".</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Full Polished Pie Chart Example</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 y = [35, 25, 25, 15]
 labels = [&quot;Apples&quot;, &quot;Bananas&quot;, &quot;Cherries&quot;, &quot;Dates&quot;]
@@ -480,22 +372,8 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Real-World Use of Pie Charts</h3>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Field</th><th>Example</th></tr></thead><tbody><tr><td><strong>Business</strong></td><td>What percentage of revenue comes from each product</td></tr><tr><td><strong>Surveys</strong></td><td>How respondents are split across answer options</td></tr><tr><td><strong>Budgeting</strong></td><td>What percentage of a budget is spent on each category</td></tr><tr><td><strong>Education</strong></td><td>Grade distribution in a class</td></tr><tr><td><strong>Health</strong></td><td>Breakdown of causes of hospital admissions</td></tr></tbody></table></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Matplotlib Pie Charts</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase5">
-  <div class="phase-header">
-    <div class="phase-num">Phase 5 of 9</div>
-    <div class="phase-title">Part 3 — Getting Started with Machine Learning</div>
-    <div class="phase-check" id="chk5"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Matplotlib Pie Charts</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase5"><div class="ph"><div class="pn">Phase 5/9</div><div class="pt">Part 3 — Getting Started with Machine Learning</div><div class="pc" id="chk5"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is Machine Learning?</h3>
 <p class="v2-p"><strong>Machine Learning (ML)</strong> is a branch of Artificial Intelligence where computers learn patterns from data — without being explicitly programmed for every situation.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Analogy:</strong> Imagine teaching a child to recognise cats. You don't write rules like "cats have pointy ears, whiskers, and fur." Instead, you show the child hundreds of cat pictures, and they learn the pattern. ML works exactly the same way — it learns from <strong>data examples</strong>.</p></blockquote>
@@ -507,40 +385,26 @@ plt.show()</code></pre></div></div>
 <p class="v2-p">The key statistical concepts used in ML are:</p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Concept</th><th>What it tells us</th></tr></thead><tbody><tr><td><strong>Mean</strong></td><td>The average value</td></tr><tr><td><strong>Median</strong></td><td>The middle value</td></tr><tr><td><strong>Mode</strong></td><td>The most common value</td></tr><tr><td><strong>Standard Deviation</strong></td><td>How spread out values are</td></tr><tr><td><strong>Percentile</strong></td><td>Where a value sits relative to all others</td></tr></tbody></table></div>
 <p class="v2-p">Let's learn each one deeply.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Getting Started with Machine Learning</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase6">
-  <div class="phase-header">
-    <div class="phase-num">Phase 6 of 9</div>
-    <div class="phase-title">Part 4 — Mean, Median, and Mode</div>
-    <div class="phase-check" id="chk6"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Getting Started with Machine Learning</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase6"><div class="ph"><div class="pn">Phase 6/9</div><div class="pt">Part 4 — Mean, Median, and Mode</div><div class="pc" id="chk6"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is the Mean?</h3>
 <p class="v2-p">The <strong>mean</strong> (also called the <strong>average</strong>) is calculated by:</p>
 <ol class="v2-ol"><li>Adding up all values</li><li>Dividing by how many values there are</li></ol>
 <p class="v2-p"><strong>Formula:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Mean = (Sum of all values) ÷ (Number of values)</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Mean = (Sum of all values) ÷ (Number of values)</code></pre></div></div>
 <p class="v2-p"><strong>Simple example:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Values: 10, 20, 30
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Values: 10, 20, 30
 Sum = 10 + 20 + 30 = 60
 Count = 3
 Mean = 60 ÷ 3 = 20</code></pre></div></div>
 <p class="v2-p"><strong>In Python with NumPy:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 speed = [99, 86, 87, 88, 111, 86, 103, 87, 94, 78, 77, 85, 86]
 x = np.mean(speed)
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>89.77</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>89.77</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 This means the average speed in this dataset is about 89.77 km/h.</p></blockquote>
 <p class="v2-p"><strong>Why is mean useful in ML?</strong></p>
 <p class="v2-p">The mean is used to <strong>fill in missing data</strong>, <strong>normalise features</strong>, and understand the <strong>central tendency</strong> of a dataset.</p>
@@ -549,55 +413,55 @@ print(x)</code></pre></div></div>
 <p class="v2-p">The <strong>median</strong> is the <strong>middle value</strong> when all values are sorted in order.</p>
 <p class="v2-p"><strong>Why not always use the mean?</strong></p>
 <p class="v2-p">The mean is pulled by extreme values. Consider this scenario:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Salaries: 30000, 32000, 35000, 38000, 1000000
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Salaries: 30000, 32000, 35000, 38000, 1000000
 Mean = (30000 + 32000 + 35000 + 38000 + 1000000) ÷ 5 = 227000</code></pre></div></div>
 <p class="v2-p">A mean of £227,000 is misleading because 4 out of 5 people earn between £30,000–£38,000. The billionaire distorts the mean.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Median = 35000  ← the actual middle value</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Median = 35000  ← the actual middle value</code></pre></div></div>
 <p class="v2-p">The median is more honest here.</p>
 <hr class="v2-hr">
 <p class="v2-p"><strong>How to find the median manually:</strong></p>
 <p class="v2-p"><strong>Odd count of values:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Values: 77, 86, 86, 86, 87, 87, 88, 94, 99, 103, 111
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Values: 77, 86, 86, 86, 87, 87, 88, 94, 99, 103, 111
 Count: 11 values (odd)
 Middle position: (11+1) ÷ 2 = position 6
 6th value = 87
 Median = 87</code></pre></div></div>
 <p class="v2-p"><strong>Even count of values:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Values: 77, 86, 86, 87, 87, 88, 94, 99, 103, 111
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Values: 77, 86, 86, 87, 87, 88, 94, 99, 103, 111
 Count: 10 values (even)
 Two middle values: position 5 and 6 → 87 and 88
 Median = (87 + 88) ÷ 2 = 87.5</code></pre></div></div>
 <hr class="v2-hr">
 <p class="v2-p"><strong>In Python with NumPy:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 speed = [99, 86, 87, 88, 111, 86, 103, 87, 94, 78, 77, 85, 86]
 x = np.median(speed)
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>87.0</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>87.0</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">What Is the Mode?</h3>
 <p class="v2-p">The <strong>mode</strong> is the value that appears <strong>most often</strong> in a dataset.</p>
 <p class="v2-p"><strong>Simple example:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Values: 4, 7, 7, 7, 9, 11
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Values: 4, 7, 7, 7, 9, 11
 Mode = 7  (appears 3 times — more than any other value)</code></pre></div></div>
 <p class="v2-p"><strong>Why is mode useful?</strong></p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Scenario</th><th>How mode helps</th></tr></thead><tbody><tr><td>Shoe sizes</td><td>Find the most common size to stock the most of</td></tr><tr><td>Survey answers</td><td>Find the most popular response</td></tr><tr><td>Defect tracking</td><td>Find the most common type of fault</td></tr></tbody></table></div>
 <hr class="v2-hr">
 <p class="v2-p"><strong>In Python with SciPy:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from scipy import stats
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from scipy import stats
 
 speed = [99, 86, 87, 88, 111, 86, 103, 87, 94, 78, 77, 85, 86]
 x = stats.mode(speed)
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>ModeResult(mode=86, count=3)</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>ModeResult(mode=86, count=3)</code></pre></div></div>
 <p class="v2-p">This tells us: <code>86</code> is the most common value, and it appears <code>3</code> times.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Comparing Mean, Median, and Mode</h3>
 <p class="v2-p">Let's compare all three on the same dataset:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 from scipy import stats
 
 data = [99, 86, 87, 88, 111, 86, 103, 87, 94, 78, 77, 85, 86]
@@ -606,46 +470,32 @@ print(&quot;Mean:  &quot;, np.mean(data))
 print(&quot;Median:&quot;, np.median(data))
 print(&quot;Mode:  &quot;, stats.mode(data).mode)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Mean:   89.77
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Mean:   89.77
 Median: 87.0
 Mode:   86</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Thinking prompt:</strong> The mean (89.77) is higher than the median (87). Why? Because the value <code>111</code> pulls the mean upward. The median ignores this.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Common Beginner Mistake: Using Mean When Outliers Exist</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG approach for skewed data with outliers
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG approach for skewed data with outliers
 salaries = [30000, 32000, 35000, 38000, 2000000]
 average = sum(salaries) / len(salaries)
 print(&quot;Average salary:&quot;, average)
 # Output: 427000 ← misleading!</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 # BETTER — use median for skewed data
 salaries = [30000, 32000, 35000, 38000, 2000000]
 print(&quot;Median salary:&quot;, np.median(salaries))
 # Output: 35000.0 ← realistic picture</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Rule:</strong> Use <strong>mean</strong> when data is evenly spread. Use <strong>median</strong> when there are outliers or skew.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Mean, Median, and Mode</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase7">
-  <div class="phase-header">
-    <div class="phase-num">Phase 7 of 9</div>
-    <div class="phase-title">Part 5 — Standard Deviation and Variance</div>
-    <div class="phase-check" id="chk7"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Mean, Median, and Mode</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase7"><div class="ph"><div class="pn">Phase 7/9</div><div class="pt">Part 5 — Standard Deviation and Variance</div><div class="pc" id="chk7"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is Standard Deviation?</h3>
 <p class="v2-p"><strong>Standard deviation</strong> measures how <strong>spread out</strong> the values in a dataset are from the mean.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Analogy:</strong> Imagine two archery teams both hitting an average score of 80. Team A's scores are 79, 80, 81, 80, 80. Team B's scores are 50, 95, 100, 65, 90. Both have the same mean — but Team B is wildly inconsistent. Standard deviation captures that inconsistency.</p></blockquote>
 <ul class="v2-ul"><li><strong>Low standard deviation</strong> → values are close to the mean → consistent, predictable</li><li><strong>High standard deviation</strong> → values are spread far from the mean → varied, unpredictable</li></ul>
 <hr class="v2-hr">
 <h3 class="v2-h3">Two Example Datasets Side by Side</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 speed1 = [86, 87, 88, 86, 87, 85, 86]       # similar values — low spread
 speed2 = [32, 111, 138, 28, 59, 77, 97]     # very different values — high spread
@@ -656,7 +506,7 @@ print()
 print(&quot;Speed1 Std Dev:&quot;, np.std(speed1))
 print(&quot;Speed2 Std Dev:&quot;, np.std(speed2))</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Speed1 Mean: 85.57
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Speed1 Mean: 85.57
 Speed2 Mean: 77.43
 
 Speed1 Std Dev: 0.90
@@ -666,28 +516,28 @@ Speed2 Std Dev: 37.85</code></pre></div></div>
 <h3 class="v2-h3">Calculating Standard Deviation Step by Step</h3>
 <p class="v2-p">Let's manually understand how it's calculated with a tiny dataset: <code>[4, 8, 6, 5, 3]</code></p>
 <p class="v2-p"><strong>Step 1 — Find the mean:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Mean = (4 + 8 + 6 + 5 + 3) ÷ 5 = 26 ÷ 5 = 5.2</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Mean = (4 + 8 + 6 + 5 + 3) ÷ 5 = 26 ÷ 5 = 5.2</code></pre></div></div>
 <p class="v2-p"><strong>Step 2 — Find each value's distance from the mean (deviation):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>4 - 5.2 = -1.2
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>4 - 5.2 = -1.2
 8 - 5.2 =  2.8
 6 - 5.2 =  0.8
 5 - 5.2 = -0.2
 3 - 5.2 = -2.2</code></pre></div></div>
 <p class="v2-p"><strong>Step 3 — Square each deviation (to remove negatives):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>(-1.2)² = 1.44
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>(-1.2)² = 1.44
 ( 2.8)² = 7.84
 ( 0.8)² = 0.64
 (-0.2)² = 0.04
 (-2.2)² = 4.84</code></pre></div></div>
 <p class="v2-p"><strong>Step 4 — Find the mean of those squares (this is the VARIANCE):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Variance = (1.44 + 7.84 + 0.64 + 0.04 + 4.84) ÷ 5
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Variance = (1.44 + 7.84 + 0.64 + 0.04 + 4.84) ÷ 5
          = 14.80 ÷ 5
          = 2.96</code></pre></div></div>
 <p class="v2-p"><strong>Step 5 — Square root of the variance = Standard Deviation:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Standard Deviation = √2.96 ≈ 1.72</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Standard Deviation = √2.96 ≈ 1.72</code></pre></div></div>
 <hr class="v2-hr">
 <p class="v2-p"><strong>In Python with NumPy (does all 5 steps instantly):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 data = [4, 8, 6, 5, 3]
 
@@ -697,13 +547,13 @@ std_dev  = np.std(data)
 print(&quot;Variance:          &quot;, variance)
 print(&quot;Standard Deviation:&quot;, std_dev)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Variance:           2.96
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Variance:           2.96
 Standard Deviation: 1.7204650534085253</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">✅ NumPy's result matches our manual calculation exactly.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">What Is Variance?</h3>
 <p class="v2-p"><strong>Variance</strong> is simply the <strong>square of the standard deviation</strong> — or equivalently, the mean of the squared deviations. It's an intermediate step in calculating standard deviation.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Variance = (Standard Deviation)²
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Variance = (Standard Deviation)²
 Standard Deviation = √Variance</code></pre></div></div>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Concept</th><th>Formula</th><th>Unit</th></tr></thead><tbody><tr><td>Variance</td><td>Mean of squared deviations</td><td>km² (if data is in km)</td></tr><tr><td>Standard Deviation</td><td>√Variance</td><td>km (same unit as the data)</td></tr></tbody></table></div>
 <blockquote class="v2-bq"><p class="v2-p">Standard deviation is more practical because it's in the <strong>same unit</strong> as your data.</p></blockquote>
@@ -711,18 +561,18 @@ Standard Deviation = √Variance</code></pre></div></div>
 <h3 class="v2-h3">What Are Percentiles?</h3>
 <p class="v2-p">A <strong>percentile</strong> tells you what percentage of values fall <strong>below</strong> a specific value.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Analogy:</strong> If you scored in the <strong>90th percentile</strong> on an exam, it means 90% of students scored lower than you.</p></blockquote>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 ages = [5, 31, 43, 48, 50, 41, 7, 11, 15, 39, 80, 82, 32, 2, 8, 6, 25, 36, 27, 61, 31]
 
 p75 = np.percentile(ages, 75)
 print(&quot;75th percentile:&quot;, p75)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>75th percentile: 43.0</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>75th percentile: 43.0</code></pre></div></div>
 <p class="v2-p">This means: <strong>75% of people in this dataset are younger than 43 years old.</strong></p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Percentiles in Action</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 ages = [5, 31, 43, 48, 50, 41, 7, 11, 15, 39, 80, 82, 32, 2, 8, 6, 25, 36, 27, 61, 31]
 
@@ -730,7 +580,7 @@ for p in [25, 50, 75, 90]:
     val = np.percentile(ages, p)
     print(f&quot;{p}th percentile: {val}&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>25th percentile: 11.0
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>25th percentile: 11.0
 50th percentile: 31.0
 75th percentile: 43.0
 90th percentile: 61.0</code></pre></div></div>
@@ -738,29 +588,14 @@ for p in [25, 50, 75, 90]:
 <hr class="v2-hr">
 <h3 class="v2-h3">Why Standard Deviation and Percentiles Matter in ML</h3>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>ML Use Case</th><th>Why it matters</th></tr></thead><tbody><tr><td><strong>Feature normalisation</strong></td><td>Ensures all features (inputs) are on the same scale</td></tr><tr><td><strong>Outlier detection</strong></td><td>Values more than 2–3 standard deviations from the mean are flagged as unusual</td></tr><tr><td><strong>Model performance</strong></td><td>Understanding how consistent predictions are</td></tr><tr><td><strong>Data quality checks</strong></td><td>Verifying your dataset is realistic and not corrupted</td></tr></tbody></table></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Standard Deviation and Variance</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase8">
-  <div class="phase-header">
-    <div class="phase-num">Phase 8 of 9</div>
-    <div class="phase-title">Guided Practice Exercises</div>
-    <div class="phase-check" id="chk8"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Standard Deviation and Variance</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase8"><div class="ph"><div class="pn">Phase 8/9</div><div class="pt">Guided Practice Exercises</div><div class="pc" id="chk8"></div></div><div class="pb2"><div class="chal-box"><div class="chal-lbl">🎯 Your Challenge</div><div class="chal-body"><hr class="v2-hr">
 <h3 class="v2-h3">Exercise 1 — Histogram of Exam Scores</h3>
 <p class="v2-p"><strong>Objective:</strong> Draw a histogram showing the distribution of 200 student exam scores.</p>
 <p class="v2-p"><strong>Scenario:</strong> A teacher wants to see how their students performed.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Use <code>np.random.normal(65, 12, 200)</code> to simulate scores centred around 65 with spread of 12</li><li>Draw a histogram with 15 bins</li><li>Add a title: <code>"Student Exam Score Distribution"</code></li><li>Add x-label: <code>"Score"</code> and y-label: <code>"Number of Students"</code></li></ol>
-<p class="v2-p"><strong>Solution:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<p class="v2-p"><strong>Solution:</strong></p></div></div><div class="task-box"><div class="task-lbl">✏️ Task</div><div class="task-body">Practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="reveal-btn" onclick="toggleReveal(this)">👁️ Reveal Answer</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 scores = np.random.normal(65, 12, 200)
@@ -780,7 +615,7 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Create values: <code>[800, 300, 200, 150, 100, 450]</code></li><li>Create labels: <code>["Rent", "Food", "Transport", "Entertainment", "Savings", "Other"]</code></li><li>Explode the "Rent" slice (the biggest expense)</li><li>Show percentages with <code>autopct</code></li><li>Add a legend</li></ol>
 <p class="v2-p"><strong>Solution:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 amounts = [800, 300, 200, 150, 100, 450]
 labels = [&quot;Rent&quot;, &quot;Food&quot;, &quot;Transport&quot;, &quot;Entertainment&quot;, &quot;Savings&quot;, &quot;Other&quot;]
@@ -805,7 +640,7 @@ plt.show()</code></pre></div></div>
 <h3 class="v2-h3">Exercise 3 — Mean, Median, Mode of Temperature Data</h3>
 <p class="v2-p"><strong>Objective:</strong> Analyse a week of temperature readings.</p>
 <p class="v2-p"><strong>Scenario:</strong> A weather station recorded daily temperatures.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 from scipy import stats
 
 temperatures = [22, 21, 23, 22, 25, 28, 22, 20, 19, 22, 24, 22, 21]
@@ -820,29 +655,15 @@ print(f&quot;Median temperature: {median_temp:.2f}°C&quot;)
 print(f&quot;Mode temperature:   {mode_temp.mode}°C (appeared {mode_temp.count} times)&quot;)
 print(f&quot;Standard deviation: {std_temp:.2f}°C&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Mean temperature:   22.38°C
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Mean temperature:   22.38°C
 Median temperature: 22.00°C
 Mode temperature:   22°C (appeared 5 times)
 Standard deviation: 2.04°C</code></pre></div></div>
 <p class="v2-p"><strong>Self-check questions:</strong></p>
 <ul class="v2-ul"><li>The mean and median are very close — what does this suggest about the data?</li><li>The standard deviation is about 2°C — is that high or low variability for daily temperature?</li></ul>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase9">
-  <div class="phase-header">
-    <div class="phase-num">Phase 9 of 9</div>
-    <div class="phase-title">Common Beginner Mistakes</div>
-    <div class="phase-check" id="chk9"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Mistake 1 — Confusing Histogram with Bar Chart</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — using bar() for continuous numerical distribution
+<hr class="v2-hr"></div><button class="ub" onclick="unlockNext(8)">Mark Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase9"><div class="ph"><div class="pn">Phase 9/9</div><div class="pt">Common Beginner Mistakes</div><div class="pc" id="chk9"></div></div><div class="pb2"><h3 class="v2-h3">Mistake 1 — Confusing Histogram with Bar Chart</h3>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — using bar() for continuous numerical distribution
 categories = [&quot;60-70&quot;, &quot;70-80&quot;, &quot;80-90&quot;]
 counts = [10, 25, 15]
 plt.bar(categories, counts)  # ← this works but is semantically wrong for distributions
@@ -852,7 +673,7 @@ data = [65, 72, 74, 78, 81, 85, 88, 63, 71]
 plt.hist(data)  # ← Matplotlib handles the binning automatically</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 2 — Forgetting to Import NumPy or SciPy</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG
 x = mean([1, 2, 3])  # mean() is not a built-in Python function!
 
 # CORRECT
@@ -860,18 +681,18 @@ import numpy as np
 x = np.mean([1, 2, 3])</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 3 — Using Mean for Skewed Data</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 house_prices = [200000, 210000, 195000, 205000, 1500000]  # one outlier
 
 print(&quot;Mean:  &quot;, np.mean(house_prices))    # 462000 — misleading!
 print(&quot;Median:&quot;, np.median(house_prices))  # 205000 — realistic</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Mean:   462000.0
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Mean:   462000.0
 Median: 205000.0</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 4 — Misreading <code>stats.mode()</code> Output</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from scipy import stats
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from scipy import stats
 
 data = [4, 4, 7, 9]
 result = stats.mode(data)
@@ -884,7 +705,7 @@ print(&quot;Mode:&quot;, result.mode)   # 4
 print(&quot;Count:&quot;, result.count) # 2</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 5 — Not Setting <code>bins</code> Intentionally</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 data = np.random.normal(50, 10, 1000)
@@ -895,24 +716,12 @@ plt.hist(data)  # Uses 10 bins by default — may not be ideal
 # Better — set bins deliberately
 plt.hist(data, bins=30)  # More detail visible
 plt.show()</code></pre></div></div>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="build-box" id="build-it"><div class="build-lbl">🏗️ Build It — Mini Project</div><div class="build-name">Project Overview</div><div class="build-req"><h3 class="v2-h3">Project Overview</h3>
+<p class="v2-p">You will build a complete Python program that:</p>
+<ol class="v2-ol"><li>Stores student test scores</li><li>Visualises the distribution with a histogram</li><li>Visualises grade categories with a pie chart</li><li>Calculates all key statistics</li><li>Prints a full report</li></ol>
 <hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="build-box" id="build-it">
-  <div class="build-label">🏗️ Build It</div>
-  <div class="build-name">Project Overview</div>
-  <div class="build-desc">You will build a complete Python program that:</div>
-  <div class="v2-code-wrap">
-    <div class="v2-code-bar">
-      <span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span>
-      <span class="v2-code-lang">starter.py</span>
-    </div>
-    <div class="v2-code-body"><pre><code>import numpy as np
+<h3 class="v2-h3">Stage 1 — Setup and Data</h3></div><button class="reveal-btn" onclick="toggleCode(this)">💻 Reveal Starter Code</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">starter.py</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
@@ -922,10 +731,7 @@ raw_scores = np.random.normal(70, 15, 50)
 scores = np.clip(raw_scores, 0, 100)  # clamp between 0 and 100
 
 print(&quot;First 10 scores:&quot;, scores[:10].round(1))
-print(&quot;Total students:&quot;, len(scores))</code></pre></div>
-  </div>
-  <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
-    <button class="unlock-btn" onclick="downloadStarter(`import numpy as np
+print(&quot;Total students:&quot;, len(scores))</code></pre></div></div><div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem"><button class="ub" onclick="downloadStarter(`import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
@@ -935,87 +741,66 @@ raw_scores = np.random.normal(70, 15, 50)
 scores = np.clip(raw_scores, 0, 100)  # clamp between 0 and 100
 
 print("First 10 scores:", scores[:10].round(1))
-print("Total students:", len(scores))`)"
-      style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">
-      ⬇ Download starter.py
-    </button>
-    <button class="unlock-btn" onclick="showGithub()"
-      style="background:#0f172a;box-shadow:none">
-      🐙 Push to GitHub →
-    </button>
-  </div>
-</div>
+print("Total students:", len(scores))`)" style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">⬇ Download starter.py</button><button class="ub" onclick="showGithub()" style="background:#0f172a;box-shadow:none">🐙 Save to GitHub →</button></div></div></div>
 <div class="gh-acc" id="gh-steps" style="display:none">
-  <div class="gh-acc-head" onclick="toggleGh(this)">
-    🐙 Push Your Project to GitHub Pages &nbsp;<span>▼</span>
-  </div>
-  <div class="gh-acc-body">
-    <div class="gh-step"><div class="gh-step-n">1</div>
-    <p>Go to <strong>github.com</strong> → click <strong>New repository</strong> → name it <code>python-lesson-33-project-overview</code>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">2</div>
-    <p>Set it to <strong>Public</strong>, tick <strong>Add a README</strong>, then click <strong>Create repository</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">3</div>
-    <p>Click <strong>Add file → Upload files</strong>. Upload your <code>starter.py</code> — rename it to <code>index.py</code> before uploading.</p></div>
-    <div class="gh-step"><div class="gh-step-n">4</div>
-    <p>Commit message: <em>"Add Python lesson 33 project"</em> → click <strong>Commit changes</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">5</div>
-    <p>Go to <strong>Settings → Pages</strong> → branch <strong>main</strong> → <strong>Save</strong>. Your project goes live at <code>https://YOUR-NAME.github.io/python-lesson-33-project-overview/</code> in about 1 minute! 🎉</p></div>
-    <button class="unlock-btn" onclick="showEnd()" style="margin-top:.5rem">I've pushed to GitHub — Finish Session ✅</button>
-  </div>
-</div>
-<div class="session-end" id="session-end">
-  <h2>🎉 Lesson 33 complete!</h2>
-  <p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p>
-  <ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1 — Matplotlib Histograms</li><li>✅ Part 2 — Matplotlib Pie Charts</li><li>✅ Part 3 — Getting Started with Machine Learning</li><li>✅ Part 4 — Mean, Median, and Mode</li><li>✅ Part 5 — Standard Deviation and Variance</li><li>✅ Guided Practice Exercises</li></ul>
-  <div class="lesson-nav"><a href="lesson_32.html" class="ln-btn">← Lesson 32</a><a href="lesson_34.html" class="ln-btn primary">Lesson 34 →</a></div>
-</div>
+<div class="gh-hd" onclick="toggleGh(this)">🐙 Save Python Project to GitHub &nbsp;<span>▼</span></div>
+<div class="gh-bd">
+<div class="gh-nop"><strong>⚠️ Python cannot be hosted on GitHub Pages.</strong><br><br>GitHub Pages only serves static HTML/CSS/JS files. Python scripts need a server to run — you will learn deployment (Replit, PythonAnywhere, Heroku) later in the course. For now, save your code to GitHub as a portfolio entry.</div>
+<div class="gh-st"><div class="gh-n">1</div><p>Go to <strong>github.com → New repository</strong> → name it <code>python-lesson-33-project-overview</code>. Set <strong>Public</strong>, tick <strong>Add README</strong>, click <strong>Create</strong>.</p></div>
+<div class="gh-st"><div class="gh-n">2</div><p>Click <strong>Add file → Upload files</strong> → upload your <code>.py</code> file.</p></div>
+<div class="gh-st"><div class="gh-n">3</div><p>Commit message: <em>"Add Python lesson 33 project"</em> → <strong>Commit changes</strong>. Your code is now part of your GitHub portfolio! 🐍</p></div>
+<button class="ub" onclick="showEnd()" style="background:#059669;margin-top:.5rem">Done — Finish Session ✅</button>
+</div></div>
+<div class="se" id="session-end"><h2>🎉 Lesson 33 complete!</h2><p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p><ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1 — Matplotlib Histograms</li><li>✅ Part 2 — Matplotlib Pie Charts</li><li>✅ Part 3 — Getting Started with Machine Learning</li><li>✅ Part 4 — Mean, Median, and Mode</li><li>✅ Part 5 — Standard Deviation and Variance</li><li>✅ Guided Practice Exercises</li></ul><div class="ln"><a href="lesson_32.html" class="ln-btn">← Lesson 32</a><a href="lesson_34.html" class="ln-btn primary">Lesson 34 →</a></div></div>
 </main>
-
-<footer class="lesson-footer">
-  Techbase Code Coach · Python Course · Lesson 33 · © 2025 Techbase Consultant Services, Ibadan
-</footer>
+<footer class="lf">Techbase Code Coach &nbsp;·&nbsp; Python Course &nbsp;·&nbsp; Lesson 33 &nbsp;·&nbsp; © 2025 Techbase Consultant Services, Ibadan</footer>
+<div id="toast"></div>
+<button id="go-top" title="Back to top">↑</button>
+<canvas id="cc"></canvas>
 <script>
 const TOTAL=9,KEY='techbase_python_l33';
-let current=parseInt(localStorage.getItem(KEY)||'1');
-function init(){
-  for(let i=2;i<=current;i++) unlockPhase(i,false);
-  updateBar();
-}
+let cur=parseInt(localStorage.getItem(KEY)||'1');
+function init(){for(let i=2;i<=cur;i++)unlock(i,false);bar();}
 function unlockNext(n){
-  const chk=document.getElementById('chk'+n);
-  if(chk){chk.classList.add('done');chk.textContent='✓';}
-  localStorage.setItem(KEY,n+1); current=n+1;
+  const c=document.getElementById('chk'+n);
+  if(c){c.classList.add('done');c.textContent='✓';}
+  localStorage.setItem(KEY,n+1);cur=n+1;
   if(n===TOTAL){
-    document.getElementById('build-it').style.display='block';
-    updateBar(100);
+    document.getElementById('build-it').classList.add('visible');
+    bar(100);toast('🏗️ Build It unlocked!');
     setTimeout(()=>document.getElementById('build-it').scrollIntoView({behavior:'smooth'}),200);
-  }else{
-    unlockPhase(n+1,true); updateBar();
-  }
+    setTimeout(confetti,600);
+  }else{unlock(n+1,true);bar();toast(['✅ Phase complete!','🎯 Keep going!','💡 Nice work!','🚀 Nailed it!'][n%4]);}
 }
-function unlockPhase(n,scroll){
-  const el=document.getElementById('phase'+n);
-  if(el){el.classList.remove('locked');if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+function unlock(n,scroll){
+  const el=document.getElementById('phase'+n);if(!el)return;
+  el.classList.remove('locked');
+  if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),180);
 }
-function updateBar(pct){
-  const p=pct!==undefined?pct:Math.round((current-1)/TOTAL*95);
-  document.getElementById('pbar').style.width=p+'%';
+function bar(p){document.getElementById('pbar').style.width=(p!==undefined?p:Math.round((cur-1)/TOTAL*95))+'%';}
+function toggleReveal(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Answer':'👁️ Reveal Answer';}
+function toggleCode(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Starter Code':'💻 Reveal Starter Code';}
+function copyCode(btn){
+  const code=btn.closest('.v2-code-wrap').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='⎘ Copy';btn.classList.remove('copied');},1800);}).catch(()=>{});
 }
-function showGithub(){
-  const g=document.getElementById('gh-steps');
-  if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}
-}
-function showEnd(){
-  const e=document.getElementById('session-end');
-  if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}
-}
+const tEl=document.getElementById('toast');let tT;
+function toast(msg){tEl.innerHTML=msg;tEl.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>tEl.classList.remove('show'),2400);}
+const gEl=document.getElementById('go-top');
+window.addEventListener('scroll',()=>gEl.classList.toggle('visible',scrollY>320),{passive:true});
+gEl.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 function toggleGh(el){el.nextElementSibling.classList.toggle('open');}
-function downloadStarter(code){
-  const a=document.createElement('a');
-  a.href='data:text/html;charset=utf-8,'+encodeURIComponent(code);
-  a.download='starter.html';a.click();
+function showGithub(){const g=document.getElementById('gh-steps');if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}}
+function showEnd(){const e=document.getElementById('session-end');if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}}
+function downloadStarter(code){const ext='python'==='python'?'py':'html';const a=document.createElement('a');a.href='data:text/'+(ext==='py'?'x-python':'html')+';charset=utf-8,'+encodeURIComponent(code);a.download='starter.'+ext;a.click();}
+function confetti(){
+  const cv=document.getElementById('cc');cv.style.display='block';const ctx=cv.getContext('2d');
+  cv.width=innerWidth;cv.height=innerHeight;
+  const ps=Array.from({length:130},()=>{return{x:Math.random()*cv.width,y:-10-Math.random()*120,r:4+Math.random()*6,d:2+Math.random()*3,c:['#e34c26','#0284c7','#d97706','#059669','#7c3aed','#ec4899'][Math.floor(Math.random()*6)],ta:0};}); 
+  let f=0;
+  function draw(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.ta+=.1;p.y+=p.d;p.x+=Math.sin(f/20);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();});f++;if(f<200)requestAnimationFrame(draw);else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}}
+  draw();toast('🎉 All phases done! Build It awaits!');
 }
 init();
 </script>
-</body>
-</html>
+</body></html>

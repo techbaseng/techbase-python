@@ -1,247 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lesson 35: Python Machine Learning — Regression Deep Dive, Scaling, Train/Test &amp; Decision Trees — Techbase Python</title>
-<meta name="description" content="Python Machine Learning — Regression Deep Dive, Scaling, Train/Test &amp; Decision Trees">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --acc:#059669;--acc-d:#047857;--acc-pale:#ecfdf5;
-  --acc-b:rgba(5,150,105,.25);--acc-sh:rgba(5,150,105,.28);
-  --bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--t2:#334155;--muted:#64748b;
-  --D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+:root{--acc:#059669;--acd:#047857;--acp:#ecfdf5;--acb:rgba(5,150,105,.22);--acs:rgba(5,150,105,.28);--bg:#f8fafc;--sf:#fff;--br:#e2e8f0;--tx:#0f172a;--t2:#334155;--mu:#64748b;--D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
-
-/* NAV */
-.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);
-  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:58px;
-  display:flex;align-items:center;padding:0 1.5rem;gap:1rem;justify-content:space-between}
-.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.l-nav-back{font-size:.8rem;color:var(--muted);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+body{background:var(--bg);color:var(--tx);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
+.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);height:58px;display:flex;align-items:center;padding:0 1.5rem;justify-content:space-between}
+.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--tx);text-decoration:none}
+.l-nav-back{font-size:.8rem;color:var(--mu);text-decoration:none;font-weight:500;transition:color .2s}
 .l-nav-back:hover{color:var(--acc)}
-.l-nav-label{font-family:var(--M);font-size:.68rem;color:var(--muted)}
-
-/* PROGRESS */
-.progress-wrap{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--border)}
-.progress-bar{height:100%;background:var(--acc);transition:width .4s ease;width:0%}
-
-/* HERO */
-.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--border)}
-.l-hero-inner{max-width:860px;margin:0 auto}
-.l-badge{display:inline-flex;align-items:center;gap:.4rem;border-radius:100px;padding:.2rem .85rem;
-  font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
-  color:var(--acc);background:var(--acc-pale);border:1px solid var(--acc-b);margin-bottom:.8rem}
-.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);
-  letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
-.l-hero-sub{font-size:.95rem;color:var(--muted);margin-bottom:1rem}
-
-/* WELCOME BOX */
-.welcome-box{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.5rem 1.8rem;max-width:860px;margin:1.5rem auto 0}
-.welcome-box h2{font-family:var(--D);font-weight:700;font-size:1.05rem;margin-bottom:.6rem}
-.welcome-box p,.welcome-box li{font-size:.9rem;line-height:1.8;opacity:.93}
-.welcome-box ul{margin-left:1.2rem;margin-top:.5rem}
-.welcome-meta{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
-.welcome-meta span{background:rgba(255,255,255,.18);border-radius:6px;padding:.2rem .75rem;
-  font-family:var(--M);font-size:.68rem;font-weight:500}
-
-/* PHASE */
-.phase{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;
-  margin-bottom:1.5rem;overflow:hidden;transition:opacity .3s,transform .3s,filter .3s}
-.phase.locked{opacity:.35;pointer-events:none;filter:blur(1.5px)}
-.phase-header{padding:1rem 1.4rem;background:#f0fdf6;
-  border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:default}
-.phase-num{font-family:var(--M);font-size:.7rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--acc)}
-.phase-title{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--text);
-  flex:1;margin:0 .8rem}
-.phase-check{width:26px;height:26px;border-radius:50%;background:var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;
-  transition:background .3s,color .3s}
-.phase-check.done{background:#10b981;color:#fff}
-.phase-body{padding:1.6rem 1.8rem}
-
-/* RICH CONTENT STYLES */
+.l-nav-lbl{font-family:var(--M);font-size:.68rem;color:var(--mu)}
+.pw{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--br)}
+.pb{height:100%;background:linear-gradient(90deg,var(--acc),var(--acd));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%;position:relative}
+.pb::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:inherit;filter:brightness(1.4);animation:pg 1.5s ease-in-out infinite}
+@keyframes pg{0%,100%{opacity:1}50%{opacity:.35}}
+.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--br)}
+.l-hero-in{max-width:860px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;border-radius:100px;padding:.22rem .9rem;font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--acc);background:var(--acp);border:1.5px solid var(--acb);margin-bottom:.85rem}
+.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
+.l-hero-sub{font-size:.9rem;color:var(--mu)}
+.wb{background:#fff;border:1.5px solid var(--acb);border-left:5px solid var(--acc);border-radius:14px;padding:1.4rem 1.6rem;max-width:860px;margin:1.5rem auto 0;box-shadow:0 2px 12px var(--acs)}
+.wb h2{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--acd);margin-bottom:.6rem}
+.wb p,.wb li{font-size:.92rem;line-height:1.85;color:var(--t2)}
+.wb ul{margin-left:1.2rem;margin-top:.4rem}
+.wm{display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap}
+.wm span{background:var(--acp);color:var(--acd);border:1px solid var(--acb);border-radius:7px;padding:.22rem .7rem;font-family:var(--M);font-size:.68rem;font-weight:600}
+.phase{background:var(--sf);border:1.5px solid var(--br);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;transition:opacity .35s,filter .35s,transform .35s}
+.phase.locked{opacity:.28;pointer-events:none;filter:blur(2px);transform:scale(.99)}
+.ph{padding:1rem 1.4rem;background:#f0fdf6;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:.8rem}
+.pn{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.pt{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--tx);flex:1}
+.pc{width:26px;height:26px;border-radius:50%;background:var(--br);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:background .3s,transform .4s}
+.pc.done{background:#10b981;color:#fff;transform:scale(1.15) rotate(360deg)}
+.pb2{padding:1.6rem 1.8rem}
 .v2-p{margin-bottom:1rem;font-size:.95rem;color:var(--t2);line-height:1.85}
-.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--text);
-  margin:1.6rem 0 .5rem;padding-top:.2rem;border-top:2px solid var(--acc-pale)}
-.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1.1rem 0 .4rem}
-.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.9rem;color:var(--muted);margin:.8rem 0 .3rem}
+.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--tx);margin:1.6rem 0 .5rem;border-top:2px solid var(--acp);padding-top:.4rem}
+.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1rem 0 .35rem}
+.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.88rem;color:var(--mu);margin:.7rem 0 .3rem}
 .v2-ul,.v2-ol{margin:.6rem 0 1rem 1.4rem;font-size:.93rem;color:var(--t2);line-height:1.9}
 .v2-ul li,.v2-ol li{margin-bottom:.3rem}
-.v2-bq{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 10px 10px 0;
-  padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
+.v2-bq{border-left:4px solid var(--acc);background:var(--acp);border-radius:0 10px 10px 0;padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
 .v2-bq p{margin:0;color:inherit}
-.v2-bq strong{font-style:normal}
-.v2-hr{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
-.v2-table-wrap{overflow-x:auto;margin:1rem 0}
+.v2-hr{border:none;border-top:1px solid var(--br);margin:1.2rem 0}
+.v2-table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--br)}
 .v2-table{width:100%;border-collapse:collapse;font-size:.87rem}
-.v2-table th{background:var(--acc-pale);color:#064e3b;font-family:var(--D);
-  font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--acc-b)}
-.v2-table td{padding:8px 12px;border:1px solid var(--border);color:var(--t2);vertical-align:top}
-.v2-table tr:nth-child(even) td{background:#f8fafc}
-.v2-table code{background:var(--acc-pale);color:var(--acc);border-radius:4px;
-  padding:1px 5px;font-family:var(--M);font-size:.8em}
-.phase-body code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-.phase-body a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
-.phase-body strong{color:var(--text)}
-
-/* CODE BLOCKS */
-.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.v2-table th{background:var(--acp);color:#064e3b;font-family:var(--D);font-weight:700;padding:10px 12px;text-align:left;border-bottom:2px solid var(--acb)}
+.v2-table td{padding:8px 12px;border-bottom:1px solid var(--br);color:var(--t2);vertical-align:top}
+.v2-table tr:last-child td{border:none}
+.v2-table tr:hover td{background:var(--acp)}
+.pb2 code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.pb2 a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
+.pb2 strong{color:var(--tx)}
+.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .v2-code-bar{background:#1e293b;padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem}
 .v2-dot{width:10px;height:10px;border-radius:50%}
 .v2-dot.r{background:#ff5f57}.v2-dot.y{background:#febc2e}.v2-dot.g{background:#28c840}
-.v2-code-lang{margin-left:.6rem;font-family:var(--M);font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em}
+.v2-code-lang{margin-left:.5rem;font-family:var(--M);font-size:.62rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;flex:1}
+.copy-btn{background:rgba(255,255,255,.08);color:#94a3b8;border:none;border-radius:6px;padding:.25rem .65rem;font-family:var(--M);font-size:.65rem;cursor:pointer;transition:background .2s,color .2s}
+.copy-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.copy-btn.copied{background:#10b981;color:#fff}
 .v2-code-body{background:#0f172a;padding:1.3rem 1.5rem;overflow-x:auto}
 .v2-code-body pre{margin:0}
-.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.9;color:#e2e8f0;
-  white-space:pre;background:transparent;padding:0;border-radius:0}
-
-/* TASK BOX */
-.task-box{background:#d1fae5;border:2px dashed #059669;
-  border-radius:12px;padding:1rem 1.3rem;margin:1.4rem 0}
-.task-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-.task-box p,.task-body{font-size:.92rem;color:#064e3b;line-height:1.8}
-.task-box code{background:rgba(0,0,0,.08);border-radius:4px;padding:1px 6px;
-  font-family:var(--M);font-size:.82em}
-
-/* UNLOCK BUTTON */
-.unlock-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);
-  color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;
-  padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;
-  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acc-sh);margin-top:1.2rem}
-.unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acc-sh)}
-
-/* BUILD IT */
+.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.95;color:#e2e8f0;white-space:pre;background:transparent;padding:0;border-radius:0}
+.task-box{background:#d1fae5;border:2px dashed #059669;border-radius:12px;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.task-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.task-body{font-size:.93rem;color:#064e3b;line-height:1.85}
+.task-body code{background:rgba(0,0,0,.1);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.chal-box{background:linear-gradient(135deg,#ecfdf5 0%,#fff 100%);border:2px solid var(--acc);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem}
+.chal-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acd);margin-bottom:.6rem}
+.chal-body{font-size:.95rem;color:var(--tx);line-height:1.85}
+.chal-body code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 5px;font-family:var(--M);font-size:.82em}
+.reveal-btn{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--acd);font-family:var(--D);font-weight:700;font-size:.85rem;padding:.6rem 1.2rem;border-radius:8px;border:2px solid var(--acc);cursor:pointer;transition:background .2s,color .2s;margin:.6rem 0}
+.reveal-btn:hover{background:var(--acc);color:#fff}
+.reveal-content{display:none;margin-top:.6rem;animation:fi .3s ease}
+.reveal-content.open{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .build-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:16px;padding:1.6rem;margin:2rem 0;display:none}
-.build-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
-.build-name{font-family:var(--D);font-weight:700;font-size:1.1rem;color:#14532d;margin-bottom:.5rem}
-.build-desc{font-size:.9rem;color:#166534;margin-bottom:1.2rem;line-height:1.75}
-.build-desc code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
-.build-desc strong{color:#14532d}
-
-/* GITHUB ACCORDION */
-.gh-acc{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
-.gh-acc-head{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none}
-.gh-acc-body{display:none;padding:1.2rem;border-top:1px solid var(--border)}
-.gh-acc-body.open{display:block}
-.gh-step{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
-.gh-step-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;
-  font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;margin-top:2px}
-.gh-step p{font-size:.88rem;color:var(--t2);line-height:1.7}
-.gh-step code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-
-/* SESSION END */
-.session-end{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
-.session-end.visible{display:block}
-.session-end h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
-.session-end ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.session-end li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
-.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);
-  color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;
-  padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;
-  border:1.5px solid var(--border);transition:border-color .2s,color .2s}
+.build-box.visible{display:block;animation:fi .4s ease}
+.build-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+.build-name{font-family:var(--D);font-weight:700;font-size:1.15rem;color:#14532d;margin-bottom:.6rem}
+.build-req{font-size:.93rem;color:#166534;line-height:1.8;margin-bottom:.8rem}
+.build-req code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.build-req strong{color:#14532d}
+.gh-acc{border:1.5px solid var(--br);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.gh-hd{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none;transition:background .2s}
+.gh-hd:hover{background:#f1f5f9}
+.gh-bd{display:none;padding:1.2rem;border-top:1px solid var(--br)}
+.gh-bd.open{display:block;animation:fi .25s ease}
+.gh-st{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
+.gh-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.gh-st p{font-size:.88rem;color:var(--t2);line-height:1.7}
+.gh-st code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.gh-nop{background:#fef3c7;border:1.5px solid #fde68a;border-radius:10px;padding:1rem 1.2rem;font-size:.9rem;color:#78350f;line-height:1.75;margin-bottom:1rem}
+.se{background:linear-gradient(135deg,var(--acc),var(--acd));color:#fff;border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
+.se.visible{display:block;animation:fi .4s ease}
+.se h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
+.se ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.se li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
+.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--sf);color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;border:1.5px solid var(--br);transition:border-color .2s,color .2s}
 .ln-btn:hover{border-color:var(--acc);color:var(--acc)}
 .ln-btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .ln-btn.primary:hover{opacity:.9}
-.lesson-nav{display:flex;align-items:center;justify-content:space-between;
-  padding-top:2rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
-.lesson-footer{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;
-  color:var(--muted);border-top:1px solid var(--border);background:var(--surface)}
+.ln{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
+.ub{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acs);margin-top:1.2rem}
+.ub:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acs)}
+.ub:active{transform:scale(.97)}
+#toast{position:fixed;bottom:90px;right:1.5rem;z-index:999;background:#1e293b;color:#fff;border-radius:10px;padding:.75rem 1.2rem;font-family:var(--D);font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#go-top{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;border:none;cursor:pointer;font-size:1.15rem;box-shadow:0 4px 16px var(--acs);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s,box-shadow .2s;pointer-events:none}
+#go-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#go-top:hover{box-shadow:0 8px 24px var(--acs);transform:translateY(-2px)}
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;display:none}
+.lf{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;color:var(--mu);border-top:1px solid var(--br);background:var(--sf)}
 </style>
 </head>
 <body>
 <nav class="l-nav">
   <a href="../index.html" class="l-nav-logo">⚡ Techbase Python</a>
-  <span class="l-nav-label">Lesson 35 of 45</span>
+  <span class="l-nav-lbl">Lesson 35 of 45</span>
   <a href="../index.html" class="l-nav-back">← All Lessons</a>
 </nav>
-<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
-
-<div class="l-hero">
-  <div class="l-hero-inner">
-    <div class="l-badge">Python · Lesson 35</div>
-    <h1>Python Machine Learning — Regression Deep Dive, Scaling, Train/Test &amp; Decision Trees</h1>
-    <div class="l-hero-sub">10 phases · Build: Stage 1 — Polynomial Regression: Temperature vs. Attendance</div>
-  </div>
-</div>
-
-<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
-  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="welcome-box">
-  <h2>👋 Welcome to Lesson 35</h2>
-  <div style="font-size:.9rem;line-height:1.85;opacity:.93"><p class="v2-p">Welcome to Lesson 35! This lesson is one of the most exciting in the whole curriculum — you are about to learn how to build real predictive models, properly prepare your data, rigorously test whether your model actually works, and use one of machine learning's most intuitive and powerful tools: the <strong>Decision Tree</strong>.</p>
-<p class="v2-p">By the end of this lesson, you will know how to:</p>
-<ul class="v2-ul"><li>Use <strong>Polynomial Regression</strong> to model curved, non-linear data</li><li>Use <strong>Multiple Regression</strong> to predict outcomes from more than one input</li><li><strong>Scale</strong> your data so that different measurement units do not confuse your model</li><li>Use the <strong>Train/Test</strong> method to measure how accurate your model truly is</li><li>Build and read a <strong>Decision Tree</strong> that makes decisions just like a human would</li></ul>
-<blockquote class="v2-bq"><p class="v2-p"><strong>Real-world application:</strong> These tools are used every day in Nigerian banks to predict loan defaults, in agricultural research to predict crop yields based on rainfall and temperature, in hospitals to classify patients, and in e-commerce platforms to recommend products.</p></blockquote>
-<hr class="v2-hr"></div>
-  <div class="welcome-meta">
-    <span>📚 10 phases</span>
-    <span>🏗️ Stage 1 — Polynomial Regression: Temperature vs. Attendance</span>
-  </div>
+<div class="pw"><div class="pb" id="pbar"></div></div>
+<div class="l-hero"><div class="l-hero-in">
+  <div class="badge">Python · Lesson 35</div>
+  <h1>Python Machine Learning — Regression Deep Dive, Scaling, Train/Test &amp; Decision Trees</h1>
+  <div class="l-hero-sub">10 phases &nbsp;·&nbsp; Build: Stage 1 — Polynomial Regression: Temperature vs. Attendance</div>
 </div></div>
-</section>
-
-<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
-<div class="phase" id="phase1">
-  <div class="phase-header">
-    <div class="phase-num">Phase 1 of 10</div>
-    <div class="phase-title">Lesson Introduction</div>
-    <div class="phase-check" id="chk1"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Welcome to Lesson 35! This lesson is one of the most exciting in the whole curriculum — you are about to learn how to build real predictive models, properly prepare your data, rigorously test whether your model actually works, and use one of machine learning's most intuitive and powerful tools: the <strong>Decision Tree</strong>.</p>
+<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--br)">
+  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="wb"><h2>👋 Welcome to Lesson 35</h2><div style="font-size:.92rem;line-height:1.85;color:var(--t2)"><p class="v2-p">Welcome to Lesson 35! This lesson is one of the most exciting in the whole curriculum — you are about to learn how to build real predictive models, properly prepare your data, rigorously test whether your model actually works, and use one of machine learning's most intuitive and powerful tools: the <strong>Decision Tree</strong>.</p>
 <p class="v2-p">By the end of this lesson, you will know how to:</p>
 <ul class="v2-ul"><li>Use <strong>Polynomial Regression</strong> to model curved, non-linear data</li><li>Use <strong>Multiple Regression</strong> to predict outcomes from more than one input</li><li><strong>Scale</strong> your data so that different measurement units do not confuse your model</li><li>Use the <strong>Train/Test</strong> method to measure how accurate your model truly is</li><li>Build and read a <strong>Decision Tree</strong> that makes decisions just like a human would</li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world application:</strong> These tools are used every day in Nigerian banks to predict loan defaults, in agricultural research to predict crop yields based on rainfall and temperature, in hospitals to classify patients, and in e-commerce platforms to recommend products.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(1)">Start Lesson ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase2">
-  <div class="phase-header">
-    <div class="phase-num">Phase 2 of 10</div>
-    <div class="phase-title">Prerequisite Concepts</div>
-    <div class="phase-check" id="chk2"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Before we start, let us quickly remind ourselves of what we already know:</p>
+<hr class="v2-hr"></div><div class="wm"><span>📚 10 phases</span><span>🏗️ Stage 1 — Polynomial Regression: Temperature vs. Attendance</span><span>🐍 GitHub Repo</span></div></div></div>
+</section>
+<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
+<div class="phase" id="phase1"><div class="ph"><div class="pn">Phase 1/10</div><div class="pt">Lesson Introduction</div><div class="pc" id="chk1"></div></div><div class="pb2"><p class="v2-p">Welcome to Lesson 35! This lesson is one of the most exciting in the whole curriculum — you are about to learn how to build real predictive models, properly prepare your data, rigorously test whether your model actually works, and use one of machine learning's most intuitive and powerful tools: the <strong>Decision Tree</strong>.</p>
+<p class="v2-p">By the end of this lesson, you will know how to:</p>
+<ul class="v2-ul"><li>Use <strong>Polynomial Regression</strong> to model curved, non-linear data</li><li>Use <strong>Multiple Regression</strong> to predict outcomes from more than one input</li><li><strong>Scale</strong> your data so that different measurement units do not confuse your model</li><li>Use the <strong>Train/Test</strong> method to measure how accurate your model truly is</li><li>Build and read a <strong>Decision Tree</strong> that makes decisions just like a human would</li></ul>
+<blockquote class="v2-bq"><p class="v2-p"><strong>Real-world application:</strong> These tools are used every day in Nigerian banks to predict loan defaults, in agricultural research to predict crop yields based on rainfall and temperature, in hospitals to classify patients, and in e-commerce platforms to recommend products.</p></blockquote>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(1)">Start Lesson ✓</button></div></div>
+<div class="phase locked" id="phase2"><div class="ph"><div class="pn">Phase 2/10</div><div class="pt">Prerequisite Concepts</div><div class="pc" id="chk2"></div></div><div class="pb2"><p class="v2-p">Before we start, let us quickly remind ourselves of what we already know:</p>
 <p class="v2-p"><strong>From previous lessons:</strong></p>
 <ul class="v2-ul"><li><strong>Linear Regression</strong> — fitting a straight line through data points to predict future values (e.g., predicting the price of garri based on market trend)</li><li><strong>R-squared (R²)</strong> — a score from 0 to 1 that tells us how well our regression line fits the data (0 = no relationship, 1 = perfect fit)</li><li><strong>NumPy</strong> — Python's library for numerical operations and array mathematics</li><li><strong>Matplotlib</strong> — Python's charting library for drawing scatter plots and graphs</li><li><strong>Pandas</strong> — Python's library for reading and working with tabular data (like spreadsheets or CSV files)</li><li><strong>sklearn</strong> — Python's machine learning library (<code>scikit-learn</code>) that provides ready-made algorithms</li></ul>
 <p class="v2-p">If any of these feel unfamiliar, take a few minutes to review them before continuing. This lesson builds directly on top of them.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase3">
-  <div class="phase-header">
-    <div class="phase-num">Phase 3 of 10</div>
-    <div class="phase-title">Section 1 — Polynomial Regression</div>
-    <div class="phase-check" id="chk3"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">1.1 What Is It and Why Do We Need It?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase3"><div class="ph"><div class="pn">Phase 3/10</div><div class="pt">Section 1 — Polynomial Regression</div><div class="pc" id="chk3"></div></div><div class="pb2"><h3 class="v2-h3">1.1 What Is It and Why Do We Need It?</h3>
 <p class="v2-p">In Lesson 34, we learned about <strong>linear regression</strong> — which draws a <strong>straight line</strong> through data. That works perfectly when your data increases (or decreases) at a steady, constant rate.</p>
 <p class="v2-p">But what if your data <strong>curves</strong>? What if the pattern bends up and then comes back down?</p>
 <p class="v2-p">Think about this real-life example from Lagos: the number of fuel queues (petrol scarcity) throughout the day. In the early morning, there are very few queues. By mid-morning, queues build up. By afternoon, they peak. In the evening, they reduce again. That pattern is <strong>not</strong> a straight line — it <strong>curves</strong>.</p>
@@ -260,7 +166,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;
 <p class="v2-p">Notice that speeds are high in the early morning, slow down mid-day (perhaps rush hour or road congestion), then pick up again in the evening. That is a <strong>curve</strong>, not a straight line!</p>
 <h4 class="v2-h4">Step 1 — Draw a Scatter Plot First</h4>
 <p class="v2-p">Always draw a scatter plot to <em>see</em> your data before fitting a model:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 
 x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
 y = [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]
@@ -269,7 +175,7 @@ plt.scatter(x, y)
 plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output in browser:</strong> A scatter plot where the dots form a U-shape (speeds dip in the middle hours and rise at the ends).</p>
 <h4 class="v2-h4">Step 2 — Fit a Polynomial Regression Line</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 import matplotlib.pyplot as plt
 
 # Our data
@@ -297,7 +203,7 @@ plt.show()</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> What if we used degree 1 instead of degree 3? Try changing the <code>3</code> to <code>1</code> — you would get a straight line (just like linear regression).</p></blockquote>
 <h3 class="v2-h3">1.4 Checking the Fit — The R-Squared Score</h3>
 <p class="v2-p">How do we know if our polynomial curve is a good fit? We check the <strong>R-squared</strong> score.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 from sklearn.metrics import r2_score
 
 x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
@@ -308,13 +214,13 @@ mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))
 # r2_score compares the actual y values against what the model predicts
 print(r2_score(y, mymodel(x)))</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>0.94</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>0.94</code></pre></div></div>
 <p class="v2-p"><strong>What does 0.94 mean?</strong> It means our polynomial curve explains <strong>94% of the variation</strong> in the speed data. That is an excellent fit! An R² of 0.94 is very close to 1, meaning we can trust this model to make predictions.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Rule of thumb:</strong> R² above 0.75 is generally considered a good fit. Below 0.3 means poor fit.</p></blockquote>
 <h3 class="v2-h3">1.5 Predicting a Future Value</h3>
 <p class="v2-p">Once we have a good model (R² is high), we can use it to predict values that are NOT in our original data.</p>
 <p class="v2-p"><strong>Question:</strong> What would the speed of a car be at hour 17 (5 PM)?</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 from sklearn.metrics import r2_score
 
 x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
@@ -326,11 +232,11 @@ mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))
 speed = mymodel(17)
 print(speed)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>88.87</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>88.87</code></pre></div></div>
 <p class="v2-p">So our model predicts a car would be travelling at approximately <strong>88.87 km/h</strong> at 5 PM. We can verify this by looking at where hour 17 falls on our curve — it falls right around that value.</p>
 <h3 class="v2-h3">1.6 When Polynomial Regression Fails (Bad Fit)</h3>
 <p class="v2-p">Not all data is suitable for polynomial regression. Let us see what a <strong>bad fit</strong> looks like:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 import matplotlib.pyplot as plt
 
 # Random, unrelated data
@@ -345,29 +251,15 @@ plt.plot(myline, mymodel(myline))
 plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output in browser:</strong> A scatter plot where the dots are scattered randomly with no clear pattern. The curve barely follows them.</p>
 <p class="v2-p">Now check the R² score:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from sklearn.metrics import r2_score
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from sklearn.metrics import r2_score
 
 print(r2_score(y, mymodel(x)))</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>0.00995</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>0.00995</code></pre></div></div>
 <p class="v2-p">An R² of <strong>0.01</strong> means the model explains almost <strong>nothing</strong> about the data. This data has no useful pattern — polynomial regression is not appropriate here.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Key lesson:</strong> Always check R² before using a model for predictions. A low R² means "do not trust this model."</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Polynomial Regression</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase4">
-  <div class="phase-header">
-    <div class="phase-num">Phase 4 of 10</div>
-    <div class="phase-title">Section 2 — Multiple Regression</div>
-    <div class="phase-check" id="chk4"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">2.1 What Is It and Why Do We Need It?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Polynomial Regression</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase4"><div class="ph"><div class="pn">Phase 4/10</div><div class="pt">Section 2 — Multiple Regression</div><div class="pc" id="chk4"></div></div><div class="pb2"><h3 class="v2-h3">2.1 What Is It and Why Do We Need It?</h3>
 <p class="v2-p">In linear and polynomial regression, we predict <code>y</code> from a <strong>single</strong> input value <code>x</code>. For example: predicting a car's speed from only the hour of day.</p>
 <p class="v2-p">But in real life, outcomes are often influenced by <strong>multiple factors at the same time</strong>.</p>
 <p class="v2-p"><strong>Everyday example from Nigeria:</strong> The price of tomatoes in Mile 12 Market, Lagos, depends on:</p>
@@ -383,10 +275,10 @@ print(r2_score(y, mymodel(x)))</code></pre></div></div>
 <p class="v2-p">The pattern: heavier cars with bigger engines generally emit more CO2. But we need both pieces of information together.</p>
 <h3 class="v2-h3">2.3 Installing Prerequisite Libraries</h3>
 <p class="v2-p">Make sure you have these installed:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">bash</span></div><div class="v2-code-body"><pre><code>pip install pandas scikit-learn</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>pip install pandas scikit-learn</code></pre></div></div>
 <p class="v2-p">You also need to download <code>data.csv</code> — the car dataset. (In a real project, you would have this file in your working directory.)</p>
 <h3 class="v2-h3">2.4 Building the Multiple Regression Model</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas                       # For reading CSV files and handling data tables
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas                       # For reading CSV files and handling data tables
 from sklearn import linear_model    # For building regression models
 
 # Step 1: Read the data from a CSV file into a DataFrame
@@ -411,14 +303,14 @@ regr.fit(X, y)
 predictedCO2 = regr.predict([[2300, 1300]])
 print(predictedCO2)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[107.2087328]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[107.2087328]</code></pre></div></div>
 <p class="v2-p">Our model predicts that a car weighing <strong>2300 kg</strong> with a <strong>1300 cm³</strong> engine emits approximately <strong>107.2 grams</strong> of CO2 per kilometre.</p>
 <p class="v2-p"><strong>Line-by-line breakdown:</strong></p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Code</th><th>What it does</th></tr></thead><tbody><tr><td><code>df[['Weight', 'Volume']]</code></td><td>Selects two columns — double brackets <code>[[...]]</code> create a 2D table of inputs</td></tr><tr><td><code>df['CO2']</code></td><td>Selects one column — the thing we want to predict</td></tr><tr><td><code>linear_model.LinearRegression()</code></td><td>Creates the regression algorithm object</td></tr><tr><td><code>regr.fit(X, y)</code></td><td>Trains the model — it figures out the mathematical relationship</td></tr><tr><td><code>regr.predict([[2300, 1300]])</code></td><td>Feeds two input values and asks "what is the predicted CO2?"</td></tr></tbody></table></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> Why do we use <code>[[2300, 1300]]</code> with double brackets? Because the model expects a 2D input (a table with rows and columns), even if we are predicting just one car.</p></blockquote>
 <h3 class="v2-h3">2.5 Coefficients — Understanding What the Model Learned</h3>
 <p class="v2-p">The word <strong>coefficient</strong> in machine learning means: "how much does this input affect the output?"</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas
 from sklearn import linear_model
 
 df = pandas.read_csv(&quot;data.csv&quot;)
@@ -431,34 +323,20 @@ regr.fit(X, y)
 # Print the coefficients — one for each input variable
 print(regr.coef_)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[0.00755095 0.00780526]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[0.00755095 0.00780526]</code></pre></div></div>
 <p class="v2-p"><strong>Interpretation:</strong></p>
 <ul class="v2-ul"><li><strong>Weight coefficient = 0.00755095</strong> — Every time the car weight increases by <strong>1 kg</strong>, the CO2 emission increases by <strong>0.00755 grams/km</strong></li><li><strong>Volume coefficient = 0.00780526</strong> — Every time the engine volume increases by <strong>1 cm³</strong>, the CO2 emission increases by <strong>0.00781 grams/km</strong></li></ul>
 <p class="v2-p"><strong>Let us verify this with a test:</strong> If we increase the weight from 2300 kg to 3300 kg (an increase of 1000 kg), what happens?</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>predictedCO2 = regr.predict([[3300, 1300]])
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>predictedCO2 = regr.predict([[3300, 1300]])
 print(predictedCO2)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[114.75968007]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[114.75968007]</code></pre></div></div>
 <p class="v2-p">Let us verify mathematically:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>107.2087328 + (1000 × 0.00755095) = 107.2087328 + 7.55095 = 114.75968</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>107.2087328 + (1000 × 0.00755095) = 107.2087328 + 7.55095 = 114.75968</code></pre></div></div>
 <p class="v2-p">The maths checks out perfectly! The coefficient is correct.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world connection:</strong> These coefficients are exactly the kind of numbers that Nigerian environmental agencies use when calculating carbon tax on vehicles — the heavier and bigger the engine, the more CO2, and the higher the levy.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Multiple Regression</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase5">
-  <div class="phase-header">
-    <div class="phase-num">Phase 5 of 10</div>
-    <div class="phase-title">Section 3 — Scale (Feature Scaling)</div>
-    <div class="phase-check" id="chk5"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">3.1 The Problem with Different Units</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Multiple Regression</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase5"><div class="ph"><div class="pn">Phase 5/10</div><div class="pt">Section 3 — Scale (Feature Scaling)</div><div class="pc" id="chk5"></div></div><div class="pb2"><h3 class="v2-h3">3.1 The Problem with Different Units</h3>
 <p class="v2-p">Here is a serious problem that beginners often miss.</p>
 <p class="v2-p">Look at our car dataset again:</p>
 <ul class="v2-ul"><li><strong>Weight</strong> values: 790, 1160, 929, 1725... (values in the hundreds and thousands)</li><li><strong>Volume</strong> values: 1.0, 1.2, 0.9, 2.5... (values between 0 and 3)</li></ul>
@@ -468,21 +346,21 @@ print(predictedCO2)</code></pre></div></div>
 <p class="v2-p"><strong>Solution: Scaling!</strong> We transform all our numbers into a common comparable scale.</p>
 <h3 class="v2-h3">3.2 The Standardization Method</h3>
 <p class="v2-p">The most common scaling method in machine learning is <strong>standardization</strong> (also called <strong>z-score normalization</strong>). The formula is:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>z = (x - mean) / standard_deviation</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>z = (x - mean) / standard_deviation</code></pre></div></div>
 <p class="v2-p">Where:</p>
 <ul class="v2-ul"><li><code>x</code> = the original value</li><li><code>mean</code> = the average of all values in that column</li><li><code>standard_deviation</code> = how spread out the values are</li><li><code>z</code> = the new scaled value</li></ul>
 <p class="v2-p"><strong>Let us work through an example manually:</strong></p>
 <p class="v2-p">Weight column mean ≈ 1292.23 kg, Standard deviation ≈ 238.74 kg</p>
 <p class="v2-p">For the first car (weight = 790 kg):</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>z = (790 - 1292.23) / 238.74 = -2.1</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>z = (790 - 1292.23) / 238.74 = -2.1</code></pre></div></div>
 <p class="v2-p">Volume column mean ≈ 1.61 litres, Standard deviation ≈ 0.38 litres</p>
 <p class="v2-p">For the first car (volume = 1.0 litres):</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>z = (1.0 - 1.61) / 0.38 = -1.59</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>z = (1.0 - 1.61) / 0.38 = -1.59</code></pre></div></div>
 <p class="v2-p">Now we can compare <strong>-2.1 with -1.59</strong> — both are on the same scale! Much easier for the model to work with.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>What do negative values mean?</strong> A negative z-score means the value is <em>below the average</em>. The first car (Toyota Aygo) is lighter than average (-2.1) and has a smaller engine than average (-1.59). Both make sense for a small city car!</p></blockquote>
 <h3 class="v2-h3">3.3 Scaling with Python (The Easy Way)</h3>
 <p class="v2-p">We do not need to calculate this manually. Python's <code>sklearn</code> provides <code>StandardScaler()</code>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas
 from sklearn import linear_model
 from sklearn.preprocessing import StandardScaler  # The scaling tool
 
@@ -502,14 +380,14 @@ scaledX = scale.fit_transform(X)
 
 print(scaledX)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output (first few rows):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[[-2.10389253 -1.59336644]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[[-2.10389253 -1.59336644]
  [-0.55407235 -1.07190106]
  [-1.52166278 -1.59336644]
  ...</code></pre></div></div>
 <p class="v2-p">Notice the very first row is <code>[-2.1, -1.59]</code> — exactly what we calculated manually!</p>
 <h3 class="v2-h3">3.4 Predicting with Scaled Data</h3>
 <p class="v2-p">When we use scaled data to train our model, we <strong>must also scale</strong> any new data before predicting. Here is the full workflow:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas
 from sklearn import linear_model
 from sklearn.preprocessing import StandardScaler
 
@@ -535,27 +413,13 @@ scaled_new = scale.transform([[2300, 1.3]])
 predictedCO2 = regr.predict([scaled_new[0]])
 print(predictedCO2)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[107.2087328]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[107.2087328]</code></pre></div></div>
 <p class="v2-p">The result is the same as before — but now the model learned from properly scaled data, making it more reliable and fair.</p>
 <p class="v2-p"><strong>Critical distinction:</strong></p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Method</th><th>When to use</th></tr></thead><tbody><tr><td><code>scale.fit_transform(X)</code></td><td>ONLY on training data — learns the scale parameters AND transforms</td></tr><tr><td><code>scale.transform(new_data)</code></td><td>On new prediction data — uses already-learned parameters to transform</td></tr></tbody></table></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Common beginner mistake:</strong> Using <code>fit_transform()</code> on new prediction data. This would learn NEW mean and std from the tiny new data, giving wrong results. Always use <code>transform()</code> for new data after training.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Scale (Feature Scaling)</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase6">
-  <div class="phase-header">
-    <div class="phase-num">Phase 6 of 10</div>
-    <div class="phase-title">Section 4 — Train/Test</div>
-    <div class="phase-check" id="chk6"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">4.1 Why Testing Your Model Matters</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Scale (Feature Scaling)</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase6"><div class="ph"><div class="pn">Phase 6/10</div><div class="pt">Section 4 — Train/Test</div><div class="pc" id="chk6"></div></div><div class="pb2"><h3 class="v2-h3">4.1 Why Testing Your Model Matters</h3>
 <p class="v2-p">Imagine you are a WAEC examiner. You give students practice questions, they memorise the answers, and then you test them using those <strong>exact same questions</strong>. Of course they score 100%! But that tells you nothing about whether they actually <em>understand</em> the material.</p>
 <p class="v2-p">Machine learning models have the same problem. If you test a model on the same data it was trained on, it might score very well — but that does not mean it will work on <strong>new, unseen data</strong> in the real world.</p>
 <p class="v2-p"><strong>The solution is Train/Test splitting:</strong></p>
@@ -564,7 +428,7 @@ print(predictedCO2)</code></pre></div></div>
 <h3 class="v2-h3">4.2 Setting Up the Data</h3>
 <p class="v2-p">We will use a randomly generated dataset of 100 shoppers. For each customer:</p>
 <ul class="v2-ul"><li><strong>x</strong> = how many minutes they spent in the shop before buying</li><li><strong>y</strong> = how much money they spent (in dollars)</li></ul>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 import matplotlib.pyplot as plt
 
 # Set a random seed so results are reproducible
@@ -583,7 +447,7 @@ plt.scatter(x, y)
 plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output in browser:</strong> A scatter plot showing a downward curve — customers who spend fewer minutes tend to spend more money (perhaps impulsive buyers), while those who take longer spend less per minute.</p>
 <h3 class="v2-h3">4.3 Splitting into Training and Testing Sets</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># The first 80 data points become training data
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># The first 80 data points become training data
 train_x = x[:80]   # Elements 0 to 79 (80 items)
 train_y = y[:80]
 
@@ -593,7 +457,7 @@ test_y = y[80:]</code></pre></div></div>
 <p class="v2-p"><strong>Understanding the slice notation:</strong></p>
 <ul class="v2-ul"><li><code>x[:80]</code> means "give me elements from the start up to (but not including) index 80"</li><li><code>x[80:]</code> means "give me elements from index 80 all the way to the end"</li></ul>
 <p class="v2-p">Let us visualise each set to make sure they look representative:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Visualise training set
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Visualise training set
 plt.scatter(train_x, train_y)
 plt.title(&quot;Training Set (80%)&quot;)
 plt.show()
@@ -605,7 +469,7 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong> Both scatter plots should look similar to the full dataset — confirming that neither set is biased or unrepresentative.</p>
 <h3 class="v2-h3">4.4 Fitting and Evaluating the Model</h3>
 <p class="v2-p">The data looks like a curve, so we will use polynomial regression (degree 4):</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 from sklearn.metrics import r2_score
 
 numpy.random.seed(2)
@@ -625,26 +489,26 @@ mymodel = numpy.poly1d(numpy.polyfit(train_x, train_y, 4))
 r2_train = r2_score(train_y, mymodel(train_x))
 print(&quot;Training R²:&quot;, r2_train)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Training R²: 0.799</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Training R²: 0.799</code></pre></div></div>
 <p class="v2-p">An R² of 0.80 on training data is acceptable. But this alone tells us very little — the model was trained on this data, so of course it fits it somewhat well.</p>
 <p class="v2-p"><strong>The real test — how does it do on UNSEEN test data?</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Evaluate how well it fits the TEST data (data the model has NEVER seen)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Evaluate how well it fits the TEST data (data the model has NEVER seen)
 r2_test = r2_score(test_y, mymodel(test_x))
 print(&quot;Test R²:&quot;, r2_test)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Test R²: 0.809</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Test R²: 0.809</code></pre></div></div>
 <p class="v2-p">The model scores <strong>0.809 on test data</strong> — nearly the same as the training score of 0.799! This is very good news. It means the model is <strong>not memorising</strong> the training data — it has genuinely learned the underlying pattern and can apply it to new, unseen data.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>What if test R² was much lower than training R²?</strong> That would be a warning sign called <strong>overfitting</strong> — the model memorised the training data but cannot generalise. Imagine a student who memorises specific answers but cannot apply the concept to new questions.</p></blockquote>
 <h3 class="v2-h3">4.5 Making a Prediction with the Validated Model</h3>
 <p class="v2-p">Now that we have confirmed the model works on both training and test data, we can confidently use it:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Predict: how much will a customer spend if they stay 5 minutes?
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Predict: how much will a customer spend if they stay 5 minutes?
 predicted_amount = mymodel(5)
 print(predicted_amount)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>22.88</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>22.88</code></pre></div></div>
 <p class="v2-p">Our model predicts that a customer who stays <strong>5 minutes</strong> in the shop will spend approximately <strong>$22.88</strong>.</p>
 <p class="v2-p"><strong>Summary of the Train/Test workflow:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Full Data (100 rows)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Full Data (100 rows)
         │
         ├── Training Set (80%) ──► Train the model ──► Get R² on training data
         │
@@ -652,25 +516,11 @@ print(predicted_amount)</code></pre></div></div>
                                                                │
                                                If training R² ≈ test R²: Model is GOOD ✓
                                                If test R² &lt;&lt; training R²: Model is OVERFITTING ✗</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Train/Test</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase7">
-  <div class="phase-header">
-    <div class="phase-num">Phase 7 of 10</div>
-    <div class="phase-title">Section 5 — Decision Tree</div>
-    <div class="phase-check" id="chk7"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">5.1 What Is a Decision Tree?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Train/Test</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase7"><div class="ph"><div class="pn">Phase 7/10</div><div class="pt">Section 5 — Decision Tree</div><div class="pc" id="chk7"></div></div><div class="pb2"><h3 class="v2-h3">5.1 What Is a Decision Tree?</h3>
 <p class="v2-p">A <strong>Decision Tree</strong> is a machine learning algorithm that makes predictions by asking a series of YES/NO questions — exactly the way a human makes decisions.</p>
 <p class="v2-p">Think about how you decide whether to buy jollof rice or fried rice at a bukka:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Is it Friday? 
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Is it Friday? 
     YES → Is the jollof available?
               YES → Get jollof rice
               NO  → Get fried rice
@@ -684,7 +534,7 @@ print(predicted_amount)</code></pre></div></div>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Age</th><th>Experience (yrs)</th><th>Rank (1–10)</th><th>Nationality</th><th>Went?</th></tr></thead><tbody><tr><td>36</td><td>10</td><td>9</td><td>UK</td><td>NO</td></tr><tr><td>42</td><td>12</td><td>4</td><td>USA</td><td>NO</td></tr><tr><td>23</td><td>4</td><td>6</td><td>Nigeria</td><td>NO</td></tr><tr><td>43</td><td>21</td><td>8</td><td>USA</td><td>YES</td></tr><tr><td>66</td><td>3</td><td>7</td><td>Nigeria</td><td>YES</td></tr><tr><td>35</td><td>14</td><td>9</td><td>UK</td><td>YES</td></tr><tr><td>52</td><td>13</td><td>7</td><td>Nigeria</td><td>YES</td></tr><tr><td>18</td><td>3</td><td>7</td><td>UK</td><td>YES</td></tr><tr><td>45</td><td>9</td><td>9</td><td>UK</td><td>YES</td></tr></tbody></table></div>
 <p class="v2-p">Given this historical data, we want to build a model that can tell us: "Given a new comedian's details, should I go to their show?"</p>
 <h3 class="v2-h3">5.3 The Full Code — Building the Decision Tree</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 import matplotlib.pyplot as plt
@@ -720,7 +570,7 @@ plt.show()</code></pre></div></div>
 <h3 class="v2-h3">5.4 Reading the Decision Tree — Box by Box</h3>
 <p class="v2-p">The decision tree produces a diagram that looks like a flowchart. Let us read each box carefully.</p>
 <h4 class="v2-h4">Box 1 — The Root (Top of the Tree): "Rank &lt;= 6.5"</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Rank &lt;= 6.5
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Rank &lt;= 6.5
 gini = 0.497
 samples = 13
 value = [6, 7]</code></pre></div></div>
@@ -728,7 +578,7 @@ value = [6, 7]</code></pre></div></div>
 <p class="v2-p">- If YES → go LEFT (these are lower-ranked comedians)   - If NO → go RIGHT (higher-ranked comedians)</p>
 <ul class="v2-ul"><li><strong>gini = 0.497</strong> — This measures how mixed the current data is. Close to 0.5 means very mixed (almost half say YES, half say NO). Close to 0.0 means one side is clearly dominant.</li><li><strong>samples = 13</strong> — At this point, all 13 comedians are still being evaluated (we haven't split yet)</li><li><strong>value = [6, 7]</strong> — Of these 13 comedians, 6 got "NO" (don't go) and 7 got "YES" (go)</li></ul>
 <p class="v2-p"><strong>Understanding the Gini formula:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Gini = 1 - (x/n)² - (y/n)²
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Gini = 1 - (x/n)² - (y/n)²
 
 Where:
   x = number of YES answers = 7
@@ -740,12 +590,12 @@ Gini = 1 - (7/13)² - (6/13)²
      = 0.497</code></pre></div></div>
 <p class="v2-p">A Gini of 0.497 means this node is nearly 50/50 — very uncertain. Good splits reduce uncertainty.</p>
 <h4 class="v2-h4">Box 2 (Left branch) — "Low Rank Comedians"</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>gini = 0.0
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>gini = 0.0
 samples = 5
 value = [5, 0]</code></pre></div></div>
 <ul class="v2-ul"><li>5 comedians had Rank &lt;= 6.5</li><li>All 5 got "NO" (value = [5, 0] means 5 NOs, 0 YESs)</li><li>Gini = 0.0 means perfect — no uncertainty. The answer is always NO.</li><li><strong>Decision: If the comedian's rank is 6.5 or lower → Don't go!</strong></li></ul>
 <h4 class="v2-h4">Box 2 (Right branch) — "High Rank Comedians": "Nationality &lt;= 0.5"</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Nationality &lt;= 0.5
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Nationality &lt;= 0.5
 gini = 0.219
 samples = 8
 value = [1, 7]</code></pre></div></div>
@@ -756,43 +606,28 @@ value = [1, 7]</code></pre></div></div>
 <p class="v2-p">The tree keeps splitting until every branch has a clear, unambiguous answer (gini = 0.0).</p>
 <h3 class="v2-h3">5.5 Predicting with the Decision Tree</h3>
 <p class="v2-p">Now we can use the trained tree to predict whether to attend a new show:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Predict: Should we go see a comedian with these details?
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Predict: Should we go see a comedian with these details?
 # [Age=40, Experience=10, Rank=7, Nationality=USA(1)]
 print(dtree.predict([[40, 10, 7, 1]]))</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[1]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[1]</code></pre></div></div>
 <p class="v2-p">The tree predicts <strong>1</strong> (YES — go to the show!).</p>
 <p class="v2-p">Let us try another comedian:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># [Age=25, Experience=2, Rank=5, Nationality=UK(0)]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># [Age=25, Experience=2, Rank=5, Nationality=UK(0)]
 print(dtree.predict([[25, 2, 5, 0]]))</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[0]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[0]</code></pre></div></div>
 <p class="v2-p">Rank of 5 is below 6.5 — the tree says <strong>0</strong> (NO — don't go).</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Decision Tree</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase8">
-  <div class="phase-header">
-    <div class="phase-num">Phase 8 of 10</div>
-    <div class="phase-title">Guided Practice Exercises</div>
-    <div class="phase-check" id="chk8"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Exercise 1 — Polynomial Regression with Market Data</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Decision Tree</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase8"><div class="ph"><div class="pn">Phase 8/10</div><div class="pt">Guided Practice Exercises</div><div class="pc" id="chk8"></div></div><div class="pb2"><div class="chal-box"><div class="chal-lbl">🎯 Your Challenge</div><div class="chal-body"><h3 class="v2-h3">Exercise 1 — Polynomial Regression with Market Data</h3>
 <p class="v2-p"><strong>Scenario:</strong> Chinwe runs a provision store in Onitsha. She records weekly sales (in units) against average outdoor temperature (°C) for 10 weeks. Hot and cold weeks tend to have different sales patterns for soft drinks.</p>
-<p class="v2-p"><strong>Data:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>temp = [18, 20, 22, 24, 26, 28, 30, 32, 34, 36]
+<p class="v2-p"><strong>Data:</strong></p></div></div><div class="task-box"><div class="task-lbl">✏️ Task</div><div class="task-body">Practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="reveal-btn" onclick="toggleReveal(this)">👁️ Reveal Answer</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>temp = [18, 20, 22, 24, 26, 28, 30, 32, 34, 36]
 sales = [80, 95, 110, 130, 145, 150, 142, 128, 100, 85]</code></pre></div></div>
 <p class="v2-p"><strong>Objective:</strong> Find out if sales follow a polynomial curve with temperature.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Draw a scatter plot of temperature vs. sales</li><li>Fit a degree-2 polynomial regression (quadratic)</li><li>Draw the fitted curve on top of the scatter plot</li><li>Check the R² score</li></ol>
 <p class="v2-p"><strong>Expected solution:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 
@@ -817,14 +652,14 @@ plt.show()
 # Check R² score
 print(&quot;R² score:&quot;, r2_score(sales, mymodel(temp)))</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>R² score: ~0.98</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>R² score: ~0.98</code></pre></div></div>
 <p class="v2-p">An R² of ~0.98 is excellent. The quadratic curve closely matches the real sales data.</p>
 <p class="v2-p"><strong>Self-check questions:</strong></p>
 <ul class="v2-ul"><li>At what temperature are sales highest? (Around 28°C — look at the peak of the curve)</li><li>What would sales be predicted at 25°C? Try <code>mymodel(25)</code></li><li>What does the R² tell us about the relationship between temperature and sales?</li></ul>
 <hr class="v2-hr">
 <h3 class="v2-h3">Exercise 2 — Multiple Regression for House Prices</h3>
 <p class="v2-p"><strong>Scenario:</strong> Emeka is a property agent in Abuja. He collects data on houses sold recently. He wants to predict house prices based on size (m²) and number of rooms.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas
 from sklearn import linear_model
 
 # Sample data — 8 houses
@@ -849,14 +684,14 @@ print(f&quot;Predicted price: ₦{predicted[0]:.2f} million&quot;)
 # Show coefficients
 print(&quot;Coefficients:&quot;, regr.coef_)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Predicted price: ₦28.xx million
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Predicted price: ₦28.xx million
 Coefficients: [approximately 0.28, 2.5]</code></pre></div></div>
 <p class="v2-p"><strong>Self-check questions:</strong></p>
 <ul class="v2-ul"><li>What does the coefficient for <code>Rooms</code> tell you? (Each additional room adds approximately ₦2.5 million to the price)</li><li>What does the coefficient for <code>Size_m2</code> tell you? (Each additional square metre adds approximately ₦280,000 to the price)</li><li>What would happen to the predicted price if we added one more room?</li></ul>
 <hr class="v2-hr">
 <h3 class="v2-h3">Exercise 3 — Train/Test on Student Exam Data</h3>
 <p class="v2-p"><strong>Scenario:</strong> A WAEC data analyst wants to build a model predicting exam scores from hours of study. She has data from 50 students. She wants to test whether the model actually generalises.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 from sklearn.metrics import r2_score
 
 numpy.random.seed(10)
@@ -886,51 +721,37 @@ print(f&quot;Test R²:     {r2_test:.3f}&quot;)
 # Predict score for a student who studies 7 hours
 print(f&quot;Predicted score for 7 hours: {mymodel(7):.1f}&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Expected output (approximate — varies slightly due to randomness):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Training R²: 0.85x
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Training R²: 0.85x
 Test R²:     0.80x
 Predicted score for 7 hours: ~82.0</code></pre></div></div>
 <p class="v2-p"><strong>Self-check questions:</strong></p>
 <ul class="v2-ul"><li>Are the training R² and test R² close to each other? (Yes — good sign, no overfitting)</li><li>What would it mean if test R² were 0.20 while training R² were 0.85?</li><li>What does the model predict for a student who studies only 1 hour?</li></ul>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase9">
-  <div class="phase-header">
-    <div class="phase-num">Phase 9 of 10</div>
-    <div class="phase-title">Common Beginner Mistakes</div>
-    <div class="phase-check" id="chk9"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Mistake 1 — Using fit_transform() on new prediction data</h3>
+<hr class="v2-hr"></div><button class="ub" onclick="unlockNext(8)">Mark Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase9"><div class="ph"><div class="pn">Phase 9/10</div><div class="pt">Common Beginner Mistakes</div><div class="pc" id="chk9"></div></div><div class="pb2"><h3 class="v2-h3">Mistake 1 — Using fit_transform() on new prediction data</h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — learns new mean/std from just 1 data point
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — learns new mean/std from just 1 data point
 new_scaled = scale.fit_transform([[2300, 1.3]])</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># CORRECT — uses the mean/std already learned from training data
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># CORRECT — uses the mean/std already learned from training data
 new_scaled = scale.transform([[2300, 1.3]])</code></pre></div></div>
 <p class="v2-p"><strong>Why it matters:</strong> <code>fit_transform()</code> calculates a new mean and standard deviation. With only one data point, it would produce completely wrong scaled values, and your prediction would be garbage.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 2 — Choosing a polynomial degree that is too high</h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Degree 10 polynomial — way too complex, will memorise noise
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Degree 10 polynomial — way too complex, will memorise noise
 mymodel = numpy.poly1d(numpy.polyfit(x, y, 10))</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Start with degree 2 or 3 — usually enough
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Start with degree 2 or 3 — usually enough
 mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))</code></pre></div></div>
 <p class="v2-p"><strong>Why it matters:</strong> A very high degree polynomial will perfectly fit the training data but fail completely on new data. This is called <strong>overfitting</strong> — the model memorises noise instead of learning the real pattern.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 3 — Testing the model on training data (not on unseen data)</h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — testing on the same data we trained on
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — testing on the same data we trained on
 r2 = r2_score(train_y, mymodel(train_x))
 print(&quot;Model accuracy:&quot;, r2)  # This score is misleading!</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># CORRECT — train on training data, test on SEPARATE test data
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># CORRECT — train on training data, test on SEPARATE test data
 r2_train = r2_score(train_y, mymodel(train_x))
 r2_test  = r2_score(test_y,  mymodel(test_x))
 print(&quot;Training R²:&quot;, r2_train)
@@ -939,11 +760,11 @@ print(&quot;Test R²:&quot;, r2_test)</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 4 — Forgetting to convert text to numbers for Decision Trees</h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — decision trees cannot handle text strings
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — decision trees cannot handle text strings
 df[&#x27;Nationality&#x27;] = [&#x27;UK&#x27;, &#x27;USA&#x27;, &#x27;Nigeria&#x27;, ...]   # still text!
 dtree.fit(X, y)   # This will crash with an error</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># CORRECT — convert text to numbers first
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># CORRECT — convert text to numbers first
 d = {&#x27;UK&#x27;: 0, &#x27;USA&#x27;: 1, &#x27;Nigeria&#x27;: 2}
 df[&#x27;Nationality&#x27;] = df[&#x27;Nationality&#x27;].map(d)
 dtree.fit(X, y)   # Now it works!</code></pre></div></div>
@@ -951,11 +772,11 @@ dtree.fit(X, y)   # Now it works!</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 5 — Ignoring R² when checking fit quality</h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Building a model and jumping straight to predictions
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Building a model and jumping straight to predictions
 mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))
 print(mymodel(50))  # Predicting without knowing if the model is reliable!</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Always check R² BEFORE making predictions
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Always check R² BEFORE making predictions
 mymodel = numpy.poly1d(numpy.polyfit(x, y, 3))
 r2 = r2_score(y, mymodel(x))
 print(&quot;R²:&quot;, r2)
@@ -968,48 +789,22 @@ else:
 <p class="v2-p">A widely used convention in machine learning:</p>
 <ul class="v2-ul"><li><code>X</code> (capital) = the <strong>input matrix</strong> (multiple columns, 2D)</li><li><code>y</code> (lowercase) = the <strong>target/output</strong> (single column, 1D)</li></ul>
 <p class="v2-p">Mixing them up can cause confusing errors. Stick to this convention always.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase10">
-  <div class="phase-header">
-    <div class="phase-num">Phase 10 of 10</div>
-    <div class="phase-title">Quick Reference Card</div>
-    <div class="phase-check" id="chk10"></div>
-  </div>
-  <div class="phase-body">
-    <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Concept</th><th>Key Function(s)</th><th>Purpose</th></tr></thead><tbody><tr><td>Polynomial Regression</td><td><code>numpy.polyfit(x, y, degree)</code> <code>numpy.poly1d(...)</code></td><td>Fit a curved line through data</td></tr><tr><td>R-squared</td><td><code>r2_score(y_actual, y_predicted)</code></td><td>Measure fit quality (0 = bad, 1 = perfect)</td></tr><tr><td>Multiple Regression</td><td><code>LinearRegression()</code> <code>.fit(X, y)</code> <code>.predict([[...]])</code></td><td>Predict from multiple inputs</td></tr><tr><td>Regression Coefficients</td><td><code>regr.coef_</code></td><td>Shows impact of each input variable</td></tr><tr><td>Feature Scaling</td><td><code>StandardScaler()</code> <code>.fit_transform(X)</code> <code>.transform(new_data)</code></td><td>Normalize different-scale features</td></tr><tr><td>Train/Test Split</td><td><code>x[:80]</code> / <code>x[80:]</code></td><td>Honest model evaluation on unseen data</td></tr><tr><td>Decision Tree</td><td><code>DecisionTreeClassifier()</code> <code>.fit(X, y)</code> <code>.predict([[...]])</code></td><td>Classify data into categories</td></tr><tr><td>Gini Impurity</td><td>Displayed in tree nodes</td><td>Measures node purity (0 = pure, 0.5 = mixed)</td></tr><tr><td>Convert text to numbers</td><td><code>df['col'].map({'A': 0, 'B': 1})</code></td><td>Prepare text data for ML algorithms</td></tr></tbody></table></div>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase10"><div class="ph"><div class="pn">Phase 10/10</div><div class="pt">Quick Reference Card</div><div class="pc" id="chk10"></div></div><div class="pb2"><div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Concept</th><th>Key Function(s)</th><th>Purpose</th></tr></thead><tbody><tr><td>Polynomial Regression</td><td><code>numpy.polyfit(x, y, degree)</code> <code>numpy.poly1d(...)</code></td><td>Fit a curved line through data</td></tr><tr><td>R-squared</td><td><code>r2_score(y_actual, y_predicted)</code></td><td>Measure fit quality (0 = bad, 1 = perfect)</td></tr><tr><td>Multiple Regression</td><td><code>LinearRegression()</code> <code>.fit(X, y)</code> <code>.predict([[...]])</code></td><td>Predict from multiple inputs</td></tr><tr><td>Regression Coefficients</td><td><code>regr.coef_</code></td><td>Shows impact of each input variable</td></tr><tr><td>Feature Scaling</td><td><code>StandardScaler()</code> <code>.fit_transform(X)</code> <code>.transform(new_data)</code></td><td>Normalize different-scale features</td></tr><tr><td>Train/Test Split</td><td><code>x[:80]</code> / <code>x[80:]</code></td><td>Honest model evaluation on unseen data</td></tr><tr><td>Decision Tree</td><td><code>DecisionTreeClassifier()</code> <code>.fit(X, y)</code> <code>.predict([[...]])</code></td><td>Classify data into categories</td></tr><tr><td>Gini Impurity</td><td>Displayed in tree nodes</td><td>Measures node purity (0 = pure, 0.5 = mixed)</td></tr><tr><td>Convert text to numbers</td><td><code>df['col'].map({'A': 0, 'B': 1})</code></td><td>Prepare text data for ML algorithms</td></tr></tbody></table></div>
 <p class="v2-p"><strong>R² Interpretation Guide:</strong></p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>R² Value</th><th>Meaning</th></tr></thead><tbody><tr><td>0.90 – 1.00</td><td>Excellent fit — model is very reliable</td></tr><tr><td>0.75 – 0.90</td><td>Good fit — model is usable for predictions</td></tr><tr><td>0.50 – 0.75</td><td>Moderate fit — use with caution</td></tr><tr><td>0.00 – 0.50</td><td>Poor fit — model not suitable for this data</td></tr></tbody></table></div>
 <p class="v2-p"><strong>Decision Tree Node Key:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Feature &lt;= threshold       ← The question being asked
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Feature &lt;= threshold       ← The question being asked
 gini = X.XXX               ← How mixed the data is at this node
 samples = N                ← How many data points reached this node
 value = [NO_count, YES_count]  ← Breakdown of outcomes at this node</code></pre></div></div>
 <hr class="v2-hr">
-<p class="v2-p"><em>End of Lesson 35. In Lesson 36, we continue with more advanced machine learning tools: the Confusion Matrix, Hierarchical Clustering, and Logistic Regression.</em></p>
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Quick Reference Card</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(10)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="build-box" id="build-it">
-  <div class="build-label">🏗️ Build It</div>
-  <div class="build-name">Stage 1 — Polynomial Regression: Temperature vs. Attendance</div>
-  <div class="build-desc"><strong>Scenario:</strong> Alhaji Musa manages a weekly farmers market. He wants to use past data to:</div>
-  <div class="v2-code-wrap">
-    <div class="v2-code-bar">
-      <span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span>
-      <span class="v2-code-lang">starter.py</span>
-    </div>
-    <div class="v2-code-body"><pre><code>import numpy
+<p class="v2-p"><em>End of Lesson 35. In Lesson 36, we continue with more advanced machine learning tools: the Confusion Matrix, Hierarchical Clustering, and Logistic Regression.</em></p><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Quick Reference Card</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(10)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="build-box" id="build-it"><div class="build-lbl">🏗️ Build It — Mini Project</div><div class="build-name">Stage 1 — Polynomial Regression: Temperature vs. Attendance</div><div class="build-req"><p class="v2-p">In this mini-project, you will build a complete data analysis and prediction system for a farmers market in Abuja. You will use polynomial regression, feature scaling, train/test validation, and a decision tree — all in one project.</p>
+<p class="v2-p"><strong>Scenario:</strong> Alhaji Musa manages a weekly farmers market. He wants to use past data to:</p>
+<ol class="v2-ol"><li>Predict how many customers will attend based on temperature</li><li>Predict how much revenue per stall based on customer count and day of week</li><li>Decide whether to order extra supplies based on weather and forecast</li></ol>
+<hr class="v2-hr">
+<h3 class="v2-h3">Stage 1 — Polynomial Regression: Temperature vs. Attendance</h3></div><button class="reveal-btn" onclick="toggleCode(this)">💻 Reveal Starter Code</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">starter.py</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 
@@ -1022,10 +817,7 @@ plt.scatter(temperature, attendance, color=&#x27;green&#x27;)
 plt.xlabel(&quot;Temperature (°C)&quot;)
 plt.ylabel(&quot;Customer Attendance&quot;)
 plt.title(&quot;Abuja Farmers Market — Temperature vs Attendance&quot;)
-plt.show()</code></pre></div>
-  </div>
-  <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
-    <button class="unlock-btn" onclick="downloadStarter(`import numpy
+plt.show()</code></pre></div></div><div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem"><button class="ub" onclick="downloadStarter(`import numpy
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 
@@ -1038,87 +830,66 @@ plt.scatter(temperature, attendance, color='green')
 plt.xlabel("Temperature (°C)")
 plt.ylabel("Customer Attendance")
 plt.title("Abuja Farmers Market — Temperature vs Attendance")
-plt.show()`)"
-      style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">
-      ⬇ Download starter.py
-    </button>
-    <button class="unlock-btn" onclick="showGithub()"
-      style="background:#0f172a;box-shadow:none">
-      🐙 Push to GitHub →
-    </button>
-  </div>
-</div>
+plt.show()`)" style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">⬇ Download starter.py</button><button class="ub" onclick="showGithub()" style="background:#0f172a;box-shadow:none">🐙 Save to GitHub →</button></div></div></div>
 <div class="gh-acc" id="gh-steps" style="display:none">
-  <div class="gh-acc-head" onclick="toggleGh(this)">
-    🐙 Push Your Project to GitHub Pages &nbsp;<span>▼</span>
-  </div>
-  <div class="gh-acc-body">
-    <div class="gh-step"><div class="gh-step-n">1</div>
-    <p>Go to <strong>github.com</strong> → click <strong>New repository</strong> → name it <code>python-lesson-35-stage-1-polynomial-regression-temperatur</code>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">2</div>
-    <p>Set it to <strong>Public</strong>, tick <strong>Add a README</strong>, then click <strong>Create repository</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">3</div>
-    <p>Click <strong>Add file → Upload files</strong>. Upload your <code>starter.py</code> — rename it to <code>index.py</code> before uploading.</p></div>
-    <div class="gh-step"><div class="gh-step-n">4</div>
-    <p>Commit message: <em>"Add Python lesson 35 project"</em> → click <strong>Commit changes</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">5</div>
-    <p>Go to <strong>Settings → Pages</strong> → branch <strong>main</strong> → <strong>Save</strong>. Your project goes live at <code>https://YOUR-NAME.github.io/python-lesson-35-stage-1-polynomial-regression-temperatur/</code> in about 1 minute! 🎉</p></div>
-    <button class="unlock-btn" onclick="showEnd()" style="margin-top:.5rem">I've pushed to GitHub — Finish Session ✅</button>
-  </div>
-</div>
-<div class="session-end" id="session-end">
-  <h2>🎉 Lesson 35 complete!</h2>
-  <p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p>
-  <ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Section 1 — Polynomial Regression</li><li>✅ Section 2 — Multiple Regression</li><li>✅ Section 3 — Scale (Feature Scaling)</li><li>✅ Section 4 — Train/Test</li><li>✅ Section 5 — Decision Tree</li><li>✅ Guided Practice Exercises</li></ul>
-  <div class="lesson-nav"><a href="lesson_34.html" class="ln-btn">← Lesson 34</a><a href="lesson_36.html" class="ln-btn primary">Lesson 36 →</a></div>
-</div>
+<div class="gh-hd" onclick="toggleGh(this)">🐙 Save Python Project to GitHub &nbsp;<span>▼</span></div>
+<div class="gh-bd">
+<div class="gh-nop"><strong>⚠️ Python cannot be hosted on GitHub Pages.</strong><br><br>GitHub Pages only serves static HTML/CSS/JS files. Python scripts need a server to run — you will learn deployment (Replit, PythonAnywhere, Heroku) later in the course. For now, save your code to GitHub as a portfolio entry.</div>
+<div class="gh-st"><div class="gh-n">1</div><p>Go to <strong>github.com → New repository</strong> → name it <code>python-lesson-35-stage-1-polynomial-regression-temperatur</code>. Set <strong>Public</strong>, tick <strong>Add README</strong>, click <strong>Create</strong>.</p></div>
+<div class="gh-st"><div class="gh-n">2</div><p>Click <strong>Add file → Upload files</strong> → upload your <code>.py</code> file.</p></div>
+<div class="gh-st"><div class="gh-n">3</div><p>Commit message: <em>"Add Python lesson 35 project"</em> → <strong>Commit changes</strong>. Your code is now part of your GitHub portfolio! 🐍</p></div>
+<button class="ub" onclick="showEnd()" style="background:#059669;margin-top:.5rem">Done — Finish Session ✅</button>
+</div></div>
+<div class="se" id="session-end"><h2>🎉 Lesson 35 complete!</h2><p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p><ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Section 1 — Polynomial Regression</li><li>✅ Section 2 — Multiple Regression</li><li>✅ Section 3 — Scale (Feature Scaling)</li><li>✅ Section 4 — Train/Test</li><li>✅ Section 5 — Decision Tree</li><li>✅ Guided Practice Exercises</li></ul><div class="ln"><a href="lesson_34.html" class="ln-btn">← Lesson 34</a><a href="lesson_36.html" class="ln-btn primary">Lesson 36 →</a></div></div>
 </main>
-
-<footer class="lesson-footer">
-  Techbase Code Coach · Python Course · Lesson 35 · © 2025 Techbase Consultant Services, Ibadan
-</footer>
+<footer class="lf">Techbase Code Coach &nbsp;·&nbsp; Python Course &nbsp;·&nbsp; Lesson 35 &nbsp;·&nbsp; © 2025 Techbase Consultant Services, Ibadan</footer>
+<div id="toast"></div>
+<button id="go-top" title="Back to top">↑</button>
+<canvas id="cc"></canvas>
 <script>
 const TOTAL=10,KEY='techbase_python_l35';
-let current=parseInt(localStorage.getItem(KEY)||'1');
-function init(){
-  for(let i=2;i<=current;i++) unlockPhase(i,false);
-  updateBar();
-}
+let cur=parseInt(localStorage.getItem(KEY)||'1');
+function init(){for(let i=2;i<=cur;i++)unlock(i,false);bar();}
 function unlockNext(n){
-  const chk=document.getElementById('chk'+n);
-  if(chk){chk.classList.add('done');chk.textContent='✓';}
-  localStorage.setItem(KEY,n+1); current=n+1;
+  const c=document.getElementById('chk'+n);
+  if(c){c.classList.add('done');c.textContent='✓';}
+  localStorage.setItem(KEY,n+1);cur=n+1;
   if(n===TOTAL){
-    document.getElementById('build-it').style.display='block';
-    updateBar(100);
+    document.getElementById('build-it').classList.add('visible');
+    bar(100);toast('🏗️ Build It unlocked!');
     setTimeout(()=>document.getElementById('build-it').scrollIntoView({behavior:'smooth'}),200);
-  }else{
-    unlockPhase(n+1,true); updateBar();
-  }
+    setTimeout(confetti,600);
+  }else{unlock(n+1,true);bar();toast(['✅ Phase complete!','🎯 Keep going!','💡 Nice work!','🚀 Nailed it!'][n%4]);}
 }
-function unlockPhase(n,scroll){
-  const el=document.getElementById('phase'+n);
-  if(el){el.classList.remove('locked');if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+function unlock(n,scroll){
+  const el=document.getElementById('phase'+n);if(!el)return;
+  el.classList.remove('locked');
+  if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),180);
 }
-function updateBar(pct){
-  const p=pct!==undefined?pct:Math.round((current-1)/TOTAL*95);
-  document.getElementById('pbar').style.width=p+'%';
+function bar(p){document.getElementById('pbar').style.width=(p!==undefined?p:Math.round((cur-1)/TOTAL*95))+'%';}
+function toggleReveal(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Answer':'👁️ Reveal Answer';}
+function toggleCode(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Starter Code':'💻 Reveal Starter Code';}
+function copyCode(btn){
+  const code=btn.closest('.v2-code-wrap').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='⎘ Copy';btn.classList.remove('copied');},1800);}).catch(()=>{});
 }
-function showGithub(){
-  const g=document.getElementById('gh-steps');
-  if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}
-}
-function showEnd(){
-  const e=document.getElementById('session-end');
-  if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}
-}
+const tEl=document.getElementById('toast');let tT;
+function toast(msg){tEl.innerHTML=msg;tEl.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>tEl.classList.remove('show'),2400);}
+const gEl=document.getElementById('go-top');
+window.addEventListener('scroll',()=>gEl.classList.toggle('visible',scrollY>320),{passive:true});
+gEl.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 function toggleGh(el){el.nextElementSibling.classList.toggle('open');}
-function downloadStarter(code){
-  const a=document.createElement('a');
-  a.href='data:text/html;charset=utf-8,'+encodeURIComponent(code);
-  a.download='starter.html';a.click();
+function showGithub(){const g=document.getElementById('gh-steps');if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}}
+function showEnd(){const e=document.getElementById('session-end');if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}}
+function downloadStarter(code){const ext='python'==='python'?'py':'html';const a=document.createElement('a');a.href='data:text/'+(ext==='py'?'x-python':'html')+';charset=utf-8,'+encodeURIComponent(code);a.download='starter.'+ext;a.click();}
+function confetti(){
+  const cv=document.getElementById('cc');cv.style.display='block';const ctx=cv.getContext('2d');
+  cv.width=innerWidth;cv.height=innerHeight;
+  const ps=Array.from({length:130},()=>{return{x:Math.random()*cv.width,y:-10-Math.random()*120,r:4+Math.random()*6,d:2+Math.random()*3,c:['#e34c26','#0284c7','#d97706','#059669','#7c3aed','#ec4899'][Math.floor(Math.random()*6)],ta:0};}); 
+  let f=0;
+  function draw(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.ta+=.1;p.y+=p.d;p.x+=Math.sin(f/20);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();});f++;if(f<200)requestAnimationFrame(draw);else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}}
+  draw();toast('🎉 All phases done! Build It awaits!');
 }
 init();
 </script>
-</body>
-</html>
+</body></html>

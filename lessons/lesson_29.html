@@ -1,267 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lesson 29: Introduction to Pandas — Data Analysis with Python — Techbase Python</title>
-<meta name="description" content="Introduction to Pandas — Data Analysis with Python">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --acc:#059669;--acc-d:#047857;--acc-pale:#ecfdf5;
-  --acc-b:rgba(5,150,105,.25);--acc-sh:rgba(5,150,105,.28);
-  --bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--t2:#334155;--muted:#64748b;
-  --D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+:root{--acc:#059669;--acd:#047857;--acp:#ecfdf5;--acb:rgba(5,150,105,.22);--acs:rgba(5,150,105,.28);--bg:#f8fafc;--sf:#fff;--br:#e2e8f0;--tx:#0f172a;--t2:#334155;--mu:#64748b;--D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
-
-/* NAV */
-.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);
-  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:58px;
-  display:flex;align-items:center;padding:0 1.5rem;gap:1rem;justify-content:space-between}
-.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.l-nav-back{font-size:.8rem;color:var(--muted);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+body{background:var(--bg);color:var(--tx);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
+.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);height:58px;display:flex;align-items:center;padding:0 1.5rem;justify-content:space-between}
+.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--tx);text-decoration:none}
+.l-nav-back{font-size:.8rem;color:var(--mu);text-decoration:none;font-weight:500;transition:color .2s}
 .l-nav-back:hover{color:var(--acc)}
-.l-nav-label{font-family:var(--M);font-size:.68rem;color:var(--muted)}
-
-/* PROGRESS */
-.progress-wrap{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--border)}
-.progress-bar{height:100%;background:var(--acc);transition:width .4s ease;width:0%}
-
-/* HERO */
-.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--border)}
-.l-hero-inner{max-width:860px;margin:0 auto}
-.l-badge{display:inline-flex;align-items:center;gap:.4rem;border-radius:100px;padding:.2rem .85rem;
-  font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
-  color:var(--acc);background:var(--acc-pale);border:1px solid var(--acc-b);margin-bottom:.8rem}
-.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);
-  letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
-.l-hero-sub{font-size:.95rem;color:var(--muted);margin-bottom:1rem}
-
-/* WELCOME BOX */
-.welcome-box{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.5rem 1.8rem;max-width:860px;margin:1.5rem auto 0}
-.welcome-box h2{font-family:var(--D);font-weight:700;font-size:1.05rem;margin-bottom:.6rem}
-.welcome-box p,.welcome-box li{font-size:.9rem;line-height:1.8;opacity:.93}
-.welcome-box ul{margin-left:1.2rem;margin-top:.5rem}
-.welcome-meta{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
-.welcome-meta span{background:rgba(255,255,255,.18);border-radius:6px;padding:.2rem .75rem;
-  font-family:var(--M);font-size:.68rem;font-weight:500}
-
-/* PHASE */
-.phase{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;
-  margin-bottom:1.5rem;overflow:hidden;transition:opacity .3s,transform .3s,filter .3s}
-.phase.locked{opacity:.35;pointer-events:none;filter:blur(1.5px)}
-.phase-header{padding:1rem 1.4rem;background:#f0fdf6;
-  border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:default}
-.phase-num{font-family:var(--M);font-size:.7rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--acc)}
-.phase-title{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--text);
-  flex:1;margin:0 .8rem}
-.phase-check{width:26px;height:26px;border-radius:50%;background:var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;
-  transition:background .3s,color .3s}
-.phase-check.done{background:#10b981;color:#fff}
-.phase-body{padding:1.6rem 1.8rem}
-
-/* RICH CONTENT STYLES */
+.l-nav-lbl{font-family:var(--M);font-size:.68rem;color:var(--mu)}
+.pw{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--br)}
+.pb{height:100%;background:linear-gradient(90deg,var(--acc),var(--acd));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%;position:relative}
+.pb::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:inherit;filter:brightness(1.4);animation:pg 1.5s ease-in-out infinite}
+@keyframes pg{0%,100%{opacity:1}50%{opacity:.35}}
+.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--br)}
+.l-hero-in{max-width:860px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;border-radius:100px;padding:.22rem .9rem;font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--acc);background:var(--acp);border:1.5px solid var(--acb);margin-bottom:.85rem}
+.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
+.l-hero-sub{font-size:.9rem;color:var(--mu)}
+.wb{background:#fff;border:1.5px solid var(--acb);border-left:5px solid var(--acc);border-radius:14px;padding:1.4rem 1.6rem;max-width:860px;margin:1.5rem auto 0;box-shadow:0 2px 12px var(--acs)}
+.wb h2{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--acd);margin-bottom:.6rem}
+.wb p,.wb li{font-size:.92rem;line-height:1.85;color:var(--t2)}
+.wb ul{margin-left:1.2rem;margin-top:.4rem}
+.wm{display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap}
+.wm span{background:var(--acp);color:var(--acd);border:1px solid var(--acb);border-radius:7px;padding:.22rem .7rem;font-family:var(--M);font-size:.68rem;font-weight:600}
+.phase{background:var(--sf);border:1.5px solid var(--br);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;transition:opacity .35s,filter .35s,transform .35s}
+.phase.locked{opacity:.28;pointer-events:none;filter:blur(2px);transform:scale(.99)}
+.ph{padding:1rem 1.4rem;background:#f0fdf6;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:.8rem}
+.pn{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.pt{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--tx);flex:1}
+.pc{width:26px;height:26px;border-radius:50%;background:var(--br);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:background .3s,transform .4s}
+.pc.done{background:#10b981;color:#fff;transform:scale(1.15) rotate(360deg)}
+.pb2{padding:1.6rem 1.8rem}
 .v2-p{margin-bottom:1rem;font-size:.95rem;color:var(--t2);line-height:1.85}
-.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--text);
-  margin:1.6rem 0 .5rem;padding-top:.2rem;border-top:2px solid var(--acc-pale)}
-.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1.1rem 0 .4rem}
-.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.9rem;color:var(--muted);margin:.8rem 0 .3rem}
+.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--tx);margin:1.6rem 0 .5rem;border-top:2px solid var(--acp);padding-top:.4rem}
+.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1rem 0 .35rem}
+.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.88rem;color:var(--mu);margin:.7rem 0 .3rem}
 .v2-ul,.v2-ol{margin:.6rem 0 1rem 1.4rem;font-size:.93rem;color:var(--t2);line-height:1.9}
 .v2-ul li,.v2-ol li{margin-bottom:.3rem}
-.v2-bq{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 10px 10px 0;
-  padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
+.v2-bq{border-left:4px solid var(--acc);background:var(--acp);border-radius:0 10px 10px 0;padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
 .v2-bq p{margin:0;color:inherit}
-.v2-bq strong{font-style:normal}
-.v2-hr{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
-.v2-table-wrap{overflow-x:auto;margin:1rem 0}
+.v2-hr{border:none;border-top:1px solid var(--br);margin:1.2rem 0}
+.v2-table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--br)}
 .v2-table{width:100%;border-collapse:collapse;font-size:.87rem}
-.v2-table th{background:var(--acc-pale);color:#064e3b;font-family:var(--D);
-  font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--acc-b)}
-.v2-table td{padding:8px 12px;border:1px solid var(--border);color:var(--t2);vertical-align:top}
-.v2-table tr:nth-child(even) td{background:#f8fafc}
-.v2-table code{background:var(--acc-pale);color:var(--acc);border-radius:4px;
-  padding:1px 5px;font-family:var(--M);font-size:.8em}
-.phase-body code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-.phase-body a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
-.phase-body strong{color:var(--text)}
-
-/* CODE BLOCKS */
-.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.v2-table th{background:var(--acp);color:#064e3b;font-family:var(--D);font-weight:700;padding:10px 12px;text-align:left;border-bottom:2px solid var(--acb)}
+.v2-table td{padding:8px 12px;border-bottom:1px solid var(--br);color:var(--t2);vertical-align:top}
+.v2-table tr:last-child td{border:none}
+.v2-table tr:hover td{background:var(--acp)}
+.pb2 code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.pb2 a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
+.pb2 strong{color:var(--tx)}
+.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .v2-code-bar{background:#1e293b;padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem}
 .v2-dot{width:10px;height:10px;border-radius:50%}
 .v2-dot.r{background:#ff5f57}.v2-dot.y{background:#febc2e}.v2-dot.g{background:#28c840}
-.v2-code-lang{margin-left:.6rem;font-family:var(--M);font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em}
+.v2-code-lang{margin-left:.5rem;font-family:var(--M);font-size:.62rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;flex:1}
+.copy-btn{background:rgba(255,255,255,.08);color:#94a3b8;border:none;border-radius:6px;padding:.25rem .65rem;font-family:var(--M);font-size:.65rem;cursor:pointer;transition:background .2s,color .2s}
+.copy-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.copy-btn.copied{background:#10b981;color:#fff}
 .v2-code-body{background:#0f172a;padding:1.3rem 1.5rem;overflow-x:auto}
 .v2-code-body pre{margin:0}
-.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.9;color:#e2e8f0;
-  white-space:pre;background:transparent;padding:0;border-radius:0}
-
-/* TASK BOX */
-.task-box{background:#d1fae5;border:2px dashed #059669;
-  border-radius:12px;padding:1rem 1.3rem;margin:1.4rem 0}
-.task-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-.task-box p,.task-body{font-size:.92rem;color:#064e3b;line-height:1.8}
-.task-box code{background:rgba(0,0,0,.08);border-radius:4px;padding:1px 6px;
-  font-family:var(--M);font-size:.82em}
-
-/* UNLOCK BUTTON */
-.unlock-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);
-  color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;
-  padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;
-  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acc-sh);margin-top:1.2rem}
-.unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acc-sh)}
-
-/* BUILD IT */
+.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.95;color:#e2e8f0;white-space:pre;background:transparent;padding:0;border-radius:0}
+.task-box{background:#d1fae5;border:2px dashed #059669;border-radius:12px;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.task-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.task-body{font-size:.93rem;color:#064e3b;line-height:1.85}
+.task-body code{background:rgba(0,0,0,.1);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.chal-box{background:linear-gradient(135deg,#ecfdf5 0%,#fff 100%);border:2px solid var(--acc);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem}
+.chal-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acd);margin-bottom:.6rem}
+.chal-body{font-size:.95rem;color:var(--tx);line-height:1.85}
+.chal-body code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 5px;font-family:var(--M);font-size:.82em}
+.reveal-btn{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--acd);font-family:var(--D);font-weight:700;font-size:.85rem;padding:.6rem 1.2rem;border-radius:8px;border:2px solid var(--acc);cursor:pointer;transition:background .2s,color .2s;margin:.6rem 0}
+.reveal-btn:hover{background:var(--acc);color:#fff}
+.reveal-content{display:none;margin-top:.6rem;animation:fi .3s ease}
+.reveal-content.open{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .build-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:16px;padding:1.6rem;margin:2rem 0;display:none}
-.build-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
-.build-name{font-family:var(--D);font-weight:700;font-size:1.1rem;color:#14532d;margin-bottom:.5rem}
-.build-desc{font-size:.9rem;color:#166534;margin-bottom:1.2rem;line-height:1.75}
-.build-desc code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
-.build-desc strong{color:#14532d}
-
-/* GITHUB ACCORDION */
-.gh-acc{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
-.gh-acc-head{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none}
-.gh-acc-body{display:none;padding:1.2rem;border-top:1px solid var(--border)}
-.gh-acc-body.open{display:block}
-.gh-step{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
-.gh-step-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;
-  font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;margin-top:2px}
-.gh-step p{font-size:.88rem;color:var(--t2);line-height:1.7}
-.gh-step code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-
-/* SESSION END */
-.session-end{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
-.session-end.visible{display:block}
-.session-end h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
-.session-end ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.session-end li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
-.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);
-  color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;
-  padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;
-  border:1.5px solid var(--border);transition:border-color .2s,color .2s}
+.build-box.visible{display:block;animation:fi .4s ease}
+.build-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+.build-name{font-family:var(--D);font-weight:700;font-size:1.15rem;color:#14532d;margin-bottom:.6rem}
+.build-req{font-size:.93rem;color:#166534;line-height:1.8;margin-bottom:.8rem}
+.build-req code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.build-req strong{color:#14532d}
+.gh-acc{border:1.5px solid var(--br);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.gh-hd{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none;transition:background .2s}
+.gh-hd:hover{background:#f1f5f9}
+.gh-bd{display:none;padding:1.2rem;border-top:1px solid var(--br)}
+.gh-bd.open{display:block;animation:fi .25s ease}
+.gh-st{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
+.gh-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.gh-st p{font-size:.88rem;color:var(--t2);line-height:1.7}
+.gh-st code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.gh-nop{background:#fef3c7;border:1.5px solid #fde68a;border-radius:10px;padding:1rem 1.2rem;font-size:.9rem;color:#78350f;line-height:1.75;margin-bottom:1rem}
+.se{background:linear-gradient(135deg,var(--acc),var(--acd));color:#fff;border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
+.se.visible{display:block;animation:fi .4s ease}
+.se h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
+.se ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.se li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
+.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--sf);color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;border:1.5px solid var(--br);transition:border-color .2s,color .2s}
 .ln-btn:hover{border-color:var(--acc);color:var(--acc)}
 .ln-btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .ln-btn.primary:hover{opacity:.9}
-.lesson-nav{display:flex;align-items:center;justify-content:space-between;
-  padding-top:2rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
-.lesson-footer{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;
-  color:var(--muted);border-top:1px solid var(--border);background:var(--surface)}
+.ln{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
+.ub{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acs);margin-top:1.2rem}
+.ub:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acs)}
+.ub:active{transform:scale(.97)}
+#toast{position:fixed;bottom:90px;right:1.5rem;z-index:999;background:#1e293b;color:#fff;border-radius:10px;padding:.75rem 1.2rem;font-family:var(--D);font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#go-top{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;border:none;cursor:pointer;font-size:1.15rem;box-shadow:0 4px 16px var(--acs);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s,box-shadow .2s;pointer-events:none}
+#go-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#go-top:hover{box-shadow:0 8px 24px var(--acs);transform:translateY(-2px)}
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;display:none}
+.lf{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;color:var(--mu);border-top:1px solid var(--br);background:var(--sf)}
 </style>
 </head>
 <body>
 <nav class="l-nav">
   <a href="../index.html" class="l-nav-logo">⚡ Techbase Python</a>
-  <span class="l-nav-label">Lesson 29 of 45</span>
+  <span class="l-nav-lbl">Lesson 29 of 45</span>
   <a href="../index.html" class="l-nav-back">← All Lessons</a>
 </nav>
-<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
-
-<div class="l-hero">
-  <div class="l-hero-inner">
-    <div class="l-badge">Python · Lesson 29</div>
-    <h1>Introduction to Pandas — Data Analysis with Python</h1>
-    <div class="l-hero-sub">10 phases · Build: Stage 1: Setup — Create the Data</div>
-  </div>
-</div>
-
-<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
-  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="welcome-box">
-  <h2>👋 Welcome to Lesson 29</h2>
-  <div style="font-size:.9rem;line-height:1.85;opacity:.93"><p class="v2-p">Welcome to one of the most powerful lessons in this series! In this lesson, you will learn <strong>Pandas</strong> — a Python library that lets you work with data the way a scientist, analyst, or engineer does every day.</p>
-<p class="v2-p">Imagine you have a huge spreadsheet of student grades, weather readings, sales figures, or health records. Instead of clicking through menus in Excel, Pandas lets you write a few lines of Python code to load, explore, clean, filter, and summarise that data instantly.</p>
-<p class="v2-p">By the end of this lesson, you will be able to:</p>
-<ul class="v2-ul"><li>Understand what Pandas is and why it exists</li><li>Install and import Pandas into your Python programs</li><li>Create and work with <strong>Series</strong> (a single column of data)</li><li>Create and work with <strong>DataFrames</strong> (a full table of data)</li><li>Load real data from <strong>CSV files</strong> and <strong>JSON files</strong></li><li>Access specific rows and columns using labels and index numbers</li><li>Build a simple real-world data mini-project from scratch</li></ul>
-<p class="v2-p">No prior data analysis experience is required. We will start from zero and build up together, step by step.</p>
-<hr class="v2-hr"></div>
-  <div class="welcome-meta">
-    <span>📚 10 phases</span>
-    <span>🏗️ Stage 1: Setup — Create the Data</span>
-  </div>
+<div class="pw"><div class="pb" id="pbar"></div></div>
+<div class="l-hero"><div class="l-hero-in">
+  <div class="badge">Python · Lesson 29</div>
+  <h1>Introduction to Pandas — Data Analysis with Python</h1>
+  <div class="l-hero-sub">10 phases &nbsp;·&nbsp; Build: Stage 1: Setup — Create the Data</div>
 </div></div>
-</section>
-
-<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
-<div class="phase" id="phase1">
-  <div class="phase-header">
-    <div class="phase-num">Phase 1 of 10</div>
-    <div class="phase-title">Lesson Introduction</div>
-    <div class="phase-check" id="chk1"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Welcome to one of the most powerful lessons in this series! In this lesson, you will learn <strong>Pandas</strong> — a Python library that lets you work with data the way a scientist, analyst, or engineer does every day.</p>
+<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--br)">
+  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="wb"><h2>👋 Welcome to Lesson 29</h2><div style="font-size:.92rem;line-height:1.85;color:var(--t2)"><p class="v2-p">Welcome to one of the most powerful lessons in this series! In this lesson, you will learn <strong>Pandas</strong> — a Python library that lets you work with data the way a scientist, analyst, or engineer does every day.</p>
 <p class="v2-p">Imagine you have a huge spreadsheet of student grades, weather readings, sales figures, or health records. Instead of clicking through menus in Excel, Pandas lets you write a few lines of Python code to load, explore, clean, filter, and summarise that data instantly.</p>
 <p class="v2-p">By the end of this lesson, you will be able to:</p>
 <ul class="v2-ul"><li>Understand what Pandas is and why it exists</li><li>Install and import Pandas into your Python programs</li><li>Create and work with <strong>Series</strong> (a single column of data)</li><li>Create and work with <strong>DataFrames</strong> (a full table of data)</li><li>Load real data from <strong>CSV files</strong> and <strong>JSON files</strong></li><li>Access specific rows and columns using labels and index numbers</li><li>Build a simple real-world data mini-project from scratch</li></ul>
 <p class="v2-p">No prior data analysis experience is required. We will start from zero and build up together, step by step.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(1)">Start Lesson ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase2">
-  <div class="phase-header">
-    <div class="phase-num">Phase 2 of 10</div>
-    <div class="phase-title">Prerequisite Concepts</div>
-    <div class="phase-check" id="chk2"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Before diving in, let's quickly review two Python concepts this lesson depends on. If you already know these, feel free to skim.</p>
+<hr class="v2-hr"></div><div class="wm"><span>📚 10 phases</span><span>🏗️ Stage 1: Setup — Create the Data</span><span>🐍 GitHub Repo</span></div></div></div>
+</section>
+<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
+<div class="phase" id="phase1"><div class="ph"><div class="pn">Phase 1/10</div><div class="pt">Lesson Introduction</div><div class="pc" id="chk1"></div></div><div class="pb2"><p class="v2-p">Welcome to one of the most powerful lessons in this series! In this lesson, you will learn <strong>Pandas</strong> — a Python library that lets you work with data the way a scientist, analyst, or engineer does every day.</p>
+<p class="v2-p">Imagine you have a huge spreadsheet of student grades, weather readings, sales figures, or health records. Instead of clicking through menus in Excel, Pandas lets you write a few lines of Python code to load, explore, clean, filter, and summarise that data instantly.</p>
+<p class="v2-p">By the end of this lesson, you will be able to:</p>
+<ul class="v2-ul"><li>Understand what Pandas is and why it exists</li><li>Install and import Pandas into your Python programs</li><li>Create and work with <strong>Series</strong> (a single column of data)</li><li>Create and work with <strong>DataFrames</strong> (a full table of data)</li><li>Load real data from <strong>CSV files</strong> and <strong>JSON files</strong></li><li>Access specific rows and columns using labels and index numbers</li><li>Build a simple real-world data mini-project from scratch</li></ul>
+<p class="v2-p">No prior data analysis experience is required. We will start from zero and build up together, step by step.</p>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(1)">Start Lesson ✓</button></div></div>
+<div class="phase locked" id="phase2"><div class="ph"><div class="pn">Phase 2/10</div><div class="pt">Prerequisite Concepts</div><div class="pc" id="chk2"></div></div><div class="pb2"><p class="v2-p">Before diving in, let's quickly review two Python concepts this lesson depends on. If you already know these, feel free to skim.</p>
 <h3 class="v2-h3">Python Lists</h3>
 <p class="v2-p">A list is a collection of values stored in order. Think of it like a numbered shopping list.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;]
 print(fruits[0])   # Access first item by its index number</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>apple</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>apple</code></pre></div></div>
 <p class="v2-p">Each item has an <strong>index</strong> — a number starting from <code>0</code> that tells Python where in the list that item lives.</p>
 <h3 class="v2-h3">Python Dictionaries</h3>
 <p class="v2-p">A dictionary stores data as <strong>key-value pairs</strong> — like a word and its definition in a real dictionary.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>person = {&quot;name&quot;: &quot;Amara&quot;, &quot;age&quot;: 22, &quot;city&quot;: &quot;Lagos&quot;}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>person = {&quot;name&quot;: &quot;Amara&quot;, &quot;age&quot;: 22, &quot;city&quot;: &quot;Lagos&quot;}
 print(person[&quot;name&quot;])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Amara</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Amara</code></pre></div></div>
 <p class="v2-p">You use the <strong>key</strong> (the word on the left) to look up its <strong>value</strong> (the data on the right). Pandas uses dictionaries heavily when creating tables of data.</p>
 <h3 class="v2-h3">Python <code>import</code> Statement</h3>
 <p class="v2-p">When you want to use an external tool or library in Python, you bring it in with <code>import</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import math
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import math
 print(math.sqrt(25))</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>5.0</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>5.0</code></pre></div></div>
 <p class="v2-p">You will use <code>import</code> to bring Pandas into every program you write in this lesson.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase3">
-  <div class="phase-header">
-    <div class="phase-num">Phase 3 of 10</div>
-    <div class="phase-title">Section 1: What Is Pandas?</div>
-    <div class="phase-check" id="chk3"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">The Big Picture — Why Does Pandas Exist?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase3"><div class="ph"><div class="pn">Phase 3/10</div><div class="pt">Section 1: What Is Pandas?</div><div class="pc" id="chk3"></div></div><div class="pb2"><h3 class="v2-h3">The Big Picture — Why Does Pandas Exist?</h3>
 <p class="v2-p">Imagine you work for a hospital, a bank, or a university. Every day, thousands of records are collected: patient readings, transactions, exam scores. You need to answer questions like:</p>
 <ul class="v2-ul"><li>What is the average score across all students?</li><li>Which patient has the highest blood pressure?</li><li>On which day did the store earn the most money?</li></ul>
 <p class="v2-p">Before Pandas, answering these questions required writing long, complex Python code just to organise the data, let alone analyse it.</p>
@@ -276,73 +182,45 @@ print(math.sqrt(25))</code></pre></div></div>
 <h3 class="v2-h3">What Fields Use Pandas?</h3>
 <p class="v2-p">Pandas is used in virtually every field that works with data:</p>
 <ul class="v2-ul"><li><strong>Data Science and Machine Learning</strong> — preparing datasets for AI models</li><li><strong>Finance and Banking</strong> — analysing stock prices, transactions, risk</li><li><strong>Healthcare</strong> — processing patient records and clinical trial data</li><li><strong>Engineering</strong> — analysing sensor readings and measurements</li><li><strong>Education</strong> — processing exam results and student performance</li><li><strong>Business</strong> — sales analysis, customer behaviour, inventory tracking</li></ul>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: What Is Pandas?</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase4">
-  <div class="phase-header">
-    <div class="phase-num">Phase 4 of 10</div>
-    <div class="phase-title">Section 2: Getting Started — Installing and Importing Pandas</div>
-    <div class="phase-check" id="chk4"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Step 1: Install Pandas</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: What Is Pandas?</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase4"><div class="ph"><div class="pn">Phase 4/10</div><div class="pt">Section 2: Getting Started — Installing and Importing Pandas</div><div class="pc" id="chk4"></div></div><div class="pb2"><h3 class="v2-h3">Step 1: Install Pandas</h3>
 <p class="v2-p">Before you can use Pandas, you must install it. Pandas is not built into Python by default, so you need to add it using <strong>PIP</strong> — Python's package manager.</p>
 <p class="v2-p">Open your terminal (also called the command prompt or shell) and type:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">bash</span></div><div class="v2-code-body"><pre><code>pip install pandas</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>pip install pandas</code></pre></div></div>
 <p class="v2-p"><strong>What this command does:</strong></p>
 <ul class="v2-ul"><li><code>pip</code> — this is Python's install helper tool</li><li><code>install</code> — tells pip to download and install a package</li><li><code>pandas</code> — the name of the package to install</li></ul>
 <p class="v2-p">If the installation is successful, you will see output ending with something like:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Successfully installed pandas-2.x.x</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Successfully installed pandas-2.x.x</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Tip:</strong> If you are using an environment like Anaconda, Spyder, or Google Colab, Pandas is usually already pre-installed. You can skip the installation step and go straight to importing.</p></blockquote>
 <h3 class="v2-h3">Step 2: Import Pandas</h3>
 <p class="v2-p">Once Pandas is installed, you bring it into your Python script using the <code>import</code> keyword. You do this at the very top of every file where you want to use Pandas.</p>
 <p class="v2-p"><strong>The full import (less common):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas
 
 print(pandas.__version__)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>2.x.x</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>2.x.x</code></pre></div></div>
 <p class="v2-p"><strong>The standard import with an alias (used everywhere):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 print(pd.__version__)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>2.x.x</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>2.x.x</code></pre></div></div>
 <h3 class="v2-h3">Understanding the <code>as pd</code> Alias</h3>
 <p class="v2-p">An <strong>alias</strong> is a shorter nickname for something. Instead of typing <code>pandas</code> every time you want to use the library, you give it the short name <code>pd</code>. This is a universal convention — every Pandas programmer in the world uses <code>import pandas as pd</code>. You will see <code>pd</code> used in all examples from this point forward.</p>
 <p class="v2-p">Think of it like this: instead of saying "please pass me the television remote control", you just say "remote". Same object, shorter name.</p>
 <p class="v2-p"><strong>Verifying the version:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 print(pd.__version__)</code></pre></div></div>
 <p class="v2-p">The <code>__version__</code> attribute (the double underscores mean it is a special built-in attribute) stores the version string of the installed library. Checking this is a simple way to confirm Pandas loaded correctly.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Getting Started — Installing and Importing Pandas</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase5">
-  <div class="phase-header">
-    <div class="phase-num">Phase 5 of 10</div>
-    <div class="phase-title">Section 3: Pandas Series — A Single Column of Data</div>
-    <div class="phase-check" id="chk5"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What Is a Series?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Getting Started — Installing and Importing Pandas</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase5"><div class="ph"><div class="pn">Phase 5/10</div><div class="pt">Section 3: Pandas Series — A Single Column of Data</div><div class="pc" id="chk5"></div></div><div class="pb2"><h3 class="v2-h3">What Is a Series?</h3>
 <p class="v2-p">A <strong>Pandas Series</strong> is a one-dimensional array — meaning it is a <strong>single column</strong> of data. You can think of it as a list, but smarter.</p>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Analogy:</strong> If a DataFrame is a full spreadsheet, a Series is one single column of that spreadsheet. For example, the "Temperature" column in a weather table, or the "Score" column in a student grade table.</p></blockquote>
 <p class="v2-p">A Series can hold any type of data: numbers, text, dates, True/False values.</p>
 <h3 class="v2-h3">Creating a Simple Series from a List</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 a = [1, 7, 2]
 
@@ -350,7 +228,7 @@ myvar = pd.Series(a)
 
 print(myvar)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>0    1
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>0    1
 1    7
 2    2
 dtype: int64</code></pre></div></div>
@@ -359,7 +237,7 @@ dtype: int64</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">🤔 <strong>Thinking prompt:</strong> What happens if you change <code>a = [1, 7, 2]</code> to <code>a = [10, 20, 30]</code>? Try it — does the index change? Why or why not?</p></blockquote>
 <h3 class="v2-h3">Accessing Values by Index</h3>
 <p class="v2-p">Once a Series is created, you can retrieve any value using its index number inside square brackets <code>[]</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 a = [1, 7, 2]
 myvar = pd.Series(a)
@@ -368,13 +246,13 @@ print(myvar[0])   # First value (index 0)
 print(myvar[1])   # Second value (index 1)
 print(myvar[2])   # Third value (index 2)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>1
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>1
 7
 2</code></pre></div></div>
 <p class="v2-p">The index always starts at <code>0</code>, not <code>1</code>. This is called <strong>zero-based indexing</strong> and is standard in Python.</p>
 <h3 class="v2-h3">Creating a Series with Custom Labels</h3>
 <p class="v2-p">By default, Pandas numbers the index 0, 1, 2, and so on. But you can give your own meaningful names to the index positions using the <code>index</code> argument.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 a = [1, 7, 2]
 
@@ -382,19 +260,19 @@ myvar = pd.Series(a, index = [&quot;x&quot;, &quot;y&quot;, &quot;z&quot;])
 
 print(myvar)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>x    1
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>x    1
 y    7
 z    2
 dtype: int64</code></pre></div></div>
 <p class="v2-p">Now the index labels are <code>"x"</code>, <code>"y"</code>, and <code>"z"</code> instead of numbers. This makes it easier to understand what each value represents.</p>
 <p class="v2-p"><strong>Accessing by custom label:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(myvar[&quot;y&quot;])</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(myvar[&quot;y&quot;])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>7</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>7</code></pre></div></div>
 <p class="v2-p">You can use either the label (<code>"y"</code>) or the numeric position (<code>[1]</code>) to access the value — they both work!</p>
 <h3 class="v2-h3">Creating a Series from a Dictionary</h3>
 <p class="v2-p">A very common way to create a Series is from a Python dictionary, because dictionaries already have the key-value structure that maps perfectly to index-value pairs.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 calories = {&quot;day1&quot;: 420, &quot;day2&quot;: 380, &quot;day3&quot;: 390}
 
@@ -402,7 +280,7 @@ myvar = pd.Series(calories)
 
 print(myvar)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>day1    420
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>day1    420
 day2    380
 day3    390
 dtype: int64</code></pre></div></div>
@@ -411,7 +289,7 @@ dtype: int64</code></pre></div></div>
 <p class="v2-p">This is extremely useful when you have labelled data — like calorie counts per day, or temperatures per city.</p>
 <h3 class="v2-h3">Selecting Only Some Items from a Dictionary</h3>
 <p class="v2-p">Sometimes you have a dictionary with many entries but only want to include some of them in your Series. Use the <code>index</code> argument to specify which keys to include:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 calories = {&quot;day1&quot;: 420, &quot;day2&quot;: 380, &quot;day3&quot;: 390}
 
@@ -419,34 +297,20 @@ myvar = pd.Series(calories, index = [&quot;day1&quot;, &quot;day2&quot;])
 
 print(myvar)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>day1    420
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>day1    420
 day2    380
 dtype: int64</code></pre></div></div>
 <p class="v2-p">Only <code>day1</code> and <code>day2</code> were included. <code>day3</code> was ignored because it was not listed in the <code>index</code> argument.</p>
 <blockquote class="v2-bq"><p class="v2-p">🤔 <strong>Thinking prompt:</strong> What do you think would happen if you listed a key in <code>index</code> that does NOT exist in the dictionary? Try <code>index = ["day1", "day5"]</code>. What does Pandas return for <code>day5</code>?</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Pandas Series — A Single Column of Data</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase6">
-  <div class="phase-header">
-    <div class="phase-num">Phase 6 of 10</div>
-    <div class="phase-title">Section 4: Pandas DataFrames — The Full Data Table</div>
-    <div class="phase-check" id="chk6"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What Is a DataFrame?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Pandas Series — A Single Column of Data</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase6"><div class="ph"><div class="pn">Phase 6/10</div><div class="pt">Section 4: Pandas DataFrames — The Full Data Table</div><div class="pc" id="chk6"></div></div><div class="pb2"><h3 class="v2-h3">What Is a DataFrame?</h3>
 <p class="v2-p">If a Series is a single column, a <strong>DataFrame</strong> is the entire table — rows AND columns.</p>
 <p class="v2-p">A <strong>Pandas DataFrame</strong> is a two-dimensional (2D) data structure, similar to a spreadsheet or a SQL table. It has:</p>
 <ul class="v2-ul"><li><strong>Rows</strong> — each row represents one record (e.g., one student, one day's workout, one product)</li><li><strong>Columns</strong> — each column represents one attribute or measurement (e.g., name, score, price)</li><li><strong>Index</strong> — labels for each row (automatically numbered 0, 1, 2... unless you name them)</li></ul>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Analogy:</strong> Think of a DataFrame as an Excel sheet. Each column is a Series. Multiple Series stacked side by side form a DataFrame.</p></blockquote>
 <h3 class="v2-h3">Creating a Simple DataFrame</h3>
 <p class="v2-p">You create a DataFrame by passing a Python dictionary to <code>pd.DataFrame()</code>. Each key in the dictionary becomes a <strong>column name</strong>, and each list of values becomes that column's data.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 data = {
   &quot;calories&quot;: [420, 380, 390],
@@ -457,7 +321,7 @@ df = pd.DataFrame(data)
 
 print(df)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>   calories  duration
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>   calories  duration
 0       420        50
 1       380        40
 2       390        45</code></pre></div></div>
@@ -467,7 +331,7 @@ print(df)</code></pre></div></div>
 <h3 class="v2-h3">Locating a Specific Row Using <code>.loc</code></h3>
 <p class="v2-p">Once you have a DataFrame, you often need to look at one specific row. Pandas provides the <code>.loc</code> attribute (short for "locate") for this purpose.</p>
 <p class="v2-p"><strong>Access a single row by index number:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 data = {
   &quot;calories&quot;: [420, 380, 390],
@@ -478,21 +342,21 @@ df = pd.DataFrame(data)
 
 print(df.loc[0])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>calories    420
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>calories    420
 duration     50
 Name: 0, dtype: int64</code></pre></div></div>
 <p class="v2-p">Notice: when you locate a single row, the result is displayed vertically and is actually a <strong>Pandas Series</strong>! The column names become the index labels, and the values in that row become the values.</p>
 <p class="v2-p"><strong>Access multiple rows by passing a list of indexes:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(df.loc[[0, 1]])</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(df.loc[[0, 1]])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>   calories  duration
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>   calories  duration
 0       420        50
 1       380        40</code></pre></div></div>
 <p class="v2-p">When you pass a list <code>[0, 1]</code> to <code>.loc</code>, the result is a <strong>DataFrame</strong> (a table with multiple rows). Notice the double square brackets — <code>[[0, 1]]</code> not <code>[0, 1]</code>.</p>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Key rule:</strong> <code>.loc[0]</code> → returns a <strong>Series</strong> (one row). <code>.loc[[0, 1]]</code> → returns a <strong>DataFrame</strong> (multiple rows).</p></blockquote>
 <h3 class="v2-h3">Creating a DataFrame with Named Row Indexes</h3>
 <p class="v2-p">By default, row indexes are numbers (0, 1, 2...). You can give rows meaningful names using the <code>index</code> parameter:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 data = {
   &quot;calories&quot;: [420, 380, 390],
@@ -503,46 +367,32 @@ df = pd.DataFrame(data, index = [&quot;day1&quot;, &quot;day2&quot;, &quot;day3&
 
 print(df)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>      calories  duration
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>      calories  duration
 day1       420        50
 day2       380        40
 day3       390        45</code></pre></div></div>
 <p class="v2-p">Now each row is labelled with a meaningful name. This is very useful for time-series data (data measured over days, months, years).</p>
 <p class="v2-p"><strong>Accessing a named row:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(df.loc[&quot;day2&quot;])</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(df.loc[&quot;day2&quot;])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>calories    380
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>calories    380
 duration     40
 Name: day2, dtype: int64</code></pre></div></div>
 <p class="v2-p">You used the string <code>"day2"</code> as the row label, and <code>.loc</code> found it instantly.</p>
 <blockquote class="v2-bq"><p class="v2-p">🤔 <strong>Thinking prompt:</strong> Can you add a third column called <code>"heartrate"</code> with values <code>[120, 110, 115]</code> to the dictionary and recreate the DataFrame? What does the output look like?</p></blockquote>
 <h3 class="v2-h3">Loading Data from Files into a DataFrame</h3>
 <p class="v2-p">In real work, you will rarely type all your data manually. You will load it from external files. The most common types are CSV and JSON.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 df = pd.read_csv(&#x27;data.csv&#x27;)
 
 print(df)</code></pre></div></div>
 <p class="v2-p">This loads an entire file of data into a DataFrame with one line of code. You will learn the full details of this in the next sections.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Pandas DataFrames — The Full Data Table</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase7">
-  <div class="phase-header">
-    <div class="phase-num">Phase 7 of 10</div>
-    <div class="phase-title">Section 5: Reading CSV Files</div>
-    <div class="phase-check" id="chk7"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What Is a CSV File?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Pandas DataFrames — The Full Data Table</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase7"><div class="ph"><div class="pn">Phase 7/10</div><div class="pt">Section 5: Reading CSV Files</div><div class="pc" id="chk7"></div></div><div class="pb2"><h3 class="v2-h3">What Is a CSV File?</h3>
 <p class="v2-p">A <strong>CSV file</strong> (Comma-Separated Values) is a plain text file that stores tabular data. Each row in the file is one record, and the values within each row are separated by commas.</p>
 <p class="v2-p">Here is what a simple CSV file looks like when you open it in a text editor:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Duration,Pulse,Maxpulse,Calories
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Duration,Pulse,Maxpulse,Calories
 60,110,130,409
 60,117,145,479
 60,103,135,340
@@ -553,7 +403,7 @@ print(df)</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Real-world use:</strong> CSV files are how many banks export transaction histories, how hospitals share patient records between systems, and how weather services distribute climate data.</p></blockquote>
 <h3 class="v2-h3">Reading a CSV File with Pandas</h3>
 <p class="v2-p">Pandas has a built-in function called <code>pd.read_csv()</code> that reads a CSV file and converts it into a DataFrame automatically.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 df = pd.read_csv(&#x27;data.csv&#x27;)
 
@@ -561,7 +411,7 @@ print(df.to_string())</code></pre></div></div>
 <p class="v2-p"><strong>What each line does:</strong></p>
 <ul class="v2-ul"><li><code>import pandas as pd</code> — loads the Pandas library with the short name <code>pd</code></li><li><code>pd.read_csv('data.csv')</code> — reads the file named <code>data.csv</code> and builds a DataFrame from it, stored in <code>df</code></li><li><code>df.to_string()</code> — converts the entire DataFrame to a string for printing, so you see every row</li></ul>
 <p class="v2-p"><strong>Expected Output (abbreviated):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>   Duration  Pulse  Maxpulse  Calories
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>   Duration  Pulse  Maxpulse  Calories
 0        60    110       130     409.1
 1        60    117       145     479.0
 2        60    103       135     340.0
@@ -571,13 +421,13 @@ print(df.to_string())</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Tip:</strong> Without <code>.to_string()</code>, if the DataFrame has many rows, Pandas only prints the first 5 and the last 5 rows by default, with <code>...</code> in between. Using <code>to_string()</code> forces it to display everything.</p></blockquote>
 <h3 class="v2-h3">Printing Without <code>.to_string()</code></h3>
 <p class="v2-p">If you just do <code>print(df)</code> on a large dataset:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 df = pd.read_csv(&#x27;data.csv&#x27;)
 
 print(df)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output (for a large file):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>     Duration  Pulse  Maxpulse  Calories
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>     Duration  Pulse  Maxpulse  Calories
 0          60    110       130     409.1
 1          60    117       145     479.0
 2          60    103       135     340.0
@@ -591,14 +441,14 @@ print(df)</code></pre></div></div>
 <p class="v2-p">Pandas truncates the output to be readable. It shows 5 rows from the top and 5 from the bottom, then shows you the total number of rows and columns at the bottom.</p>
 <h3 class="v2-h3">Checking and Changing the Maximum Display Rows</h3>
 <p class="v2-p">Pandas has a setting that controls how many rows are shown when you print a DataFrame. You can check it like this:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 print(pd.options.display.max_rows)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>60</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>60</code></pre></div></div>
 <p class="v2-p">This means: if your DataFrame has more than 60 rows, Pandas will only show the first and last 5 when you <code>print(df)</code>.</p>
 <p class="v2-p"><strong>Changing the maximum rows:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 pd.options.display.max_rows = 9999
 
@@ -607,25 +457,11 @@ df = pd.read_csv(&#x27;data.csv&#x27;)
 print(df)</code></pre></div></div>
 <p class="v2-p">By setting <code>max_rows</code> to <code>9999</code>, you are telling Pandas to show up to 9,999 rows without truncating. This is useful when you want to inspect the full dataset.</p>
 <p class="v2-p"><strong>Why does this setting exist?</strong> Because some real-world datasets have millions of rows. Printing all of them to the terminal would be both slow and useless. Pandas defaults to showing a manageable summary.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Reading CSV Files</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase8">
-  <div class="phase-header">
-    <div class="phase-num">Phase 8 of 10</div>
-    <div class="phase-title">Section 6: Reading JSON Files</div>
-    <div class="phase-check" id="chk8"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What Is JSON?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Reading CSV Files</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase8"><div class="ph"><div class="pn">Phase 8/10</div><div class="pt">Section 6: Reading JSON Files</div><div class="pc" id="chk8"></div></div><div class="pb2"><h3 class="v2-h3">What Is JSON?</h3>
 <p class="v2-p"><strong>JSON</strong> stands for <strong>JavaScript Object Notation</strong>. Despite the name mentioning JavaScript, JSON is a universal data format used everywhere — web APIs, databases, configuration files, and data science pipelines.</p>
 <p class="v2-p">JSON uses a structure that looks very similar to a Python dictionary:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">json</span></div><div class="v2-code-body"><pre><code>{
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">json</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{
   &quot;Duration&quot;: {&quot;0&quot;: 60, &quot;1&quot;: 60, &quot;2&quot;: 60},
   &quot;Pulse&quot;:    {&quot;0&quot;: 110, &quot;1&quot;: 117, &quot;2&quot;: 103},
   &quot;Calories&quot;: {&quot;0&quot;: 409, &quot;1&quot;: 479, &quot;2&quot;: 340}
@@ -634,13 +470,13 @@ print(df)</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Key insight:</strong> JSON = Python Dictionary (in terms of structure). This is why Pandas can load both with ease.</p></blockquote>
 <h3 class="v2-h3">Reading a JSON File</h3>
 <p class="v2-p">Just like CSV, Pandas has a dedicated function: <code>pd.read_json()</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 df = pd.read_json(&#x27;data.json&#x27;)
 
 print(df.to_string())</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>   Duration  Pulse  Maxpulse  Calories
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>   Duration  Pulse  Maxpulse  Calories
 0        60    110       130     409.1
 1        60    117       145     479.0
 2        60    103       135     340.0
@@ -648,7 +484,7 @@ print(df.to_string())</code></pre></div></div>
 <p class="v2-p">The result is identical to reading the CSV — a proper DataFrame with column headers and row indexes. Pandas handles the conversion for you.</p>
 <h3 class="v2-h3">Loading a Python Dictionary Directly as JSON</h3>
 <p class="v2-p">Since JSON and Python dictionaries share the same structure, you can also pass a Python dictionary directly to <code>pd.DataFrame()</code> to simulate reading JSON data without needing a file:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 data = {
   &quot;Duration&quot;: {
@@ -689,7 +525,7 @@ df = pd.DataFrame(data)
 
 print(df)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>   Duration  Pulse  Maxpulse  Calories
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>   Duration  Pulse  Maxpulse  Calories
 0        60    110       130       409
 1        60    117       145       479
 2        60    103       135       340
@@ -702,50 +538,35 @@ print(df)</code></pre></div></div>
 <h3 class="v2-h3">CSV vs JSON — A Quick Comparison</h3>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Feature</th><th>CSV</th><th>JSON</th></tr></thead><tbody><tr><td>Format</td><td>Plain text, comma-separated</td><td>Structured key-value pairs</td></tr><tr><td>Readability</td><td>Very simple, human-readable</td><td>More structured, slightly more complex</td></tr><tr><td>Use case</td><td>Flat tables, spreadsheet exports</td><td>Web APIs, nested or hierarchical data</td></tr><tr><td>Pandas function</td><td><code>pd.read_csv()</code></td><td><code>pd.read_json()</code></td></tr></tbody></table></div>
 <p class="v2-p">Both formats are extremely common. A data analyst needs to be comfortable with both.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Reading JSON Files</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase9">
-  <div class="phase-header">
-    <div class="phase-num">Phase 9 of 10</div>
-    <div class="phase-title">Section 7: Guided Practice Exercises</div>
-    <div class="phase-check" id="chk9"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Exercise 1: Creating Your First Series</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Reading JSON Files</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase9"><div class="ph"><div class="pn">Phase 9/10</div><div class="pt">Section 7: Guided Practice Exercises</div><div class="pc" id="chk9"></div></div><div class="pb2"><div class="chal-box"><div class="chal-lbl">🎯 Your Challenge</div><div class="chal-body"><h3 class="v2-h3">Exercise 1: Creating Your First Series</h3>
 <p class="v2-p"><strong>Objective:</strong> Create and explore a Pandas Series using a list.</p>
 <p class="v2-p"><strong>Scenario:</strong> You are tracking the daily temperatures (in °C) in Lagos for 5 days.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Create a list: <code>[32, 34, 30, 35, 31]</code></li><li>Create a Pandas Series from that list</li><li>Print the full Series</li><li>Print only the temperature for day 3 (index <code>2</code>)</li><li>Create the same Series again but with custom labels: <code>["Mon", "Tue", "Wed", "Thu", "Fri"]</code></li><li>Access Wednesday's temperature using its label</li></ol>
-<p class="v2-p"><strong>Solution:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<p class="v2-p"><strong>Solution:</strong></p></div></div><div class="task-box"><div class="task-lbl">✏️ Task</div><div class="task-body">Practise what you just learned about <strong>: Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="reveal-btn" onclick="toggleReveal(this)">👁️ Reveal Answer</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 # Step 1-3: Create and print
 temperatures = [32, 34, 30, 35, 31]
 temp_series = pd.Series(temperatures)
 print(temp_series)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>0    32
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>0    32
 1    34
 2    30
 3    35
 4    31
 dtype: int64</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Step 4: Access by index
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Step 4: Access by index
 print(temp_series[2])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>30</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Step 5-6: Custom labels
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>30</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Step 5-6: Custom labels
 temp_series_labelled = pd.Series(temperatures, index=[&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;])
 print(temp_series_labelled)
 print(temp_series_labelled[&quot;Wed&quot;])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Mon    32
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Mon    32
 Tue    34
 Wed    30
 Thu    35
@@ -761,7 +582,7 @@ dtype: int64
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Create a dictionary with keys <code>"student"</code>, <code>"maths"</code>, <code>"english"</code>, <code>"science"</code></li><li>Fill each key with a list of five values</li><li>Create a DataFrame from the dictionary</li><li>Print the full DataFrame</li><li>Use <code>.loc</code> to print the data for student at index <code>0</code></li><li>Use <code>.loc</code> to print data for students at indexes <code>1</code> and <code>3</code></li></ol>
 <p class="v2-p"><strong>Solution:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 # Step 1-4
 data = {
@@ -774,24 +595,24 @@ data = {
 df = pd.DataFrame(data)
 print(df)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>  student  maths  english  science
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>  student  maths  english  science
 0   Amara     85       88       79
 1    Bola     72       80       85
 2   Chidi     90       76       92
 3    Dami     65       91       60
 4   Emeka     78       70       83</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Step 5: Single row
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Step 5: Single row
 print(df.loc[0])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>student    Amara
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>student    Amara
 maths         85
 english       88
 science       79
 Name: 0, dtype: object</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Step 6: Multiple rows
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Step 6: Multiple rows
 print(df.loc[[1, 3]])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>  student  maths  english  science
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>  student  maths  english  science
 1    Bola     72       80       85
 3    Dami     65       91       60</code></pre></div></div>
 <p class="v2-p"><strong>Optional What-If Challenge:</strong> Add an <code>index</code> parameter to give each student their student ID as the row label (e.g., <code>"S001"</code>, <code>"S002"</code>, ...). Then use <code>.loc["S003"]</code> to access Chidi's grades.</p>
@@ -801,7 +622,7 @@ print(df.loc[[1, 3]])</code></pre></div></div>
 <p class="v2-p"><strong>Scenario:</strong> You download a dataset of workout sessions. Create a small sample CSV in your mind (or actually create the file) and load it.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Create a file called <code>workouts.csv</code> with the following content (save it in the same folder as your Python file):</li></ol>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>day,duration_minutes,calories_burned,heartrate
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>day,duration_minutes,calories_burned,heartrate
 Monday,45,350,130
 Tuesday,60,450,145
 Wednesday,30,220,115
@@ -811,13 +632,13 @@ Saturday,75,600,155
 Sunday,20,160,105</code></pre></div></div>
 <ol class="v2-ol"><li>Load it using <code>pd.read_csv()</code></li><li>Print it using <code>to_string()</code> to see everything</li><li>Print it without <code>to_string()</code> to see the default behaviour</li><li>Check the current <code>max_rows</code> setting</li></ol>
 <p class="v2-p"><strong>Solution:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 # Step 2-3
 df = pd.read_csv(&#x27;workouts.csv&#x27;)
 print(df.to_string())</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>        day  duration_minutes  calories_burned  heartrate
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>        day  duration_minutes  calories_burned  heartrate
 0    Monday                45              350        130
 1   Tuesday                60              450        145
 2 Wednesday                30              220        115
@@ -825,15 +646,15 @@ print(df.to_string())</code></pre></div></div>
 4    Friday                40              310        125
 5  Saturday                75              600        155
 6    Sunday                20              160        105</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Step 5
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Step 5
 print(pd.options.display.max_rows)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>60</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>60</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Exercise 4: Loading JSON Data from a Dictionary</h3>
 <p class="v2-p"><strong>Objective:</strong> Create a DataFrame from a nested dictionary (simulating JSON data).</p>
 <p class="v2-p"><strong>Scenario:</strong> You receive a JSON-style data payload from a weather API with temperature data for three cities over three days.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 weather_data = {
   &quot;Lagos&quot;: {&quot;Mon&quot;: 32, &quot;Tue&quot;: 34, &quot;Wed&quot;: 30},
@@ -844,40 +665,26 @@ weather_data = {
 df = pd.DataFrame(weather_data)
 print(df)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>     Lagos  Abuja  Kano
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>     Lagos  Abuja  Kano
 Mon     32     28    35
 Tue     34     29    37
 Wed     30     27    33</code></pre></div></div>
 <p class="v2-p">Notice: here the <strong>outer keys</strong> became the <strong>column names</strong> (cities), and the <strong>inner keys</strong> became the <strong>row index labels</strong> (days). This is the natural structure when the dictionary is organised by column.</p>
 <p class="v2-p"><strong>Self-check questions:</strong></p>
 <ul class="v2-ul"><li>How would you access the temperature in Abuja on Tuesday?</li><li>What happens if you use <code>df.loc["Tue"]</code>?</li></ul>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase10">
-  <div class="phase-header">
-    <div class="phase-num">Phase 10 of 10</div>
-    <div class="phase-title">Section 9: Common Beginner Mistakes</div>
-    <div class="phase-check" id="chk10"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Mistake 1: Forgetting <code>import pandas as pd</code></h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — Pandas not imported
+<hr class="v2-hr"></div><button class="ub" onclick="unlockNext(9)">Mark Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase10"><div class="ph"><div class="pn">Phase 10/10</div><div class="pt">Section 9: Common Beginner Mistakes</div><div class="pc" id="chk10"></div></div><div class="pb2"><h3 class="v2-h3">Mistake 1: Forgetting <code>import pandas as pd</code></h3>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — Pandas not imported
 df = pd.DataFrame({&quot;a&quot;: [1, 2, 3]})</code></pre></div></div>
 <p class="v2-p"><strong>Error:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>NameError: name &#x27;pd&#x27; is not defined</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>NameError: name &#x27;pd&#x27; is not defined</code></pre></div></div>
 <p class="v2-p"><strong>Fix:</strong> Always start your file with <code>import pandas as pd</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># CORRECT
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># CORRECT
 import pandas as pd
 df = pd.DataFrame({&quot;a&quot;: [1, 2, 3]})</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 2: Single Brackets vs Double Brackets with <code>.loc</code></h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 data = {&quot;calories&quot;: [420, 380, 390], &quot;duration&quot;: [50, 40, 45]}
 df = pd.DataFrame(data)
 
@@ -891,48 +698,48 @@ print(df.loc[[0]])</code></pre></div></div>
 <p class="v2-p">Use double brackets when you want to keep the table structure intact.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 3: Mixing Up List and Dictionary Formats</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — passing a flat list to pd.DataFrame creates an error
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — passing a flat list to pd.DataFrame creates an error
 import pandas as pd
 df = pd.DataFrame([1, 2, 3])   # This actually works but creates something unexpected
 print(df)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>   0
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>   0
 0  1
 1  2
 2  3</code></pre></div></div>
 <p class="v2-p">This creates a DataFrame with one column (named <code>0</code>) and the numbers as rows. This is rarely what you intend. The proper way to create a meaningful DataFrame is using a <strong>dictionary</strong>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># CORRECT
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># CORRECT
 import pandas as pd
 df = pd.DataFrame({&quot;values&quot;: [1, 2, 3]})
 print(df)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>   values
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>   values
 0       1
 1       2
 2       3</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 4: Wrong File Path for CSV/JSON</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 df = pd.read_csv(&#x27;myfile.csv&#x27;)</code></pre></div></div>
 <p class="v2-p"><strong>Error:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>FileNotFoundError: [Errno 2] No such file or directory: &#x27;myfile.csv&#x27;</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>FileNotFoundError: [Errno 2] No such file or directory: &#x27;myfile.csv&#x27;</code></pre></div></div>
 <p class="v2-p"><strong>Causes and fixes:</strong></p>
 <ul class="v2-ul"><li>The file doesn't exist → create or download the file</li><li>The file is in a different folder → provide the full path, e.g., <code>pd.read_csv('/home/user/data/myfile.csv')</code></li><li>Wrong file extension → check you're not accidentally trying to read a <code>.txt</code> file as <code>.csv</code></li></ul>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 5: Accessing an Index That Doesn't Exist</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 a = [10, 20, 30]
 s = pd.Series(a)
 print(s[5])   # There is no index 5 — only 0, 1, 2 exist</code></pre></div></div>
 <p class="v2-p"><strong>Error:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>KeyError: 5</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>KeyError: 5</code></pre></div></div>
 <p class="v2-p"><strong>Fix:</strong> Always check the length of your Series first with <code>len(s)</code> or print the Series to see its valid indexes before accessing.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 6: Confusing <code>.loc</code> Label Access with <code>.iloc</code> Position Access</h3>
 <p class="v2-p">Pandas has two ways to access rows:</p>
 <ul class="v2-ul"><li><code>.loc["label"]</code> — access by <strong>label</strong> (the name you gave the index)</li><li><code>.iloc[2]</code> — access by <strong>position</strong> (the numeric position, always starting from 0)</li></ul>
 <p class="v2-p">If you have named indexes and you try to use a number with <code>.loc</code>, you might get unexpected results or errors.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 data = {&quot;value&quot;: [100, 200, 300]}
 df = pd.DataFrame(data, index=[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;])
 
@@ -942,24 +749,12 @@ print(df.loc[&quot;b&quot;])     # Correct — uses label &quot;b&quot;
 # Using .iloc with position
 print(df.iloc[1])      # Correct — uses position 1 (which is &quot;b&quot;)</code></pre></div></div>
 <p class="v2-p">Both give the same result here, but always know which one you need.</p>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(10)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="build-box" id="build-it"><div class="build-lbl">🏗️ Build It — Mini Project</div><div class="build-name">Stage 1: Setup — Create the Data</div><div class="build-req"><p class="v2-p">This mini-project pulls together everything you have learned: creating Series, building DataFrames, naming indexes, and loading data.</p>
+<p class="v2-p"><strong>Project Goal:</strong> Build a weekly fitness tracker that stores, displays, and accesses a person's daily workout data using Pandas.</p>
 <hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(10)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="build-box" id="build-it">
-  <div class="build-label">🏗️ Build It</div>
-  <div class="build-name">Stage 1: Setup — Create the Data</div>
-  <div class="build-desc"><strong>Project Goal:</strong> Build a weekly fitness tracker that stores, displays, and accesses a person's daily workout data using Pandas.</div>
-  <div class="v2-code-wrap">
-    <div class="v2-code-bar">
-      <span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span>
-      <span class="v2-code-lang">starter.py</span>
-    </div>
-    <div class="v2-code-body"><pre><code>import pandas as pd
+<h3 class="v2-h3">Stage 1: Setup — Create the Data</h3>
+<p class="v2-p"><strong>Scenario:</strong> Adaeze is tracking her fitness for one week. She records: how many minutes she exercised, how many calories she burned, and her average heart rate.</p></div><button class="reveal-btn" onclick="toggleCode(this)">💻 Reveal Starter Code</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">starter.py</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 # Stage 1: Create the workout data as a dictionary
 workout_data = {
@@ -973,10 +768,7 @@ days = [&quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Th
 df = pd.DataFrame(workout_data, index=days)
 
 print(&quot;=== Adaeze&#x27;s Weekly Fitness Log ===&quot;)
-print(df)</code></pre></div>
-  </div>
-  <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
-    <button class="unlock-btn" onclick="downloadStarter(`import pandas as pd
+print(df)</code></pre></div></div><div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem"><button class="ub" onclick="downloadStarter(`import pandas as pd
 
 # Stage 1: Create the workout data as a dictionary
 workout_data = {
@@ -990,87 +782,66 @@ days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 df = pd.DataFrame(workout_data, index=days)
 
 print("=== Adaeze's Weekly Fitness Log ===")
-print(df)`)"
-      style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">
-      ⬇ Download starter.py
-    </button>
-    <button class="unlock-btn" onclick="showGithub()"
-      style="background:#0f172a;box-shadow:none">
-      🐙 Push to GitHub →
-    </button>
-  </div>
-</div>
+print(df)`)" style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">⬇ Download starter.py</button><button class="ub" onclick="showGithub()" style="background:#0f172a;box-shadow:none">🐙 Save to GitHub →</button></div></div></div>
 <div class="gh-acc" id="gh-steps" style="display:none">
-  <div class="gh-acc-head" onclick="toggleGh(this)">
-    🐙 Push Your Project to GitHub Pages &nbsp;<span>▼</span>
-  </div>
-  <div class="gh-acc-body">
-    <div class="gh-step"><div class="gh-step-n">1</div>
-    <p>Go to <strong>github.com</strong> → click <strong>New repository</strong> → name it <code>python-lesson-29-stage-1-setup-create-the-data</code>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">2</div>
-    <p>Set it to <strong>Public</strong>, tick <strong>Add a README</strong>, then click <strong>Create repository</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">3</div>
-    <p>Click <strong>Add file → Upload files</strong>. Upload your <code>starter.py</code> — rename it to <code>index.py</code> before uploading.</p></div>
-    <div class="gh-step"><div class="gh-step-n">4</div>
-    <p>Commit message: <em>"Add Python lesson 29 project"</em> → click <strong>Commit changes</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">5</div>
-    <p>Go to <strong>Settings → Pages</strong> → branch <strong>main</strong> → <strong>Save</strong>. Your project goes live at <code>https://YOUR-NAME.github.io/python-lesson-29-stage-1-setup-create-the-data/</code> in about 1 minute! 🎉</p></div>
-    <button class="unlock-btn" onclick="showEnd()" style="margin-top:.5rem">I've pushed to GitHub — Finish Session ✅</button>
-  </div>
-</div>
-<div class="session-end" id="session-end">
-  <h2>🎉 Lesson 29 complete!</h2>
-  <p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p>
-  <ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Section 1: What Is Pandas?</li><li>✅ Section 2: Getting Started — Installing and Importing Pandas</li><li>✅ Section 3: Pandas Series — A Single Column of Data</li><li>✅ Section 4: Pandas DataFrames — The Full Data Table</li><li>✅ Section 5: Reading CSV Files</li><li>✅ Section 6: Reading JSON Files</li></ul>
-  <div class="lesson-nav"><a href="lesson_28.html" class="ln-btn">← Lesson 28</a><a href="lesson_30.html" class="ln-btn primary">Lesson 30 →</a></div>
-</div>
+<div class="gh-hd" onclick="toggleGh(this)">🐙 Save Python Project to GitHub &nbsp;<span>▼</span></div>
+<div class="gh-bd">
+<div class="gh-nop"><strong>⚠️ Python cannot be hosted on GitHub Pages.</strong><br><br>GitHub Pages only serves static HTML/CSS/JS files. Python scripts need a server to run — you will learn deployment (Replit, PythonAnywhere, Heroku) later in the course. For now, save your code to GitHub as a portfolio entry.</div>
+<div class="gh-st"><div class="gh-n">1</div><p>Go to <strong>github.com → New repository</strong> → name it <code>python-lesson-29-stage-1-setup-create-the-data</code>. Set <strong>Public</strong>, tick <strong>Add README</strong>, click <strong>Create</strong>.</p></div>
+<div class="gh-st"><div class="gh-n">2</div><p>Click <strong>Add file → Upload files</strong> → upload your <code>.py</code> file.</p></div>
+<div class="gh-st"><div class="gh-n">3</div><p>Commit message: <em>"Add Python lesson 29 project"</em> → <strong>Commit changes</strong>. Your code is now part of your GitHub portfolio! 🐍</p></div>
+<button class="ub" onclick="showEnd()" style="background:#059669;margin-top:.5rem">Done — Finish Session ✅</button>
+</div></div>
+<div class="se" id="session-end"><h2>🎉 Lesson 29 complete!</h2><p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p><ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Section 1: What Is Pandas?</li><li>✅ Section 2: Getting Started — Installing and Importing Pandas</li><li>✅ Section 3: Pandas Series — A Single Column of Data</li><li>✅ Section 4: Pandas DataFrames — The Full Data Table</li><li>✅ Section 5: Reading CSV Files</li><li>✅ Section 6: Reading JSON Files</li></ul><div class="ln"><a href="lesson_28.html" class="ln-btn">← Lesson 28</a><a href="lesson_30.html" class="ln-btn primary">Lesson 30 →</a></div></div>
 </main>
-
-<footer class="lesson-footer">
-  Techbase Code Coach · Python Course · Lesson 29 · © 2025 Techbase Consultant Services, Ibadan
-</footer>
+<footer class="lf">Techbase Code Coach &nbsp;·&nbsp; Python Course &nbsp;·&nbsp; Lesson 29 &nbsp;·&nbsp; © 2025 Techbase Consultant Services, Ibadan</footer>
+<div id="toast"></div>
+<button id="go-top" title="Back to top">↑</button>
+<canvas id="cc"></canvas>
 <script>
 const TOTAL=10,KEY='techbase_python_l29';
-let current=parseInt(localStorage.getItem(KEY)||'1');
-function init(){
-  for(let i=2;i<=current;i++) unlockPhase(i,false);
-  updateBar();
-}
+let cur=parseInt(localStorage.getItem(KEY)||'1');
+function init(){for(let i=2;i<=cur;i++)unlock(i,false);bar();}
 function unlockNext(n){
-  const chk=document.getElementById('chk'+n);
-  if(chk){chk.classList.add('done');chk.textContent='✓';}
-  localStorage.setItem(KEY,n+1); current=n+1;
+  const c=document.getElementById('chk'+n);
+  if(c){c.classList.add('done');c.textContent='✓';}
+  localStorage.setItem(KEY,n+1);cur=n+1;
   if(n===TOTAL){
-    document.getElementById('build-it').style.display='block';
-    updateBar(100);
+    document.getElementById('build-it').classList.add('visible');
+    bar(100);toast('🏗️ Build It unlocked!');
     setTimeout(()=>document.getElementById('build-it').scrollIntoView({behavior:'smooth'}),200);
-  }else{
-    unlockPhase(n+1,true); updateBar();
-  }
+    setTimeout(confetti,600);
+  }else{unlock(n+1,true);bar();toast(['✅ Phase complete!','🎯 Keep going!','💡 Nice work!','🚀 Nailed it!'][n%4]);}
 }
-function unlockPhase(n,scroll){
-  const el=document.getElementById('phase'+n);
-  if(el){el.classList.remove('locked');if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+function unlock(n,scroll){
+  const el=document.getElementById('phase'+n);if(!el)return;
+  el.classList.remove('locked');
+  if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),180);
 }
-function updateBar(pct){
-  const p=pct!==undefined?pct:Math.round((current-1)/TOTAL*95);
-  document.getElementById('pbar').style.width=p+'%';
+function bar(p){document.getElementById('pbar').style.width=(p!==undefined?p:Math.round((cur-1)/TOTAL*95))+'%';}
+function toggleReveal(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Answer':'👁️ Reveal Answer';}
+function toggleCode(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Starter Code':'💻 Reveal Starter Code';}
+function copyCode(btn){
+  const code=btn.closest('.v2-code-wrap').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='⎘ Copy';btn.classList.remove('copied');},1800);}).catch(()=>{});
 }
-function showGithub(){
-  const g=document.getElementById('gh-steps');
-  if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}
-}
-function showEnd(){
-  const e=document.getElementById('session-end');
-  if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}
-}
+const tEl=document.getElementById('toast');let tT;
+function toast(msg){tEl.innerHTML=msg;tEl.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>tEl.classList.remove('show'),2400);}
+const gEl=document.getElementById('go-top');
+window.addEventListener('scroll',()=>gEl.classList.toggle('visible',scrollY>320),{passive:true});
+gEl.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 function toggleGh(el){el.nextElementSibling.classList.toggle('open');}
-function downloadStarter(code){
-  const a=document.createElement('a');
-  a.href='data:text/html;charset=utf-8,'+encodeURIComponent(code);
-  a.download='starter.html';a.click();
+function showGithub(){const g=document.getElementById('gh-steps');if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}}
+function showEnd(){const e=document.getElementById('session-end');if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}}
+function downloadStarter(code){const ext='python'==='python'?'py':'html';const a=document.createElement('a');a.href='data:text/'+(ext==='py'?'x-python':'html')+';charset=utf-8,'+encodeURIComponent(code);a.download='starter.'+ext;a.click();}
+function confetti(){
+  const cv=document.getElementById('cc');cv.style.display='block';const ctx=cv.getContext('2d');
+  cv.width=innerWidth;cv.height=innerHeight;
+  const ps=Array.from({length:130},()=>{return{x:Math.random()*cv.width,y:-10-Math.random()*120,r:4+Math.random()*6,d:2+Math.random()*3,c:['#e34c26','#0284c7','#d97706','#059669','#7c3aed','#ec4899'][Math.floor(Math.random()*6)],ta:0};}); 
+  let f=0;
+  function draw(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.ta+=.1;p.y+=p.d;p.x+=Math.sin(f/20);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();});f++;if(f<200)requestAnimationFrame(draw);else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}}
+  draw();toast('🎉 All phases done! Build It awaits!');
 }
 init();
 </script>
-</body>
-</html>
+</body></html>

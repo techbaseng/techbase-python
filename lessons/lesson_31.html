@@ -1,228 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lesson 31: Pandas Correlations, Pandas Plotting &amp; Introduction to Matplotlib — Techbase Python</title>
-<meta name="description" content="Pandas Correlations, Pandas Plotting &amp; Introduction to Matplotlib">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --acc:#059669;--acc-d:#047857;--acc-pale:#ecfdf5;
-  --acc-b:rgba(5,150,105,.25);--acc-sh:rgba(5,150,105,.28);
-  --bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--t2:#334155;--muted:#64748b;
-  --D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+:root{--acc:#059669;--acd:#047857;--acp:#ecfdf5;--acb:rgba(5,150,105,.22);--acs:rgba(5,150,105,.28);--bg:#f8fafc;--sf:#fff;--br:#e2e8f0;--tx:#0f172a;--t2:#334155;--mu:#64748b;--D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
-
-/* NAV */
-.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);
-  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:58px;
-  display:flex;align-items:center;padding:0 1.5rem;gap:1rem;justify-content:space-between}
-.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.l-nav-back{font-size:.8rem;color:var(--muted);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+body{background:var(--bg);color:var(--tx);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
+.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);height:58px;display:flex;align-items:center;padding:0 1.5rem;justify-content:space-between}
+.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--tx);text-decoration:none}
+.l-nav-back{font-size:.8rem;color:var(--mu);text-decoration:none;font-weight:500;transition:color .2s}
 .l-nav-back:hover{color:var(--acc)}
-.l-nav-label{font-family:var(--M);font-size:.68rem;color:var(--muted)}
-
-/* PROGRESS */
-.progress-wrap{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--border)}
-.progress-bar{height:100%;background:var(--acc);transition:width .4s ease;width:0%}
-
-/* HERO */
-.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--border)}
-.l-hero-inner{max-width:860px;margin:0 auto}
-.l-badge{display:inline-flex;align-items:center;gap:.4rem;border-radius:100px;padding:.2rem .85rem;
-  font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
-  color:var(--acc);background:var(--acc-pale);border:1px solid var(--acc-b);margin-bottom:.8rem}
-.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);
-  letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
-.l-hero-sub{font-size:.95rem;color:var(--muted);margin-bottom:1rem}
-
-/* WELCOME BOX */
-.welcome-box{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.5rem 1.8rem;max-width:860px;margin:1.5rem auto 0}
-.welcome-box h2{font-family:var(--D);font-weight:700;font-size:1.05rem;margin-bottom:.6rem}
-.welcome-box p,.welcome-box li{font-size:.9rem;line-height:1.8;opacity:.93}
-.welcome-box ul{margin-left:1.2rem;margin-top:.5rem}
-.welcome-meta{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
-.welcome-meta span{background:rgba(255,255,255,.18);border-radius:6px;padding:.2rem .75rem;
-  font-family:var(--M);font-size:.68rem;font-weight:500}
-
-/* PHASE */
-.phase{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;
-  margin-bottom:1.5rem;overflow:hidden;transition:opacity .3s,transform .3s,filter .3s}
-.phase.locked{opacity:.35;pointer-events:none;filter:blur(1.5px)}
-.phase-header{padding:1rem 1.4rem;background:#f0fdf6;
-  border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:default}
-.phase-num{font-family:var(--M);font-size:.7rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--acc)}
-.phase-title{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--text);
-  flex:1;margin:0 .8rem}
-.phase-check{width:26px;height:26px;border-radius:50%;background:var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;
-  transition:background .3s,color .3s}
-.phase-check.done{background:#10b981;color:#fff}
-.phase-body{padding:1.6rem 1.8rem}
-
-/* RICH CONTENT STYLES */
+.l-nav-lbl{font-family:var(--M);font-size:.68rem;color:var(--mu)}
+.pw{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--br)}
+.pb{height:100%;background:linear-gradient(90deg,var(--acc),var(--acd));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%;position:relative}
+.pb::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:inherit;filter:brightness(1.4);animation:pg 1.5s ease-in-out infinite}
+@keyframes pg{0%,100%{opacity:1}50%{opacity:.35}}
+.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--br)}
+.l-hero-in{max-width:860px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;border-radius:100px;padding:.22rem .9rem;font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--acc);background:var(--acp);border:1.5px solid var(--acb);margin-bottom:.85rem}
+.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
+.l-hero-sub{font-size:.9rem;color:var(--mu)}
+.wb{background:#fff;border:1.5px solid var(--acb);border-left:5px solid var(--acc);border-radius:14px;padding:1.4rem 1.6rem;max-width:860px;margin:1.5rem auto 0;box-shadow:0 2px 12px var(--acs)}
+.wb h2{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--acd);margin-bottom:.6rem}
+.wb p,.wb li{font-size:.92rem;line-height:1.85;color:var(--t2)}
+.wb ul{margin-left:1.2rem;margin-top:.4rem}
+.wm{display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap}
+.wm span{background:var(--acp);color:var(--acd);border:1px solid var(--acb);border-radius:7px;padding:.22rem .7rem;font-family:var(--M);font-size:.68rem;font-weight:600}
+.phase{background:var(--sf);border:1.5px solid var(--br);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;transition:opacity .35s,filter .35s,transform .35s}
+.phase.locked{opacity:.28;pointer-events:none;filter:blur(2px);transform:scale(.99)}
+.ph{padding:1rem 1.4rem;background:#f0fdf6;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:.8rem}
+.pn{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.pt{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--tx);flex:1}
+.pc{width:26px;height:26px;border-radius:50%;background:var(--br);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:background .3s,transform .4s}
+.pc.done{background:#10b981;color:#fff;transform:scale(1.15) rotate(360deg)}
+.pb2{padding:1.6rem 1.8rem}
 .v2-p{margin-bottom:1rem;font-size:.95rem;color:var(--t2);line-height:1.85}
-.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--text);
-  margin:1.6rem 0 .5rem;padding-top:.2rem;border-top:2px solid var(--acc-pale)}
-.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1.1rem 0 .4rem}
-.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.9rem;color:var(--muted);margin:.8rem 0 .3rem}
+.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--tx);margin:1.6rem 0 .5rem;border-top:2px solid var(--acp);padding-top:.4rem}
+.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1rem 0 .35rem}
+.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.88rem;color:var(--mu);margin:.7rem 0 .3rem}
 .v2-ul,.v2-ol{margin:.6rem 0 1rem 1.4rem;font-size:.93rem;color:var(--t2);line-height:1.9}
 .v2-ul li,.v2-ol li{margin-bottom:.3rem}
-.v2-bq{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 10px 10px 0;
-  padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
+.v2-bq{border-left:4px solid var(--acc);background:var(--acp);border-radius:0 10px 10px 0;padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
 .v2-bq p{margin:0;color:inherit}
-.v2-bq strong{font-style:normal}
-.v2-hr{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
-.v2-table-wrap{overflow-x:auto;margin:1rem 0}
+.v2-hr{border:none;border-top:1px solid var(--br);margin:1.2rem 0}
+.v2-table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--br)}
 .v2-table{width:100%;border-collapse:collapse;font-size:.87rem}
-.v2-table th{background:var(--acc-pale);color:#064e3b;font-family:var(--D);
-  font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--acc-b)}
-.v2-table td{padding:8px 12px;border:1px solid var(--border);color:var(--t2);vertical-align:top}
-.v2-table tr:nth-child(even) td{background:#f8fafc}
-.v2-table code{background:var(--acc-pale);color:var(--acc);border-radius:4px;
-  padding:1px 5px;font-family:var(--M);font-size:.8em}
-.phase-body code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-.phase-body a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
-.phase-body strong{color:var(--text)}
-
-/* CODE BLOCKS */
-.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.v2-table th{background:var(--acp);color:#064e3b;font-family:var(--D);font-weight:700;padding:10px 12px;text-align:left;border-bottom:2px solid var(--acb)}
+.v2-table td{padding:8px 12px;border-bottom:1px solid var(--br);color:var(--t2);vertical-align:top}
+.v2-table tr:last-child td{border:none}
+.v2-table tr:hover td{background:var(--acp)}
+.pb2 code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.pb2 a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
+.pb2 strong{color:var(--tx)}
+.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .v2-code-bar{background:#1e293b;padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem}
 .v2-dot{width:10px;height:10px;border-radius:50%}
 .v2-dot.r{background:#ff5f57}.v2-dot.y{background:#febc2e}.v2-dot.g{background:#28c840}
-.v2-code-lang{margin-left:.6rem;font-family:var(--M);font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em}
+.v2-code-lang{margin-left:.5rem;font-family:var(--M);font-size:.62rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;flex:1}
+.copy-btn{background:rgba(255,255,255,.08);color:#94a3b8;border:none;border-radius:6px;padding:.25rem .65rem;font-family:var(--M);font-size:.65rem;cursor:pointer;transition:background .2s,color .2s}
+.copy-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.copy-btn.copied{background:#10b981;color:#fff}
 .v2-code-body{background:#0f172a;padding:1.3rem 1.5rem;overflow-x:auto}
 .v2-code-body pre{margin:0}
-.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.9;color:#e2e8f0;
-  white-space:pre;background:transparent;padding:0;border-radius:0}
-
-/* TASK BOX */
-.task-box{background:#d1fae5;border:2px dashed #059669;
-  border-radius:12px;padding:1rem 1.3rem;margin:1.4rem 0}
-.task-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-.task-box p,.task-body{font-size:.92rem;color:#064e3b;line-height:1.8}
-.task-box code{background:rgba(0,0,0,.08);border-radius:4px;padding:1px 6px;
-  font-family:var(--M);font-size:.82em}
-
-/* UNLOCK BUTTON */
-.unlock-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);
-  color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;
-  padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;
-  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acc-sh);margin-top:1.2rem}
-.unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acc-sh)}
-
-/* BUILD IT */
+.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.95;color:#e2e8f0;white-space:pre;background:transparent;padding:0;border-radius:0}
+.task-box{background:#d1fae5;border:2px dashed #059669;border-radius:12px;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.task-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.task-body{font-size:.93rem;color:#064e3b;line-height:1.85}
+.task-body code{background:rgba(0,0,0,.1);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.chal-box{background:linear-gradient(135deg,#ecfdf5 0%,#fff 100%);border:2px solid var(--acc);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem}
+.chal-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acd);margin-bottom:.6rem}
+.chal-body{font-size:.95rem;color:var(--tx);line-height:1.85}
+.chal-body code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 5px;font-family:var(--M);font-size:.82em}
+.reveal-btn{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--acd);font-family:var(--D);font-weight:700;font-size:.85rem;padding:.6rem 1.2rem;border-radius:8px;border:2px solid var(--acc);cursor:pointer;transition:background .2s,color .2s;margin:.6rem 0}
+.reveal-btn:hover{background:var(--acc);color:#fff}
+.reveal-content{display:none;margin-top:.6rem;animation:fi .3s ease}
+.reveal-content.open{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .build-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:16px;padding:1.6rem;margin:2rem 0;display:none}
-.build-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
-.build-name{font-family:var(--D);font-weight:700;font-size:1.1rem;color:#14532d;margin-bottom:.5rem}
-.build-desc{font-size:.9rem;color:#166534;margin-bottom:1.2rem;line-height:1.75}
-.build-desc code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
-.build-desc strong{color:#14532d}
-
-/* GITHUB ACCORDION */
-.gh-acc{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
-.gh-acc-head{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none}
-.gh-acc-body{display:none;padding:1.2rem;border-top:1px solid var(--border)}
-.gh-acc-body.open{display:block}
-.gh-step{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
-.gh-step-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;
-  font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;margin-top:2px}
-.gh-step p{font-size:.88rem;color:var(--t2);line-height:1.7}
-.gh-step code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-
-/* SESSION END */
-.session-end{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
-.session-end.visible{display:block}
-.session-end h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
-.session-end ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.session-end li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
-.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);
-  color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;
-  padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;
-  border:1.5px solid var(--border);transition:border-color .2s,color .2s}
+.build-box.visible{display:block;animation:fi .4s ease}
+.build-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+.build-name{font-family:var(--D);font-weight:700;font-size:1.15rem;color:#14532d;margin-bottom:.6rem}
+.build-req{font-size:.93rem;color:#166534;line-height:1.8;margin-bottom:.8rem}
+.build-req code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.build-req strong{color:#14532d}
+.gh-acc{border:1.5px solid var(--br);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.gh-hd{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none;transition:background .2s}
+.gh-hd:hover{background:#f1f5f9}
+.gh-bd{display:none;padding:1.2rem;border-top:1px solid var(--br)}
+.gh-bd.open{display:block;animation:fi .25s ease}
+.gh-st{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
+.gh-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.gh-st p{font-size:.88rem;color:var(--t2);line-height:1.7}
+.gh-st code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.gh-nop{background:#fef3c7;border:1.5px solid #fde68a;border-radius:10px;padding:1rem 1.2rem;font-size:.9rem;color:#78350f;line-height:1.75;margin-bottom:1rem}
+.se{background:linear-gradient(135deg,var(--acc),var(--acd));color:#fff;border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
+.se.visible{display:block;animation:fi .4s ease}
+.se h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
+.se ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.se li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
+.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--sf);color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;border:1.5px solid var(--br);transition:border-color .2s,color .2s}
 .ln-btn:hover{border-color:var(--acc);color:var(--acc)}
 .ln-btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .ln-btn.primary:hover{opacity:.9}
-.lesson-nav{display:flex;align-items:center;justify-content:space-between;
-  padding-top:2rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
-.lesson-footer{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;
-  color:var(--muted);border-top:1px solid var(--border);background:var(--surface)}
+.ln{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
+.ub{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acs);margin-top:1.2rem}
+.ub:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acs)}
+.ub:active{transform:scale(.97)}
+#toast{position:fixed;bottom:90px;right:1.5rem;z-index:999;background:#1e293b;color:#fff;border-radius:10px;padding:.75rem 1.2rem;font-family:var(--D);font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#go-top{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;border:none;cursor:pointer;font-size:1.15rem;box-shadow:0 4px 16px var(--acs);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s,box-shadow .2s;pointer-events:none}
+#go-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#go-top:hover{box-shadow:0 8px 24px var(--acs);transform:translateY(-2px)}
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;display:none}
+.lf{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;color:var(--mu);border-top:1px solid var(--br);background:var(--sf)}
 </style>
 </head>
 <body>
 <nav class="l-nav">
   <a href="../index.html" class="l-nav-logo">⚡ Techbase Python</a>
-  <span class="l-nav-label">Lesson 31 of 45</span>
+  <span class="l-nav-lbl">Lesson 31 of 45</span>
   <a href="../index.html" class="l-nav-back">← All Lessons</a>
 </nav>
-<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
-
-<div class="l-hero">
-  <div class="l-hero-inner">
-    <div class="l-badge">Python · Lesson 31</div>
-    <h1>Pandas Correlations, Pandas Plotting &amp; Introduction to Matplotlib</h1>
-    <div class="l-hero-sub">9 phases · Build: Project Goal</div>
-  </div>
-</div>
-
-<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
-  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="welcome-box">
-  <h2>👋 Welcome to Lesson 31</h2>
-  <div style="font-size:.9rem;line-height:1.85;opacity:.93"><p class="v2-p">Welcome to Lesson 31! In this lesson, you will learn three powerful skills that work beautifully together:</p>
-<ol class="v2-ol"><li><strong>How to find correlations in data using Pandas</strong> — discovering hidden relationships between numbers</li><li><strong>How to create charts and graphs directly from a Pandas DataFrame</strong></li><li><strong>What Matplotlib is, how to install it, and how to draw your first plot</strong></li></ol>
-<p class="v2-p">By the end of this lesson, you will be able to look at a table of numbers, automatically measure how strongly different columns are related to each other, and then draw visual charts to <em>see</em> those relationships.</p>
-<p class="v2-p"><strong>Real-world relevance:</strong> These skills are used every day by data scientists, business analysts, finance professionals, health researchers, sports statisticians, and engineers. Whenever someone says "does more sleep lead to better grades?" or "does workout duration affect calories burned?" — correlation and charts are the tools they use to answer those questions.</p>
-<hr class="v2-hr"></div>
-  <div class="welcome-meta">
-    <span>📚 9 phases</span>
-    <span>🏗️ Project Goal</span>
-  </div>
+<div class="pw"><div class="pb" id="pbar"></div></div>
+<div class="l-hero"><div class="l-hero-in">
+  <div class="badge">Python · Lesson 31</div>
+  <h1>Pandas Correlations, Pandas Plotting &amp; Introduction to Matplotlib</h1>
+  <div class="l-hero-sub">9 phases &nbsp;·&nbsp; Build: Project Goal</div>
 </div></div>
-</section>
-
-<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
-<div class="phase" id="phase1">
-  <div class="phase-header">
-    <div class="phase-num">Phase 1 of 9</div>
-    <div class="phase-title">Lesson Introduction</div>
-    <div class="phase-check" id="chk1"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Welcome to Lesson 31! In this lesson, you will learn three powerful skills that work beautifully together:</p>
+<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--br)">
+  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="wb"><h2>👋 Welcome to Lesson 31</h2><div style="font-size:.92rem;line-height:1.85;color:var(--t2)"><p class="v2-p">Welcome to Lesson 31! In this lesson, you will learn three powerful skills that work beautifully together:</p>
 <ol class="v2-ol"><li><strong>How to find correlations in data using Pandas</strong> — discovering hidden relationships between numbers</li><li><strong>How to create charts and graphs directly from a Pandas DataFrame</strong></li><li><strong>What Matplotlib is, how to install it, and how to draw your first plot</strong></li></ol>
 <p class="v2-p">By the end of this lesson, you will be able to look at a table of numbers, automatically measure how strongly different columns are related to each other, and then draw visual charts to <em>see</em> those relationships.</p>
 <p class="v2-p"><strong>Real-world relevance:</strong> These skills are used every day by data scientists, business analysts, finance professionals, health researchers, sports statisticians, and engineers. Whenever someone says "does more sleep lead to better grades?" or "does workout duration affect calories burned?" — correlation and charts are the tools they use to answer those questions.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(1)">Start Lesson ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase2">
-  <div class="phase-header">
-    <div class="phase-num">Phase 2 of 9</div>
-    <div class="phase-title">Prerequisite Concepts</div>
-    <div class="phase-check" id="chk2"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Before we start, let us make sure you understand a few foundational ideas. We will explain each one simply.</p>
+<hr class="v2-hr"></div><div class="wm"><span>📚 9 phases</span><span>🏗️ Project Goal</span><span>🐍 GitHub Repo</span></div></div></div>
+</section>
+<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
+<div class="phase" id="phase1"><div class="ph"><div class="pn">Phase 1/9</div><div class="pt">Lesson Introduction</div><div class="pc" id="chk1"></div></div><div class="pb2"><p class="v2-p">Welcome to Lesson 31! In this lesson, you will learn three powerful skills that work beautifully together:</p>
+<ol class="v2-ol"><li><strong>How to find correlations in data using Pandas</strong> — discovering hidden relationships between numbers</li><li><strong>How to create charts and graphs directly from a Pandas DataFrame</strong></li><li><strong>What Matplotlib is, how to install it, and how to draw your first plot</strong></li></ol>
+<p class="v2-p">By the end of this lesson, you will be able to look at a table of numbers, automatically measure how strongly different columns are related to each other, and then draw visual charts to <em>see</em> those relationships.</p>
+<p class="v2-p"><strong>Real-world relevance:</strong> These skills are used every day by data scientists, business analysts, finance professionals, health researchers, sports statisticians, and engineers. Whenever someone says "does more sleep lead to better grades?" or "does workout duration affect calories burned?" — correlation and charts are the tools they use to answer those questions.</p>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(1)">Start Lesson ✓</button></div></div>
+<div class="phase locked" id="phase2"><div class="ph"><div class="pn">Phase 2/9</div><div class="pt">Prerequisite Concepts</div><div class="pc" id="chk2"></div></div><div class="pb2"><p class="v2-p">Before we start, let us make sure you understand a few foundational ideas. We will explain each one simply.</p>
 <h3 class="v2-h3">What is a Library (or Module) in Python?</h3>
 <p class="v2-p">A <strong>library</strong> (also called a <strong>module</strong> or <strong>package</strong>) is a collection of code that someone else already wrote for you. Instead of writing all the code yourself from scratch, you simply "import" (load) the library and use its ready-made tools.</p>
 <p class="v2-p">Think of it like a toolbox: rather than building a hammer yourself, you just open the toolbox and pick up the hammer.</p>
@@ -230,7 +150,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;
 <ul class="v2-ul"><li><strong>Pandas</strong> — for working with tables of data (like a spreadsheet in Python)</li><li><strong>Matplotlib</strong> — for drawing charts and graphs</li></ul>
 <h3 class="v2-h3">What is a DataFrame?</h3>
 <p class="v2-p">A <strong>DataFrame</strong> is like a table — it has rows and columns. Think of it like an Excel spreadsheet inside Python. For example:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>| Duration | Pulse | Maxpulse | Calories |
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>| Duration | Pulse | Maxpulse | Calories |
 |----------|-------|----------|----------|
 | 60       | 110   | 130      | 409      |
 | 45       | 117   | 141      | 282      |
@@ -240,22 +160,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;
 <p class="v2-p">A <strong>CSV</strong> file (Comma-Separated Values) is a simple text file that stores table data. Each line is one row, and columns are separated by commas. Pandas can read CSV files directly into a DataFrame.</p>
 <h3 class="v2-h3">What is NumPy?</h3>
 <p class="v2-p"><strong>NumPy</strong> is another Python library used for working with numbers and arrays (lists of numbers). Matplotlib often works alongside NumPy. We will use <code>np.array()</code> to create lists of numbers for plotting.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase3">
-  <div class="phase-header">
-    <div class="phase-num">Phase 3 of 9</div>
-    <div class="phase-title">Part 1: Pandas — Data Correlations</div>
-    <div class="phase-check" id="chk3"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What is a Correlation?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase3"><div class="ph"><div class="pn">Phase 3/9</div><div class="pt">Part 1: Pandas — Data Correlations</div><div class="pc" id="chk3"></div></div><div class="pb2"><h3 class="v2-h3">What is a Correlation?</h3>
 <p class="v2-p"><strong>Correlation</strong> means "how much do two things change together?"</p>
 <p class="v2-p">Imagine you're tracking students in a class. You record their study hours per week and their exam scores. You notice: students who study more tend to score higher. That is a <strong>positive correlation</strong> — when one goes up, the other goes up too.</p>
 <p class="v2-p">Now imagine tracking how many times students skip classes and their exam scores. Students who skip more tend to score <em>lower</em>. That is a <strong>negative correlation</strong> — when one goes up, the other goes down.</p>
@@ -273,7 +179,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;
 <hr class="v2-hr">
 <h3 class="v2-h3">Simple Example: Understanding What <code>corr()</code> Returns</h3>
 <p class="v2-p">Let's start with a tiny, easy example to understand the output before we use real data.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 # Create a very simple DataFrame with 3 columns
 data = {
@@ -288,7 +194,7 @@ df = pd.DataFrame(data)
 result = df.corr()
 print(result)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>               Hours_Studied  Exam_Score  Shoe_Size
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>               Hours_Studied  Exam_Score  Shoe_Size
 Hours_Studied       1.000000    0.993399   0.000000
 Exam_Score          0.993399    1.000000  -0.019608
 Shoe_Size           0.000000   -0.019608   1.000000</code></pre></div></div>
@@ -298,7 +204,7 @@ Shoe_Size           0.000000   -0.019608   1.000000</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Real Data Example: The Workout Dataset</h3>
 <p class="v2-p">Now let's use a real dataset. This is a workout tracking CSV file called <code>data.csv</code> that contains these columns: <code>Duration</code>, <code>Pulse</code>, <code>Maxpulse</code>, <code>Calories</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 # Read the CSV file into a DataFrame
 df = pd.read_csv(&#x27;data.csv&#x27;)
@@ -306,7 +212,7 @@ df = pd.read_csv(&#x27;data.csv&#x27;)
 # Calculate correlations between all numeric columns
 print(df.corr())</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>            Duration     Pulse  Maxpulse  Calories
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>            Duration     Pulse  Maxpulse  Calories
 Duration    1.000000 -0.155408  0.009403  0.922721
 Pulse      -0.155408  1.000000  0.786535  0.025120
 Maxpulse    0.009403  0.786535  1.000000  0.203814
@@ -327,7 +233,7 @@ Calories    0.922721  0.025120  0.203814  1.000000</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Second Example: Student Performance Correlations</h3>
 <p class="v2-p">Let's look at another scenario to reinforce the concept:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 # Student performance data
 data = {
@@ -340,7 +246,7 @@ data = {
 df = pd.DataFrame(data)
 print(df.corr())</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output (approximate):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>              Study_Hours  Sleep_Hours     Score  Absences
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>              Study_Hours  Sleep_Hours     Score  Absences
 Study_Hours      1.000000     0.674957  0.985290 -0.947674
 Sleep_Hours      0.674957     1.000000  0.718050 -0.678490
 Score            0.985290     0.718050  1.000000 -0.962330
@@ -353,28 +259,14 @@ Absences        -0.947674    -0.678490 -0.962330  1.000000</code></pre></div></d
 <p class="v2-p"><strong>Mistake:</strong> Assuming that because two things are correlated, one <em>causes</em> the other.</p>
 <p class="v2-p"><strong>Example:</strong> Ice cream sales and drowning accidents are both high in summer. They are correlated — but ice cream does not <em>cause</em> drowning! Both are caused by hot weather leading people to swim more and eat more ice cream.</p>
 <p class="v2-p"><strong>Corrected thinking:</strong> Correlation tells you that two things <em>tend to move together</em>. It does <strong>not</strong> tell you <em>why</em>. Always think critically about whether there is a logical explanation before drawing conclusions.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Pandas — Data Correlations</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase4">
-  <div class="phase-header">
-    <div class="phase-num">Phase 4 of 9</div>
-    <div class="phase-title">Part 2: Pandas — Plotting</div>
-    <div class="phase-check" id="chk4"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What is Plotting?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Pandas — Data Correlations</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase4"><div class="ph"><div class="pn">Phase 4/9</div><div class="pt">Part 2: Pandas — Plotting</div><div class="pc" id="chk4"></div></div><div class="pb2"><h3 class="v2-h3">What is Plotting?</h3>
 <p class="v2-p"><strong>Plotting</strong> means drawing a visual chart (a diagram, a graph) from your data. Instead of staring at rows and rows of numbers, you create a picture that shows the pattern at a glance.</p>
 <p class="v2-p">Think of it like this: if I show you 200 workout records in a table, you might not immediately see any pattern. But if I draw a scatter plot showing Duration vs Calories — you'll immediately see the upward trend with your eyes.</p>
 <h3 class="v2-h3">How Pandas Plotting Works</h3>
 <p class="v2-p">Pandas has a built-in <code>plot()</code> method that lets you draw charts directly from a DataFrame. It uses Matplotlib (which we'll learn about in Parts 3–5) behind the scenes to actually display the chart. You call <code>plt.show()</code> to make the chart appear on screen.</p>
 <p class="v2-p"><strong>The basic structure is:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 import matplotlib.pyplot as plt   # needed to show the chart
 
 df = pd.read_csv(&#x27;data.csv&#x27;)       # load the data
@@ -383,7 +275,7 @@ plt.show()                          # display the plot</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Simple Default Plot</h3>
 <p class="v2-p">When you call <code>df.plot()</code> with no arguments, Pandas draws a <strong>line chart</strong> of all numeric columns against the row index (0, 1, 2, 3...).</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv(&#x27;data.csv&#x27;)
@@ -399,11 +291,11 @@ plt.show()</code></pre></div></div>
 <p class="v2-p">A <strong>scatter plot</strong> is one of the most powerful charts for visualising correlation. It places a dot for every data row, with the x-position determined by one column and the y-position determined by another.</p>
 <p class="v2-p">If the dots form a diagonal upward line → positive correlation. If the dots form a diagonal downward line → negative correlation. If the dots are scattered randomly → no correlation.</p>
 <p class="v2-p"><strong>Syntax for a scatter plot with Pandas:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>df.plot(kind = &#x27;scatter&#x27;, x = &#x27;ColumnName&#x27;, y = &#x27;OtherColumnName&#x27;)</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>df.plot(kind = &#x27;scatter&#x27;, x = &#x27;ColumnName&#x27;, y = &#x27;OtherColumnName&#x27;)</code></pre></div></div>
 <ul class="v2-ul"><li><code>kind = 'scatter'</code> → tells Pandas to make a scatter plot (not a line chart)</li><li><code>x = 'Duration'</code> → use the Duration column as the horizontal axis</li><li><code>y = 'Calories'</code> → use the Calories column as the vertical axis</li></ul>
 <hr class="v2-hr">
 <h4 class="v2-h4">Scatter Plot Example 1: Good Correlation (Duration vs Calories)</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv(&#x27;data.csv&#x27;)
@@ -417,7 +309,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h4 class="v2-h4">Scatter Plot Example 2: Bad Correlation (Duration vs Maxpulse)</h4>
 <p class="v2-p">Now let's plot the pair that had a very low correlation (<code>0.009403</code>):</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv(&#x27;data.csv&#x27;)
@@ -434,11 +326,11 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Analogy:</strong> Imagine asking 200 students how many hours they studied. Instead of listing all 200 numbers, a histogram groups them: "40 students studied 1–2 hours, 80 students studied 3–4 hours," etc. You immediately see the most common study amount.</p>
 <p class="v2-p"><strong>Key difference from scatter plot:</strong> A scatter plot needs two columns (x and y). A histogram only needs <strong>one column</strong>.</p>
 <p class="v2-p"><strong>Syntax for a histogram:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>df[&quot;ColumnName&quot;].plot(kind = &#x27;hist&#x27;)</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>df[&quot;ColumnName&quot;].plot(kind = &#x27;hist&#x27;)</code></pre></div></div>
 <ul class="v2-ul"><li><code>df["Duration"]</code> → select just the Duration column from the DataFrame</li><li><code>.plot(kind = 'hist')</code> → draw a histogram of that column's values</li></ul>
 <hr class="v2-hr">
 <h4 class="v2-h4">Histogram Example: Distribution of Workout Durations</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv(&#x27;data.csv&#x27;)
@@ -453,22 +345,8 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Summary of Pandas Plot Types</h3>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Plot Type</th><th><code>kind =</code> value</th><th>What it shows</th><th>Columns needed</th></tr></thead><tbody><tr><td>Line chart</td><td>(default, no <code>kind</code>)</td><td>Trends over rows</td><td>All numeric</td></tr><tr><td>Scatter plot</td><td><code>'scatter'</code></td><td>Relationship between 2 columns</td><td>2 (x and y)</td></tr><tr><td>Histogram</td><td><code>'hist'</code></td><td>Distribution/frequency of values</td><td>1</td></tr></tbody></table></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Pandas — Plotting</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase5">
-  <div class="phase-header">
-    <div class="phase-num">Phase 5 of 9</div>
-    <div class="phase-title">Part 3: Introduction to Matplotlib</div>
-    <div class="phase-check" id="chk5"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What is Matplotlib?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Pandas — Plotting</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase5"><div class="ph"><div class="pn">Phase 5/9</div><div class="pt">Part 3: Introduction to Matplotlib</div><div class="pc" id="chk5"></div></div><div class="pb2"><h3 class="v2-h3">What is Matplotlib?</h3>
 <p class="v2-p"><strong>Matplotlib</strong> is a Python library specifically designed for creating charts, graphs, diagrams, and all kinds of visualisations.</p>
 <ul class="v2-ul"><li>It was created by <strong>John D. Hunter</strong></li><li>It is <strong>open source</strong> — free for anyone to use</li><li>It is mostly written in Python, with some parts in C, Objective-C, and JavaScript</li><li>It is the most popular charting library in the Python data science world</li></ul>
 <p class="v2-p"><strong>Why do we need it?</strong> Pandas' <code>plot()</code> method we used above actually <em>uses</em> Matplotlib internally. But when you use Matplotlib directly, you get much more control: custom colours, labels, titles, grid lines, multiple charts in one figure, and much more.</p>
@@ -478,48 +356,34 @@ plt.show()</code></pre></div></div>
 <p class="v2-p">Before you can use any external library, you must install it. Here's how:</p>
 <p class="v2-p"><strong>Step 1:</strong> Open your command prompt (Windows) or terminal (Mac/Linux).</p>
 <p class="v2-p"><strong>Step 2:</strong> Type this command and press Enter:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>pip install matplotlib</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>pip install matplotlib</code></pre></div></div>
 <p class="v2-p"><code>pip</code> is Python's <strong>package manager</strong> — the tool that downloads and installs libraries from the internet.</p>
 <p class="v2-p">If this command doesn't work, you might be using a Python distribution like <strong>Anaconda</strong> or <strong>Spyder</strong>, which often have Matplotlib already pre-installed.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Checking Your Matplotlib Version</h3>
 <p class="v2-p">Once installed, you can verify the installation and see which version you have:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib
 
 print(matplotlib.__version__)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output (your version may differ):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>3.9.2</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>3.9.2</code></pre></div></div>
 <p class="v2-p"><strong>Line-by-line explanation:</strong></p>
 <ul class="v2-ul"><li><code>import matplotlib</code> → loads the entire Matplotlib library</li><li><code>print(matplotlib.__version__)</code> → prints the version number stored in the <code>__version__</code> attribute</li><li>Note: there are <strong>two underscore characters</strong> on each side of <code>version</code> (that's four underscores total: <code>__version__</code>)</li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Common mistake:</strong> Typing <code>_version_</code> (one underscore each side) instead of <code>__version__</code> (two underscores each side). Python won't recognise it.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Introduction to Matplotlib</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase6">
-  <div class="phase-header">
-    <div class="phase-num">Phase 6 of 9</div>
-    <div class="phase-title">Part 4: Matplotlib — The Pyplot Submodule</div>
-    <div class="phase-check" id="chk6"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What is Pyplot?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Introduction to Matplotlib</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase6"><div class="ph"><div class="pn">Phase 6/9</div><div class="pt">Part 4: Matplotlib — The Pyplot Submodule</div><div class="pc" id="chk6"></div></div><div class="pb2"><h3 class="v2-h3">What is Pyplot?</h3>
 <p class="v2-p">Matplotlib is a large library with many parts. The part we almost always use is called <strong>Pyplot</strong> — a submodule (a smaller package inside the bigger one) that contains all the functions for drawing plots.</p>
 <p class="v2-p"><strong>Think of it this way:</strong> Matplotlib is the whole art studio. Pyplot is the particular drawing table where you actually sit down and draw.</p>
 <h3 class="v2-h3">Importing Pyplot</h3>
 <p class="v2-p">The standard way to import Pyplot is:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt</code></pre></div></div>
 <p class="v2-p"><strong>Breaking this down:</strong></p>
 <ul class="v2-ul"><li><code>import matplotlib.pyplot</code> → loads the pyplot submodule</li><li><code>as plt</code> → gives it a short nickname <code>plt</code> so you don't have to type <code>matplotlib.pyplot</code> every time</li><li>Now whenever you want to use Pyplot, you just write <code>plt.something()</code></li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Convention:</strong> <code>import matplotlib.pyplot as plt</code> is the universally agreed way to import it. You'll see this exact line in virtually every data science script in the world.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Your First Plot with Pyplot</h3>
 <p class="v2-p">Now let's draw something! This is the simplest possible Matplotlib example — a straight line:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 # Define the x-coordinates of our two points
@@ -537,29 +401,15 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Line-by-line explanation:</strong></p>
 <ul class="v2-ul"><li><code>import matplotlib.pyplot as plt</code> → loads Pyplot with the nickname <code>plt</code></li><li><code>import numpy as np</code> → loads NumPy with the nickname <code>np</code></li><li><code>xpoints = np.array([0, 6])</code> → creates an array with two x-values: 0 and 6</li><li><code>ypoints = np.array([0, 250])</code> → creates an array with two y-values: 0 and 250</li><li><code>plt.plot(xpoints, ypoints)</code> → draws a line chart. Python will plot the point (0, 0) and (6, 250) and draw a line between them</li><li><code>plt.show()</code> → opens a window on your screen to display the chart. <strong>This is required!</strong> Without it, nothing appears.</li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>What is <code>np.array()</code>?</strong> It creates a NumPy array — an ordered collection of numbers. Think of it as a smarter version of a Python list. Matplotlib works best with NumPy arrays.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Matplotlib — The Pyplot Submodule</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase7">
-  <div class="phase-header">
-    <div class="phase-num">Phase 7 of 9</div>
-    <div class="phase-title">Part 5: Matplotlib Plotting — Drawing Points and Lines</div>
-    <div class="phase-check" id="chk7"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">The <code>plot()</code> Function</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Matplotlib — The Pyplot Submodule</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase7"><div class="ph"><div class="pn">Phase 7/9</div><div class="pt">Part 5: Matplotlib Plotting — Drawing Points and Lines</div><div class="pc" id="chk7"></div></div><div class="pb2"><h3 class="v2-h3">The <code>plot()</code> Function</h3>
 <p class="v2-p">The <code>plt.plot()</code> function is the core of Matplotlib. It draws markers (dots) or lines in a diagram.</p>
 <p class="v2-p"><strong>How it works:</strong></p>
 <ul class="v2-ul"><li><strong>Parameter 1:</strong> An array of x-coordinates (horizontal positions)</li><li><strong>Parameter 2:</strong> An array of y-coordinates (vertical positions)</li><li>Each pair (x[i], y[i]) defines one point</li><li>By default, Matplotlib connects the points with a line</li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Think of it like plotting points on graph paper.</strong> The x-axis is horizontal. The y-axis is vertical. You mark each point and Matplotlib connects them.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Example 1: Simple Line Between Two Points</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 # Point 1: (1, 3)   Point 2: (8, 10)
@@ -574,7 +424,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Example 2: Plotting Without a Line (Just Dots)</h3>
 <p class="v2-p">Sometimes you just want dots, not a line connecting them. Use the shortcut <code>'o'</code> as the third argument — <code>'o'</code> stands for "circles" (ring markers):</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 xpoints = np.array([1, 8])
@@ -587,7 +437,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Example 3: Multiple Points — Connecting a Path</h3>
 <p class="v2-p">You can provide as many points as you want, as long as both arrays have the same number of elements:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 # Four x-points and four y-points
@@ -604,7 +454,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Example 4: Plotting with Default X-Points</h3>
 <p class="v2-p">If you only provide y-values and leave out the x-values, Matplotlib automatically assigns x-values starting from 0:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 # Only y-values provided
@@ -617,27 +467,12 @@ plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>So the plotted points are:</strong> (0,3), (1,8), (2,1), (3,10), (4,5), (5,7)</p>
 <p class="v2-p"><strong>When is this useful?</strong> When your data is in sequence and the index (position number) is the natural x-axis — for example, daily temperatures for a week, where day 0 = Monday, day 1 = Tuesday, etc.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> What would happen if you provided 10 y-values? What would the x-axis go up to?</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Matplotlib Plotting — Drawing Points and Lines</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase8">
-  <div class="phase-header">
-    <div class="phase-num">Phase 8 of 9</div>
-    <div class="phase-title">Guided Practice Exercises</div>
-    <div class="phase-check" id="chk8"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Exercise 1: Simple Correlation Finder</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Matplotlib Plotting — Drawing Points and Lines</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase8"><div class="ph"><div class="pn">Phase 8/9</div><div class="pt">Guided Practice Exercises</div><div class="pc" id="chk8"></div></div><div class="pb2"><div class="chal-box"><div class="chal-lbl">🎯 Your Challenge</div><div class="chal-body"><h3 class="v2-h3">Exercise 1: Simple Correlation Finder</h3>
 <p class="v2-p"><strong>Objective:</strong> Use <code>corr()</code> to discover relationships in student data.</p>
 <p class="v2-p"><strong>Scenario:</strong> You have data from 8 students tracking study time, sleep, and test scores.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
-<ol class="v2-ol"><li>Copy and run this code:</li></ol>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<ol class="v2-ol"><li>Copy and run this code:</li></ol></div></div><div class="task-box"><div class="task-lbl">✏️ Task</div><div class="task-body">Practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="reveal-btn" onclick="toggleReveal(this)">👁️ Reveal Answer</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 
 data = {
     &#x27;Study_Hours&#x27;: [2, 5, 3, 8, 1, 6, 4, 7],
@@ -652,7 +487,7 @@ print(df.corr())</code></pre></div></div>
 <p class="v2-p"><strong>Self-check Questions:</strong></p>
 <ul class="v2-ul"><li>What is the correlation between Study_Hours and Test_Score? Is it strong?</li><li>What is the correlation between Phone_Hours and Test_Score? Positive or negative?</li><li>What does the diagonal always equal?</li><li>Would you expect more phone use to lead to lower or higher scores?</li></ul>
 <p class="v2-p"><strong>Expected Output (approximate):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>              Study_Hours  Sleep_Hours  Test_Score  Phone_Hours
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>              Study_Hours  Sleep_Hours  Test_Score  Phone_Hours
 Study_Hours      1.000000     0.697539    0.993180    -0.996386
 Sleep_Hours      0.697539     1.000000    0.746671    -0.707764
 Test_Score       0.993180     0.746671    1.000000    -0.991474
@@ -664,7 +499,7 @@ Phone_Hours     -0.996386    -0.707764   -0.991474     1.000000</code></pre></di
 <p class="v2-p"><strong>Objective:</strong> Visualise two pairs of data — one with strong correlation, one without.</p>
 <p class="v2-p"><strong>Scenario:</strong> You have production data from a factory.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import pandas as pd
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 import matplotlib.pyplot as plt
 
 # Factory data
@@ -694,7 +529,7 @@ plt.show()</code></pre></div></div>
 <h3 class="v2-h3">Exercise 3: Plotting a Custom Line with Matplotlib</h3>
 <p class="v2-p"><strong>Objective:</strong> Draw a Matplotlib line chart from scratch.</p>
 <p class="v2-p"><strong>Scenario:</strong> Track the temperature in a city over 6 days.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import numpy as np
 
 # Days of the week (x-axis)
@@ -710,44 +545,30 @@ plt.plot(days, temperature)
 plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong> A line chart showing temperature going up from day 1 to 3, then dropping on day 5, then slightly recovering on day 6.</p>
 <p class="v2-p"><strong>What-if challenge:</strong> What happens if you change <code>plt.plot(days, temperature)</code> to <code>plt.plot(days, temperature, 'o')</code>? Try it!</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase9">
-  <div class="phase-header">
-    <div class="phase-num">Phase 9 of 9</div>
-    <div class="phase-title">Common Beginner Mistakes</div>
-    <div class="phase-check" id="chk9"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Mistake 1: Forgetting <code>plt.show()</code></h3>
+<hr class="v2-hr"></div><button class="ub" onclick="unlockNext(8)">Mark Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase9"><div class="ph"><div class="pn">Phase 9/9</div><div class="pt">Common Beginner Mistakes</div><div class="pc" id="chk9"></div></div><div class="pb2"><h3 class="v2-h3">Mistake 1: Forgetting <code>plt.show()</code></h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>plt.plot(x, y)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>plt.plot(x, y)
 # Nothing appears on screen!</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>plt.plot(x, y)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>plt.plot(x, y)
 plt.show()  # This is what actually displays the chart</code></pre></div></div>
 <p class="v2-p"><strong>Why it happens:</strong> Beginners think drawing the chart and displaying it are the same step. They're not. <code>plt.plot()</code> prepares the chart in memory; <code>plt.show()</code> opens the window.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 2: Different Array Lengths</h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>x = np.array([1, 2, 3, 4])    # 4 values
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>x = np.array([1, 2, 3, 4])    # 4 values
 y = np.array([10, 20, 30])     # only 3 values!
 plt.plot(x, y)  # ERROR!</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>x = np.array([1, 2, 3, 4])    # 4 values
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>x = np.array([1, 2, 3, 4])    # 4 values
 y = np.array([10, 20, 30, 40]) # also 4 values
 plt.plot(x, y)  # Works!</code></pre></div></div>
 <p class="v2-p"><strong>Rule:</strong> x and y arrays must always have the <strong>exact same number of elements</strong>.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 3: Using <code>.corr()</code> on Non-Numeric Data</h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>data = {&#x27;Name&#x27;: [&#x27;Alice&#x27;, &#x27;Bob&#x27;, &#x27;Charlie&#x27;], &#x27;Score&#x27;: [85, 90, 78]}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>data = {&#x27;Name&#x27;: [&#x27;Alice&#x27;, &#x27;Bob&#x27;, &#x27;Charlie&#x27;], &#x27;Score&#x27;: [85, 90, 78]}
 df = pd.DataFrame(data)
 print(df.corr())  # Only &#x27;Score&#x27; will appear — Name is text, not a number</code></pre></div></div>
 <p class="v2-p"><strong>Correct understanding:</strong> <code>.corr()</code> <strong>automatically ignores</strong> text columns. Only numeric columns participate in the correlation calculation. This is not an error — it is by design.</p>
@@ -758,22 +579,19 @@ print(df.corr())  # Only &#x27;Score&#x27; will appear — Name is text, not a n
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 5: Importing Without Aliases</h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot
 matplotlib.pyplot.plot(x, y)  # Very tedious to type!</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 plt.plot(x, y)  # Much cleaner!</code></pre></div></div>
 <p class="v2-p">The <code>as plt</code> shortcut is not required, but it is standard practice and makes your code much easier to read and write.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 6: Using One Underscore in <code>__version__</code></h3>
 <p class="v2-p"><strong>Wrong:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(matplotlib._version_)   # One underscore each side — Error!</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(matplotlib._version_)   # One underscore each side — Error!</code></pre></div></div>
 <p class="v2-p"><strong>Correct:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(matplotlib.__version__)  # Two underscores each side — Correct!</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">---
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(matplotlib.__version__)  # Two underscores each side — Correct!</code></pre></div></div>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">---
 
 ### Mistake 6: Using One Underscore in __version__
 
@@ -787,21 +605,13 @@ Correct:
 print(matplotlib.__version__)  # Two underscores each side — Correct!
 `
 
----</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="build-box" id="build-it">
-  <div class="build-label">🏗️ Build It</div>
-  <div class="build-name">Project Goal</div>
-  <div class="build-desc">Analyse workout data to:</div>
-  <div class="v2-code-wrap">
-    <div class="v2-code-bar">
-      <span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span>
-      <span class="v2-code-lang">starter.py</span>
-    </div>
-    <div class="v2-code-body"><pre><code>import pandas as pd
+---</div></div><button class="ub" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="build-box" id="build-it"><div class="build-lbl">🏗️ Build It — Mini Project</div><div class="build-name">Project Goal</div><div class="build-req"><p class="v2-p">Let's combine everything from this lesson into a realistic mini-project that a fitness coach might actually use.</p>
+<h3 class="v2-h3">Project Goal</h3>
+<p class="v2-p">Analyse workout data to:</p>
+<ol class="v2-ol"><li>Find which factors are most strongly correlated with calories burned</li><li>Draw visual charts to present the findings</li><li>Summarise your conclusions</li></ol>
+<hr class="v2-hr">
+<h3 class="v2-h3">Stage 1: Setup — Create the Data</h3></div><button class="reveal-btn" onclick="toggleCode(this)">💻 Reveal Starter Code</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">starter.py</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -816,10 +626,7 @@ workout_data = {
 
 df = pd.DataFrame(workout_data)
 print(&quot;=== Workout Data ===&quot;)
-print(df)</code></pre></div>
-  </div>
-  <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
-    <button class="unlock-btn" onclick="downloadStarter(`import pandas as pd
+print(df)</code></pre></div></div><div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem"><button class="ub" onclick="downloadStarter(`import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -834,87 +641,66 @@ workout_data = {
 
 df = pd.DataFrame(workout_data)
 print("=== Workout Data ===")
-print(df)`)"
-      style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">
-      ⬇ Download starter.py
-    </button>
-    <button class="unlock-btn" onclick="showGithub()"
-      style="background:#0f172a;box-shadow:none">
-      🐙 Push to GitHub →
-    </button>
-  </div>
-</div>
+print(df)`)" style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">⬇ Download starter.py</button><button class="ub" onclick="showGithub()" style="background:#0f172a;box-shadow:none">🐙 Save to GitHub →</button></div></div></div>
 <div class="gh-acc" id="gh-steps" style="display:none">
-  <div class="gh-acc-head" onclick="toggleGh(this)">
-    🐙 Push Your Project to GitHub Pages &nbsp;<span>▼</span>
-  </div>
-  <div class="gh-acc-body">
-    <div class="gh-step"><div class="gh-step-n">1</div>
-    <p>Go to <strong>github.com</strong> → click <strong>New repository</strong> → name it <code>python-lesson-31-project-goal</code>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">2</div>
-    <p>Set it to <strong>Public</strong>, tick <strong>Add a README</strong>, then click <strong>Create repository</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">3</div>
-    <p>Click <strong>Add file → Upload files</strong>. Upload your <code>starter.py</code> — rename it to <code>index.py</code> before uploading.</p></div>
-    <div class="gh-step"><div class="gh-step-n">4</div>
-    <p>Commit message: <em>"Add Python lesson 31 project"</em> → click <strong>Commit changes</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">5</div>
-    <p>Go to <strong>Settings → Pages</strong> → branch <strong>main</strong> → <strong>Save</strong>. Your project goes live at <code>https://YOUR-NAME.github.io/python-lesson-31-project-goal/</code> in about 1 minute! 🎉</p></div>
-    <button class="unlock-btn" onclick="showEnd()" style="margin-top:.5rem">I've pushed to GitHub — Finish Session ✅</button>
-  </div>
-</div>
-<div class="session-end" id="session-end">
-  <h2>🎉 Lesson 31 complete!</h2>
-  <p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p>
-  <ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1: Pandas — Data Correlations</li><li>✅ Part 2: Pandas — Plotting</li><li>✅ Part 3: Introduction to Matplotlib</li><li>✅ Part 4: Matplotlib — The Pyplot Submodule</li><li>✅ Part 5: Matplotlib Plotting — Drawing Points and Lines</li><li>✅ Guided Practice Exercises</li></ul>
-  <div class="lesson-nav"><a href="lesson_30.html" class="ln-btn">← Lesson 30</a><a href="lesson_32.html" class="ln-btn primary">Lesson 32 →</a></div>
-</div>
+<div class="gh-hd" onclick="toggleGh(this)">🐙 Save Python Project to GitHub &nbsp;<span>▼</span></div>
+<div class="gh-bd">
+<div class="gh-nop"><strong>⚠️ Python cannot be hosted on GitHub Pages.</strong><br><br>GitHub Pages only serves static HTML/CSS/JS files. Python scripts need a server to run — you will learn deployment (Replit, PythonAnywhere, Heroku) later in the course. For now, save your code to GitHub as a portfolio entry.</div>
+<div class="gh-st"><div class="gh-n">1</div><p>Go to <strong>github.com → New repository</strong> → name it <code>python-lesson-31-project-goal</code>. Set <strong>Public</strong>, tick <strong>Add README</strong>, click <strong>Create</strong>.</p></div>
+<div class="gh-st"><div class="gh-n">2</div><p>Click <strong>Add file → Upload files</strong> → upload your <code>.py</code> file.</p></div>
+<div class="gh-st"><div class="gh-n">3</div><p>Commit message: <em>"Add Python lesson 31 project"</em> → <strong>Commit changes</strong>. Your code is now part of your GitHub portfolio! 🐍</p></div>
+<button class="ub" onclick="showEnd()" style="background:#059669;margin-top:.5rem">Done — Finish Session ✅</button>
+</div></div>
+<div class="se" id="session-end"><h2>🎉 Lesson 31 complete!</h2><p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p><ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1: Pandas — Data Correlations</li><li>✅ Part 2: Pandas — Plotting</li><li>✅ Part 3: Introduction to Matplotlib</li><li>✅ Part 4: Matplotlib — The Pyplot Submodule</li><li>✅ Part 5: Matplotlib Plotting — Drawing Points and Lines</li><li>✅ Guided Practice Exercises</li></ul><div class="ln"><a href="lesson_30.html" class="ln-btn">← Lesson 30</a><a href="lesson_32.html" class="ln-btn primary">Lesson 32 →</a></div></div>
 </main>
-
-<footer class="lesson-footer">
-  Techbase Code Coach · Python Course · Lesson 31 · © 2025 Techbase Consultant Services, Ibadan
-</footer>
+<footer class="lf">Techbase Code Coach &nbsp;·&nbsp; Python Course &nbsp;·&nbsp; Lesson 31 &nbsp;·&nbsp; © 2025 Techbase Consultant Services, Ibadan</footer>
+<div id="toast"></div>
+<button id="go-top" title="Back to top">↑</button>
+<canvas id="cc"></canvas>
 <script>
 const TOTAL=9,KEY='techbase_python_l31';
-let current=parseInt(localStorage.getItem(KEY)||'1');
-function init(){
-  for(let i=2;i<=current;i++) unlockPhase(i,false);
-  updateBar();
-}
+let cur=parseInt(localStorage.getItem(KEY)||'1');
+function init(){for(let i=2;i<=cur;i++)unlock(i,false);bar();}
 function unlockNext(n){
-  const chk=document.getElementById('chk'+n);
-  if(chk){chk.classList.add('done');chk.textContent='✓';}
-  localStorage.setItem(KEY,n+1); current=n+1;
+  const c=document.getElementById('chk'+n);
+  if(c){c.classList.add('done');c.textContent='✓';}
+  localStorage.setItem(KEY,n+1);cur=n+1;
   if(n===TOTAL){
-    document.getElementById('build-it').style.display='block';
-    updateBar(100);
+    document.getElementById('build-it').classList.add('visible');
+    bar(100);toast('🏗️ Build It unlocked!');
     setTimeout(()=>document.getElementById('build-it').scrollIntoView({behavior:'smooth'}),200);
-  }else{
-    unlockPhase(n+1,true); updateBar();
-  }
+    setTimeout(confetti,600);
+  }else{unlock(n+1,true);bar();toast(['✅ Phase complete!','🎯 Keep going!','💡 Nice work!','🚀 Nailed it!'][n%4]);}
 }
-function unlockPhase(n,scroll){
-  const el=document.getElementById('phase'+n);
-  if(el){el.classList.remove('locked');if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+function unlock(n,scroll){
+  const el=document.getElementById('phase'+n);if(!el)return;
+  el.classList.remove('locked');
+  if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),180);
 }
-function updateBar(pct){
-  const p=pct!==undefined?pct:Math.round((current-1)/TOTAL*95);
-  document.getElementById('pbar').style.width=p+'%';
+function bar(p){document.getElementById('pbar').style.width=(p!==undefined?p:Math.round((cur-1)/TOTAL*95))+'%';}
+function toggleReveal(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Answer':'👁️ Reveal Answer';}
+function toggleCode(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Starter Code':'💻 Reveal Starter Code';}
+function copyCode(btn){
+  const code=btn.closest('.v2-code-wrap').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='⎘ Copy';btn.classList.remove('copied');},1800);}).catch(()=>{});
 }
-function showGithub(){
-  const g=document.getElementById('gh-steps');
-  if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}
-}
-function showEnd(){
-  const e=document.getElementById('session-end');
-  if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}
-}
+const tEl=document.getElementById('toast');let tT;
+function toast(msg){tEl.innerHTML=msg;tEl.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>tEl.classList.remove('show'),2400);}
+const gEl=document.getElementById('go-top');
+window.addEventListener('scroll',()=>gEl.classList.toggle('visible',scrollY>320),{passive:true});
+gEl.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 function toggleGh(el){el.nextElementSibling.classList.toggle('open');}
-function downloadStarter(code){
-  const a=document.createElement('a');
-  a.href='data:text/html;charset=utf-8,'+encodeURIComponent(code);
-  a.download='starter.html';a.click();
+function showGithub(){const g=document.getElementById('gh-steps');if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}}
+function showEnd(){const e=document.getElementById('session-end');if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}}
+function downloadStarter(code){const ext='python'==='python'?'py':'html';const a=document.createElement('a');a.href='data:text/'+(ext==='py'?'x-python':'html')+';charset=utf-8,'+encodeURIComponent(code);a.download='starter.'+ext;a.click();}
+function confetti(){
+  const cv=document.getElementById('cc');cv.style.display='block';const ctx=cv.getContext('2d');
+  cv.width=innerWidth;cv.height=innerHeight;
+  const ps=Array.from({length:130},()=>{return{x:Math.random()*cv.width,y:-10-Math.random()*120,r:4+Math.random()*6,d:2+Math.random()*3,c:['#e34c26','#0284c7','#d97706','#059669','#7c3aed','#ec4899'][Math.floor(Math.random()*6)],ta:0};}); 
+  let f=0;
+  function draw(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.ta+=.1;p.y+=p.d;p.x+=Math.sin(f/20);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();});f++;if(f<200)requestAnimationFrame(draw);else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}}
+  draw();toast('🎉 All phases done! Build It awaits!');
 }
 init();
 </script>
-</body>
-</html>
+</body></html>

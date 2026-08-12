@@ -1,245 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lesson 16: Lesson 16 – Python Decorators, Lambda Functions, Recursion, and Generators — Techbase Python</title>
-<meta name="description" content="Lesson 16 – Python Decorators, Lambda Functions, Recursion, and Generators">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --acc:#059669;--acc-d:#047857;--acc-pale:#ecfdf5;
-  --acc-b:rgba(5,150,105,.25);--acc-sh:rgba(5,150,105,.28);
-  --bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--t2:#334155;--muted:#64748b;
-  --D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+:root{--acc:#059669;--acd:#047857;--acp:#ecfdf5;--acb:rgba(5,150,105,.22);--acs:rgba(5,150,105,.28);--bg:#f8fafc;--sf:#fff;--br:#e2e8f0;--tx:#0f172a;--t2:#334155;--mu:#64748b;--D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
-
-/* NAV */
-.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);
-  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:58px;
-  display:flex;align-items:center;padding:0 1.5rem;gap:1rem;justify-content:space-between}
-.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.l-nav-back{font-size:.8rem;color:var(--muted);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+body{background:var(--bg);color:var(--tx);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
+.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);height:58px;display:flex;align-items:center;padding:0 1.5rem;justify-content:space-between}
+.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--tx);text-decoration:none}
+.l-nav-back{font-size:.8rem;color:var(--mu);text-decoration:none;font-weight:500;transition:color .2s}
 .l-nav-back:hover{color:var(--acc)}
-.l-nav-label{font-family:var(--M);font-size:.68rem;color:var(--muted)}
-
-/* PROGRESS */
-.progress-wrap{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--border)}
-.progress-bar{height:100%;background:var(--acc);transition:width .4s ease;width:0%}
-
-/* HERO */
-.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--border)}
-.l-hero-inner{max-width:860px;margin:0 auto}
-.l-badge{display:inline-flex;align-items:center;gap:.4rem;border-radius:100px;padding:.2rem .85rem;
-  font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
-  color:var(--acc);background:var(--acc-pale);border:1px solid var(--acc-b);margin-bottom:.8rem}
-.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);
-  letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
-.l-hero-sub{font-size:.95rem;color:var(--muted);margin-bottom:1rem}
-
-/* WELCOME BOX */
-.welcome-box{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.5rem 1.8rem;max-width:860px;margin:1.5rem auto 0}
-.welcome-box h2{font-family:var(--D);font-weight:700;font-size:1.05rem;margin-bottom:.6rem}
-.welcome-box p,.welcome-box li{font-size:.9rem;line-height:1.8;opacity:.93}
-.welcome-box ul{margin-left:1.2rem;margin-top:.5rem}
-.welcome-meta{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
-.welcome-meta span{background:rgba(255,255,255,.18);border-radius:6px;padding:.2rem .75rem;
-  font-family:var(--M);font-size:.68rem;font-weight:500}
-
-/* PHASE */
-.phase{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;
-  margin-bottom:1.5rem;overflow:hidden;transition:opacity .3s,transform .3s,filter .3s}
-.phase.locked{opacity:.35;pointer-events:none;filter:blur(1.5px)}
-.phase-header{padding:1rem 1.4rem;background:#f0fdf6;
-  border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:default}
-.phase-num{font-family:var(--M);font-size:.7rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--acc)}
-.phase-title{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--text);
-  flex:1;margin:0 .8rem}
-.phase-check{width:26px;height:26px;border-radius:50%;background:var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;
-  transition:background .3s,color .3s}
-.phase-check.done{background:#10b981;color:#fff}
-.phase-body{padding:1.6rem 1.8rem}
-
-/* RICH CONTENT STYLES */
+.l-nav-lbl{font-family:var(--M);font-size:.68rem;color:var(--mu)}
+.pw{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--br)}
+.pb{height:100%;background:linear-gradient(90deg,var(--acc),var(--acd));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%;position:relative}
+.pb::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:inherit;filter:brightness(1.4);animation:pg 1.5s ease-in-out infinite}
+@keyframes pg{0%,100%{opacity:1}50%{opacity:.35}}
+.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--br)}
+.l-hero-in{max-width:860px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;border-radius:100px;padding:.22rem .9rem;font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--acc);background:var(--acp);border:1.5px solid var(--acb);margin-bottom:.85rem}
+.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
+.l-hero-sub{font-size:.9rem;color:var(--mu)}
+.wb{background:#fff;border:1.5px solid var(--acb);border-left:5px solid var(--acc);border-radius:14px;padding:1.4rem 1.6rem;max-width:860px;margin:1.5rem auto 0;box-shadow:0 2px 12px var(--acs)}
+.wb h2{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--acd);margin-bottom:.6rem}
+.wb p,.wb li{font-size:.92rem;line-height:1.85;color:var(--t2)}
+.wb ul{margin-left:1.2rem;margin-top:.4rem}
+.wm{display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap}
+.wm span{background:var(--acp);color:var(--acd);border:1px solid var(--acb);border-radius:7px;padding:.22rem .7rem;font-family:var(--M);font-size:.68rem;font-weight:600}
+.phase{background:var(--sf);border:1.5px solid var(--br);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;transition:opacity .35s,filter .35s,transform .35s}
+.phase.locked{opacity:.28;pointer-events:none;filter:blur(2px);transform:scale(.99)}
+.ph{padding:1rem 1.4rem;background:#f0fdf6;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:.8rem}
+.pn{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.pt{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--tx);flex:1}
+.pc{width:26px;height:26px;border-radius:50%;background:var(--br);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:background .3s,transform .4s}
+.pc.done{background:#10b981;color:#fff;transform:scale(1.15) rotate(360deg)}
+.pb2{padding:1.6rem 1.8rem}
 .v2-p{margin-bottom:1rem;font-size:.95rem;color:var(--t2);line-height:1.85}
-.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--text);
-  margin:1.6rem 0 .5rem;padding-top:.2rem;border-top:2px solid var(--acc-pale)}
-.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1.1rem 0 .4rem}
-.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.9rem;color:var(--muted);margin:.8rem 0 .3rem}
+.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--tx);margin:1.6rem 0 .5rem;border-top:2px solid var(--acp);padding-top:.4rem}
+.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1rem 0 .35rem}
+.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.88rem;color:var(--mu);margin:.7rem 0 .3rem}
 .v2-ul,.v2-ol{margin:.6rem 0 1rem 1.4rem;font-size:.93rem;color:var(--t2);line-height:1.9}
 .v2-ul li,.v2-ol li{margin-bottom:.3rem}
-.v2-bq{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 10px 10px 0;
-  padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
+.v2-bq{border-left:4px solid var(--acc);background:var(--acp);border-radius:0 10px 10px 0;padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
 .v2-bq p{margin:0;color:inherit}
-.v2-bq strong{font-style:normal}
-.v2-hr{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
-.v2-table-wrap{overflow-x:auto;margin:1rem 0}
+.v2-hr{border:none;border-top:1px solid var(--br);margin:1.2rem 0}
+.v2-table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--br)}
 .v2-table{width:100%;border-collapse:collapse;font-size:.87rem}
-.v2-table th{background:var(--acc-pale);color:#064e3b;font-family:var(--D);
-  font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--acc-b)}
-.v2-table td{padding:8px 12px;border:1px solid var(--border);color:var(--t2);vertical-align:top}
-.v2-table tr:nth-child(even) td{background:#f8fafc}
-.v2-table code{background:var(--acc-pale);color:var(--acc);border-radius:4px;
-  padding:1px 5px;font-family:var(--M);font-size:.8em}
-.phase-body code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-.phase-body a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
-.phase-body strong{color:var(--text)}
-
-/* CODE BLOCKS */
-.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.v2-table th{background:var(--acp);color:#064e3b;font-family:var(--D);font-weight:700;padding:10px 12px;text-align:left;border-bottom:2px solid var(--acb)}
+.v2-table td{padding:8px 12px;border-bottom:1px solid var(--br);color:var(--t2);vertical-align:top}
+.v2-table tr:last-child td{border:none}
+.v2-table tr:hover td{background:var(--acp)}
+.pb2 code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.pb2 a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
+.pb2 strong{color:var(--tx)}
+.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .v2-code-bar{background:#1e293b;padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem}
 .v2-dot{width:10px;height:10px;border-radius:50%}
 .v2-dot.r{background:#ff5f57}.v2-dot.y{background:#febc2e}.v2-dot.g{background:#28c840}
-.v2-code-lang{margin-left:.6rem;font-family:var(--M);font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em}
+.v2-code-lang{margin-left:.5rem;font-family:var(--M);font-size:.62rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;flex:1}
+.copy-btn{background:rgba(255,255,255,.08);color:#94a3b8;border:none;border-radius:6px;padding:.25rem .65rem;font-family:var(--M);font-size:.65rem;cursor:pointer;transition:background .2s,color .2s}
+.copy-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.copy-btn.copied{background:#10b981;color:#fff}
 .v2-code-body{background:#0f172a;padding:1.3rem 1.5rem;overflow-x:auto}
 .v2-code-body pre{margin:0}
-.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.9;color:#e2e8f0;
-  white-space:pre;background:transparent;padding:0;border-radius:0}
-
-/* TASK BOX */
-.task-box{background:#d1fae5;border:2px dashed #059669;
-  border-radius:12px;padding:1rem 1.3rem;margin:1.4rem 0}
-.task-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-.task-box p,.task-body{font-size:.92rem;color:#064e3b;line-height:1.8}
-.task-box code{background:rgba(0,0,0,.08);border-radius:4px;padding:1px 6px;
-  font-family:var(--M);font-size:.82em}
-
-/* UNLOCK BUTTON */
-.unlock-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);
-  color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;
-  padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;
-  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acc-sh);margin-top:1.2rem}
-.unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acc-sh)}
-
-/* BUILD IT */
+.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.95;color:#e2e8f0;white-space:pre;background:transparent;padding:0;border-radius:0}
+.task-box{background:#d1fae5;border:2px dashed #059669;border-radius:12px;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.task-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.task-body{font-size:.93rem;color:#064e3b;line-height:1.85}
+.task-body code{background:rgba(0,0,0,.1);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.chal-box{background:linear-gradient(135deg,#ecfdf5 0%,#fff 100%);border:2px solid var(--acc);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem}
+.chal-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acd);margin-bottom:.6rem}
+.chal-body{font-size:.95rem;color:var(--tx);line-height:1.85}
+.chal-body code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 5px;font-family:var(--M);font-size:.82em}
+.reveal-btn{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--acd);font-family:var(--D);font-weight:700;font-size:.85rem;padding:.6rem 1.2rem;border-radius:8px;border:2px solid var(--acc);cursor:pointer;transition:background .2s,color .2s;margin:.6rem 0}
+.reveal-btn:hover{background:var(--acc);color:#fff}
+.reveal-content{display:none;margin-top:.6rem;animation:fi .3s ease}
+.reveal-content.open{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .build-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:16px;padding:1.6rem;margin:2rem 0;display:none}
-.build-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
-.build-name{font-family:var(--D);font-weight:700;font-size:1.1rem;color:#14532d;margin-bottom:.5rem}
-.build-desc{font-size:.9rem;color:#166534;margin-bottom:1.2rem;line-height:1.75}
-.build-desc code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
-.build-desc strong{color:#14532d}
-
-/* GITHUB ACCORDION */
-.gh-acc{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
-.gh-acc-head{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none}
-.gh-acc-body{display:none;padding:1.2rem;border-top:1px solid var(--border)}
-.gh-acc-body.open{display:block}
-.gh-step{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
-.gh-step-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;
-  font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;margin-top:2px}
-.gh-step p{font-size:.88rem;color:var(--t2);line-height:1.7}
-.gh-step code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-
-/* SESSION END */
-.session-end{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
-.session-end.visible{display:block}
-.session-end h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
-.session-end ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.session-end li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
-.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);
-  color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;
-  padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;
-  border:1.5px solid var(--border);transition:border-color .2s,color .2s}
+.build-box.visible{display:block;animation:fi .4s ease}
+.build-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+.build-name{font-family:var(--D);font-weight:700;font-size:1.15rem;color:#14532d;margin-bottom:.6rem}
+.build-req{font-size:.93rem;color:#166534;line-height:1.8;margin-bottom:.8rem}
+.build-req code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.build-req strong{color:#14532d}
+.gh-acc{border:1.5px solid var(--br);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.gh-hd{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none;transition:background .2s}
+.gh-hd:hover{background:#f1f5f9}
+.gh-bd{display:none;padding:1.2rem;border-top:1px solid var(--br)}
+.gh-bd.open{display:block;animation:fi .25s ease}
+.gh-st{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
+.gh-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.gh-st p{font-size:.88rem;color:var(--t2);line-height:1.7}
+.gh-st code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.gh-nop{background:#fef3c7;border:1.5px solid #fde68a;border-radius:10px;padding:1rem 1.2rem;font-size:.9rem;color:#78350f;line-height:1.75;margin-bottom:1rem}
+.se{background:linear-gradient(135deg,var(--acc),var(--acd));color:#fff;border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
+.se.visible{display:block;animation:fi .4s ease}
+.se h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
+.se ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.se li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
+.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--sf);color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;border:1.5px solid var(--br);transition:border-color .2s,color .2s}
 .ln-btn:hover{border-color:var(--acc);color:var(--acc)}
 .ln-btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .ln-btn.primary:hover{opacity:.9}
-.lesson-nav{display:flex;align-items:center;justify-content:space-between;
-  padding-top:2rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
-.lesson-footer{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;
-  color:var(--muted);border-top:1px solid var(--border);background:var(--surface)}
+.ln{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
+.ub{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acs);margin-top:1.2rem}
+.ub:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acs)}
+.ub:active{transform:scale(.97)}
+#toast{position:fixed;bottom:90px;right:1.5rem;z-index:999;background:#1e293b;color:#fff;border-radius:10px;padding:.75rem 1.2rem;font-family:var(--D);font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#go-top{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;border:none;cursor:pointer;font-size:1.15rem;box-shadow:0 4px 16px var(--acs);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s,box-shadow .2s;pointer-events:none}
+#go-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#go-top:hover{box-shadow:0 8px 24px var(--acs);transform:translateY(-2px)}
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;display:none}
+.lf{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;color:var(--mu);border-top:1px solid var(--br);background:var(--sf)}
 </style>
 </head>
 <body>
 <nav class="l-nav">
   <a href="../index.html" class="l-nav-logo">⚡ Techbase Python</a>
-  <span class="l-nav-label">Lesson 16 of 45</span>
+  <span class="l-nav-lbl">Lesson 16 of 45</span>
   <a href="../index.html" class="l-nav-back">← All Lessons</a>
 </nav>
-<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
-
-<div class="l-hero">
-  <div class="l-hero-inner">
-    <div class="l-badge">Python · Lesson 16</div>
-    <h1>Lesson 16 – Python Decorators, Lambda Functions, Recursion, and Generators</h1>
-    <div class="l-hero-sub">8 phases · Build: Project Overview</div>
-  </div>
-</div>
-
-<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
-  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="welcome-box">
-  <h2>👋 Welcome to Lesson 16</h2>
-  <div style="font-size:.9rem;line-height:1.85;opacity:.93"><p class="v2-p">Welcome to one of the most powerful lessons in your Python journey.</p>
-<p class="v2-p">In earlier lessons you learned how to write functions — blocks of reusable code that take inputs and return outputs. In this lesson you will meet <strong>four advanced functional programming tools</strong> that Python developers use every single day in real-world projects:</p>
-<div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Tool</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Decorators</strong></td><td>Wrap a function to add extra behaviour without changing its code</td></tr><tr><td><strong>Lambda Functions</strong></td><td>Write tiny, one-line anonymous functions on the spot</td></tr><tr><td><strong>Recursion</strong></td><td>Write functions that solve problems by calling themselves</td></tr><tr><td><strong>Generators</strong></td><td>Produce values one at a time to save memory</td></tr></tbody></table></div>
-<p class="v2-p">Each concept is a genuine superpower. By the end of this lesson you will understand them deeply, practise them with guided exercises, and combine them in a realistic mini-project.</p>
-<blockquote class="v2-bq"><p class="v2-p">💡 <strong>Teacher's Note:</strong> These topics are interconnected. Lambdas are often used inside decorators. Generators often use recursion. Take your time with each section before moving on.</p></blockquote>
-<hr class="v2-hr"></div>
-  <div class="welcome-meta">
-    <span>📚 8 phases</span>
-    <span>🏗️ Project Overview</span>
-  </div>
+<div class="pw"><div class="pb" id="pbar"></div></div>
+<div class="l-hero"><div class="l-hero-in">
+  <div class="badge">Python · Lesson 16</div>
+  <h1>Lesson 16 – Python Decorators, Lambda Functions, Recursion, and Generators</h1>
+  <div class="l-hero-sub">8 phases &nbsp;·&nbsp; Build: Project Overview</div>
 </div></div>
-</section>
-
-<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
-<div class="phase" id="phase1">
-  <div class="phase-header">
-    <div class="phase-num">Phase 1 of 8</div>
-    <div class="phase-title">Lesson Introduction</div>
-    <div class="phase-check" id="chk1"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Welcome to one of the most powerful lessons in your Python journey.</p>
+<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--br)">
+  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="wb"><h2>👋 Welcome to Lesson 16</h2><div style="font-size:.92rem;line-height:1.85;color:var(--t2)"><p class="v2-p">Welcome to one of the most powerful lessons in your Python journey.</p>
 <p class="v2-p">In earlier lessons you learned how to write functions — blocks of reusable code that take inputs and return outputs. In this lesson you will meet <strong>four advanced functional programming tools</strong> that Python developers use every single day in real-world projects:</p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Tool</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Decorators</strong></td><td>Wrap a function to add extra behaviour without changing its code</td></tr><tr><td><strong>Lambda Functions</strong></td><td>Write tiny, one-line anonymous functions on the spot</td></tr><tr><td><strong>Recursion</strong></td><td>Write functions that solve problems by calling themselves</td></tr><tr><td><strong>Generators</strong></td><td>Produce values one at a time to save memory</td></tr></tbody></table></div>
 <p class="v2-p">Each concept is a genuine superpower. By the end of this lesson you will understand them deeply, practise them with guided exercises, and combine them in a realistic mini-project.</p>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Teacher's Note:</strong> These topics are interconnected. Lambdas are often used inside decorators. Generators often use recursion. Take your time with each section before moving on.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">> 💡 Teacher's Note: These topics are interconnected. Lambdas are often used inside decorators. Generators often use recursion. Take your time with each section before moving on.
+<hr class="v2-hr"></div><div class="wm"><span>📚 8 phases</span><span>🏗️ Project Overview</span><span>🐍 GitHub Repo</span></div></div></div>
+</section>
+<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
+<div class="phase" id="phase1"><div class="ph"><div class="pn">Phase 1/8</div><div class="pt">Lesson Introduction</div><div class="pc" id="chk1"></div></div><div class="pb2"><p class="v2-p">Welcome to one of the most powerful lessons in your Python journey.</p>
+<p class="v2-p">In earlier lessons you learned how to write functions — blocks of reusable code that take inputs and return outputs. In this lesson you will meet <strong>four advanced functional programming tools</strong> that Python developers use every single day in real-world projects:</p>
+<div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Tool</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Decorators</strong></td><td>Wrap a function to add extra behaviour without changing its code</td></tr><tr><td><strong>Lambda Functions</strong></td><td>Write tiny, one-line anonymous functions on the spot</td></tr><tr><td><strong>Recursion</strong></td><td>Write functions that solve problems by calling themselves</td></tr><tr><td><strong>Generators</strong></td><td>Produce values one at a time to save memory</td></tr></tbody></table></div>
+<p class="v2-p">Each concept is a genuine superpower. By the end of this lesson you will understand them deeply, practise them with guided exercises, and combine them in a realistic mini-project.</p>
+<blockquote class="v2-bq"><p class="v2-p">💡 <strong>Teacher's Note:</strong> These topics are interconnected. Lambdas are often used inside decorators. Generators often use recursion. Take your time with each section before moving on.</p></blockquote>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">> 💡 Teacher's Note: These topics are interconnected. Lambdas are often used inside decorators. Generators often use recursion. Take your time with each section before moving on.
 
----</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(1)">Start Lesson ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase2">
-  <div class="phase-header">
-    <div class="phase-num">Phase 2 of 8</div>
-    <div class="phase-title">Prerequisite Concepts</div>
-    <div class="phase-check" id="chk2"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Before diving in, make sure you are comfortable with the following. Each one is briefly reviewed below.</p>
+---</div></div><button class="ub" onclick="unlockNext(1)">Start Lesson ✓</button></div></div>
+<div class="phase locked" id="phase2"><div class="ph"><div class="pn">Phase 2/8</div><div class="pt">Prerequisite Concepts</div><div class="pc" id="chk2"></div></div><div class="pb2"><p class="v2-p">Before diving in, make sure you are comfortable with the following. Each one is briefly reviewed below.</p>
 <h3 class="v2-h3">Functions</h3>
 <p class="v2-p">A function is a named block of reusable code.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def greet(name):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def greet(name):
     return &quot;Hello, &quot; + name
 
 print(greet(&quot;Alice&quot;))</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Hello, Alice</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Hello, Alice</code></pre></div></div>
 <h3 class="v2-h3">Functions Are Objects in Python</h3>
 <p class="v2-p">This is the most important prerequisite for this lesson.</p>
 <p class="v2-p">In Python, <strong>a function is just an object</strong> — exactly like a number, a string, or a list. That means you can:</p>
 <ul class="v2-ul"><li>Store a function inside a variable</li><li>Pass a function as an argument to another function</li><li>Return a function from a function</li></ul>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def say_hello():
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def say_hello():
     print(&quot;Hello!&quot;)
 
 # Store the function in a variable (no parentheses = no call)
@@ -248,34 +168,20 @@ my_func = say_hello
 # Call it through the variable
 my_func()</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Hello!</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Hello!</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">🔑 <strong>Key insight:</strong> <code>say_hello</code> (no parentheses) is the function <strong>object</strong>. <code>say_hello()</code> (with parentheses) <strong>calls</strong> it and runs it. This distinction is critical for decorators.</p></blockquote>
 <h3 class="v2-h3">Inner Functions</h3>
 <p class="v2-p">Python allows you to define a function <strong>inside</strong> another function.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def outer():
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def outer():
     def inner():
         print(&quot;I am the inner function&quot;)
     inner()  # call the inner function
 
 outer()</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>I am the inner function</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase3">
-  <div class="phase-header">
-    <div class="phase-num">Phase 3 of 8</div>
-    <div class="phase-title">Part 1 — Python Decorators</div>
-    <div class="phase-check" id="chk3"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>I am the inner function</code></pre></div></div>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase3"><div class="ph"><div class="pn">Phase 3/8</div><div class="pt">Part 1 — Python Decorators</div><div class="pc" id="chk3"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is a Decorator?</h3>
 <p class="v2-p">Imagine you have a function that does something useful. Now you want to add extra behaviour to it — like logging when it runs, checking if the user is logged in, or measuring how long it takes — <strong>without changing the function's original code</strong>.</p>
 <p class="v2-p">A <strong>decorator</strong> is a function that wraps around another function and adds that extra behaviour automatically.</p>
@@ -284,20 +190,20 @@ outer()</code></pre></div></div>
 <h3 class="v2-h3">How a Decorator Works — Step by Step</h3>
 <p class="v2-p">Let's build one from scratch before using the shortcut syntax.</p>
 <h4 class="v2-h4">Step 1: A simple function we want to decorate</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def say_hello():
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def say_hello():
     print(&quot;Hello!&quot;)</code></pre></div></div>
 <h4 class="v2-h4">Step 2: Write a decorator function</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def my_decorator(func):          # receives the function as an argument
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def my_decorator(func):          # receives the function as an argument
     def wrapper():               # defines a new wrapping function
         print(&quot;Before the function runs&quot;)
         func()                   # calls the original function
         print(&quot;After the function runs&quot;)
     return wrapper               # returns the wrapper (not calling it!)</code></pre></div></div>
 <h4 class="v2-h4">Step 3: Apply the decorator manually</h4>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>say_hello = my_decorator(say_hello)   # wrap say_hello
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>say_hello = my_decorator(say_hello)   # wrap say_hello
 say_hello()                            # call the wrapped version</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Before the function runs
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Before the function runs
 Hello!
 After the function runs</code></pre></div></div>
 <p class="v2-p">Let's trace exactly what happened:</p>
@@ -305,7 +211,7 @@ After the function runs</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">The <code>@</code> Shortcut Syntax</h3>
 <p class="v2-p">Python provides a cleaner way to apply a decorator using the <code>@</code> symbol. This is called <strong>decorator syntax</strong> or <strong>pie syntax</strong>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def my_decorator(func):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def my_decorator(func):
     def wrapper():
         print(&quot;Before the function runs&quot;)
         func()
@@ -318,14 +224,14 @@ def say_hello():
 
 say_hello()</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Before the function runs
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Before the function runs
 Hello!
 After the function runs</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 <code>@my_decorator</code> placed just above a function definition is a clean shorthand for wrapping it.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Decorating Functions That Have Arguments</h3>
 <p class="v2-p">What if the function you want to decorate takes arguments? You need to pass those arguments through the wrapper.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def my_decorator(func):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def my_decorator(func):
     def wrapper(*args, **kwargs):    # accepts any arguments
         print(&quot;Something before&quot;)
         result = func(*args, **kwargs)   # passes them to the original function
@@ -340,7 +246,7 @@ def add(a, b):
 total = add(3, 4)
 print(&quot;Result:&quot;, total)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Something before
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Something before
 Something after
 Result: 7</code></pre></div></div>
 <p class="v2-p"><strong>What are <code><em>args</code> and <code></strong>kwargs</code>?</em>*</p>
@@ -348,7 +254,7 @@ Result: 7</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">A Practical Decorator: Timing a Function</h3>
 <p class="v2-p">Here is a decorator you would actually use in real code — measuring how long a function takes to run:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import time
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import time
 
 def timer_decorator(func):
     def wrapper(*args, **kwargs):
@@ -366,12 +272,12 @@ def slow_task():
 
 slow_task()</code></pre></div></div>
 <p class="v2-p"><strong>Output (approximate):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Task done!
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Task done!
 slow_task took 1.0012 seconds</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">🌍 <strong>Real-world use:</strong> Web frameworks like Flask and Django use decorators extensively for routing (<code>@app.route("/home")</code>), authentication (<code>@login_required</code>), and caching.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">A Practical Decorator: Access Control</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>is_logged_in = True   # simulate login state
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>is_logged_in = True   # simulate login state
 
 def require_login(func):
     def wrapper(*args, **kwargs):
@@ -387,11 +293,11 @@ def view_dashboard():
 
 view_dashboard()</code></pre></div></div>
 <p class="v2-p"><strong>Output (when logged in):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Welcome to your dashboard!</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Welcome to your dashboard!</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Applying Multiple Decorators</h3>
 <p class="v2-p">You can stack decorators. They apply from <strong>bottom to top</strong> (closest to the function first).</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def bold(func):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def bold(func):
     def wrapper():
         return &quot;&lt;b&gt;&quot; + func() + &quot;&lt;/b&gt;&quot;
     return wrapper
@@ -408,18 +314,18 @@ def greet():
 
 print(greet())</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>&lt;b&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;/b&gt;</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>&lt;b&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;/b&gt;</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">🤔 <strong>Thinking prompt:</strong> What happens if you swap <code>@bold</code> and <code>@italic</code>? Try it — what output do you get?</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Common Beginner Mistakes with Decorators</h3>
 <p class="v2-p"><strong>Mistake 1: Calling the function instead of passing it</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ WRONG
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ WRONG
 decorated = my_decorator(say_hello())   # say_hello() calls it and passes None
 
 # ✅ CORRECT
 decorated = my_decorator(say_hello)     # pass the function object</code></pre></div></div>
 <p class="v2-p"><strong>Mistake 2: Forgetting to return the wrapper</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ WRONG — decorator returns None
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ WRONG — decorator returns None
 def my_decorator(func):
     def wrapper():
         func()
@@ -431,16 +337,13 @@ def my_decorator(func):
         func()
     return wrapper</code></pre></div></div>
 <p class="v2-p"><strong>Mistake 3: Forgetting to call the original function inside wrapper</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ WRONG — original function never runs
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ WRONG — original function never runs
 def my_decorator(func):
     def wrapper():
         print(&quot;Before&quot;)
         # forgot: func()
     return wrapper</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">time.sleep(1)   # simulate a slow operation
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">time.sleep(1)   # simulate a slow operation
     print("Task done!")
 
 slow_task()
@@ -454,27 +357,16 @@ slow_task took 1.0012 seconds
 
 > 🌍 Real-world use: Web frameworks like Flask and Django use decorators extensively for routing (@app.route("/home")), authentication (@login_required), and caching.
 
----</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase4">
-  <div class="phase-header">
-    <div class="phase-num">Phase 4 of 8</div>
-    <div class="phase-title">Part 2 — Lambda Functions</div>
-    <div class="phase-check" id="chk4"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+---</div></div><button class="ub" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase4"><div class="ph"><div class="pn">Phase 4/8</div><div class="pt">Part 2 — Lambda Functions</div><div class="pc" id="chk4"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is a Lambda Function?</h3>
 <p class="v2-p">A <strong>lambda function</strong> is a small, anonymous (nameless) function written in a single line.</p>
 <ul class="v2-ul"><li><strong>Anonymous</strong> means it has no <code>def</code> keyword and no name</li><li>It is used when you need a short, throwaway function</li><li>It can only contain a <strong>single expression</strong> (not multiple lines of code)</li></ul>
 <p class="v2-p"><strong>Syntax:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>lambda arguments : expression</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>lambda arguments : expression</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Your First Lambda</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Regular function
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Regular function
 def double(x):
     return x * 2
 
@@ -484,35 +376,35 @@ double_lambda = lambda x: x * 2
 print(double(5))          # Output: 10
 print(double_lambda(5))   # Output: 10</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>10
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>10
 10</code></pre></div></div>
 <p class="v2-p">Both do exactly the same thing. The lambda is just shorter.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Lambda With Multiple Arguments</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>add = lambda a, b: a + b
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>add = lambda a, b: a + b
 
 print(add(3, 7))</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>10</code></pre></div></div>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>full_name = lambda first, last: first + &quot; &quot; + last
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>10</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>full_name = lambda first, last: first + &quot; &quot; + last
 
 print(full_name(&quot;Ada&quot;, &quot;Lovelace&quot;))</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Ada Lovelace</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Ada Lovelace</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Why Use Lambda? — The Power Comes With Other Functions</h3>
 <p class="v2-p">The real power of lambda appears when you use it <strong>inside</strong> other functions that accept a function as an argument. The most common examples are <code>map()</code>, <code>filter()</code>, and <code>sorted()</code>.</p>
 <h4 class="v2-h4">Lambda with <code>map()</code></h4>
 <p class="v2-p"><code>map(function, list)</code> applies a function to <strong>every item</strong> in a list.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>numbers = [1, 2, 3, 4, 5]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>numbers = [1, 2, 3, 4, 5]
 
 doubled = list(map(lambda x: x * 2, numbers))
 
 print(doubled)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[2, 4, 6, 8, 10]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[2, 4, 6, 8, 10]</code></pre></div></div>
 <p class="v2-p"><strong>Without lambda</strong>, you'd need to write a separate function:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def double(x):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def double(x):
     return x * 2
 
 doubled = list(map(double, numbers))</code></pre></div></div>
@@ -520,17 +412,17 @@ doubled = list(map(double, numbers))</code></pre></div></div>
 <hr class="v2-hr">
 <h4 class="v2-h4">Lambda with <code>filter()</code></h4>
 <p class="v2-p"><code>filter(function, list)</code> keeps only the items where the function returns <code>True</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 evens = list(filter(lambda x: x % 2 == 0, numbers))
 
 print(evens)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[2, 4, 6, 8, 10]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[2, 4, 6, 8, 10]</code></pre></div></div>
 <hr class="v2-hr">
 <h4 class="v2-h4">Lambda with <code>sorted()</code></h4>
 <p class="v2-p"><code>sorted(list, key=function)</code> sorts a list using a custom key.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>students = [
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>students = [
     {&quot;name&quot;: &quot;Alice&quot;, &quot;grade&quot;: 85},
     {&quot;name&quot;: &quot;Bob&quot;,   &quot;grade&quot;: 72},
     {&quot;name&quot;: &quot;Carol&quot;, &quot;grade&quot;: 91},
@@ -542,13 +434,13 @@ sorted_students = sorted(students, key=lambda s: s[&quot;grade&quot;])
 for s in sorted_students:
     print(s[&quot;name&quot;], s[&quot;grade&quot;])</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Bob 72
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Bob 72
 Alice 85
 Carol 91</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Lambda Inside a Function (Returning Lambda)</h3>
 <p class="v2-p">One common pattern: a function that <strong>returns</strong> a lambda. This lets you create customised functions on the fly.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def multiplier(n):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def multiplier(n):
     return lambda x: x * n      # returns a lambda that multiplies by n
 
 double  = multiplier(2)
@@ -559,7 +451,7 @@ print(double(5))    # 10
 print(triple(5))    # 15
 print(times10(5))   # 50</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>10
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>10
 15
 50</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">🌍 <strong>Real-world use:</strong> Sorting e-commerce products by price, name, or rating. Filtering customer lists. Transforming data in data science pipelines.</p></blockquote>
@@ -567,20 +459,20 @@ print(times10(5))   # 50</code></pre></div></div>
 <h3 class="v2-h3">Lambda Limitations</h3>
 <p class="v2-p">Lambda can only hold <strong>one expression</strong>. It cannot contain:</p>
 <ul class="v2-ul"><li>Multiple statements</li><li><code>if/else</code> blocks (only inline ternary expressions)</li><li>Loops</li><li><code>return</code> keyword (the expression IS the return value)</li></ul>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ✅ Inline if/else IS allowed
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ✅ Inline if/else IS allowed
 classify = lambda x: &quot;positive&quot; if x &gt; 0 else &quot;non-positive&quot;
 print(classify(5))    # positive
 print(classify(-3))   # non-positive</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Common Beginner Mistakes with Lambda</h3>
 <p class="v2-p"><strong>Mistake 1: Using <code>return</code> inside lambda</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ WRONG
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ WRONG
 f = lambda x: return x * 2    # SyntaxError
 
 # ✅ CORRECT
 f = lambda x: x * 2</code></pre></div></div>
 <p class="v2-p"><strong>Mistake 2: Using lambda for complex logic</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ Bad practice — hard to read
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ Bad practice — hard to read
 f = lambda x, y: x**2 + 2*x*y + y**2 if x &gt; 0 and y &gt; 0 else 0
 
 # ✅ Better — use a regular function for clarity
@@ -589,10 +481,7 @@ def compute(x, y):
         return x**2 + 2*x*y + y**2
     return 0</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">💡 <strong>Rule of thumb:</strong> If the lambda is hard to read in one line, write a regular function instead.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">f = lambda x, y: x2 + 2*x*y + y2 if x > 0 and y > 0 else 0
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">f = lambda x, y: x2 + 2*x*y + y2 if x > 0 and y > 0 else 0
 
 # ✅ Better — use a regular function for clarity
 def compute(x, y):
@@ -603,19 +492,8 @@ def compute(x, y):
 
 > 💡 Rule of thumb: If the lambda is hard to read in one line, write a regular function instead.
 
----</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase5">
-  <div class="phase-header">
-    <div class="phase-num">Phase 5 of 8</div>
-    <div class="phase-title">Part 3 — Python Recursion</div>
-    <div class="phase-check" id="chk5"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+---</div></div><button class="ub" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase5"><div class="ph"><div class="pn">Phase 5/8</div><div class="pt">Part 3 — Python Recursion</div><div class="pc" id="chk5"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is Recursion?</h3>
 <p class="v2-p"><strong>Recursion</strong> is when a function calls <strong>itself</strong> inside its own body to solve a smaller version of the same problem.</p>
 <p class="v2-p"><strong>Real-world analogy:</strong> Imagine you're in a long line at a cinema and you can't see the front. You ask the person in front of you, "What number are you in line?" They don't know either, so they ask the person in front of <em>them</em>, and so on. Eventually someone at the front says "I'm number 1!" Then the answer travels back: "I'm number 2", "I'm number 3", until the answer reaches you.</p>
@@ -627,7 +505,7 @@ def compute(x, y):
 <p class="v2-p">Without a base case, the function calls itself forever → <strong>infinite recursion</strong> → Python crashes with a <code>RecursionError</code>.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Your First Recursive Function: Counting Down</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def countdown(n):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def countdown(n):
     if n &lt;= 0:          # Base case: stop here
         print(&quot;Go!&quot;)
     else:
@@ -636,14 +514,14 @@ def compute(x, y):
 
 countdown(5)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>5
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>5
 4
 3
 2
 1
 Go!</code></pre></div></div>
 <p class="v2-p">Let's trace the calls:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>countdown(5) → prints 5, calls countdown(4)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>countdown(5) → prints 5, calls countdown(4)
   countdown(4) → prints 4, calls countdown(3)
     countdown(3) → prints 3, calls countdown(2)
       countdown(2) → prints 2, calls countdown(1)
@@ -652,10 +530,10 @@ Go!</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Classic Example: Factorial</h3>
 <p class="v2-p">The <strong>factorial</strong> of a number n (written n!) is:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>5! = 5 × 4 × 3 × 2 × 1 = 120</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>5! = 5 × 4 × 3 × 2 × 1 = 120</code></pre></div></div>
 <p class="v2-p">It has a natural recursive definition:</p>
 <ul class="v2-ul"><li><code>0! = 1</code> (base case — defined mathematically)</li><li><code>n! = n × (n-1)!</code> (recursive case)</li></ul>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def factorial(n):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def factorial(n):
     if n == 0:              # Base case
         return 1
     else:
@@ -665,11 +543,11 @@ print(factorial(5))   # 120
 print(factorial(6))   # 720
 print(factorial(0))   # 1</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>120
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>120
 720
 1</code></pre></div></div>
 <p class="v2-p"><strong>Tracing factorial(5):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>factorial(5)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>factorial(5)
   = 5 * factorial(4)
   = 5 * 4 * factorial(3)
   = 5 * 4 * 3 * factorial(2)
@@ -682,7 +560,7 @@ print(factorial(0))   # 1</code></pre></div></div>
 <p class="v2-p">The <strong>Fibonacci sequence</strong> is: 0, 1, 1, 2, 3, 5, 8, 13, 21, …</p>
 <p class="v2-p">Each number is the sum of the two before it.</p>
 <ul class="v2-ul"><li><code>fib(0) = 0</code> (base case)</li><li><code>fib(1) = 1</code> (base case)</li><li><code>fib(n) = fib(n-1) + fib(n-2)</code> (recursive case)</li></ul>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def fib(n):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def fib(n):
     if n == 0:
         return 0
     elif n == 1:
@@ -693,7 +571,7 @@ print(factorial(0))   # 1</code></pre></div></div>
 for i in range(10):
     print(f&quot;fib({i}) = {fib(i)}&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>fib(0) = 0
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>fib(0) = 0
 fib(1) = 1
 fib(2) = 1
 fib(3) = 2
@@ -706,7 +584,7 @@ fib(9) = 34</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Classic Example: Power Function</h3>
 <p class="v2-p">Calculate <code>base ** exponent</code> recursively:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def power(base, exp):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def power(base, exp):
     if exp == 0:              # anything to the power 0 is 1
         return 1
     else:
@@ -715,12 +593,12 @@ fib(9) = 34</code></pre></div></div>
 print(power(2, 10))   # 1024
 print(power(3, 4))    # 81</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>1024
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>1024
 81</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Visualising the Call Stack</h3>
 <p class="v2-p">Every time a recursive function calls itself, Python pushes a new <strong>stack frame</strong> onto the <strong>call stack</strong>. When the base case is reached, the frames unwind in reverse order.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>factorial(3)           ← frame 1
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>factorial(3)           ← frame 1
   factorial(2)         ← frame 2
     factorial(1)       ← frame 3
       factorial(0)     ← frame 4 → returns 1
@@ -732,7 +610,7 @@ print(power(3, 4))    # 81</code></pre></div></div>
 <h3 class="v2-h3">Recursion vs Loops</h3>
 <p class="v2-p">Both can solve the same problems. Here is the same task done two ways:</p>
 <p class="v2-p"><strong>Loop version (sum 1 to n):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def sum_loop(n):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def sum_loop(n):
     total = 0
     for i in range(1, n + 1):
         total += i
@@ -740,19 +618,19 @@ print(power(3, 4))    # 81</code></pre></div></div>
 
 print(sum_loop(5))   # 15</code></pre></div></div>
 <p class="v2-p"><strong>Recursive version:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def sum_recursive(n):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def sum_recursive(n):
     if n == 0:
         return 0
     return n + sum_recursive(n - 1)
 
 print(sum_recursive(5))   # 15</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>15</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>15</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">🌍 <strong>Real-world use:</strong> Recursion shines in tasks with <strong>naturally nested structure</strong>: file systems (folders inside folders), HTML/XML trees, organisation charts, mathematical proofs, sorting algorithms (merge sort, quicksort), and graph traversal (GPS routing, social networks).</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Common Beginner Mistakes with Recursion</h3>
 <p class="v2-p"><strong>Mistake 1: Missing base case (infinite recursion)</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ WRONG — never stops
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ WRONG — never stops
 def countdown(n):
     print(n)
     countdown(n - 1)   # No base case → RecursionError
@@ -764,7 +642,7 @@ def countdown(n):
     print(n)
     countdown(n - 1)</code></pre></div></div>
 <p class="v2-p"><strong>Mistake 2: Base case never reached</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ WRONG — n grows instead of shrinks
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ WRONG — n grows instead of shrinks
 def countdown(n):
     if n == 0:
         return
@@ -776,7 +654,7 @@ def countdown(n):
         return
     countdown(n - 1)</code></pre></div></div>
 <p class="v2-p"><strong>Mistake 3: Forgetting to return the recursive result</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ WRONG
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ WRONG
 def factorial(n):
     if n == 0:
         return 1
@@ -788,22 +666,8 @@ def factorial(n):
         return 1
     return n * factorial(n - 1)</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p">🤔 <strong>Thinking prompt:</strong> What is the largest number you can pass to <code>factorial()</code> before Python raises a RecursionError? Try it!</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Python Recursion</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase6">
-  <div class="phase-header">
-    <div class="phase-num">Phase 6 of 8</div>
-    <div class="phase-title">Part 4 — Python Generators</div>
-    <div class="phase-check" id="chk6"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Python Recursion</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase6"><div class="ph"><div class="pn">Phase 6/8</div><div class="pt">Part 4 — Python Generators</div><div class="pc" id="chk6"></div></div><div class="pb2"><hr class="v2-hr">
 <h3 class="v2-h3">What Is a Generator?</h3>
 <p class="v2-p">Imagine you need to process 10 million numbers. If you put them all in a list, Python stores all 10 million in memory at once — that's enormous. A <strong>generator</strong> produces values <strong>one at a time</strong>, on demand, without storing them all in memory.</p>
 <p class="v2-p"><strong>Real-world analogy:</strong> A list is like printing a whole book before reading it. A generator is like a printing press that prints one page at a time as you read.</p>
@@ -814,7 +678,7 @@ def factorial(n):
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th><code>return</code></th><th><code>yield</code></th></tr></thead><tbody><tr><td>Returns a value and the function <strong>ends</strong></td><td>Returns a value and the function <strong>pauses</strong></td></tr><tr><td>Called once</td><td>Can be called many times</td></tr><tr><td>Produces one result</td><td>Produces a series of results</td></tr><tr><td>Regular function</td><td>Generator function</td></tr></tbody></table></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Your First Generator</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def my_generator():
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def my_generator():
     yield 1
     yield 2
     yield 3
@@ -825,15 +689,15 @@ print(next(gen))   # runs until first yield → 1
 print(next(gen))   # resumes, runs until second yield → 2
 print(next(gen))   # resumes, runs until third yield → 3</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>1
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>1
 2
 3</code></pre></div></div>
 <p class="v2-p"><strong>What happens if you call <code>next()</code> again?</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(next(gen))   # StopIteration error — no more values</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(next(gen))   # StopIteration error — no more values</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Looping Over a Generator</h3>
 <p class="v2-p">The most common way to consume a generator is with a <code>for</code> loop. Python calls <code>next()</code> automatically and stops when <code>StopIteration</code> is raised.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def count_up(n):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def count_up(n):
     i = 1
     while i &lt;= n:
         yield i
@@ -842,7 +706,7 @@ print(next(gen))   # resumes, runs until third yield → 3</code></pre></div></d
 for number in count_up(5):
     print(number)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>1
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>1
 2
 3
 4
@@ -850,7 +714,7 @@ for number in count_up(5):
 <hr class="v2-hr">
 <h3 class="v2-h3">Generator with an Infinite Sequence</h3>
 <p class="v2-p">Generators are perfect for sequences that go on forever — something you cannot do with a list.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def infinite_counter(start=0):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def infinite_counter(start=0):
     n = start
     while True:         # runs forever
         yield n
@@ -861,7 +725,7 @@ counter = infinite_counter(10)
 for _ in range(5):
     print(next(counter))</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>10
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>10
 11
 12
 13
@@ -870,7 +734,7 @@ for _ in range(5):
 <hr class="v2-hr">
 <h3 class="v2-h3">Generator Expressions (One-Liners)</h3>
 <p class="v2-p">Just as list comprehensions build lists in one line, <strong>generator expressions</strong> build generators in one line. Use parentheses <code>()</code> instead of square brackets <code>[]</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># List comprehension — creates ALL values in memory NOW
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># List comprehension — creates ALL values in memory NOW
 squares_list = [x**2 for x in range(10)]
 
 # Generator expression — creates values one at a time on demand
@@ -882,11 +746,11 @@ print(squares_gen)        # &lt;generator object &lt;genexpr&gt; at 0x...&gt;
 for val in squares_gen:
     print(val, end=&quot; &quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
 0 1 4 9 16 25 36 49 64 81</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Memory Comparison: List vs Generator</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import sys
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import sys
 
 nums_list = [x for x in range(1000000)]
 nums_gen  = (x for x in range(1000000))
@@ -894,12 +758,12 @@ nums_gen  = (x for x in range(1000000))
 print(&quot;List size:&quot;, sys.getsizeof(nums_list), &quot;bytes&quot;)
 print(&quot;Generator size:&quot;, sys.getsizeof(nums_gen), &quot;bytes&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Output (approximate):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>List size: 8056624 bytes    (~8 MB)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>List size: 8056624 bytes    (~8 MB)
 Generator size: 104 bytes   (~0.0001 MB)</code></pre></div></div>
 <p class="v2-p">The generator uses almost <strong>no memory</strong> regardless of how many values it will produce.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">A Practical Generator: Reading a Large File Line by Line</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def read_large_file(filepath):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def read_large_file(filepath):
     with open(filepath, &quot;r&quot;) as f:
         for line in f:
             yield line.strip()
@@ -910,7 +774,7 @@ for line in read_large_file(&quot;huge_log_file.txt&quot;):
 <blockquote class="v2-bq"><p class="v2-p">🌍 <strong>Real-world use:</strong> Log analysis, streaming database results, processing CSV files too large to fit in RAM, real-time sensor data, network packet processing.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Generator with Multiple <code>yield</code> Statements</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def weather_report():
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def weather_report():
     yield &quot;Morning: Sunny, 18°C&quot;
     yield &quot;Noon: Partly cloudy, 24°C&quot;
     yield &quot;Evening: Windy, 20°C&quot;
@@ -919,14 +783,14 @@ for line in read_large_file(&quot;huge_log_file.txt&quot;):
 for report in weather_report():
     print(report)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Morning: Sunny, 18°C
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Morning: Sunny, 18°C
 Noon: Partly cloudy, 24°C
 Evening: Windy, 20°C
 Night: Clear, 15°C</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">The <code>send()</code> Method — Two-Way Communication</h3>
 <p class="v2-p">Generators can also <strong>receive</strong> values while running using <code>.send()</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def accumulator():
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def accumulator():
     total = 0
     while True:
         value = yield total     # yields total, then receives a new value
@@ -939,13 +803,13 @@ print(acc.send(10))   # sends 10 → total = 10
 print(acc.send(20))   # sends 20 → total = 30
 print(acc.send(5))    # sends 5  → total = 35</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>10
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>10
 30
 35</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Common Beginner Mistakes with Generators</h3>
 <p class="v2-p"><strong>Mistake 1: Trying to index a generator like a list</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>gen = (x for x in range(10))
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>gen = (x for x in range(10))
 
 # ❌ WRONG
 print(gen[0])   # TypeError: &#x27;generator&#x27; object is not subscriptable
@@ -954,14 +818,14 @@ print(gen[0])   # TypeError: &#x27;generator&#x27; object is not subscriptable
 lst = list(gen)
 print(lst[0])   # 0</code></pre></div></div>
 <p class="v2-p"><strong>Mistake 2: Consuming a generator twice</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>gen = (x for x in range(5))
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>gen = (x for x in range(5))
 list1 = list(gen)   # consumes all values
 list2 = list(gen)   # generator is exhausted — empty!
 
 print(list1)   # [0, 1, 2, 3, 4]
 print(list2)   # []</code></pre></div></div>
 <p class="v2-p"><strong>Mistake 3: Confusing <code>yield</code> with <code>return</code></strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># ❌ Using return — gives only ONE value, function ends
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># ❌ Using return — gives only ONE value, function ends
 def give_numbers():
     return 1
     return 2    # never reached
@@ -970,30 +834,15 @@ def give_numbers():
 def give_numbers():
     yield 1
     yield 2</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Python Generators</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase7">
-  <div class="phase-header">
-    <div class="phase-num">Phase 7 of 8</div>
-    <div class="phase-title">Guided Practice Exercises</div>
-    <div class="phase-check" id="chk7"></div>
-  </div>
-  <div class="phase-body">
-    <hr class="v2-hr">
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Python Generators</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase7"><div class="ph"><div class="pn">Phase 7/8</div><div class="pt">Guided Practice Exercises</div><div class="pc" id="chk7"></div></div><div class="pb2"><div class="chal-box"><div class="chal-lbl">🎯 Your Challenge</div><div class="chal-body"><hr class="v2-hr">
 <h3 class="v2-h3">Exercise 1 — Decorator: Logging Function Calls</h3>
 <p class="v2-p"><strong>Objective:</strong> Write a decorator that logs when a function starts and ends.</p>
 <p class="v2-p"><strong>Scenario:</strong> You are building a data processing pipeline and need to track which functions run and when.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Write a decorator called <code>log_call</code></li><li>It should print <code>"Calling: [function name]"</code> before the function runs</li><li>It should print <code>"Finished: [function name]"</code> after it finishes</li><li>Decorate a function called <code>process_data(items)</code> that prints each item</li></ol>
 <p class="v2-p"><strong>Hint:</strong> Use <code>func.__name__</code> to get the function's name.</p>
-<p class="v2-p"><strong>Solution:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def log_call(func):
+<p class="v2-p"><strong>Solution:</strong></p></div></div><div class="task-box"><div class="task-lbl">✏️ Task</div><div class="task-body">Practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="reveal-btn" onclick="toggleReveal(this)">👁️ Reveal Answer</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def log_call(func):
     def wrapper(*args, **kwargs):
         print(f&quot;Calling: {func.__name__}&quot;)
         result = func(*args, **kwargs)
@@ -1008,7 +857,7 @@ def process_data(items):
 
 process_data([&quot;order_1&quot;, &quot;order_2&quot;, &quot;order_3&quot;])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Calling: process_data
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Calling: process_data
   Processing: order_1
   Processing: order_2
   Processing: order_3
@@ -1019,7 +868,7 @@ Finished: process_data</code></pre></div></div>
 <h3 class="v2-h3">Exercise 2 — Lambda: Sorting Products</h3>
 <p class="v2-p"><strong>Objective:</strong> Use lambda to sort a list of product dictionaries.</p>
 <p class="v2-p"><strong>Scenario:</strong> An online shop needs to display products sorted by price (cheapest first), then by rating (highest first).</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>products = [
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>products = [
     {&quot;name&quot;: &quot;Keyboard&quot;,  &quot;price&quot;: 49.99, &quot;rating&quot;: 4.5},
     {&quot;name&quot;: &quot;Mouse&quot;,     &quot;price&quot;: 29.99, &quot;rating&quot;: 4.8},
     {&quot;name&quot;: &quot;Monitor&quot;,   &quot;price&quot;: 299.99, &quot;rating&quot;: 4.2},
@@ -1041,7 +890,7 @@ print(&quot;\nSorted by rating:&quot;)
 for p in by_rating:
     print(f&quot;  {p[&#x27;name&#x27;]}: {p[&#x27;rating&#x27;]} stars&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Sorted by price:
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Sorted by price:
   Mouse: £29.99
   Keyboard: £49.99
   Webcam: £49.99
@@ -1060,7 +909,7 @@ Sorted by rating:
 <p class="v2-p"><strong>Objective:</strong> Write a recursive function that sums all digits of a number.</p>
 <p class="v2-p"><strong>Example:</strong> <code>sum_digits(1234) → 1 + 2 + 3 + 4 = 10</code></p>
 <p class="v2-p"><strong>Hint:</strong> A number's last digit is <code>n % 10</code>. The rest of the number is <code>n // 10</code>.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>def sum_digits(n):
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>def sum_digits(n):
     if n &lt; 10:             # Base case: single digit
         return n
     return (n % 10) + sum_digits(n // 10)   # last digit + recurse on the rest
@@ -1069,7 +918,7 @@ print(sum_digits(1234))   # 10
 print(sum_digits(9999))   # 36
 print(sum_digits(7))      # 7</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>10
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>10
 36
 7</code></pre></div></div>
 <p class="v2-p"><strong>Self-check:</strong> Trace <code>sum_digits(456)</code> step by step on paper.</p>
@@ -1077,7 +926,7 @@ print(sum_digits(7))      # 7</code></pre></div></div>
 <h3 class="v2-h3">Exercise 4 — Generator: Student Grade Report</h3>
 <p class="v2-p"><strong>Objective:</strong> Write a generator that yields student report lines one at a time.</p>
 <p class="v2-p"><strong>Scenario:</strong> A school system needs to print student reports without loading all 10,000 student records into memory at once.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>students = [
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>students = [
     {&quot;name&quot;: &quot;Alice&quot;,  &quot;score&quot;: 88},
     {&quot;name&quot;: &quot;Bob&quot;,    &quot;score&quot;: 62},
     {&quot;name&quot;: &quot;Carol&quot;,  &quot;score&quot;: 95},
@@ -1095,143 +944,95 @@ print(&quot;=== STUDENT GRADE REPORT ===&quot;)
 for report_line in grade_report(students):
     print(report_line)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>=== STUDENT GRADE REPORT ===
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>=== STUDENT GRADE REPORT ===
 Alice: 88/100 — Grade B
 Bob: 62/100 — Grade D
 Carol: 95/100 — Grade A
 David: 74/100 — Grade C
 Eve: 55/100 — Grade F</code></pre></div></div>
+<hr class="v2-hr"></div><button class="ub" onclick="unlockNext(7)">Mark Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase8"><div class="ph"><div class="pn">Phase 8/8</div><div class="pt">Common Beginner Mistakes — Consolidated Reference</div><div class="pc" id="chk8"></div></div><div class="pb2"><div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Mistake</th><th>Wrong</th><th>Correct</th></tr></thead><tbody><tr><td>Calling function when passing to decorator</td><td><code>decorator(func())</code></td><td><code>decorator(func)</code></td></tr><tr><td>Forgetting to return wrapper</td><td><code>def dec(f): def w(): f()</code></td><td><code>def dec(f): def w(): f(); return w</code></td></tr><tr><td><code>return</code> inside lambda</td><td><code>lambda x: return x*2</code></td><td><code>lambda x: x*2</code></td></tr><tr><td>Missing base case in recursion</td><td>No <code>if</code> to stop</td><td>Always include <code>if n == base: return value</code></td></tr><tr><td>Wrong recursion direction</td><td><code>countdown(n+1)</code></td><td><code>countdown(n-1)</code></td></tr><tr><td>Indexing a generator</td><td><code>gen[0]</code></td><td><code>list(gen)[0]</code></td></tr><tr><td>Consuming a generator twice</td><td><code>list(gen); list(gen)</code></td><td>Create a new generator each time</td></tr><tr><td>Stacking decorators wrong order</td><td>Confusing inner/outer</td><td>Remember: bottom <code>@</code> applies first</td></tr></tbody></table></div>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Common Beginner Mistakes — Consolidated Reference</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="build-box" id="build-it"><div class="build-lbl">🏗️ Build It — Mini Project</div><div class="build-name">Project Overview</div><div class="build-req"><p class="v2-p">In this project you will combine <strong>all four concepts</strong> — decorators, lambda, recursion, and generators — to build a simple budget analysis tool.</p>
 <hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase8">
-  <div class="phase-header">
-    <div class="phase-num">Phase 8 of 8</div>
-    <div class="phase-title">Common Beginner Mistakes — Consolidated Reference</div>
-    <div class="phase-check" id="chk8"></div>
-  </div>
-  <div class="phase-body">
-    <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Mistake</th><th>Wrong</th><th>Correct</th></tr></thead><tbody><tr><td>Calling function when passing to decorator</td><td><code>decorator(func())</code></td><td><code>decorator(func)</code></td></tr><tr><td>Forgetting to return wrapper</td><td><code>def dec(f): def w(): f()</code></td><td><code>def dec(f): def w(): f(); return w</code></td></tr><tr><td><code>return</code> inside lambda</td><td><code>lambda x: return x*2</code></td><td><code>lambda x: x*2</code></td></tr><tr><td>Missing base case in recursion</td><td>No <code>if</code> to stop</td><td>Always include <code>if n == base: return value</code></td></tr><tr><td>Wrong recursion direction</td><td><code>countdown(n+1)</code></td><td><code>countdown(n-1)</code></td></tr><tr><td>Indexing a generator</td><td><code>gen[0]</code></td><td><code>list(gen)[0]</code></td></tr><tr><td>Consuming a generator twice</td><td><code>list(gen); list(gen)</code></td><td>Create a new generator each time</td></tr><tr><td>Stacking decorators wrong order</td><td>Confusing inner/outer</td><td>Remember: bottom <code>@</code> applies first</td></tr></tbody></table></div>
+<h3 class="v2-h3">Project Overview</h3>
+<p class="v2-p"><strong>Scenario:</strong> You are building a personal finance tool. Given a list of transactions, you need to:</p>
+<ol class="v2-ol"><li>Log every major function call (decorator)</li><li>Filter and sort transactions (lambda)</li><li>Calculate running totals recursively (recursion)</li><li>Stream the report line by line (generator)</li></ol>
 <hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Common Beginner Mistakes — Consolidated Reference</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="build-box" id="build-it">
-  <div class="build-label">🏗️ Build It</div>
-  <div class="build-name">Project Overview</div>
-  <div class="build-desc"><strong>Scenario:</strong> You are building a personal finance tool. Given a list of transactions, you need to:</div>
-  <div class="v2-code-wrap">
-    <div class="v2-code-bar">
-      <span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span>
-      <span class="v2-code-lang">starter.py</span>
-    </div>
-    <div class="v2-code-body"><pre><code># Stage 1: Logging decorator
+<h3 class="v2-h3">Stage 1 — Setup and Decorator</h3></div><button class="reveal-btn" onclick="toggleCode(this)">💻 Reveal Starter Code</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">starter.py</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Stage 1: Logging decorator
 def log_operation(func):
     def wrapper(*args, **kwargs):
         print(f&quot;\n[LOG] Running: {func.__name__}&quot;)
         result = func(*args, **kwargs)
         print(f&quot;[LOG] Completed: {func.__name__}&quot;)
         return result
-    return wrapper</code></pre></div>
-  </div>
-  <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
-    <button class="unlock-btn" onclick="downloadStarter(`# Stage 1: Logging decorator
+    return wrapper</code></pre></div></div><div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem"><button class="ub" onclick="downloadStarter(`# Stage 1: Logging decorator
 def log_operation(func):
     def wrapper(*args, **kwargs):
         print(f"\\n[LOG] Running: {func.__name__}")
         result = func(*args, **kwargs)
         print(f"[LOG] Completed: {func.__name__}")
         return result
-    return wrapper`)"
-      style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">
-      ⬇ Download starter.py
-    </button>
-    <button class="unlock-btn" onclick="showGithub()"
-      style="background:#0f172a;box-shadow:none">
-      🐙 Push to GitHub →
-    </button>
-  </div>
-</div>
+    return wrapper`)" style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">⬇ Download starter.py</button><button class="ub" onclick="showGithub()" style="background:#0f172a;box-shadow:none">🐙 Save to GitHub →</button></div></div></div>
 <div class="gh-acc" id="gh-steps" style="display:none">
-  <div class="gh-acc-head" onclick="toggleGh(this)">
-    🐙 Push Your Project to GitHub Pages &nbsp;<span>▼</span>
-  </div>
-  <div class="gh-acc-body">
-    <div class="gh-step"><div class="gh-step-n">1</div>
-    <p>Go to <strong>github.com</strong> → click <strong>New repository</strong> → name it <code>python-lesson-16-project-overview</code>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">2</div>
-    <p>Set it to <strong>Public</strong>, tick <strong>Add a README</strong>, then click <strong>Create repository</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">3</div>
-    <p>Click <strong>Add file → Upload files</strong>. Upload your <code>starter.py</code> — rename it to <code>index.py</code> before uploading.</p></div>
-    <div class="gh-step"><div class="gh-step-n">4</div>
-    <p>Commit message: <em>"Add Python lesson 16 project"</em> → click <strong>Commit changes</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">5</div>
-    <p>Go to <strong>Settings → Pages</strong> → branch <strong>main</strong> → <strong>Save</strong>. Your project goes live at <code>https://YOUR-NAME.github.io/python-lesson-16-project-overview/</code> in about 1 minute! 🎉</p></div>
-    <button class="unlock-btn" onclick="showEnd()" style="margin-top:.5rem">I've pushed to GitHub — Finish Session ✅</button>
-  </div>
-</div>
-<div class="session-end" id="session-end">
-  <h2>🎉 Lesson 16 complete!</h2>
-  <p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p>
-  <ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1 — Python Decorators</li><li>✅ Part 2 — Lambda Functions</li><li>✅ Part 3 — Python Recursion</li><li>✅ Part 4 — Python Generators</li><li>✅ Guided Practice Exercises</li><li>✅ Common Beginner Mistakes — Consolidated Reference</li></ul>
-  <div class="lesson-nav"><a href="lesson_15.html" class="ln-btn">← Lesson 15</a><a href="lesson_17.html" class="ln-btn primary">Lesson 17 →</a></div>
-</div>
+<div class="gh-hd" onclick="toggleGh(this)">🐙 Save Python Project to GitHub &nbsp;<span>▼</span></div>
+<div class="gh-bd">
+<div class="gh-nop"><strong>⚠️ Python cannot be hosted on GitHub Pages.</strong><br><br>GitHub Pages only serves static HTML/CSS/JS files. Python scripts need a server to run — you will learn deployment (Replit, PythonAnywhere, Heroku) later in the course. For now, save your code to GitHub as a portfolio entry.</div>
+<div class="gh-st"><div class="gh-n">1</div><p>Go to <strong>github.com → New repository</strong> → name it <code>python-lesson-16-project-overview</code>. Set <strong>Public</strong>, tick <strong>Add README</strong>, click <strong>Create</strong>.</p></div>
+<div class="gh-st"><div class="gh-n">2</div><p>Click <strong>Add file → Upload files</strong> → upload your <code>.py</code> file.</p></div>
+<div class="gh-st"><div class="gh-n">3</div><p>Commit message: <em>"Add Python lesson 16 project"</em> → <strong>Commit changes</strong>. Your code is now part of your GitHub portfolio! 🐍</p></div>
+<button class="ub" onclick="showEnd()" style="background:#059669;margin-top:.5rem">Done — Finish Session ✅</button>
+</div></div>
+<div class="se" id="session-end"><h2>🎉 Lesson 16 complete!</h2><p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p><ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1 — Python Decorators</li><li>✅ Part 2 — Lambda Functions</li><li>✅ Part 3 — Python Recursion</li><li>✅ Part 4 — Python Generators</li><li>✅ Guided Practice Exercises</li><li>✅ Common Beginner Mistakes — Consolidated Reference</li></ul><div class="ln"><a href="lesson_15.html" class="ln-btn">← Lesson 15</a><a href="lesson_17.html" class="ln-btn primary">Lesson 17 →</a></div></div>
 </main>
-
-<footer class="lesson-footer">
-  Techbase Code Coach · Python Course · Lesson 16 · © 2025 Techbase Consultant Services, Ibadan
-</footer>
+<footer class="lf">Techbase Code Coach &nbsp;·&nbsp; Python Course &nbsp;·&nbsp; Lesson 16 &nbsp;·&nbsp; © 2025 Techbase Consultant Services, Ibadan</footer>
+<div id="toast"></div>
+<button id="go-top" title="Back to top">↑</button>
+<canvas id="cc"></canvas>
 <script>
 const TOTAL=8,KEY='techbase_python_l16';
-let current=parseInt(localStorage.getItem(KEY)||'1');
-function init(){
-  for(let i=2;i<=current;i++) unlockPhase(i,false);
-  updateBar();
-}
+let cur=parseInt(localStorage.getItem(KEY)||'1');
+function init(){for(let i=2;i<=cur;i++)unlock(i,false);bar();}
 function unlockNext(n){
-  const chk=document.getElementById('chk'+n);
-  if(chk){chk.classList.add('done');chk.textContent='✓';}
-  localStorage.setItem(KEY,n+1); current=n+1;
+  const c=document.getElementById('chk'+n);
+  if(c){c.classList.add('done');c.textContent='✓';}
+  localStorage.setItem(KEY,n+1);cur=n+1;
   if(n===TOTAL){
-    document.getElementById('build-it').style.display='block';
-    updateBar(100);
+    document.getElementById('build-it').classList.add('visible');
+    bar(100);toast('🏗️ Build It unlocked!');
     setTimeout(()=>document.getElementById('build-it').scrollIntoView({behavior:'smooth'}),200);
-  }else{
-    unlockPhase(n+1,true); updateBar();
-  }
+    setTimeout(confetti,600);
+  }else{unlock(n+1,true);bar();toast(['✅ Phase complete!','🎯 Keep going!','💡 Nice work!','🚀 Nailed it!'][n%4]);}
 }
-function unlockPhase(n,scroll){
-  const el=document.getElementById('phase'+n);
-  if(el){el.classList.remove('locked');if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+function unlock(n,scroll){
+  const el=document.getElementById('phase'+n);if(!el)return;
+  el.classList.remove('locked');
+  if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),180);
 }
-function updateBar(pct){
-  const p=pct!==undefined?pct:Math.round((current-1)/TOTAL*95);
-  document.getElementById('pbar').style.width=p+'%';
+function bar(p){document.getElementById('pbar').style.width=(p!==undefined?p:Math.round((cur-1)/TOTAL*95))+'%';}
+function toggleReveal(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Answer':'👁️ Reveal Answer';}
+function toggleCode(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Starter Code':'💻 Reveal Starter Code';}
+function copyCode(btn){
+  const code=btn.closest('.v2-code-wrap').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='⎘ Copy';btn.classList.remove('copied');},1800);}).catch(()=>{});
 }
-function showGithub(){
-  const g=document.getElementById('gh-steps');
-  if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}
-}
-function showEnd(){
-  const e=document.getElementById('session-end');
-  if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}
-}
+const tEl=document.getElementById('toast');let tT;
+function toast(msg){tEl.innerHTML=msg;tEl.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>tEl.classList.remove('show'),2400);}
+const gEl=document.getElementById('go-top');
+window.addEventListener('scroll',()=>gEl.classList.toggle('visible',scrollY>320),{passive:true});
+gEl.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 function toggleGh(el){el.nextElementSibling.classList.toggle('open');}
-function downloadStarter(code){
-  const a=document.createElement('a');
-  a.href='data:text/html;charset=utf-8,'+encodeURIComponent(code);
-  a.download='starter.html';a.click();
+function showGithub(){const g=document.getElementById('gh-steps');if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}}
+function showEnd(){const e=document.getElementById('session-end');if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}}
+function downloadStarter(code){const ext='python'==='python'?'py':'html';const a=document.createElement('a');a.href='data:text/'+(ext==='py'?'x-python':'html')+';charset=utf-8,'+encodeURIComponent(code);a.download='starter.'+ext;a.click();}
+function confetti(){
+  const cv=document.getElementById('cc');cv.style.display='block';const ctx=cv.getContext('2d');
+  cv.width=innerWidth;cv.height=innerHeight;
+  const ps=Array.from({length:130},()=>{return{x:Math.random()*cv.width,y:-10-Math.random()*120,r:4+Math.random()*6,d:2+Math.random()*3,c:['#e34c26','#0284c7','#d97706','#059669','#7c3aed','#ec4899'][Math.floor(Math.random()*6)],ta:0};}); 
+  let f=0;
+  function draw(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.ta+=.1;p.y+=p.d;p.x+=Math.sin(f/20);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();});f++;if(f<200)requestAnimationFrame(draw);else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}}
+  draw();toast('🎉 All phases done! Build It awaits!');
 }
 init();
 </script>
-</body>
-</html>
+</body></html>

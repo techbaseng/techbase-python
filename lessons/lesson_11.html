@@ -1,262 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lesson 11: Python Dictionaries – From Zero to Real-World Mastery — Techbase Python</title>
-<meta name="description" content="Python Dictionaries – From Zero to Real-World Mastery">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --acc:#059669;--acc-d:#047857;--acc-pale:#ecfdf5;
-  --acc-b:rgba(5,150,105,.25);--acc-sh:rgba(5,150,105,.28);
-  --bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--t2:#334155;--muted:#64748b;
-  --D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+:root{--acc:#059669;--acd:#047857;--acp:#ecfdf5;--acb:rgba(5,150,105,.22);--acs:rgba(5,150,105,.28);--bg:#f8fafc;--sf:#fff;--br:#e2e8f0;--tx:#0f172a;--t2:#334155;--mu:#64748b;--D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
-
-/* NAV */
-.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);
-  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:58px;
-  display:flex;align-items:center;padding:0 1.5rem;gap:1rem;justify-content:space-between}
-.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.l-nav-back{font-size:.8rem;color:var(--muted);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+body{background:var(--bg);color:var(--tx);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
+.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);height:58px;display:flex;align-items:center;padding:0 1.5rem;justify-content:space-between}
+.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--tx);text-decoration:none}
+.l-nav-back{font-size:.8rem;color:var(--mu);text-decoration:none;font-weight:500;transition:color .2s}
 .l-nav-back:hover{color:var(--acc)}
-.l-nav-label{font-family:var(--M);font-size:.68rem;color:var(--muted)}
-
-/* PROGRESS */
-.progress-wrap{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--border)}
-.progress-bar{height:100%;background:var(--acc);transition:width .4s ease;width:0%}
-
-/* HERO */
-.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--border)}
-.l-hero-inner{max-width:860px;margin:0 auto}
-.l-badge{display:inline-flex;align-items:center;gap:.4rem;border-radius:100px;padding:.2rem .85rem;
-  font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
-  color:var(--acc);background:var(--acc-pale);border:1px solid var(--acc-b);margin-bottom:.8rem}
-.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);
-  letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
-.l-hero-sub{font-size:.95rem;color:var(--muted);margin-bottom:1rem}
-
-/* WELCOME BOX */
-.welcome-box{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.5rem 1.8rem;max-width:860px;margin:1.5rem auto 0}
-.welcome-box h2{font-family:var(--D);font-weight:700;font-size:1.05rem;margin-bottom:.6rem}
-.welcome-box p,.welcome-box li{font-size:.9rem;line-height:1.8;opacity:.93}
-.welcome-box ul{margin-left:1.2rem;margin-top:.5rem}
-.welcome-meta{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
-.welcome-meta span{background:rgba(255,255,255,.18);border-radius:6px;padding:.2rem .75rem;
-  font-family:var(--M);font-size:.68rem;font-weight:500}
-
-/* PHASE */
-.phase{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;
-  margin-bottom:1.5rem;overflow:hidden;transition:opacity .3s,transform .3s,filter .3s}
-.phase.locked{opacity:.35;pointer-events:none;filter:blur(1.5px)}
-.phase-header{padding:1rem 1.4rem;background:#f0fdf6;
-  border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:default}
-.phase-num{font-family:var(--M);font-size:.7rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--acc)}
-.phase-title{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--text);
-  flex:1;margin:0 .8rem}
-.phase-check{width:26px;height:26px;border-radius:50%;background:var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;
-  transition:background .3s,color .3s}
-.phase-check.done{background:#10b981;color:#fff}
-.phase-body{padding:1.6rem 1.8rem}
-
-/* RICH CONTENT STYLES */
+.l-nav-lbl{font-family:var(--M);font-size:.68rem;color:var(--mu)}
+.pw{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--br)}
+.pb{height:100%;background:linear-gradient(90deg,var(--acc),var(--acd));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%;position:relative}
+.pb::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:inherit;filter:brightness(1.4);animation:pg 1.5s ease-in-out infinite}
+@keyframes pg{0%,100%{opacity:1}50%{opacity:.35}}
+.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--br)}
+.l-hero-in{max-width:860px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;border-radius:100px;padding:.22rem .9rem;font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--acc);background:var(--acp);border:1.5px solid var(--acb);margin-bottom:.85rem}
+.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
+.l-hero-sub{font-size:.9rem;color:var(--mu)}
+.wb{background:#fff;border:1.5px solid var(--acb);border-left:5px solid var(--acc);border-radius:14px;padding:1.4rem 1.6rem;max-width:860px;margin:1.5rem auto 0;box-shadow:0 2px 12px var(--acs)}
+.wb h2{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--acd);margin-bottom:.6rem}
+.wb p,.wb li{font-size:.92rem;line-height:1.85;color:var(--t2)}
+.wb ul{margin-left:1.2rem;margin-top:.4rem}
+.wm{display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap}
+.wm span{background:var(--acp);color:var(--acd);border:1px solid var(--acb);border-radius:7px;padding:.22rem .7rem;font-family:var(--M);font-size:.68rem;font-weight:600}
+.phase{background:var(--sf);border:1.5px solid var(--br);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;transition:opacity .35s,filter .35s,transform .35s}
+.phase.locked{opacity:.28;pointer-events:none;filter:blur(2px);transform:scale(.99)}
+.ph{padding:1rem 1.4rem;background:#f0fdf6;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:.8rem}
+.pn{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.pt{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--tx);flex:1}
+.pc{width:26px;height:26px;border-radius:50%;background:var(--br);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:background .3s,transform .4s}
+.pc.done{background:#10b981;color:#fff;transform:scale(1.15) rotate(360deg)}
+.pb2{padding:1.6rem 1.8rem}
 .v2-p{margin-bottom:1rem;font-size:.95rem;color:var(--t2);line-height:1.85}
-.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--text);
-  margin:1.6rem 0 .5rem;padding-top:.2rem;border-top:2px solid var(--acc-pale)}
-.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1.1rem 0 .4rem}
-.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.9rem;color:var(--muted);margin:.8rem 0 .3rem}
+.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--tx);margin:1.6rem 0 .5rem;border-top:2px solid var(--acp);padding-top:.4rem}
+.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1rem 0 .35rem}
+.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.88rem;color:var(--mu);margin:.7rem 0 .3rem}
 .v2-ul,.v2-ol{margin:.6rem 0 1rem 1.4rem;font-size:.93rem;color:var(--t2);line-height:1.9}
 .v2-ul li,.v2-ol li{margin-bottom:.3rem}
-.v2-bq{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 10px 10px 0;
-  padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
+.v2-bq{border-left:4px solid var(--acc);background:var(--acp);border-radius:0 10px 10px 0;padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
 .v2-bq p{margin:0;color:inherit}
-.v2-bq strong{font-style:normal}
-.v2-hr{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
-.v2-table-wrap{overflow-x:auto;margin:1rem 0}
+.v2-hr{border:none;border-top:1px solid var(--br);margin:1.2rem 0}
+.v2-table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--br)}
 .v2-table{width:100%;border-collapse:collapse;font-size:.87rem}
-.v2-table th{background:var(--acc-pale);color:#064e3b;font-family:var(--D);
-  font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--acc-b)}
-.v2-table td{padding:8px 12px;border:1px solid var(--border);color:var(--t2);vertical-align:top}
-.v2-table tr:nth-child(even) td{background:#f8fafc}
-.v2-table code{background:var(--acc-pale);color:var(--acc);border-radius:4px;
-  padding:1px 5px;font-family:var(--M);font-size:.8em}
-.phase-body code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-.phase-body a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
-.phase-body strong{color:var(--text)}
-
-/* CODE BLOCKS */
-.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.v2-table th{background:var(--acp);color:#064e3b;font-family:var(--D);font-weight:700;padding:10px 12px;text-align:left;border-bottom:2px solid var(--acb)}
+.v2-table td{padding:8px 12px;border-bottom:1px solid var(--br);color:var(--t2);vertical-align:top}
+.v2-table tr:last-child td{border:none}
+.v2-table tr:hover td{background:var(--acp)}
+.pb2 code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.pb2 a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
+.pb2 strong{color:var(--tx)}
+.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .v2-code-bar{background:#1e293b;padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem}
 .v2-dot{width:10px;height:10px;border-radius:50%}
 .v2-dot.r{background:#ff5f57}.v2-dot.y{background:#febc2e}.v2-dot.g{background:#28c840}
-.v2-code-lang{margin-left:.6rem;font-family:var(--M);font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em}
+.v2-code-lang{margin-left:.5rem;font-family:var(--M);font-size:.62rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;flex:1}
+.copy-btn{background:rgba(255,255,255,.08);color:#94a3b8;border:none;border-radius:6px;padding:.25rem .65rem;font-family:var(--M);font-size:.65rem;cursor:pointer;transition:background .2s,color .2s}
+.copy-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.copy-btn.copied{background:#10b981;color:#fff}
 .v2-code-body{background:#0f172a;padding:1.3rem 1.5rem;overflow-x:auto}
 .v2-code-body pre{margin:0}
-.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.9;color:#e2e8f0;
-  white-space:pre;background:transparent;padding:0;border-radius:0}
-
-/* TASK BOX */
-.task-box{background:#d1fae5;border:2px dashed #059669;
-  border-radius:12px;padding:1rem 1.3rem;margin:1.4rem 0}
-.task-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-.task-box p,.task-body{font-size:.92rem;color:#064e3b;line-height:1.8}
-.task-box code{background:rgba(0,0,0,.08);border-radius:4px;padding:1px 6px;
-  font-family:var(--M);font-size:.82em}
-
-/* UNLOCK BUTTON */
-.unlock-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);
-  color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;
-  padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;
-  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acc-sh);margin-top:1.2rem}
-.unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acc-sh)}
-
-/* BUILD IT */
+.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.95;color:#e2e8f0;white-space:pre;background:transparent;padding:0;border-radius:0}
+.task-box{background:#d1fae5;border:2px dashed #059669;border-radius:12px;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.task-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.task-body{font-size:.93rem;color:#064e3b;line-height:1.85}
+.task-body code{background:rgba(0,0,0,.1);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.chal-box{background:linear-gradient(135deg,#ecfdf5 0%,#fff 100%);border:2px solid var(--acc);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem}
+.chal-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acd);margin-bottom:.6rem}
+.chal-body{font-size:.95rem;color:var(--tx);line-height:1.85}
+.chal-body code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 5px;font-family:var(--M);font-size:.82em}
+.reveal-btn{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--acd);font-family:var(--D);font-weight:700;font-size:.85rem;padding:.6rem 1.2rem;border-radius:8px;border:2px solid var(--acc);cursor:pointer;transition:background .2s,color .2s;margin:.6rem 0}
+.reveal-btn:hover{background:var(--acc);color:#fff}
+.reveal-content{display:none;margin-top:.6rem;animation:fi .3s ease}
+.reveal-content.open{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .build-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:16px;padding:1.6rem;margin:2rem 0;display:none}
-.build-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
-.build-name{font-family:var(--D);font-weight:700;font-size:1.1rem;color:#14532d;margin-bottom:.5rem}
-.build-desc{font-size:.9rem;color:#166534;margin-bottom:1.2rem;line-height:1.75}
-.build-desc code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
-.build-desc strong{color:#14532d}
-
-/* GITHUB ACCORDION */
-.gh-acc{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
-.gh-acc-head{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none}
-.gh-acc-body{display:none;padding:1.2rem;border-top:1px solid var(--border)}
-.gh-acc-body.open{display:block}
-.gh-step{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
-.gh-step-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;
-  font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;margin-top:2px}
-.gh-step p{font-size:.88rem;color:var(--t2);line-height:1.7}
-.gh-step code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-
-/* SESSION END */
-.session-end{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
-.session-end.visible{display:block}
-.session-end h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
-.session-end ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.session-end li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
-.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);
-  color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;
-  padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;
-  border:1.5px solid var(--border);transition:border-color .2s,color .2s}
+.build-box.visible{display:block;animation:fi .4s ease}
+.build-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+.build-name{font-family:var(--D);font-weight:700;font-size:1.15rem;color:#14532d;margin-bottom:.6rem}
+.build-req{font-size:.93rem;color:#166534;line-height:1.8;margin-bottom:.8rem}
+.build-req code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.build-req strong{color:#14532d}
+.gh-acc{border:1.5px solid var(--br);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.gh-hd{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none;transition:background .2s}
+.gh-hd:hover{background:#f1f5f9}
+.gh-bd{display:none;padding:1.2rem;border-top:1px solid var(--br)}
+.gh-bd.open{display:block;animation:fi .25s ease}
+.gh-st{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
+.gh-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.gh-st p{font-size:.88rem;color:var(--t2);line-height:1.7}
+.gh-st code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.gh-nop{background:#fef3c7;border:1.5px solid #fde68a;border-radius:10px;padding:1rem 1.2rem;font-size:.9rem;color:#78350f;line-height:1.75;margin-bottom:1rem}
+.se{background:linear-gradient(135deg,var(--acc),var(--acd));color:#fff;border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
+.se.visible{display:block;animation:fi .4s ease}
+.se h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
+.se ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.se li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
+.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--sf);color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;border:1.5px solid var(--br);transition:border-color .2s,color .2s}
 .ln-btn:hover{border-color:var(--acc);color:var(--acc)}
 .ln-btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .ln-btn.primary:hover{opacity:.9}
-.lesson-nav{display:flex;align-items:center;justify-content:space-between;
-  padding-top:2rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
-.lesson-footer{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;
-  color:var(--muted);border-top:1px solid var(--border);background:var(--surface)}
+.ln{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
+.ub{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acs);margin-top:1.2rem}
+.ub:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acs)}
+.ub:active{transform:scale(.97)}
+#toast{position:fixed;bottom:90px;right:1.5rem;z-index:999;background:#1e293b;color:#fff;border-radius:10px;padding:.75rem 1.2rem;font-family:var(--D);font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#go-top{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;border:none;cursor:pointer;font-size:1.15rem;box-shadow:0 4px 16px var(--acs);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s,box-shadow .2s;pointer-events:none}
+#go-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#go-top:hover{box-shadow:0 8px 24px var(--acs);transform:translateY(-2px)}
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;display:none}
+.lf{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;color:var(--mu);border-top:1px solid var(--br);background:var(--sf)}
 </style>
 </head>
 <body>
 <nav class="l-nav">
   <a href="../index.html" class="l-nav-logo">⚡ Techbase Python</a>
-  <span class="l-nav-label">Lesson 11 of 45</span>
+  <span class="l-nav-lbl">Lesson 11 of 45</span>
   <a href="../index.html" class="l-nav-back">← All Lessons</a>
 </nav>
-<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
-
-<div class="l-hero">
-  <div class="l-hero-inner">
-    <div class="l-badge">Python · Lesson 11</div>
-    <h1>Python Dictionaries – From Zero to Real-World Mastery</h1>
-    <div class="l-hero-sub">12 phases · Build: Project Overview</div>
-  </div>
-</div>
-
-<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
-  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="welcome-box">
-  <h2>👋 Welcome to Lesson 11</h2>
-  <div style="font-size:.9rem;line-height:1.85;opacity:.93"><p class="v2-p">Welcome to one of the most powerful lessons in Python! In this lesson, you will learn about <strong>dictionaries</strong> — one of Python's most useful and widely-used data structures.</p>
-<p class="v2-p">Before you're done, you'll know how to:</p>
-<ul class="v2-ul"><li>Create a dictionary and understand what it is</li><li>Access, change, add, and remove data inside it</li><li>Loop through a dictionary in multiple ways</li><li>Copy a dictionary safely</li><li>Build dictionaries inside dictionaries (nested dictionaries)</li><li>Apply all of this in a real-world mini project</li></ul>
-<p class="v2-p">You do <strong>not</strong> need any prior experience with dictionaries. This lesson assumes you know only the very basics of Python (variables, print statements, and perhaps lists). Everything else will be taught step by step.</p>
-<blockquote class="v2-bq"><p class="v2-p"><strong>Real-world connection:</strong> Dictionaries are everywhere. When a website stores your user profile, when a weather app stores city data, when a database returns a record — all of it uses something that works exactly like a Python dictionary. Once you master this, you're thinking like a real programmer.</p></blockquote>
-<hr class="v2-hr"></div>
-  <div class="welcome-meta">
-    <span>📚 12 phases</span>
-    <span>🏗️ Project Overview</span>
-  </div>
+<div class="pw"><div class="pb" id="pbar"></div></div>
+<div class="l-hero"><div class="l-hero-in">
+  <div class="badge">Python · Lesson 11</div>
+  <h1>Python Dictionaries – From Zero to Real-World Mastery</h1>
+  <div class="l-hero-sub">12 phases &nbsp;·&nbsp; Build: Project Overview</div>
 </div></div>
-</section>
-
-<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
-<div class="phase" id="phase1">
-  <div class="phase-header">
-    <div class="phase-num">Phase 1 of 12</div>
-    <div class="phase-title">Lesson Introduction</div>
-    <div class="phase-check" id="chk1"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Welcome to one of the most powerful lessons in Python! In this lesson, you will learn about <strong>dictionaries</strong> — one of Python's most useful and widely-used data structures.</p>
+<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--br)">
+  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="wb"><h2>👋 Welcome to Lesson 11</h2><div style="font-size:.92rem;line-height:1.85;color:var(--t2)"><p class="v2-p">Welcome to one of the most powerful lessons in Python! In this lesson, you will learn about <strong>dictionaries</strong> — one of Python's most useful and widely-used data structures.</p>
 <p class="v2-p">Before you're done, you'll know how to:</p>
 <ul class="v2-ul"><li>Create a dictionary and understand what it is</li><li>Access, change, add, and remove data inside it</li><li>Loop through a dictionary in multiple ways</li><li>Copy a dictionary safely</li><li>Build dictionaries inside dictionaries (nested dictionaries)</li><li>Apply all of this in a real-world mini project</li></ul>
 <p class="v2-p">You do <strong>not</strong> need any prior experience with dictionaries. This lesson assumes you know only the very basics of Python (variables, print statements, and perhaps lists). Everything else will be taught step by step.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world connection:</strong> Dictionaries are everywhere. When a website stores your user profile, when a weather app stores city data, when a database returns a record — all of it uses something that works exactly like a Python dictionary. Once you master this, you're thinking like a real programmer.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(1)">Start Lesson ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase2">
-  <div class="phase-header">
-    <div class="phase-num">Phase 2 of 12</div>
-    <div class="phase-title">Prerequisite Concepts</div>
-    <div class="phase-check" id="chk2"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Before we jump in, let's quickly make sure you understand a few ideas we'll build on.</p>
+<hr class="v2-hr"></div><div class="wm"><span>📚 12 phases</span><span>🏗️ Project Overview</span><span>🐍 GitHub Repo</span></div></div></div>
+</section>
+<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
+<div class="phase" id="phase1"><div class="ph"><div class="pn">Phase 1/12</div><div class="pt">Lesson Introduction</div><div class="pc" id="chk1"></div></div><div class="pb2"><p class="v2-p">Welcome to one of the most powerful lessons in Python! In this lesson, you will learn about <strong>dictionaries</strong> — one of Python's most useful and widely-used data structures.</p>
+<p class="v2-p">Before you're done, you'll know how to:</p>
+<ul class="v2-ul"><li>Create a dictionary and understand what it is</li><li>Access, change, add, and remove data inside it</li><li>Loop through a dictionary in multiple ways</li><li>Copy a dictionary safely</li><li>Build dictionaries inside dictionaries (nested dictionaries)</li><li>Apply all of this in a real-world mini project</li></ul>
+<p class="v2-p">You do <strong>not</strong> need any prior experience with dictionaries. This lesson assumes you know only the very basics of Python (variables, print statements, and perhaps lists). Everything else will be taught step by step.</p>
+<blockquote class="v2-bq"><p class="v2-p"><strong>Real-world connection:</strong> Dictionaries are everywhere. When a website stores your user profile, when a weather app stores city data, when a database returns a record — all of it uses something that works exactly like a Python dictionary. Once you master this, you're thinking like a real programmer.</p></blockquote>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(1)">Start Lesson ✓</button></div></div>
+<div class="phase locked" id="phase2"><div class="ph"><div class="pn">Phase 2/12</div><div class="pt">Prerequisite Concepts</div><div class="pc" id="chk2"></div></div><div class="pb2"><p class="v2-p">Before we jump in, let's quickly make sure you understand a few ideas we'll build on.</p>
 <h3 class="v2-h3">Variables</h3>
 <p class="v2-p">A variable is a named container that holds a value.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>name = &quot;Alice&quot;
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>name = &quot;Alice&quot;
 age = 25</code></pre></div></div>
 <h3 class="v2-h3">Lists (Quick Review)</h3>
 <p class="v2-p">A list holds multiple values, one after another, accessed by position number (index).</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;]
 print(fruits[0])   # Output: apple
 print(fruits[1])   # Output: banana</code></pre></div></div>
 <p class="v2-p">The <strong>problem</strong> with a list: you access items by their position. But what if you want to look up "the price of apples" — not "item number 0"? That's exactly where <strong>dictionaries</strong> shine.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase3">
-  <div class="phase-header">
-    <div class="phase-num">Phase 3 of 12</div>
-    <div class="phase-title">Part 1: What Is a Python Dictionary?</div>
-    <div class="phase-check" id="chk3"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">The Core Idea</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase3"><div class="ph"><div class="pn">Phase 3/12</div><div class="pt">Part 1: What Is a Python Dictionary?</div><div class="pc" id="chk3"></div></div><div class="pb2"><h3 class="v2-h3">The Core Idea</h3>
 <p class="v2-p">Think about a real physical dictionary (like the Oxford Dictionary). You look up a <strong>word</strong> (the key), and it gives you the <strong>definition</strong> (the value). You never say "give me definition number 47" — you say "give me the definition of <em>elephant</em>."</p>
 <p class="v2-p">A Python dictionary works <strong>exactly</strong> the same way.</p>
 <ul class="v2-ul"><li>Every piece of data has a <strong>label (the key)</strong></li><li>The label points to a <strong>value</strong></li><li>You retrieve data using the label, not a position number</li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Analogy:</strong> Imagine a school locker system. Each student has a locker <strong>number</strong> (the key), and inside the locker is their <strong>stuff</strong> (the value). You look up locker 205, and you find what's inside — you don't count lockers one by one to find it.</p></blockquote>
 <h3 class="v2-h3">What Does a Dictionary Look Like?</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>student = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>student = {
     &quot;name&quot;: &quot;Alice&quot;,
     &quot;age&quot;: 20,
     &quot;grade&quot;: &quot;A&quot;
@@ -265,14 +171,14 @@ print(fruits[1])   # Output: banana</code></pre></div></div>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Symbol</th><th>Meaning</th></tr></thead><tbody><tr><td><code>{</code></td><td>Opens the dictionary</td></tr><tr><td><code>"name"</code></td><td>A <strong>key</strong> — the label for this piece of data</td></tr><tr><td><code>:</code></td><td>Separates the key from its value</td></tr><tr><td><code>"Alice"</code></td><td>The <strong>value</strong> — the actual data stored</td></tr><tr><td><code>,</code></td><td>Separates one key-value pair from the next</td></tr><tr><td><code>}</code></td><td>Closes the dictionary</td></tr></tbody></table></div>
 <p class="v2-p">Each <code>key: value</code> pair is called a <strong>dictionary item</strong>.</p>
 <h3 class="v2-h3">Your First Dictionary — Full Demo</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {
     &quot;brand&quot;: &quot;Ford&quot;,
     &quot;model&quot;: &quot;Mustang&quot;,
     &quot;year&quot;: 1964
 }
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964}</code></pre></div></div>
 <p class="v2-p">Python prints the whole dictionary for you. Notice the curly braces <code>{}</code> in the output too.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> What happens if you just write <code>print(thisdict["brand"])</code>? What do you think it will show?</p></blockquote>
 <hr class="v2-hr">
@@ -281,7 +187,7 @@ print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>1. Ordered</strong> (Python 3.7 and later) Items appear in the order you added them. Python 3.6 and earlier did NOT guarantee order — but modern Python does.</p>
 <p class="v2-p"><strong>2. Changeable (Mutable)</strong> You can add, remove, or update items after the dictionary is created.</p>
 <p class="v2-p"><strong>3. No Duplicate Keys</strong> Each key must be unique. If you use the same key twice, the second one <strong>overwrites</strong> the first.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Duplicate key example — the second &quot;year&quot; wins
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Duplicate key example — the second &quot;year&quot; wins
 thisdict = {
     &quot;brand&quot;: &quot;Ford&quot;,
     &quot;model&quot;: &quot;Mustang&quot;,
@@ -290,24 +196,24 @@ thisdict = {
 }
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 2020}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 2020}</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Common Beginner Mistake:</strong> Using the same key twice and wondering why one of your values disappeared. Remember: only one value per key.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Dictionary Length</h3>
 <p class="v2-p">To count how many items (key-value pairs) are in a dictionary, use <code>len()</code>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {
     &quot;brand&quot;: &quot;Ford&quot;,
     &quot;model&quot;: &quot;Mustang&quot;,
     &quot;year&quot;: 1964
 }
 print(len(thisdict))</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>3</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>3</code></pre></div></div>
 <p class="v2-p">There are 3 key-value pairs, so the length is 3.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Values Can Be Any Data Type</h3>
 <p class="v2-p">Dictionary values are not restricted to strings or numbers. They can be <strong>any</strong> Python data type:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {
     &quot;brand&quot;: &quot;Ford&quot;,          # string
     &quot;electric&quot;: False,        # boolean
     &quot;year&quot;: 1964,             # integer
@@ -315,22 +221,22 @@ print(len(thisdict))</code></pre></div></div>
 }
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;electric&#x27;: False, &#x27;year&#x27;: 1964, &#x27;colors&#x27;: [&#x27;red&#x27;, &#x27;white&#x27;, &#x27;blue&#x27;]}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;electric&#x27;: False, &#x27;year&#x27;: 1964, &#x27;colors&#x27;: [&#x27;red&#x27;, &#x27;white&#x27;, &#x27;blue&#x27;]}</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world use:</strong> When an app stores a user profile, it might store name (string), age (integer), is_premium_member (boolean), and purchased_items (list) — all in one dictionary.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Checking the Data Type</h3>
 <p class="v2-p">Python's <code>type()</code> function confirms a dictionary is of type <code>dict</code>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 print(type(thisdict))</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>&lt;class &#x27;dict&#x27;&gt;</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>&lt;class &#x27;dict&#x27;&gt;</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">The <code>dict()</code> Constructor — Another Way to Create a Dictionary</h3>
 <p class="v2-p">You can also create a dictionary using the built-in <code>dict()</code> function. Note: when using <code>dict()</code>, keys are written <strong>without</strong> quotes:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = dict(name=&quot;John&quot;, age=36, country=&quot;Norway&quot;)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = dict(name=&quot;John&quot;, age=36, country=&quot;Norway&quot;)
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;name&#x27;: &#x27;John&#x27;, &#x27;age&#x27;: 36, &#x27;country&#x27;: &#x27;Norway&#x27;}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;name&#x27;: &#x27;John&#x27;, &#x27;age&#x27;: 36, &#x27;country&#x27;: &#x27;Norway&#x27;}</code></pre></div></div>
 <p class="v2-p">Both methods produce the same result. The curly-bracket method is more common in practice.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Python's Four Collection Types — Where Dictionaries Fit</h3>
@@ -338,24 +244,10 @@ print(thisdict)</code></pre></div></div>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Collection</th><th>Ordered</th><th>Changeable</th><th>Allows Duplicates</th></tr></thead><tbody><tr><td>List <code>[]</code></td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td>Tuple <code>()</code></td><td>Yes</td><td>No</td><td>Yes</td></tr><tr><td>Set <code>{}</code></td><td>No</td><td>No*</td><td>No</td></tr><tr><td><strong>Dictionary <code>{}</code></strong></td><td><strong>Yes</strong></td><td><strong>Yes</strong></td><td><strong>No (keys only)</strong></td></tr></tbody></table></div>
 <p class="v2-p">\<em> Set </em>items* are unchangeable, but you can add/remove items.</p>
 <p class="v2-p">Dictionaries are the best choice when you want to label your data with meaningful names instead of position numbers.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: What Is a Python Dictionary?</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase4">
-  <div class="phase-header">
-    <div class="phase-num">Phase 4 of 12</div>
-    <div class="phase-title">Part 2: Accessing Dictionary Items</div>
-    <div class="phase-check" id="chk4"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Method 1 — Square Bracket Notation</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: What Is a Python Dictionary?</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase4"><div class="ph"><div class="pn">Phase 4/12</div><div class="pt">Part 2: Accessing Dictionary Items</div><div class="pc" id="chk4"></div></div><div class="pb2"><h3 class="v2-h3">Method 1 — Square Bracket Notation</h3>
 <p class="v2-p">The most direct way to access a value is to write the dictionary name, then the key inside square brackets:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {
     &quot;brand&quot;: &quot;Ford&quot;,
     &quot;model&quot;: &quot;Mustang&quot;,
     &quot;year&quot;: 1964
@@ -363,17 +255,17 @@ print(thisdict)</code></pre></div></div>
 x = thisdict[&quot;model&quot;]
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Mustang</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Mustang</code></pre></div></div>
 <p class="v2-p">Think of it like this: <code>thisdict["model"]</code> means "go into <code>thisdict</code> and find the item labeled <code>model</code>."</p>
 <h3 class="v2-h3">Method 2 — The <code>.get()</code> Method</h3>
 <p class="v2-p">The <code>.get()</code> method does the same thing but is <strong>safer</strong>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>x = thisdict.get(&quot;model&quot;)
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>x = thisdict.get(&quot;model&quot;)
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Mustang</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Mustang</code></pre></div></div>
 <p class="v2-p"><strong>Why is <code>.get()</code> safer?</strong></p>
 <p class="v2-p">If you try to access a key that doesn't exist using square brackets, Python <strong>crashes</strong> with a <code>KeyError</code>. But <code>.get()</code> quietly returns <code>None</code> instead of crashing:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Square bracket — crashes if key missing
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Square bracket — crashes if key missing
 print(thisdict[&quot;color&quot;])   # KeyError: &#x27;color&#x27;
 
 # .get() — returns None safely
@@ -382,13 +274,13 @@ print(thisdict.get(&quot;color&quot;))   # None</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Getting All Keys — <code>.keys()</code></h3>
 <p class="v2-p">The <code>.keys()</code> method returns a view of all the keys in the dictionary:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 x = thisdict.keys()
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>dict_keys([&#x27;brand&#x27;, &#x27;model&#x27;, &#x27;year&#x27;])</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>dict_keys([&#x27;brand&#x27;, &#x27;model&#x27;, &#x27;year&#x27;])</code></pre></div></div>
 <p class="v2-p"><strong>Important — It's a "Live View":</strong> The keys list is linked to the dictionary. If you add a new item to the dictionary, the keys view updates automatically:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>car = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>car = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 x = car.keys()
 print(x)           # dict_keys([&#x27;brand&#x27;, &#x27;model&#x27;, &#x27;year&#x27;])
 
@@ -396,19 +288,19 @@ car[&quot;color&quot;] = &quot;white&quot;    # Add a new key
 
 print(x)           # dict_keys([&#x27;brand&#x27;, &#x27;model&#x27;, &#x27;year&#x27;, &#x27;color&#x27;])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>dict_keys([&#x27;brand&#x27;, &#x27;model&#x27;, &#x27;year&#x27;])
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>dict_keys([&#x27;brand&#x27;, &#x27;model&#x27;, &#x27;year&#x27;])
 dict_keys([&#x27;brand&#x27;, &#x27;model&#x27;, &#x27;year&#x27;, &#x27;color&#x27;])</code></pre></div></div>
 <p class="v2-p">The variable <code>x</code> updated without you having to call <code>.keys()</code> again. That's what "live view" means.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Getting All Values — <code>.values()</code></h3>
 <p class="v2-p">The <code>.values()</code> method returns a view of all the values:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 x = thisdict.values()
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>dict_values([&#x27;Ford&#x27;, &#x27;Mustang&#x27;, 1964])</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>dict_values([&#x27;Ford&#x27;, &#x27;Mustang&#x27;, 1964])</code></pre></div></div>
 <p class="v2-p">Again, this is a live view. If you change a value in the dictionary, <code>.values()</code> reflects it instantly:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>car = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>car = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 x = car.values()
 print(x)               # dict_values([&#x27;Ford&#x27;, &#x27;Mustang&#x27;, 1964])
 
@@ -416,53 +308,39 @@ car[&quot;year&quot;] = 2020     # Change a value
 
 print(x)               # dict_values([&#x27;Ford&#x27;, &#x27;Mustang&#x27;, 2020])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>dict_values([&#x27;Ford&#x27;, &#x27;Mustang&#x27;, 1964])
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>dict_values([&#x27;Ford&#x27;, &#x27;Mustang&#x27;, 1964])
 dict_values([&#x27;Ford&#x27;, &#x27;Mustang&#x27;, 2020])</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Getting All Key-Value Pairs — <code>.items()</code></h3>
 <p class="v2-p">The <code>.items()</code> method returns a view of all key-value pairs as a list of tuples:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 x = thisdict.items()
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>dict_items([(&#x27;brand&#x27;, &#x27;Ford&#x27;), (&#x27;model&#x27;, &#x27;Mustang&#x27;), (&#x27;year&#x27;, 1964)])</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>dict_items([(&#x27;brand&#x27;, &#x27;Ford&#x27;), (&#x27;model&#x27;, &#x27;Mustang&#x27;), (&#x27;year&#x27;, 1964)])</code></pre></div></div>
 <p class="v2-p">Each pair is wrapped in parentheses <code>()</code> — that's a <strong>tuple</strong>. Think of a tuple as a locked pair: "brand" is locked with "Ford", "model" is locked with "Mustang", and so on.</p>
 <p class="v2-p">This <code>.items()</code> method is especially useful in loops (more on that in Part 6).</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Checking if a Key Exists — the <code>in</code> Keyword</h3>
 <p class="v2-p">Before accessing an item, you can check whether a key exists using <code>in</code>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 
 if &quot;model&quot; in thisdict:
     print(&quot;Yes, &#x27;model&#x27; is one of the keys in the dictionary&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Yes, &#x27;model&#x27; is one of the keys in the dictionary</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Yes, &#x27;model&#x27; is one of the keys in the dictionary</code></pre></div></div>
 <p class="v2-p">This is extremely useful in programs where you're not sure if a certain key was added yet.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Another example — checking before accessing
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Another example — checking before accessing
 if &quot;color&quot; in thisdict:
     print(thisdict[&quot;color&quot;])
 else:
     print(&quot;No color recorded yet.&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>No color recorded yet.</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Accessing Dictionary Items</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase5">
-  <div class="phase-header">
-    <div class="phase-num">Phase 5 of 12</div>
-    <div class="phase-title">Part 3: Changing Dictionary Items</div>
-    <div class="phase-check" id="chk5"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Changing a Value by Key</h3>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>No color recorded yet.</code></pre></div></div>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Accessing Dictionary Items</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase5"><div class="ph"><div class="pn">Phase 5/12</div><div class="pt">Part 3: Changing Dictionary Items</div><div class="pc" id="chk5"></div></div><div class="pb2"><h3 class="v2-h3">Changing a Value by Key</h3>
 <p class="v2-p">To update a value, refer to its key and assign a new value:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {
     &quot;brand&quot;: &quot;Ford&quot;,
     &quot;model&quot;: &quot;Mustang&quot;,
     &quot;year&quot;: 1964
@@ -470,11 +348,11 @@ else:
 thisdict[&quot;year&quot;] = 2018
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 2018}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 2018}</code></pre></div></div>
 <p class="v2-p">The key <code>"year"</code> still exists — only its value changed from <code>1964</code> to <code>2018</code>.</p>
 <h3 class="v2-h3">Using the <code>.update()</code> Method</h3>
 <p class="v2-p">The <code>.update()</code> method lets you update one or more values at once by passing in a small dictionary:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {
     &quot;brand&quot;: &quot;Ford&quot;,
     &quot;model&quot;: &quot;Mustang&quot;,
     &quot;year&quot;: 1964
@@ -482,31 +360,17 @@ print(thisdict)</code></pre></div></div>
 thisdict.update({&quot;year&quot;: 2020})
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 2020}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 2020}</code></pre></div></div>
 <p class="v2-p">You can update multiple items in one call:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict.update({&quot;year&quot;: 2022, &quot;model&quot;: &quot;Explorer&quot;})
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict.update({&quot;year&quot;: 2022, &quot;model&quot;: &quot;Explorer&quot;})
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Explorer&#x27;, &#x27;year&#x27;: 2022}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Explorer&#x27;, &#x27;year&#x27;: 2022}</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>When to use <code>.update()</code> vs. direct assignment?</strong> Use direct assignment <code>dict["key"] = value</code> for changing one value quickly. Use <code>.update()</code> when you want to update multiple values at once, or when you're merging data from another source.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Changing Dictionary Items</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase6">
-  <div class="phase-header">
-    <div class="phase-num">Phase 6 of 12</div>
-    <div class="phase-title">Part 4: Adding Items to a Dictionary</div>
-    <div class="phase-check" id="chk6"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Adding a New Key-Value Pair</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Changing Dictionary Items</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase6"><div class="ph"><div class="pn">Phase 6/12</div><div class="pt">Part 4: Adding Items to a Dictionary</div><div class="pc" id="chk6"></div></div><div class="pb2"><h3 class="v2-h3">Adding a New Key-Value Pair</h3>
 <p class="v2-p">Adding a new item is exactly like changing a value — but you use a <strong>key that doesn't exist yet</strong>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {
     &quot;brand&quot;: &quot;Ford&quot;,
     &quot;model&quot;: &quot;Mustang&quot;,
     &quot;year&quot;: 1964
@@ -514,128 +378,100 @@ print(thisdict)</code></pre></div></div>
 thisdict[&quot;color&quot;] = &quot;red&quot;
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964, &#x27;color&#x27;: &#x27;red&#x27;}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964, &#x27;color&#x27;: &#x27;red&#x27;}</code></pre></div></div>
 <p class="v2-p">Python sees that <code>"color"</code> is not an existing key, so it <strong>creates</strong> a new entry.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Key rule to remember:</strong> If the key exists → it <strong>updates</strong> the value. If the key doesn't exist → it <strong>adds</strong> a new item. The same syntax does both.</p></blockquote>
 <h3 class="v2-h3">Using <code>.update()</code> to Add New Items</h3>
 <p class="v2-p"><code>.update()</code> also works for adding, not just changing:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 thisdict.update({&quot;color&quot;: &quot;white&quot;})
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964, &#x27;color&#x27;: &#x27;white&#x27;}</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Adding Items to a Dictionary</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase7">
-  <div class="phase-header">
-    <div class="phase-num">Phase 7 of 12</div>
-    <div class="phase-title">Part 5: Removing Items from a Dictionary</div>
-    <div class="phase-check" id="chk7"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Python gives you several ways to remove items from a dictionary. Each one is useful in different situations.</p>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964, &#x27;color&#x27;: &#x27;white&#x27;}</code></pre></div></div>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Adding Items to a Dictionary</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase7"><div class="ph"><div class="pn">Phase 7/12</div><div class="pt">Part 5: Removing Items from a Dictionary</div><div class="pc" id="chk7"></div></div><div class="pb2"><p class="v2-p">Python gives you several ways to remove items from a dictionary. Each one is useful in different situations.</p>
 <h3 class="v2-h3">Method 1 — <code>.pop(key)</code> — Remove by Key Name</h3>
 <p class="v2-p"><code>.pop()</code> removes the item with the specified key and <strong>returns its value</strong>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 removed = thisdict.pop(&quot;model&quot;)
 print(thisdict)
 print(&quot;Removed value:&quot;, removed)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;year&#x27;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;year&#x27;: 1964}
 Removed value: Mustang</code></pre></div></div>
 <p class="v2-p">This is useful when you want to remove an item but also need to use its value one last time.</p>
 <h3 class="v2-h3">Method 2 — <code>.popitem()</code> — Remove the Last Inserted Item</h3>
 <p class="v2-p"><code>.popitem()</code> removes the <strong>most recently added</strong> item and returns it as a tuple <code>(key, value)</code>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 thisdict.popitem()
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;}</code></pre></div></div>
 <p class="v2-p"><code>"year": 1964</code> was the last item added, so it was removed.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Note:</strong> In Python 3.7 and earlier, <code>.popitem()</code> removed a random item. In Python 3.8+, it always removes the last inserted item.</p></blockquote>
 <h3 class="v2-h3">Method 3 — <code>del</code> Keyword — Delete by Key or Delete Entire Dictionary</h3>
 <p class="v2-p">Use <code>del</code> with a specific key to remove that item:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 del thisdict[&quot;model&quot;]
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;year&#x27;: 1964}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;year&#x27;: 1964}</code></pre></div></div>
 <p class="v2-p">You can also use <code>del</code> to <strong>delete the entire dictionary</strong>:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 del thisdict
 # print(thisdict)  # This would cause a NameError — dictionary no longer exists!</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Warning:</strong> After <code>del thisdict</code>, the variable <code>thisdict</code> no longer exists in memory. Trying to use it will cause a <code>NameError</code>.</p></blockquote>
 <h3 class="v2-h3">Method 4 — <code>.clear()</code> — Empty the Dictionary</h3>
 <p class="v2-p"><code>.clear()</code> removes <strong>all items</strong> but keeps the dictionary itself (as an empty dictionary):</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 thisdict.clear()
 print(thisdict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{}</code></pre></div></div>
 <p class="v2-p">The dictionary still exists — it's just empty now. This is different from <code>del</code> which destroys the variable entirely.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Removal Methods Quick Reference</h3>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Method</th><th>What It Removes</th><th>Returns</th></tr></thead><tbody><tr><td><code>.pop("key")</code></td><td>Item with that key</td><td>The removed value</td></tr><tr><td><code>.popitem()</code></td><td>Last inserted item</td><td><code>(key, value)</code> tuple</td></tr><tr><td><code>del dict["key"]</code></td><td>Item with that key</td><td>Nothing</td></tr><tr><td><code>del dict</code></td><td>The whole variable</td><td>Nothing</td></tr><tr><td><code>.clear()</code></td><td>All items (keeps empty dict)</td><td>Nothing</td></tr></tbody></table></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Removing Items from a Dictionary</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase8">
-  <div class="phase-header">
-    <div class="phase-num">Phase 8 of 12</div>
-    <div class="phase-title">Part 6: Looping Through a Dictionary</div>
-    <div class="phase-check" id="chk8"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">One of the most powerful things you can do with a dictionary is loop through it — visiting every item automatically. Python gives you several ways to do this.</p>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Removing Items from a Dictionary</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase8"><div class="ph"><div class="pn">Phase 8/12</div><div class="pt">Part 6: Looping Through a Dictionary</div><div class="pc" id="chk8"></div></div><div class="pb2"><p class="v2-p">One of the most powerful things you can do with a dictionary is loop through it — visiting every item automatically. Python gives you several ways to do this.</p>
 <h3 class="v2-h3">Loop 1 — Loop Through Keys (Default)</h3>
 <p class="v2-p">When you write a basic <code>for</code> loop on a dictionary, Python loops through the <strong>keys</strong> by default:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 
 for x in thisdict:
     print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>brand
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>brand
 model
 year</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> What do you need to add to also print the values?</p></blockquote>
 <h3 class="v2-h3">Loop 2 — Loop Through Keys Explicitly with <code>.keys()</code></h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 
 for x in thisdict.keys():
     print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>brand
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>brand
 model
 year</code></pre></div></div>
 <p class="v2-p">Same result as the default loop — but writing <code>.keys()</code> makes your intention very clear to anyone reading your code.</p>
 <h3 class="v2-h3">Loop 3 — Loop Through Values with <code>.values()</code></h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 
 for x in thisdict.values():
     print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Ford
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Ford
 Mustang
 1964</code></pre></div></div>
 <h3 class="v2-h3">Loop 4 — Loop Through Both Keys and Values with <code>.items()</code></h3>
 <p class="v2-p">This is the most common and most useful loop. It gives you the key <strong>and</strong> value at the same time:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 
 for key, value in thisdict.items():
     print(key, &quot;:&quot;, value)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>brand : Ford
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>brand : Ford
 model : Mustang
 year : 1964</code></pre></div></div>
 <p class="v2-p"><strong>Line-by-line explanation:</strong></p>
@@ -643,36 +479,22 @@ year : 1964</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world use:</strong> Imagine building a report that shows every setting in a configuration file, or printing out every field in a user's profile — that's exactly this loop pattern.</p></blockquote>
 <h3 class="v2-h3">Loop 5 — Access Values Inside a Key Loop</h3>
 <p class="v2-p">You can also loop through keys and manually access each value:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 
 for x in thisdict:
     print(thisdict[x])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Ford
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Ford
 Mustang
 1964</code></pre></div></div>
 <p class="v2-p">Here, <code>x</code> is each key. Then <code>thisdict[x]</code> retrieves the value for that key.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Looping Through a Dictionary</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase9">
-  <div class="phase-header">
-    <div class="phase-num">Phase 9 of 12</div>
-    <div class="phase-title">Part 7: Copying a Dictionary</div>
-    <div class="phase-check" id="chk9"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Why Copying Matters — The Dangerous Mistake</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Looping Through a Dictionary</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase9"><div class="ph"><div class="pn">Phase 9/12</div><div class="pt">Part 7: Copying a Dictionary</div><div class="pc" id="chk9"></div></div><div class="pb2"><h3 class="v2-h3">Why Copying Matters — The Dangerous Mistake</h3>
 <p class="v2-p">You might think this copies a dictionary:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>dict1 = {&quot;brand&quot;: &quot;Ford&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>dict1 = {&quot;brand&quot;: &quot;Ford&quot;, &quot;year&quot;: 1964}
 dict2 = dict1       # This is NOT a copy!</code></pre></div></div>
 <p class="v2-p"><strong>This does NOT create a real copy.</strong> Both <code>dict1</code> and <code>dict2</code> now point to the <strong>same dictionary in memory</strong>. If you change one, the other changes too:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>dict1 = {&quot;brand&quot;: &quot;Ford&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>dict1 = {&quot;brand&quot;: &quot;Ford&quot;, &quot;year&quot;: 1964}
 dict2 = dict1
 dict2[&quot;year&quot;] = 2023
 
@@ -681,40 +503,26 @@ print(dict2)   # {&quot;brand&quot;: &quot;Ford&quot;, &quot;year&quot;: 2023}</
 <p class="v2-p">This is one of the most common and confusing bugs for beginners. You must use a proper copy method.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Safe Copy Method 1 — <code>.copy()</code></h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 mydict = thisdict.copy()
 print(mydict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964}</code></pre></div></div>
 <p class="v2-p">Now <code>mydict</code> is a <strong>completely independent</strong> dictionary. Changes to <code>mydict</code> do <strong>not</strong> affect <code>thisdict</code>, and vice versa.</p>
 <h3 class="v2-h3">Safe Copy Method 2 — <code>dict()</code> Constructor</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>thisdict = {&quot;brand&quot;: &quot;Ford&quot;, &quot;model&quot;: &quot;Mustang&quot;, &quot;year&quot;: 1964}
 mydict = dict(thisdict)
 print(mydict)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;brand&#x27;: &#x27;Ford&#x27;, &#x27;model&#x27;: &#x27;Mustang&#x27;, &#x27;year&#x27;: 1964}</code></pre></div></div>
 <p class="v2-p">Both <code>.copy()</code> and <code>dict()</code> create what's called a <strong>shallow copy</strong> — meaning the top-level dictionary is independent, but if your values are themselves dictionaries (nested), those inner dictionaries are still shared. For most beginner use cases, <code>.copy()</code> is perfectly safe and correct.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Remember the rule:</strong> Never say <code>new_dict = old_dict</code> when you actually want a copy. Always use <code>.copy()</code> or <code>dict()</code>.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Copying a Dictionary</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase10">
-  <div class="phase-header">
-    <div class="phase-num">Phase 10 of 12</div>
-    <div class="phase-title">Part 8: Nested Dictionaries</div>
-    <div class="phase-check" id="chk10"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What Is a Nested Dictionary?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Copying a Dictionary</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(9)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase10"><div class="ph"><div class="pn">Phase 10/12</div><div class="pt">Part 8: Nested Dictionaries</div><div class="pc" id="chk10"></div></div><div class="pb2"><h3 class="v2-h3">What Is a Nested Dictionary?</h3>
 <p class="v2-p">A <strong>nested dictionary</strong> is a dictionary that contains other dictionaries as its values.</p>
 <p class="v2-p">Think of it like a filing cabinet with drawers (outer dictionary) and folders inside each drawer (inner dictionaries).</p>
 <h3 class="v2-h3">Creating a Nested Dictionary — All at Once</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>myfamily = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>myfamily = {
     &quot;child1&quot;: {
         &quot;name&quot;: &quot;Emil&quot;,
         &quot;year&quot;: 2004
@@ -730,11 +538,11 @@ print(mydict)</code></pre></div></div>
 }
 print(myfamily)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;child1&#x27;: {&#x27;name&#x27;: &#x27;Emil&#x27;, &#x27;year&#x27;: 2004}, &#x27;child2&#x27;: {&#x27;name&#x27;: &#x27;Tobias&#x27;, &#x27;year&#x27;: 2007}, &#x27;child3&#x27;: {&#x27;name&#x27;: &#x27;Linus&#x27;, &#x27;year&#x27;: 2011}}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;child1&#x27;: {&#x27;name&#x27;: &#x27;Emil&#x27;, &#x27;year&#x27;: 2004}, &#x27;child2&#x27;: {&#x27;name&#x27;: &#x27;Tobias&#x27;, &#x27;year&#x27;: 2007}, &#x27;child3&#x27;: {&#x27;name&#x27;: &#x27;Linus&#x27;, &#x27;year&#x27;: 2011}}</code></pre></div></div>
 <p class="v2-p">Here, <code>myfamily</code> has 3 keys: <code>"child1"</code>, <code>"child2"</code>, <code>"child3"</code>. Each key's value is itself a dictionary containing <code>"name"</code> and <code>"year"</code>.</p>
 <h3 class="v2-h3">Creating a Nested Dictionary — By Combining Existing Ones</h3>
 <p class="v2-p">You can also create dictionaries separately and then combine them:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>child1 = {&quot;name&quot;: &quot;Emil&quot;, &quot;year&quot;: 2004}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>child1 = {&quot;name&quot;: &quot;Emil&quot;, &quot;year&quot;: 2004}
 child2 = {&quot;name&quot;: &quot;Tobias&quot;, &quot;year&quot;: 2007}
 child3 = {&quot;name&quot;: &quot;Linus&quot;, &quot;year&quot;: 2011}
 
@@ -745,25 +553,25 @@ myfamily = {
 }
 print(myfamily)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;child1&#x27;: {&#x27;name&#x27;: &#x27;Emil&#x27;, &#x27;year&#x27;: 2004}, &#x27;child2&#x27;: {&#x27;name&#x27;: &#x27;Tobias&#x27;, &#x27;year&#x27;: 2007}, &#x27;child3&#x27;: {&#x27;name&#x27;: &#x27;Linus&#x27;, &#x27;year&#x27;: 2011}}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;child1&#x27;: {&#x27;name&#x27;: &#x27;Emil&#x27;, &#x27;year&#x27;: 2004}, &#x27;child2&#x27;: {&#x27;name&#x27;: &#x27;Tobias&#x27;, &#x27;year&#x27;: 2007}, &#x27;child3&#x27;: {&#x27;name&#x27;: &#x27;Linus&#x27;, &#x27;year&#x27;: 2011}}</code></pre></div></div>
 <p class="v2-p">Same result, different approach. The second approach is cleaner when the inner dictionaries are complex.</p>
 <h3 class="v2-h3">Accessing Items Inside a Nested Dictionary</h3>
 <p class="v2-p">To access a value inside a nested dictionary, chain your square brackets:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># Access child1&#x27;s name
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># Access child1&#x27;s name
 print(myfamily[&quot;child1&quot;][&quot;name&quot;])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Emil</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Emil</code></pre></div></div>
 <p class="v2-p"><strong>How to read this:</strong> <code>myfamily["child1"]</code> gives you the inner dictionary <code>{"name": "Emil", "year": 2004}</code>. Then <code>["name"]</code> drills into that inner dictionary to get <code>"Emil"</code>.</p>
 <p class="v2-p">More examples:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(myfamily[&quot;child2&quot;][&quot;year&quot;])    # Output: 2007
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(myfamily[&quot;child2&quot;][&quot;year&quot;])    # Output: 2007
 print(myfamily[&quot;child3&quot;][&quot;name&quot;])    # Output: Linus</code></pre></div></div>
 <h3 class="v2-h3">Looping Through a Nested Dictionary</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>for child_key, child_info in myfamily.items():
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>for child_key, child_info in myfamily.items():
     print(&quot;Key:&quot;, child_key)
     for detail_key, detail_value in child_info.items():
         print(&quot;  &quot;, detail_key, &quot;:&quot;, detail_value)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Key: child1
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Key: child1
    name : Emil
    year : 2004
 Key: child2
@@ -775,28 +583,13 @@ Key: child3
 <p class="v2-p"><strong>Line-by-line explanation:</strong></p>
 <ul class="v2-ul"><li>The outer loop goes through the family dictionary and assigns each child's key (<code>"child1"</code>, etc.) to <code>child_key</code>, and the inner dictionary to <code>child_info</code></li><li>The inner loop then goes through each inner dictionary's items</li><li>The <code>"  "</code> (two spaces) indents the inner output to visually show the hierarchy</li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world use:</strong> This pattern is used everywhere — when an app processes JSON data from a web API, when a program reads a configuration file, when a database returns records with sub-fields. Nested dictionaries are the backbone of modern data handling.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>: Nested Dictionaries</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(10)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase11">
-  <div class="phase-header">
-    <div class="phase-num">Phase 11 of 12</div>
-    <div class="phase-title">Guided Practice Exercises</div>
-    <div class="phase-check" id="chk11"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Exercise 1 — Build a Student Profile</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>: Nested Dictionaries</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(10)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase11"><div class="ph"><div class="pn">Phase 11/12</div><div class="pt">Guided Practice Exercises</div><div class="pc" id="chk11"></div></div><div class="pb2"><div class="chal-box"><div class="chal-lbl">🎯 Your Challenge</div><div class="chal-body"><h3 class="v2-h3">Exercise 1 — Build a Student Profile</h3>
 <p class="v2-p"><strong>Objective:</strong> Create and access a dictionary representing a student's record.</p>
 <p class="v2-p"><strong>Scenario:</strong> You're building a simple student management system. Each student has a name, age, subject, and grade.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Create a dictionary called <code>student</code> with keys: <code>"name"</code>, <code>"age"</code>, <code>"subject"</code>, <code>"grade"</code></li><li>Fill in values of your choice</li><li>Print the full dictionary</li><li>Print only the student's name</li><li>Print only the grade</li></ol>
-<p class="v2-p"><strong>Starter Code:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>student = {
+<p class="v2-p"><strong>Starter Code:</strong></p></div></div><div class="task-box"><div class="task-lbl">✏️ Task</div><div class="task-body">Practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="reveal-btn" onclick="toggleReveal(this)">👁️ Reveal Answer</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>student = {
     &quot;name&quot;: &quot;Amara&quot;,
     &quot;age&quot;: 18,
     &quot;subject&quot;: &quot;Mathematics&quot;,
@@ -812,7 +605,7 @@ print(student[&quot;name&quot;])
 # Step 5
 print(student[&quot;grade&quot;])</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;name&#x27;: &#x27;Amara&#x27;, &#x27;age&#x27;: 18, &#x27;subject&#x27;: &#x27;Mathematics&#x27;, &#x27;grade&#x27;: &#x27;A&#x27;}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;name&#x27;: &#x27;Amara&#x27;, &#x27;age&#x27;: 18, &#x27;subject&#x27;: &#x27;Mathematics&#x27;, &#x27;grade&#x27;: &#x27;A&#x27;}
 Amara
 A</code></pre></div></div>
 <p class="v2-p"><strong>Self-check:</strong> Can you also print the student's subject using <code>.get()</code> instead of square brackets?</p>
@@ -822,7 +615,7 @@ A</code></pre></div></div>
 <p class="v2-p"><strong>Scenario:</strong> A student just changed their subject and also got their exam score recorded.</p>
 <p class="v2-p"><strong>Steps:</strong></p>
 <ol class="v2-ol"><li>Start with the student dictionary from Exercise 1</li><li>Update <code>"subject"</code> to <code>"Physics"</code></li><li>Add a new key <code>"score"</code> with value <code>95</code></li><li>Print the updated dictionary</li></ol>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>student = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>student = {
     &quot;name&quot;: &quot;Amara&quot;,
     &quot;age&quot;: 18,
     &quot;subject&quot;: &quot;Mathematics&quot;,
@@ -834,13 +627,13 @@ student[&quot;score&quot;] = 95             # Add new key
 
 print(student)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>{&#x27;name&#x27;: &#x27;Amara&#x27;, &#x27;age&#x27;: 18, &#x27;subject&#x27;: &#x27;Physics&#x27;, &#x27;grade&#x27;: &#x27;A&#x27;, &#x27;score&#x27;: 95}</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>{&#x27;name&#x27;: &#x27;Amara&#x27;, &#x27;age&#x27;: 18, &#x27;subject&#x27;: &#x27;Physics&#x27;, &#x27;grade&#x27;: &#x27;A&#x27;, &#x27;score&#x27;: 95}</code></pre></div></div>
 <p class="v2-p"><strong>What-if challenge:</strong> What happens if you try <code>student.update({"grade": "B", "score": 88})</code>? Try it!</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Exercise 3 — Remove Items Safely</h3>
 <p class="v2-p"><strong>Objective:</strong> Practice the different removal methods.</p>
 <p class="v2-p"><strong>Scenario:</strong> The school's system needs to remove certain fields from a student record.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>student = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>student = {
     &quot;name&quot;: &quot;Amara&quot;,
     &quot;age&quot;: 18,
     &quot;subject&quot;: &quot;Physics&quot;,
@@ -861,7 +654,7 @@ print(&quot;After popitem:&quot;, student)
 del student[&quot;age&quot;]
 print(&quot;After del:&quot;, student)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Removed score: 95
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Removed score: 95
 After pop: {&#x27;name&#x27;: &#x27;Amara&#x27;, &#x27;age&#x27;: 18, &#x27;subject&#x27;: &#x27;Physics&#x27;, &#x27;grade&#x27;: &#x27;A&#x27;}
 After popitem: {&#x27;name&#x27;: &#x27;Amara&#x27;, &#x27;age&#x27;: 18, &#x27;subject&#x27;: &#x27;Physics&#x27;}
 After del: {&#x27;name&#x27;: &#x27;Amara&#x27;, &#x27;subject&#x27;: &#x27;Physics&#x27;}</code></pre></div></div>
@@ -869,7 +662,7 @@ After del: {&#x27;name&#x27;: &#x27;Amara&#x27;, &#x27;subject&#x27;: &#x27;Phys
 <h3 class="v2-h3">Exercise 4 — Loop and Report</h3>
 <p class="v2-p"><strong>Objective:</strong> Use a loop to generate a readable report from a dictionary.</p>
 <p class="v2-p"><strong>Scenario:</strong> Print a formatted summary of a product.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>product = {
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>product = {
     &quot;name&quot;: &quot;Laptop&quot;,
     &quot;brand&quot;: &quot;TechPro&quot;,
     &quot;price&quot;: 750,
@@ -881,7 +674,7 @@ print(&quot;=== Product Report ===&quot;)
 for field, info in product.items():
     print(f&quot;{field}: {info}&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>=== Product Report ===
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>=== Product Report ===
 name: Laptop
 brand: TechPro
 price: 750
@@ -891,7 +684,7 @@ weight_kg: 1.8</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Exercise 5 — Safe vs. Unsafe Copy</h3>
 <p class="v2-p"><strong>Objective:</strong> Observe the difference between reference assignment and a real copy.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>original = {&quot;city&quot;: &quot;Lagos&quot;, &quot;country&quot;: &quot;Nigeria&quot;, &quot;population&quot;: 15000000}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>original = {&quot;city&quot;: &quot;Lagos&quot;, &quot;country&quot;: &quot;Nigeria&quot;, &quot;population&quot;: 15000000}
 
 # Unsafe — both variables point to the same object
 unsafe_copy = original
@@ -909,38 +702,24 @@ print(&quot;Original after safe copy change:&quot;, original)
 # &quot;population&quot; is still 15000000 — original is untouched!
 print(&quot;Safe copy:&quot;, safe_copy)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Original after unsafe copy change: {&#x27;city&#x27;: &#x27;Lagos&#x27;, &#x27;country&#x27;: &#x27;Nigeria&#x27;, &#x27;population&#x27;: 999}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Original after unsafe copy change: {&#x27;city&#x27;: &#x27;Lagos&#x27;, &#x27;country&#x27;: &#x27;Nigeria&#x27;, &#x27;population&#x27;: 999}
 Original after safe copy change: {&#x27;city&#x27;: &#x27;Lagos&#x27;, &#x27;country&#x27;: &#x27;Nigeria&#x27;, &#x27;population&#x27;: 15000000}
 Safe copy: {&#x27;city&#x27;: &#x27;Lagos&#x27;, &#x27;country&#x27;: &#x27;Nigeria&#x27;, &#x27;population&#x27;: 999}</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(11)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase12">
-  <div class="phase-header">
-    <div class="phase-num">Phase 12 of 12</div>
-    <div class="phase-title">Common Beginner Mistakes</div>
-    <div class="phase-check" id="chk12"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Mistake 1 — Using a List Index Style on a Dictionary</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG
+<hr class="v2-hr"></div><button class="ub" onclick="unlockNext(11)">Mark Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase12"><div class="ph"><div class="pn">Phase 12/12</div><div class="pt">Common Beginner Mistakes</div><div class="pc" id="chk12"></div></div><div class="pb2"><h3 class="v2-h3">Mistake 1 — Using a List Index Style on a Dictionary</h3>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG
 mydict = {&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 25}
 print(mydict[0])    # KeyError! Dictionaries don&#x27;t use numbers as positions</code></pre></div></div>
 <p class="v2-p"><strong>Fix:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(mydict[&quot;name&quot;])    # Correct — use the key name</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(mydict[&quot;name&quot;])    # Correct — use the key name</code></pre></div></div>
 <h3 class="v2-h3">Mistake 2 — Forgetting Quotes Around String Keys</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG
 mydict = {name: &quot;Alice&quot;}    # NameError — Python looks for a variable called name
 
 # CORRECT
 mydict = {&quot;name&quot;: &quot;Alice&quot;}  # Key is a string — must have quotes</code></pre></div></div>
 <h3 class="v2-h3">Mistake 3 — Using Duplicate Keys</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — duplicate key
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — duplicate key
 config = {
     &quot;timeout&quot;: 30,
     &quot;timeout&quot;: 60    # This silently overwrites 30!
@@ -948,47 +727,35 @@ config = {
 print(config[&quot;timeout&quot;])   # Output: 60 — you lost 30!</code></pre></div></div>
 <p class="v2-p"><strong>Fix:</strong> Use distinct, meaningful key names.</p>
 <h3 class="v2-h3">Mistake 4 — Confusing <code>=</code> (assign) with Updating</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># You can&#x27;t do this for a new key
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># You can&#x27;t do this for a new key
 mydict[&quot;new_key&quot;]    # KeyError — you must assign a value
 
 # Correct
 mydict[&quot;new_key&quot;] = &quot;some value&quot;</code></pre></div></div>
 <h3 class="v2-h3">Mistake 5 — Shallow Copy Trap with Nested Dictionaries</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>original = {&quot;info&quot;: {&quot;city&quot;: &quot;Abuja&quot;}}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>original = {&quot;info&quot;: {&quot;city&quot;: &quot;Abuja&quot;}}
 copy = original.copy()
 copy[&quot;info&quot;][&quot;city&quot;] = &quot;Lagos&quot;
 
 print(original[&quot;info&quot;][&quot;city&quot;])   # Output: Lagos — original was changed!</code></pre></div></div>
 <p class="v2-p"><strong>Why?</strong> <code>.copy()</code> only copies the outer dictionary. The inner dictionary is still shared. For fully independent copies of nested dictionaries, you need <code>copy.deepcopy()</code> from Python's <code>copy</code> module:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import copy
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import copy
 original = {&quot;info&quot;: {&quot;city&quot;: &quot;Abuja&quot;}}
 safe_copy = copy.deepcopy(original)
 safe_copy[&quot;info&quot;][&quot;city&quot;] = &quot;Lagos&quot;
 print(original[&quot;info&quot;][&quot;city&quot;])   # Output: Abuja — original safe!</code></pre></div></div>
 <h3 class="v2-h3">Mistake 6 — Accessing a Non-Existent Key with Square Brackets</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>mydict = {&quot;name&quot;: &quot;Alice&quot;}
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>mydict = {&quot;name&quot;: &quot;Alice&quot;}
 print(mydict[&quot;age&quot;])    # KeyError: &#x27;age&#x27;</code></pre></div></div>
 <p class="v2-p"><strong>Fix — use <code>.get()</code> with a default value:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>print(mydict.get(&quot;age&quot;, &quot;Not specified&quot;))   # Output: Not specified</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>print(mydict.get(&quot;age&quot;, &quot;Not specified&quot;))   # Output: Not specified</code></pre></div></div>
 <p class="v2-p">The second argument to <code>.get()</code> is the default value returned when the key doesn't exist.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(12)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="build-box" id="build-it">
-  <div class="build-label">🏗️ Build It</div>
-  <div class="build-name">Project Overview</div>
-  <div class="build-desc">You will create a grade book where:</div>
-  <div class="v2-code-wrap">
-    <div class="v2-code-bar">
-      <span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span>
-      <span class="v2-code-lang">starter.py</span>
-    </div>
-    <div class="v2-code-body"><pre><code>gradebook = {
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(12)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="build-box" id="build-it"><div class="build-lbl">🏗️ Build It — Mini Project</div><div class="build-name">Project Overview</div><div class="build-req"><p class="v2-p">In this project, you'll build a small grade book program that stores student data in nested dictionaries and generates a report.</p>
+<h3 class="v2-h3">Project Overview</h3>
+<p class="v2-p">You will create a grade book where:</p>
+<ul class="v2-ul"><li>Each student has a name, subject scores, and a calculated average</li><li>The system can display a full report</li><li>You can look up a specific student's info</li></ul>
+<h3 class="v2-h3">Stage 1 — Setup: Create the Grade Book</h3></div><button class="reveal-btn" onclick="toggleCode(this)">💻 Reveal Starter Code</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">starter.py</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>gradebook = {
     &quot;Alice&quot;: {
         &quot;math&quot;: 88,
         &quot;science&quot;: 92,
@@ -1004,10 +771,7 @@ print(mydict[&quot;age&quot;])    # KeyError: &#x27;age&#x27;</code></pre></div>
         &quot;science&quot;: 91,
         &quot;english&quot;: 98
     }
-}</code></pre></div>
-  </div>
-  <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
-    <button class="unlock-btn" onclick="downloadStarter(`gradebook = {
+}</code></pre></div></div><div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem"><button class="ub" onclick="downloadStarter(`gradebook = {
     "Alice": {
         "math": 88,
         "science": 92,
@@ -1023,87 +787,66 @@ print(mydict[&quot;age&quot;])    # KeyError: &#x27;age&#x27;</code></pre></div>
         "science": 91,
         "english": 98
     }
-}`)"
-      style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">
-      ⬇ Download starter.py
-    </button>
-    <button class="unlock-btn" onclick="showGithub()"
-      style="background:#0f172a;box-shadow:none">
-      🐙 Push to GitHub →
-    </button>
-  </div>
-</div>
+}`)" style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">⬇ Download starter.py</button><button class="ub" onclick="showGithub()" style="background:#0f172a;box-shadow:none">🐙 Save to GitHub →</button></div></div></div>
 <div class="gh-acc" id="gh-steps" style="display:none">
-  <div class="gh-acc-head" onclick="toggleGh(this)">
-    🐙 Push Your Project to GitHub Pages &nbsp;<span>▼</span>
-  </div>
-  <div class="gh-acc-body">
-    <div class="gh-step"><div class="gh-step-n">1</div>
-    <p>Go to <strong>github.com</strong> → click <strong>New repository</strong> → name it <code>python-lesson-11-project-overview</code>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">2</div>
-    <p>Set it to <strong>Public</strong>, tick <strong>Add a README</strong>, then click <strong>Create repository</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">3</div>
-    <p>Click <strong>Add file → Upload files</strong>. Upload your <code>starter.py</code> — rename it to <code>index.py</code> before uploading.</p></div>
-    <div class="gh-step"><div class="gh-step-n">4</div>
-    <p>Commit message: <em>"Add Python lesson 11 project"</em> → click <strong>Commit changes</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">5</div>
-    <p>Go to <strong>Settings → Pages</strong> → branch <strong>main</strong> → <strong>Save</strong>. Your project goes live at <code>https://YOUR-NAME.github.io/python-lesson-11-project-overview/</code> in about 1 minute! 🎉</p></div>
-    <button class="unlock-btn" onclick="showEnd()" style="margin-top:.5rem">I've pushed to GitHub — Finish Session ✅</button>
-  </div>
-</div>
-<div class="session-end" id="session-end">
-  <h2>🎉 Lesson 11 complete!</h2>
-  <p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p>
-  <ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1: What Is a Python Dictionary?</li><li>✅ Part 2: Accessing Dictionary Items</li><li>✅ Part 3: Changing Dictionary Items</li><li>✅ Part 4: Adding Items to a Dictionary</li><li>✅ Part 5: Removing Items from a Dictionary</li><li>✅ Part 6: Looping Through a Dictionary</li></ul>
-  <div class="lesson-nav"><a href="lesson_10.html" class="ln-btn">← Lesson 10</a><a href="lesson_12.html" class="ln-btn primary">Lesson 12 →</a></div>
-</div>
+<div class="gh-hd" onclick="toggleGh(this)">🐙 Save Python Project to GitHub &nbsp;<span>▼</span></div>
+<div class="gh-bd">
+<div class="gh-nop"><strong>⚠️ Python cannot be hosted on GitHub Pages.</strong><br><br>GitHub Pages only serves static HTML/CSS/JS files. Python scripts need a server to run — you will learn deployment (Replit, PythonAnywhere, Heroku) later in the course. For now, save your code to GitHub as a portfolio entry.</div>
+<div class="gh-st"><div class="gh-n">1</div><p>Go to <strong>github.com → New repository</strong> → name it <code>python-lesson-11-project-overview</code>. Set <strong>Public</strong>, tick <strong>Add README</strong>, click <strong>Create</strong>.</p></div>
+<div class="gh-st"><div class="gh-n">2</div><p>Click <strong>Add file → Upload files</strong> → upload your <code>.py</code> file.</p></div>
+<div class="gh-st"><div class="gh-n">3</div><p>Commit message: <em>"Add Python lesson 11 project"</em> → <strong>Commit changes</strong>. Your code is now part of your GitHub portfolio! 🐍</p></div>
+<button class="ub" onclick="showEnd()" style="background:#059669;margin-top:.5rem">Done — Finish Session ✅</button>
+</div></div>
+<div class="se" id="session-end"><h2>🎉 Lesson 11 complete!</h2><p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p><ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1: What Is a Python Dictionary?</li><li>✅ Part 2: Accessing Dictionary Items</li><li>✅ Part 3: Changing Dictionary Items</li><li>✅ Part 4: Adding Items to a Dictionary</li><li>✅ Part 5: Removing Items from a Dictionary</li><li>✅ Part 6: Looping Through a Dictionary</li></ul><div class="ln"><a href="lesson_10.html" class="ln-btn">← Lesson 10</a><a href="lesson_12.html" class="ln-btn primary">Lesson 12 →</a></div></div>
 </main>
-
-<footer class="lesson-footer">
-  Techbase Code Coach · Python Course · Lesson 11 · © 2025 Techbase Consultant Services, Ibadan
-</footer>
+<footer class="lf">Techbase Code Coach &nbsp;·&nbsp; Python Course &nbsp;·&nbsp; Lesson 11 &nbsp;·&nbsp; © 2025 Techbase Consultant Services, Ibadan</footer>
+<div id="toast"></div>
+<button id="go-top" title="Back to top">↑</button>
+<canvas id="cc"></canvas>
 <script>
 const TOTAL=12,KEY='techbase_python_l11';
-let current=parseInt(localStorage.getItem(KEY)||'1');
-function init(){
-  for(let i=2;i<=current;i++) unlockPhase(i,false);
-  updateBar();
-}
+let cur=parseInt(localStorage.getItem(KEY)||'1');
+function init(){for(let i=2;i<=cur;i++)unlock(i,false);bar();}
 function unlockNext(n){
-  const chk=document.getElementById('chk'+n);
-  if(chk){chk.classList.add('done');chk.textContent='✓';}
-  localStorage.setItem(KEY,n+1); current=n+1;
+  const c=document.getElementById('chk'+n);
+  if(c){c.classList.add('done');c.textContent='✓';}
+  localStorage.setItem(KEY,n+1);cur=n+1;
   if(n===TOTAL){
-    document.getElementById('build-it').style.display='block';
-    updateBar(100);
+    document.getElementById('build-it').classList.add('visible');
+    bar(100);toast('🏗️ Build It unlocked!');
     setTimeout(()=>document.getElementById('build-it').scrollIntoView({behavior:'smooth'}),200);
-  }else{
-    unlockPhase(n+1,true); updateBar();
-  }
+    setTimeout(confetti,600);
+  }else{unlock(n+1,true);bar();toast(['✅ Phase complete!','🎯 Keep going!','💡 Nice work!','🚀 Nailed it!'][n%4]);}
 }
-function unlockPhase(n,scroll){
-  const el=document.getElementById('phase'+n);
-  if(el){el.classList.remove('locked');if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+function unlock(n,scroll){
+  const el=document.getElementById('phase'+n);if(!el)return;
+  el.classList.remove('locked');
+  if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),180);
 }
-function updateBar(pct){
-  const p=pct!==undefined?pct:Math.round((current-1)/TOTAL*95);
-  document.getElementById('pbar').style.width=p+'%';
+function bar(p){document.getElementById('pbar').style.width=(p!==undefined?p:Math.round((cur-1)/TOTAL*95))+'%';}
+function toggleReveal(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Answer':'👁️ Reveal Answer';}
+function toggleCode(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Starter Code':'💻 Reveal Starter Code';}
+function copyCode(btn){
+  const code=btn.closest('.v2-code-wrap').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='⎘ Copy';btn.classList.remove('copied');},1800);}).catch(()=>{});
 }
-function showGithub(){
-  const g=document.getElementById('gh-steps');
-  if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}
-}
-function showEnd(){
-  const e=document.getElementById('session-end');
-  if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}
-}
+const tEl=document.getElementById('toast');let tT;
+function toast(msg){tEl.innerHTML=msg;tEl.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>tEl.classList.remove('show'),2400);}
+const gEl=document.getElementById('go-top');
+window.addEventListener('scroll',()=>gEl.classList.toggle('visible',scrollY>320),{passive:true});
+gEl.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 function toggleGh(el){el.nextElementSibling.classList.toggle('open');}
-function downloadStarter(code){
-  const a=document.createElement('a');
-  a.href='data:text/html;charset=utf-8,'+encodeURIComponent(code);
-  a.download='starter.html';a.click();
+function showGithub(){const g=document.getElementById('gh-steps');if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}}
+function showEnd(){const e=document.getElementById('session-end');if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}}
+function downloadStarter(code){const ext='python'==='python'?'py':'html';const a=document.createElement('a');a.href='data:text/'+(ext==='py'?'x-python':'html')+';charset=utf-8,'+encodeURIComponent(code);a.download='starter.'+ext;a.click();}
+function confetti(){
+  const cv=document.getElementById('cc');cv.style.display='block';const ctx=cv.getContext('2d');
+  cv.width=innerWidth;cv.height=innerHeight;
+  const ps=Array.from({length:130},()=>{return{x:Math.random()*cv.width,y:-10-Math.random()*120,r:4+Math.random()*6,d:2+Math.random()*3,c:['#e34c26','#0284c7','#d97706','#059669','#7c3aed','#ec4899'][Math.floor(Math.random()*6)],ta:0};}); 
+  let f=0;
+  function draw(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.ta+=.1;p.y+=p.d;p.x+=Math.sin(f/20);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();});f++;if(f<200)requestAnimationFrame(draw);else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}}
+  draw();toast('🎉 All phases done! Build It awaits!');
 }
 init();
 </script>
-</body>
-</html>
+</body></html>

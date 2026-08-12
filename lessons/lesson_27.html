@@ -1,255 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lesson 27: NumPy Random Distributions, Permutations, Seaborn Visualisation, and Universal Functions (ufuncs) — Techbase Python</title>
-<meta name="description" content="NumPy Random Distributions, Permutations, Seaborn Visualisation, and Universal Functions (ufuncs)">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --acc:#059669;--acc-d:#047857;--acc-pale:#ecfdf5;
-  --acc-b:rgba(5,150,105,.25);--acc-sh:rgba(5,150,105,.28);
-  --bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--t2:#334155;--muted:#64748b;
-  --D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+:root{--acc:#059669;--acd:#047857;--acp:#ecfdf5;--acb:rgba(5,150,105,.22);--acs:rgba(5,150,105,.28);--bg:#f8fafc;--sf:#fff;--br:#e2e8f0;--tx:#0f172a;--t2:#334155;--mu:#64748b;--D:'Space Grotesk',sans-serif;--B:'Plus Jakarta Sans',sans-serif;--M:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);color:var(--text);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
-
-/* NAV */
-.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);
-  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:58px;
-  display:flex;align-items:center;padding:0 1.5rem;gap:1rem;justify-content:space-between}
-.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.l-nav-back{font-size:.8rem;color:var(--muted);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+body{background:var(--bg);color:var(--tx);font-family:var(--B);font-size:16px;line-height:1.75;overflow-x:hidden}
+.l-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);height:58px;display:flex;align-items:center;padding:0 1.5rem;justify-content:space-between}
+.l-nav-logo{font-family:var(--D);font-weight:700;font-size:.9rem;color:var(--tx);text-decoration:none}
+.l-nav-back{font-size:.8rem;color:var(--mu);text-decoration:none;font-weight:500;transition:color .2s}
 .l-nav-back:hover{color:var(--acc)}
-.l-nav-label{font-family:var(--M);font-size:.68rem;color:var(--muted)}
-
-/* PROGRESS */
-.progress-wrap{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--border)}
-.progress-bar{height:100%;background:var(--acc);transition:width .4s ease;width:0%}
-
-/* HERO */
-.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--border)}
-.l-hero-inner{max-width:860px;margin:0 auto}
-.l-badge{display:inline-flex;align-items:center;gap:.4rem;border-radius:100px;padding:.2rem .85rem;
-  font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
-  color:var(--acc);background:var(--acc-pale);border:1px solid var(--acc-b);margin-bottom:.8rem}
-.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);
-  letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
-.l-hero-sub{font-size:.95rem;color:var(--muted);margin-bottom:1rem}
-
-/* WELCOME BOX */
-.welcome-box{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.5rem 1.8rem;max-width:860px;margin:1.5rem auto 0}
-.welcome-box h2{font-family:var(--D);font-weight:700;font-size:1.05rem;margin-bottom:.6rem}
-.welcome-box p,.welcome-box li{font-size:.9rem;line-height:1.8;opacity:.93}
-.welcome-box ul{margin-left:1.2rem;margin-top:.5rem}
-.welcome-meta{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
-.welcome-meta span{background:rgba(255,255,255,.18);border-radius:6px;padding:.2rem .75rem;
-  font-family:var(--M);font-size:.68rem;font-weight:500}
-
-/* PHASE */
-.phase{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;
-  margin-bottom:1.5rem;overflow:hidden;transition:opacity .3s,transform .3s,filter .3s}
-.phase.locked{opacity:.35;pointer-events:none;filter:blur(1.5px)}
-.phase-header{padding:1rem 1.4rem;background:#f0fdf6;
-  border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:default}
-.phase-num{font-family:var(--M);font-size:.7rem;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--acc)}
-.phase-title{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--text);
-  flex:1;margin:0 .8rem}
-.phase-check{width:26px;height:26px;border-radius:50%;background:var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;
-  transition:background .3s,color .3s}
-.phase-check.done{background:#10b981;color:#fff}
-.phase-body{padding:1.6rem 1.8rem}
-
-/* RICH CONTENT STYLES */
+.l-nav-lbl{font-family:var(--M);font-size:.68rem;color:var(--mu)}
+.pw{position:fixed;top:58px;left:0;right:0;z-index:199;height:4px;background:var(--br)}
+.pb{height:100%;background:linear-gradient(90deg,var(--acc),var(--acd));transition:width .5s cubic-bezier(.4,0,.2,1);width:0%;position:relative}
+.pb::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:inherit;filter:brightness(1.4);animation:pg 1.5s ease-in-out infinite}
+@keyframes pg{0%,100%{opacity:1}50%{opacity:.35}}
+.l-hero{padding:80px 1.5rem 2rem;background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);border-bottom:1px solid var(--br)}
+.l-hero-in{max-width:860px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;border-radius:100px;padding:.22rem .9rem;font-family:var(--M);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--acc);background:var(--acp);border:1.5px solid var(--acb);margin-bottom:.85rem}
+.l-hero h1{font-family:var(--D);font-weight:700;font-size:clamp(1.5rem,4vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin-bottom:.5rem}
+.l-hero-sub{font-size:.9rem;color:var(--mu)}
+.wb{background:#fff;border:1.5px solid var(--acb);border-left:5px solid var(--acc);border-radius:14px;padding:1.4rem 1.6rem;max-width:860px;margin:1.5rem auto 0;box-shadow:0 2px 12px var(--acs)}
+.wb h2{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--acd);margin-bottom:.6rem}
+.wb p,.wb li{font-size:.92rem;line-height:1.85;color:var(--t2)}
+.wb ul{margin-left:1.2rem;margin-top:.4rem}
+.wm{display:flex;gap:.65rem;margin-top:1rem;flex-wrap:wrap}
+.wm span{background:var(--acp);color:var(--acd);border:1px solid var(--acb);border-radius:7px;padding:.22rem .7rem;font-family:var(--M);font-size:.68rem;font-weight:600}
+.phase{background:var(--sf);border:1.5px solid var(--br);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;transition:opacity .35s,filter .35s,transform .35s}
+.phase.locked{opacity:.28;pointer-events:none;filter:blur(2px);transform:scale(.99)}
+.ph{padding:1rem 1.4rem;background:#f0fdf6;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:.8rem}
+.pn{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.pt{font-family:var(--D);font-weight:700;font-size:.95rem;color:var(--tx);flex:1}
+.pc{width:26px;height:26px;border-radius:50%;background:var(--br);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:background .3s,transform .4s}
+.pc.done{background:#10b981;color:#fff;transform:scale(1.15) rotate(360deg)}
+.pb2{padding:1.6rem 1.8rem}
 .v2-p{margin-bottom:1rem;font-size:.95rem;color:var(--t2);line-height:1.85}
-.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--text);
-  margin:1.6rem 0 .5rem;padding-top:.2rem;border-top:2px solid var(--acc-pale)}
-.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1.1rem 0 .4rem}
-.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.9rem;color:var(--muted);margin:.8rem 0 .3rem}
+.v2-h3{font-family:var(--D);font-weight:700;font-size:1.05rem;color:var(--tx);margin:1.6rem 0 .5rem;border-top:2px solid var(--acp);padding-top:.4rem}
+.v2-h4{font-family:var(--D);font-weight:600;font-size:.95rem;color:var(--t2);margin:1rem 0 .35rem}
+.v2-h5,.v2-h6{font-family:var(--D);font-weight:600;font-size:.88rem;color:var(--mu);margin:.7rem 0 .3rem}
 .v2-ul,.v2-ol{margin:.6rem 0 1rem 1.4rem;font-size:.93rem;color:var(--t2);line-height:1.9}
 .v2-ul li,.v2-ol li{margin-bottom:.3rem}
-.v2-bq{border-left:4px solid var(--acc);background:var(--acc-pale);border-radius:0 10px 10px 0;
-  padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
+.v2-bq{border-left:4px solid var(--acc);background:var(--acp);border-radius:0 10px 10px 0;padding:.9rem 1.2rem;margin:1rem 0;font-size:.92rem;color:#064e3b;font-style:italic}
 .v2-bq p{margin:0;color:inherit}
-.v2-bq strong{font-style:normal}
-.v2-hr{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
-.v2-table-wrap{overflow-x:auto;margin:1rem 0}
+.v2-hr{border:none;border-top:1px solid var(--br);margin:1.2rem 0}
+.v2-table-wrap{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--br)}
 .v2-table{width:100%;border-collapse:collapse;font-size:.87rem}
-.v2-table th{background:var(--acc-pale);color:#064e3b;font-family:var(--D);
-  font-weight:700;padding:9px 12px;text-align:left;border:1px solid var(--acc-b)}
-.v2-table td{padding:8px 12px;border:1px solid var(--border);color:var(--t2);vertical-align:top}
-.v2-table tr:nth-child(even) td{background:#f8fafc}
-.v2-table code{background:var(--acc-pale);color:var(--acc);border-radius:4px;
-  padding:1px 5px;font-family:var(--M);font-size:.8em}
-.phase-body code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-.phase-body a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
-.phase-body strong{color:var(--text)}
-
-/* CODE BLOCKS */
-.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.v2-table th{background:var(--acp);color:#064e3b;font-family:var(--D);font-weight:700;padding:10px 12px;text-align:left;border-bottom:2px solid var(--acb)}
+.v2-table td{padding:8px 12px;border-bottom:1px solid var(--br);color:var(--t2);vertical-align:top}
+.v2-table tr:last-child td{border:none}
+.v2-table tr:hover td{background:var(--acp)}
+.pb2 code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.pb2 a{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
+.pb2 strong{color:var(--tx)}
+.v2-code-wrap{margin:1.2rem 0;border-radius:12px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .v2-code-bar{background:#1e293b;padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem}
 .v2-dot{width:10px;height:10px;border-radius:50%}
 .v2-dot.r{background:#ff5f57}.v2-dot.y{background:#febc2e}.v2-dot.g{background:#28c840}
-.v2-code-lang{margin-left:.6rem;font-family:var(--M);font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em}
+.v2-code-lang{margin-left:.5rem;font-family:var(--M);font-size:.62rem;color:#64748b;text-transform:uppercase;letter-spacing:.08em;flex:1}
+.copy-btn{background:rgba(255,255,255,.08);color:#94a3b8;border:none;border-radius:6px;padding:.25rem .65rem;font-family:var(--M);font-size:.65rem;cursor:pointer;transition:background .2s,color .2s}
+.copy-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.copy-btn.copied{background:#10b981;color:#fff}
 .v2-code-body{background:#0f172a;padding:1.3rem 1.5rem;overflow-x:auto}
 .v2-code-body pre{margin:0}
-.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.9;color:#e2e8f0;
-  white-space:pre;background:transparent;padding:0;border-radius:0}
-
-/* TASK BOX */
-.task-box{background:#d1fae5;border:2px dashed #059669;
-  border-radius:12px;padding:1rem 1.3rem;margin:1.4rem 0}
-.task-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-.task-box p,.task-body{font-size:.92rem;color:#064e3b;line-height:1.8}
-.task-box code{background:rgba(0,0,0,.08);border-radius:4px;padding:1px 6px;
-  font-family:var(--M);font-size:.82em}
-
-/* UNLOCK BUTTON */
-.unlock-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);
-  color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;
-  padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;
-  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acc-sh);margin-top:1.2rem}
-.unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acc-sh)}
-
-/* BUILD IT */
+.v2-code-body code{font-family:var(--M);font-size:.8rem;line-height:1.95;color:#e2e8f0;white-space:pre;background:transparent;padding:0;border-radius:0}
+.task-box{background:#d1fae5;border:2px dashed #059669;border-radius:12px;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.task-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#064e3b;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.task-body{font-size:.93rem;color:#064e3b;line-height:1.85}
+.task-body code{background:rgba(0,0,0,.1);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.chal-box{background:linear-gradient(135deg,#ecfdf5 0%,#fff 100%);border:2px solid var(--acc);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem}
+.chal-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acd);margin-bottom:.6rem}
+.chal-body{font-size:.95rem;color:var(--tx);line-height:1.85}
+.chal-body code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 5px;font-family:var(--M);font-size:.82em}
+.reveal-btn{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--acd);font-family:var(--D);font-weight:700;font-size:.85rem;padding:.6rem 1.2rem;border-radius:8px;border:2px solid var(--acc);cursor:pointer;transition:background .2s,color .2s;margin:.6rem 0}
+.reveal-btn:hover{background:var(--acc);color:#fff}
+.reveal-content{display:none;margin-top:.6rem;animation:fi .3s ease}
+.reveal-content.open{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .build-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:16px;padding:1.6rem;margin:2rem 0;display:none}
-.build-label{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
-.build-name{font-family:var(--D);font-weight:700;font-size:1.1rem;color:#14532d;margin-bottom:.5rem}
-.build-desc{font-size:.9rem;color:#166534;margin-bottom:1.2rem;line-height:1.75}
-.build-desc code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
-.build-desc strong{color:#14532d}
-
-/* GITHUB ACCORDION */
-.gh-acc{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
-.gh-acc-head{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none}
-.gh-acc-body{display:none;padding:1.2rem;border-top:1px solid var(--border)}
-.gh-acc-body.open{display:block}
-.gh-step{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
-.gh-step-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;
-  font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;margin-top:2px}
-.gh-step p{font-size:.88rem;color:var(--t2);line-height:1.7}
-.gh-step code{background:var(--acc-pale);color:var(--acc-d);border-radius:4px;
-  padding:1px 6px;font-family:var(--M);font-size:.82em}
-
-/* SESSION END */
-.session-end{background:linear-gradient(135deg,var(--acc),var(--acc-d));color:#fff;
-  border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
-.session-end.visible{display:block}
-.session-end h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
-.session-end ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.session-end li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
-.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);
-  color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;
-  padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;
-  border:1.5px solid var(--border);transition:border-color .2s,color .2s}
+.build-box.visible{display:block;animation:fi .4s ease}
+.build-lbl{font-family:var(--M);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#15803d;margin-bottom:.4rem}
+.build-name{font-family:var(--D);font-weight:700;font-size:1.15rem;color:#14532d;margin-bottom:.6rem}
+.build-req{font-size:.93rem;color:#166534;line-height:1.8;margin-bottom:.8rem}
+.build-req code{background:rgba(22,163,74,.12);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.build-req strong{color:#14532d}
+.gh-acc{border:1.5px solid var(--br);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.gh-hd{padding:1rem 1.2rem;background:#f8fafc;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--D);font-weight:600;font-size:.9rem;user-select:none;transition:background .2s}
+.gh-hd:hover{background:#f1f5f9}
+.gh-bd{display:none;padding:1.2rem;border-top:1px solid var(--br)}
+.gh-bd.open{display:block;animation:fi .25s ease}
+.gh-st{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start}
+.gh-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.gh-st p{font-size:.88rem;color:var(--t2);line-height:1.7}
+.gh-st code{background:var(--acp);color:var(--acd);border-radius:4px;padding:1px 6px;font-family:var(--M);font-size:.82em}
+.gh-nop{background:#fef3c7;border:1.5px solid #fde68a;border-radius:10px;padding:1rem 1.2rem;font-size:.9rem;color:#78350f;line-height:1.75;margin-bottom:1rem}
+.se{background:linear-gradient(135deg,var(--acc),var(--acd));color:#fff;border-radius:16px;padding:1.6rem 1.8rem;margin:2rem 0;display:none}
+.se.visible{display:block;animation:fi .4s ease}
+.se h2{font-family:var(--D);font-weight:700;font-size:1.1rem;margin-bottom:.8rem}
+.se ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.se li{font-size:.9rem;opacity:.93;display:flex;align-items:center;gap:.5rem}
+.ln-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--sf);color:var(--t2);font-family:var(--D);font-weight:600;font-size:.82rem;padding:.65rem 1.2rem;border-radius:8px;text-decoration:none;border:1.5px solid var(--br);transition:border-color .2s,color .2s}
 .ln-btn:hover{border-color:var(--acc);color:var(--acc)}
 .ln-btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
 .ln-btn.primary:hover{opacity:.9}
-.lesson-nav{display:flex;align-items:center;justify-content:space-between;
-  padding-top:2rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
-.lesson-footer{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;
-  color:var(--muted);border-top:1px solid var(--border);background:var(--surface)}
+.ln{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.25);margin-top:1.5rem;flex-wrap:wrap;gap:.75rem}
+.ub{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:#fff;font-family:var(--D);font-weight:700;font-size:.88rem;padding:.75rem 1.6rem;border-radius:10px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px var(--acs);margin-top:1.2rem}
+.ub:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--acs)}
+.ub:active{transform:scale(.97)}
+#toast{position:fixed;bottom:90px;right:1.5rem;z-index:999;background:#1e293b;color:#fff;border-radius:10px;padding:.75rem 1.2rem;font-family:var(--D);font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#go-top{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;border:none;cursor:pointer;font-size:1.15rem;box-shadow:0 4px 16px var(--acs);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s,box-shadow .2s;pointer-events:none}
+#go-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#go-top:hover{box-shadow:0 8px 24px var(--acs);transform:translateY(-2px)}
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;display:none}
+.lf{text-align:center;padding:1.5rem;font-family:var(--M);font-size:.72rem;color:var(--mu);border-top:1px solid var(--br);background:var(--sf)}
 </style>
 </head>
 <body>
 <nav class="l-nav">
   <a href="../index.html" class="l-nav-logo">⚡ Techbase Python</a>
-  <span class="l-nav-label">Lesson 27 of 45</span>
+  <span class="l-nav-lbl">Lesson 27 of 45</span>
   <a href="../index.html" class="l-nav-back">← All Lessons</a>
 </nav>
-<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
-
-<div class="l-hero">
-  <div class="l-hero-inner">
-    <div class="l-badge">Python · Lesson 27</div>
-    <h1>NumPy Random Distributions, Permutations, Seaborn Visualisation, and Universal Functions (ufuncs)</h1>
-    <div class="l-hero-sub">8 phases · Build: Project Description</div>
-  </div>
-</div>
-
-<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--border)">
-  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="welcome-box">
-  <h2>👋 Welcome to Lesson 27</h2>
-  <div style="font-size:.9rem;line-height:1.85;opacity:.93"><p class="v2-p">Welcome to Lesson 27! In this lesson you will learn four powerful ideas that sit at the heart of modern data science and scientific computing in Python:</p>
-<ol class="v2-ol"><li><strong>Random Data Distributions</strong> — how to generate random numbers that follow real-world patterns (like weighted choices and probability rules).</li><li><strong>Random Permutations</strong> — how to shuffle arrays or create new rearrangements without changing the original data.</li><li><strong>Seaborn for Visualisation</strong> — how to draw beautiful distribution charts using a Python library called Seaborn, so you can <em>see</em> what your data looks like.</li><li><strong>Universal Functions (ufuncs)</strong> — NumPy's super-fast way of doing math operations on entire arrays at once without writing slow loops.</li></ol>
-<p class="v2-p">These four topics flow naturally into each other. First you will learn to <em>create</em> specially shaped random data, then to <em>rearrange</em> it, then to <em>visualise</em> it, and finally to <em>process</em> it efficiently with ufuncs. By the end of this lesson you will have everything you need for a real mini-project.</p>
-<blockquote class="v2-bq"><p class="v2-p"><strong>Prerequisites check:</strong> This lesson assumes you have already used NumPy and know how to create arrays with <code>np.array()</code>. If you have not, quickly review: <code>import numpy as np</code> and <code>arr = np.array([1, 2, 3])</code> before continuing.</p></blockquote>
-<hr class="v2-hr"></div>
-  <div class="welcome-meta">
-    <span>📚 8 phases</span>
-    <span>🏗️ Project Description</span>
-  </div>
+<div class="pw"><div class="pb" id="pbar"></div></div>
+<div class="l-hero"><div class="l-hero-in">
+  <div class="badge">Python · Lesson 27</div>
+  <h1>NumPy Random Distributions, Permutations, Seaborn Visualisation, and Universal Functions (ufuncs)</h1>
+  <div class="l-hero-sub">8 phases &nbsp;·&nbsp; Build: Project Description</div>
 </div></div>
-</section>
-
-<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
-<div class="phase" id="phase1">
-  <div class="phase-header">
-    <div class="phase-num">Phase 1 of 8</div>
-    <div class="phase-title">Lesson Introduction</div>
-    <div class="phase-check" id="chk1"></div>
-  </div>
-  <div class="phase-body">
-    <p class="v2-p">Welcome to Lesson 27! In this lesson you will learn four powerful ideas that sit at the heart of modern data science and scientific computing in Python:</p>
+<section style="background:linear-gradient(160deg,#ecfdf5 0%,#f8fafc 55%,#d1fae5 100%);padding-bottom:1.5rem;border-bottom:1px solid var(--br)">
+  <div style="max-width:860px;margin:0 auto;padding:0 1.5rem"><div class="wb"><h2>👋 Welcome to Lesson 27</h2><div style="font-size:.92rem;line-height:1.85;color:var(--t2)"><p class="v2-p">Welcome to Lesson 27! In this lesson you will learn four powerful ideas that sit at the heart of modern data science and scientific computing in Python:</p>
 <ol class="v2-ol"><li><strong>Random Data Distributions</strong> — how to generate random numbers that follow real-world patterns (like weighted choices and probability rules).</li><li><strong>Random Permutations</strong> — how to shuffle arrays or create new rearrangements without changing the original data.</li><li><strong>Seaborn for Visualisation</strong> — how to draw beautiful distribution charts using a Python library called Seaborn, so you can <em>see</em> what your data looks like.</li><li><strong>Universal Functions (ufuncs)</strong> — NumPy's super-fast way of doing math operations on entire arrays at once without writing slow loops.</li></ol>
 <p class="v2-p">These four topics flow naturally into each other. First you will learn to <em>create</em> specially shaped random data, then to <em>rearrange</em> it, then to <em>visualise</em> it, and finally to <em>process</em> it efficiently with ufuncs. By the end of this lesson you will have everything you need for a real mini-project.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Prerequisites check:</strong> This lesson assumes you have already used NumPy and know how to create arrays with <code>np.array()</code>. If you have not, quickly review: <code>import numpy as np</code> and <code>arr = np.array([1, 2, 3])</code> before continuing.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(1)">Start Lesson ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase2">
-  <div class="phase-header">
-    <div class="phase-num">Phase 2 of 8</div>
-    <div class="phase-title">Prerequisite Concepts</div>
-    <div class="phase-check" id="chk2"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What is a Python Array (NumPy ndarray)?</h3>
+<hr class="v2-hr"></div><div class="wm"><span>📚 8 phases</span><span>🏗️ Project Description</span><span>🐍 GitHub Repo</span></div></div></div>
+</section>
+<main style="max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem">
+<div class="phase" id="phase1"><div class="ph"><div class="pn">Phase 1/8</div><div class="pt">Lesson Introduction</div><div class="pc" id="chk1"></div></div><div class="pb2"><p class="v2-p">Welcome to Lesson 27! In this lesson you will learn four powerful ideas that sit at the heart of modern data science and scientific computing in Python:</p>
+<ol class="v2-ol"><li><strong>Random Data Distributions</strong> — how to generate random numbers that follow real-world patterns (like weighted choices and probability rules).</li><li><strong>Random Permutations</strong> — how to shuffle arrays or create new rearrangements without changing the original data.</li><li><strong>Seaborn for Visualisation</strong> — how to draw beautiful distribution charts using a Python library called Seaborn, so you can <em>see</em> what your data looks like.</li><li><strong>Universal Functions (ufuncs)</strong> — NumPy's super-fast way of doing math operations on entire arrays at once without writing slow loops.</li></ol>
+<p class="v2-p">These four topics flow naturally into each other. First you will learn to <em>create</em> specially shaped random data, then to <em>rearrange</em> it, then to <em>visualise</em> it, and finally to <em>process</em> it efficiently with ufuncs. By the end of this lesson you will have everything you need for a real mini-project.</p>
+<blockquote class="v2-bq"><p class="v2-p"><strong>Prerequisites check:</strong> This lesson assumes you have already used NumPy and know how to create arrays with <code>np.array()</code>. If you have not, quickly review: <code>import numpy as np</code> and <code>arr = np.array([1, 2, 3])</code> before continuing.</p></blockquote>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Lesson Introduction</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(1)">Start Lesson ✓</button></div></div>
+<div class="phase locked" id="phase2"><div class="ph"><div class="pn">Phase 2/8</div><div class="pt">Prerequisite Concepts</div><div class="pc" id="chk2"></div></div><div class="pb2"><h3 class="v2-h3">What is a Python Array (NumPy ndarray)?</h3>
 <p class="v2-p">Before we start, a very quick reminder. In NumPy, data is stored in an <strong>ndarray</strong> (n-dimensional array). Think of it as a super-powered list that can hold numbers very efficiently.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 arr = np.array([10, 20, 30, 40])
 print(arr)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[10 20 30 40]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[10 20 30 40]</code></pre></div></div>
 <h3 class="v2-h3">What is a Python List?</h3>
 <p class="v2-p">A Python list is the built-in container: <code>[1, 2, 3]</code>. NumPy arrays and Python lists look similar but NumPy arrays are far faster for maths operations. You will see both used in this lesson.</p>
 <h3 class="v2-h3">What is a Library Import?</h3>
 <p class="v2-p">When you write <code>from numpy import random</code>, you are saying: "Go into the NumPy toolkit and bring out the <em>random</em> tool so I can use it directly." Instead of typing <code>numpy.random.choice()</code> every time, you just type <code>random.choice()</code>.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase3">
-  <div class="phase-header">
-    <div class="phase-num">Phase 3 of 8</div>
-    <div class="phase-title">Part 1 — Random Data Distribution</div>
-    <div class="phase-check" id="chk3"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What is a Data Distribution?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Prerequisite Concepts</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(2)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase3"><div class="ph"><div class="pn">Phase 3/8</div><div class="pt">Part 1 — Random Data Distribution</div><div class="pc" id="chk3"></div></div><div class="pb2"><h3 class="v2-h3">What is a Data Distribution?</h3>
 <p class="v2-p">Imagine a bag of coloured marbles. You reach in and pull one out. A <strong>data distribution</strong> tells you the complete story of the bag: how many of each colour exist, and therefore how likely you are to pull each one.</p>
 <p class="v2-p">In statistics and data science, a <strong>data distribution</strong> is a description of all the possible values a variable can take, and how often each value appears.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world analogy:</strong> Think about a school canteen that sells only four snacks: biscuits, chips, juice, and water. If you ask 100 students what they bought, maybe 10 bought biscuits, 30 bought chips, 60 bought juice, and 0 bought water. <em>That pattern — 10%, 30%, 60%, 0%</em> — is the distribution of purchases.</p></blockquote>
@@ -265,13 +171,13 @@ print(arr)</code></pre></div></div>
 <p class="v2-p">NumPy's <code>random</code> module gives us a method called <code>choice()</code>. This method lets you:</p>
 <ol class="v2-ol"><li>Give it a list of possible values.</li><li>Tell it exactly how likely each value should be (using probabilities).</li><li>Ask it to generate as many random picks as you want.</li></ol>
 <p class="v2-p"><strong>Syntax breakdown:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>random.choice(values_list, p=probabilities_list, size=how_many_you_want)</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>random.choice(values_list, p=probabilities_list, size=how_many_you_want)</code></pre></div></div>
 <ul class="v2-ul"><li><code>values_list</code> — the list of values to pick from, e.g. <code>[3, 5, 7, 9]</code></li><li><code>p=</code> — the probability for each value; must be the same length as the values list and must sum to exactly 1.0</li><li><code>size=</code> — how many random values to generate; can be a single number like <code>(100,)</code> or a shape like <code>(3, 5)</code> for a 2D array</li></ul>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Important rule:</strong> The probabilities in the <code>p</code> list <strong>must sum to exactly 1.0</strong>. If they don't, Python will raise an error.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Simple Example 1 — Weighted Coin Flip</h3>
 <p class="v2-p">Let's start with the simplest possible example: a coin that is more likely to land on heads.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 
 # Our coin: 1 = heads, 0 = tails
 # Probability of heads = 0.7, tails = 0.3
@@ -279,14 +185,14 @@ result = random.choice([0, 1], p=[0.3, 0.7], size=(10))
 
 print(result)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output (your output will vary because it is random):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[1 1 0 1 1 1 0 1 1 1]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[1 1 0 1 1 1 0 1 1 1]</code></pre></div></div>
 <p class="v2-p"><strong>Line-by-line explanation:</strong></p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Line</th><th>What it does</th></tr></thead><tbody><tr><td><code>from numpy import random</code></td><td>Imports the random module from NumPy</td></tr><tr><td><code>random.choice([0, 1], ...)</code></td><td>Tells Python to pick from the values 0 or 1</td></tr><tr><td><code>p=[0.3, 0.7]</code></td><td>0 has a 30% chance; 1 has a 70% chance</td></tr><tr><td><code>size=(10)</code></td><td>Generate 10 random picks</td></tr><tr><td><code>print(result)</code></td><td>Show the result</td></tr></tbody></table></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> What would happen if you changed <code>p=[0.3, 0.7]</code> to <code>p=[0.0, 1.0]</code>? Would you ever see a 0? Try it!</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Simple Example 2 — Weighted Choice with Four Values</h3>
 <p class="v2-p">Now let's pick from four possible values with different probabilities, just like the canteen example.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 
 # Values: 3, 5, 7, 9
 # 3 has 10% chance, 5 has 30% chance, 7 has 60% chance, 9 has 0% chance
@@ -294,7 +200,7 @@ x = random.choice([3, 5, 7, 9], p=[0.1, 0.3, 0.6, 0.0], size=(100))
 
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output (yours will be different but follow the same pattern):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[7 7 5 7 7 3 7 5 7 7 7 5 7 7 7 7 7 5 7 7 7 5 7 7 7 7 7 5 7 7
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[7 7 5 7 7 3 7 5 7 7 7 5 7 7 7 7 7 5 7 7 7 5 7 7 7 7 7 5 7 7
  7 5 7 7 7 7 7 7 7 7 7 7 3 7 5 7 7 5 7 5 5 7 7 7 7 5 7 7 7 7
  5 7 7 7 5 5 7 7 7 5 7 7 5 7 7 7 7 7 7 5 7 7 3 5 7 7 5 7 7 7
  7 7 5 7 5 7 7 7 7 7]</code></pre></div></div>
@@ -303,35 +209,21 @@ print(x)</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Generating 2D Distribution Arrays</h3>
 <p class="v2-p">You can also generate the random values as a two-dimensional array (like a grid/table) by passing a <strong>tuple</strong> as the <code>size</code> parameter.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 
 # Same four values, same probabilities, but now get a 3×5 table
 x = random.choice([3, 5, 7, 9], p=[0.1, 0.3, 0.6, 0.0], size=(3, 5))
 
 print(x)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[[7 5 7 7 7]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[[7 5 7 7 7]
  [5 7 7 3 7]
  [7 7 5 7 7]]</code></pre></div></div>
 <p class="v2-p"><strong>Line-by-line explanation:</strong></p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Code Part</th><th>Meaning</th></tr></thead><tbody><tr><td><code>size=(3, 5)</code></td><td>Create a 2D array with 3 rows and 5 columns</td></tr><tr><td>The result</td><td>A 3×5 table of randomly chosen values (total = 15 values)</td></tr></tbody></table></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world use:</strong> In data science, you might model a weather system where rain (probability 0.4), cloud (0.35), sun (0.2), and storm (0.05) occur across a 10-day, 5-city forecast grid.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Random Data Distribution</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase4">
-  <div class="phase-header">
-    <div class="phase-num">Phase 4 of 8</div>
-    <div class="phase-title">Part 2 — Random Permutations</div>
-    <div class="phase-check" id="chk4"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What is a Permutation?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Random Data Distribution</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(3)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase4"><div class="ph"><div class="pn">Phase 4/8</div><div class="pt">Part 2 — Random Permutations</div><div class="pc" id="chk4"></div></div><div class="pb2"><h3 class="v2-h3">What is a Permutation?</h3>
 <p class="v2-p">A <strong>permutation</strong> is simply a rearrangement of the same elements in a different order.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Everyday analogy:</strong> Imagine you have three books on your shelf: A, B, C. One arrangement is A-B-C. A permutation could be B-C-A or C-A-B. All three books are still there — they're just in a different order.</p></blockquote>
 <p class="v2-p">Examples of permutations:</p>
@@ -342,7 +234,7 @@ print(x)</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Method 1: <code>shuffle()</code> — Rearrange In-Place</h3>
 <p class="v2-p"><strong>"In-place"</strong> means the method <em>directly modifies</em> the original array. The array you started with gets a new order. Nothing new is created.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 import numpy as np
 
 arr = np.array([1, 2, 3, 4, 5])
@@ -353,16 +245,16 @@ random.shuffle(arr)
 
 print(&quot;After shuffle:&quot;, arr)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output (your shuffle order will vary):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Before shuffle: [1 2 3 4 5]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Before shuffle: [1 2 3 4 5]
 After shuffle:  [3 1 5 2 4]</code></pre></div></div>
 <p class="v2-p"><strong>Key point:</strong> After calling <code>shuffle(arr)</code>, the original <code>arr</code> is permanently changed. The values <code>[1, 2, 3, 4, 5]</code> are now in a random order.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Common beginner mistake:</strong> Assigning the result to a new variable like this:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>new_arr = random.shuffle(arr)  # WRONG! new_arr will be None</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>new_arr = random.shuffle(arr)  # WRONG! new_arr will be None</code></pre></div></div>
 <p class="v2-p"><code>shuffle()</code> does NOT return anything. It modifies <code>arr</code> directly and returns <code>None</code>. Simply call <code>random.shuffle(arr)</code> and then use <code>arr</code>.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Method 2: <code>permutation()</code> — Return a New Arrangement</h3>
 <p class="v2-p"><code>permutation()</code> is the safe option when you want a shuffled copy but need to keep your original data intact.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 import numpy as np
 
 arr = np.array([1, 2, 3, 4, 5])
@@ -374,14 +266,14 @@ new_arr = random.permutation(arr)
 print(&quot;New permutation:&quot;, new_arr)
 print(&quot;Original arr still:&quot;, arr)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Original arr: [1 2 3 4 5]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Original arr: [1 2 3 4 5]
 New permutation: [4 1 3 5 2]
 Original arr still: [1 2 3 4 5]</code></pre></div></div>
 <p class="v2-p"><strong>Notice:</strong> <code>arr</code> is completely unchanged! The shuffled version is stored in <code>new_arr</code>.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Real-world use case:</strong> Imagine you have a list of 1000 student names for a quiz draw. You want to shuffle the order for fair selection, but you also want to keep the original alphabetical list intact for your records. Use <code>permutation()</code> — not <code>shuffle()</code>.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">Comparing shuffle() and permutation() Side by Side</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 import numpy as np
 
 original = np.array([10, 20, 30, 40, 50])
@@ -396,26 +288,12 @@ new_version = random.permutation(original)
 print(&quot;After permutation(): &quot;, new_version)
 print(&quot;Original unchanged:  &quot;, original)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>After shuffle():      [30 10 50 20 40]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>After shuffle():      [30 10 50 20 40]
 After permutation():  [20 50 10 40 30]
 Original unchanged:   [10 20 30 40 50]</code></pre></div></div>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Feature</th><th><code>shuffle()</code></th><th><code>permutation()</code></th></tr></thead><tbody><tr><td>Modifies original</td><td>YES</td><td>NO</td></tr><tr><td>Returns new array</td><td>NO (returns None)</td><td>YES</td></tr><tr><td>Safe for original data</td><td>Only if you copy first</td><td>Always safe</td></tr></tbody></table></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Random Permutations</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase5">
-  <div class="phase-header">
-    <div class="phase-num">Phase 5 of 8</div>
-    <div class="phase-title">Part 3 — Seaborn: Visualising Distributions</div>
-    <div class="phase-check" id="chk5"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Why Do We Need to Visualise?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Random Permutations</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(4)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase5"><div class="ph"><div class="pn">Phase 5/8</div><div class="pt">Part 3 — Seaborn: Visualising Distributions</div><div class="pc" id="chk5"></div></div><div class="pb2"><h3 class="v2-h3">Why Do We Need to Visualise?</h3>
 <p class="v2-p">Numbers alone can be hard to understand. When you generate 1000 random numbers, looking at them as a list tells you very little. A <strong>chart</strong> instantly shows you the shape: Are most values clustered together? Are they spread evenly? Are there extreme values?</p>
 <p class="v2-p">This is exactly why data scientists use <strong>visualisation libraries</strong> — tools that turn numbers into charts.</p>
 <h3 class="v2-h3">What is Seaborn?</h3>
@@ -423,12 +301,12 @@ Original unchanged:   [10 20 30 40 50]</code></pre></div></div>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Analogy:</strong> Matplotlib is like a professional artist's full studio — powerful but takes time to set up. Seaborn is like a smart automated art assistant that handles all the setup for you.</p></blockquote>
 <h3 class="v2-h3">Installing Seaborn</h3>
 <p class="v2-p">Before using Seaborn, you need to install it. Open your terminal/command prompt and run:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">bash</span></div><div class="v2-code-body"><pre><code>pip install seaborn</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>pip install seaborn</code></pre></div></div>
 <p class="v2-p">If you are using <strong>Jupyter Notebook</strong>, run this inside a cell:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>!pip install seaborn</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>!pip install seaborn</code></pre></div></div>
 <h3 class="v2-h3">What is Matplotlib?</h3>
 <p class="v2-p"><strong>Matplotlib</strong> is the core plotting library for Python. Seaborn uses it behind the scenes. You need to import both.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt   # For displaying charts
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt   # For displaying charts
 import seaborn as sns              # For creating distribution charts</code></pre></div></div>
 <ul class="v2-ul"><li><code>matplotlib.pyplot</code> is imported as <code>plt</code> — a short name by convention</li><li><code>seaborn</code> is imported as <code>sns</code> — another short name by convention</li></ul>
 <hr class="v2-hr">
@@ -437,7 +315,7 @@ import seaborn as sns              # For creating distribution charts</code></pr
 <p class="v2-p">Think of it like this: if you measured the heights of 1000 people and plotted them, the displot would show a curve peaking around the average height, with fewer and fewer people as you go towards very short or very tall heights.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">Simple Example 1 — Basic Displot</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import seaborn as sns
 
 # A small list of 6 numbers
@@ -452,7 +330,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Simple Example 2 — Displot Without the Histogram (KDE Only)</h3>
 <p class="v2-p">Sometimes you want to see only the smooth curve (called a <strong>KDE — Kernel Density Estimate</strong>) without the histogram bars underneath. This is useful when you have a lot of data and just want to see the shape.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Pass kind=&quot;kde&quot; to show only the smooth curve
@@ -465,7 +343,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Practical Example — Visualising a Random Distribution</h3>
 <p class="v2-p">Now let's combine what we learned in Part 1 with Seaborn to actually <em>see</em> a distribution:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -478,22 +356,8 @@ plt.title(&quot;Distribution of Weighted Random Choices&quot;)
 plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>What you will see:</strong> A curve with a large peak around 7 (since it has 60% probability), a smaller bump around 5 (30%), and a tiny presence near 3 (10%). The value 9 will not appear at all.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> What would the chart look like if all four values had equal probability of 0.25? Try changing the <code>p</code> values and observe the shape.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Seaborn: Visualising Distributions</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase6">
-  <div class="phase-header">
-    <div class="phase-num">Phase 6 of 8</div>
-    <div class="phase-title">Part 4 — NumPy Universal Functions (ufuncs)</div>
-    <div class="phase-check" id="chk6"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">What Are ufuncs?</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Seaborn: Visualising Distributions</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(5)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase6"><div class="ph"><div class="pn">Phase 6/8</div><div class="pt">Part 4 — NumPy Universal Functions (ufuncs)</div><div class="pc" id="chk6"></div></div><div class="pb2"><h3 class="v2-h3">What Are ufuncs?</h3>
 <p class="v2-p"><strong>ufuncs</strong> stands for <strong>Universal Functions</strong>. These are special NumPy functions that are designed to work on entire arrays at once — on every element simultaneously — instead of going through them one by one.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Analogy:</strong> Imagine you need to paint 100 fence posts. The slow way: you paint them one at a time with a small brush. The fast way: you use a spray painter that covers all 100 at once. ufuncs are NumPy's spray painter.</p></blockquote>
 <h3 class="v2-h3">Why Use ufuncs?</h3>
@@ -505,7 +369,7 @@ plt.show()</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">The Problem: Slow Python Loops</h3>
 <p class="v2-p">Let's first see the <em>old slow way</em> of adding two lists together:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># The slow Python way — using a loop
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># The slow Python way — using a loop
 x = [1, 2, 3, 4]
 y = [4, 5, 6, 7]
 z = []   # Empty list to store results
@@ -515,14 +379,14 @@ for i, j in zip(x, y):      # zip() pairs up elements: (1,4), (2,5), (3,6), (4,7
 
 print(z)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[5, 7, 9, 11]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[5, 7, 9, 11]</code></pre></div></div>
 <p class="v2-p"><strong>Line-by-line explanation:</strong></p>
 <div class="v2-table-wrap"><table class="v2-table"><thead><tr><th>Line</th><th>Meaning</th></tr></thead><tbody><tr><td><code>x = [1, 2, 3, 4]</code></td><td>First list of numbers</td></tr><tr><td><code>y = [4, 5, 6, 7]</code></td><td>Second list of numbers</td></tr><tr><td><code>z = []</code></td><td>Start with an empty list to collect results</td></tr><tr><td><code>for i, j in zip(x, y):</code></td><td>Loop through both lists together, pairing elements</td></tr><tr><td><code>z.append(i + j)</code></td><td>Add the paired numbers and add them to the results list</td></tr></tbody></table></div>
 <p class="v2-p">This works! But imagine doing this with 1 million numbers — it would be slow.</p>
 <hr class="v2-hr">
 <h3 class="v2-h3">The Fast Way: NumPy's <code>np.add()</code> ufunc</h3>
 <p class="v2-p">NumPy has a built-in ufunc called <code>add()</code> that does exactly the same thing in one line, but much faster:</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 x = [1, 2, 3, 4]
 y = [4, 5, 6, 7]
@@ -531,12 +395,12 @@ z = np.add(x, y)   # Add all elements at once — no loop needed!
 
 print(z)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>[ 5  7  9 11]</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>[ 5  7  9 11]</code></pre></div></div>
 <p class="v2-p"><strong>Notice:</strong> The result is exactly the same as the loop version! But <code>np.add()</code> did it in a single operation instead of iterating step by step.</p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> The output looks like <code>[ 5  7  9 11]</code> (with spaces, no commas) instead of <code>[5, 7, 9, 11]</code>. Why? Because NumPy arrays print differently from Python lists — no commas, and numbers are aligned.</p></blockquote>
 <hr class="v2-hr">
 <h3 class="v2-h3">What Happens Inside np.add()?</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Input x:  [1,  2,  3,  4]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Input x:  [1,  2,  3,  4]
 Input y:  [4,  5,  6,  7]
             ↓   ↓   ↓   ↓
 Result z: [5,  7,  9, 11]</code></pre></div></div>
@@ -555,7 +419,7 @@ Result z: [5,  7,  9, 11]</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Simple ufunc Examples to Consolidate</h3>
 <p class="v2-p"><strong>Example A — Adding arrays:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 a = np.array([10, 20, 30])
 b = np.array([1, 2, 3])
@@ -564,7 +428,7 @@ result = np.add(a, b)
 print(result)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong> <code>[11 22 33]</code></p>
 <p class="v2-p"><strong>Example B — Multiplying arrays:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 a = np.array([2, 4, 6])
 b = np.array([3, 3, 3])
@@ -573,7 +437,7 @@ result = np.multiply(a, b)
 print(result)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong> <code>[ 6 12 18]</code></p>
 <p class="v2-p"><strong>Example C — Squaring all elements (using np.power):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 arr = np.array([1, 2, 3, 4, 5])
 
@@ -581,29 +445,14 @@ squared = np.power(arr, 2)   # Raise each element to the power of 2
 print(squared)</code></pre></div></div>
 <p class="v2-p"><strong>Output:</strong> <code>[ 1  4  9 16 25]</code></p>
 <blockquote class="v2-bq"><p class="v2-p"><strong>Thinking prompt:</strong> What would <code>np.power(arr, 3)</code> produce? Try to calculate the answer before running it.</p></blockquote>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>NumPy Universal Functions (ufuncs)</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase7">
-  <div class="phase-header">
-    <div class="phase-num">Phase 7 of 8</div>
-    <div class="phase-title">Guided Practice Exercises</div>
-    <div class="phase-check" id="chk7"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Exercise 1 — Weighted Lottery Simulation</h3>
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>NumPy Universal Functions (ufuncs)</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(6)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase7"><div class="ph"><div class="pn">Phase 7/8</div><div class="pt">Guided Practice Exercises</div><div class="pc" id="chk7"></div></div><div class="pb2"><div class="chal-box"><div class="chal-lbl">🎯 Your Challenge</div><div class="chal-body"><h3 class="v2-h3">Exercise 1 — Weighted Lottery Simulation</h3>
 <p class="v2-p"><strong>Objective:</strong> Simulate a simple lottery where different prizes have different probabilities.</p>
 <p class="v2-p"><strong>Scenario:</strong> A raffle has 4 possible prizes:</p>
 <ul class="v2-ul"><li>Prize A (₦5,000): 5% chance</li><li>Prize B (₦1,000): 15% chance</li><li>Prize C (₦200): 30% chance</li><li>No prize (₦0): 50% chance</li></ul>
 <p class="v2-p"><strong>Your Task:</strong></p>
 <ol class="v2-ol"><li>Use <code>random.choice()</code> to simulate 500 raffle draws.</li><li>Print the result.</li><li>Count how many times each prize was won using <code>np.unique()</code> (optional bonus).</li></ol>
-<p class="v2-p"><strong>Steps:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<p class="v2-p"><strong>Steps:</strong></p></div></div><div class="task-box"><div class="task-lbl">✏️ Task</div><div class="task-body">Practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="reveal-btn" onclick="toggleReveal(this)">👁️ Reveal Answer</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 import numpy as np
 
 # Step 1: Define prizes and their probabilities
@@ -621,7 +470,7 @@ values, counts = np.unique(draws, return_counts=True)
 for val, cnt in zip(values, counts):
     print(f&quot;Prize ₦{val}: appeared {cnt} times ({cnt/500*100:.1f}%)&quot;)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output (approximate — exact numbers vary):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>First 20 draws: [   0    0  200    0    0    0  200    0 1000    0    0  200    0    0    0    0    0    0    0    0]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>First 20 draws: [   0    0  200    0    0    0  200    0 1000    0    0  200    0    0    0    0    0    0    0    0]
 Prize ₦0:    appeared 251 times (50.2%)
 Prize ₦200:  appeared 149 times (29.8%)
 Prize ₦1000: appeared 76 times (15.2%)
@@ -632,7 +481,7 @@ Prize ₦5000: appeared 24 times (4.8%)</code></pre></div></div>
 <h3 class="v2-h3">Exercise 2 — Shuffling a Student List</h3>
 <p class="v2-p"><strong>Objective:</strong> Practice the difference between <code>shuffle()</code> and <code>permutation()</code>.</p>
 <p class="v2-p"><strong>Scenario:</strong> You are a teacher with 8 students. You want to randomly assign them to two groups of 4.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 import numpy as np
 
 students = np.array([&quot;Alice&quot;, &quot;Bob&quot;, &quot;Carol&quot;, &quot;David&quot;,
@@ -651,7 +500,7 @@ group2 = shuffled[4:]
 print(&quot;\nGroup 1:&quot;, group1)
 print(&quot;Group 2:&quot;, group2)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output (your shuffle will differ):</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Original list: [&#x27;Alice&#x27; &#x27;Bob&#x27; &#x27;Carol&#x27; &#x27;David&#x27; &#x27;Emma&#x27; &#x27;Frank&#x27; &#x27;Grace&#x27; &#x27;Henry&#x27;]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Original list: [&#x27;Alice&#x27; &#x27;Bob&#x27; &#x27;Carol&#x27; &#x27;David&#x27; &#x27;Emma&#x27; &#x27;Frank&#x27; &#x27;Grace&#x27; &#x27;Henry&#x27;]
 Shuffled list: [&#x27;Grace&#x27; &#x27;Bob&#x27; &#x27;Emma&#x27; &#x27;Alice&#x27; &#x27;Henry&#x27; &#x27;Frank&#x27; &#x27;Carol&#x27; &#x27;David&#x27;]
 
 Group 1: [&#x27;Grace&#x27; &#x27;Bob&#x27; &#x27;Emma&#x27; &#x27;Alice&#x27;]
@@ -662,7 +511,7 @@ Group 2: [&#x27;Henry&#x27; &#x27;Frank&#x27; &#x27;Carol&#x27; &#x27;David&#x27
 <h3 class="v2-h3">Exercise 3 — Fast Array Arithmetic with ufuncs</h3>
 <p class="v2-p"><strong>Objective:</strong> Compare the loop approach vs ufunc approach.</p>
 <p class="v2-p"><strong>Scenario:</strong> You have sales data for 5 shops. You need to apply a 10% bonus to each shop's monthly revenue.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 
 # Monthly revenue (in thousands of Naira)
 revenue = np.array([120, 85, 200, 145, 310])
@@ -681,7 +530,7 @@ print(&quot;Bonuses (ufunc method):&quot;, bonuses_ufunc)
 new_revenue = np.add(revenue, bonuses_ufunc)
 print(&quot;Revenue after bonus:&quot;, new_revenue)</code></pre></div></div>
 <p class="v2-p"><strong>Expected Output:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>Bonuses (loop method): [12.0, 8.5, 20.0, 14.5, 31.0]
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>Bonuses (loop method): [12.0, 8.5, 20.0, 14.5, 31.0]
 Bonuses (ufunc method): [12.  8.5 20.  14.5 31. ]
 Revenue after bonus: [132.   93.5 220.  159.5 341. ]</code></pre></div></div>
 <p class="v2-p"><strong>Self-check questions:</strong></p>
@@ -689,7 +538,7 @@ Revenue after bonus: [132.   93.5 220.  159.5 341. ]</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Exercise 4 — Visualising a Weighted Distribution</h3>
 <p class="v2-p"><strong>Objective:</strong> Use Seaborn to visualise a weighted distribution and observe its shape.</p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>from numpy import random
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -706,185 +555,134 @@ plt.xlabel(&quot;Score&quot;)
 plt.ylabel(&quot;Density&quot;)
 plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>What to observe:</strong> The curve should peak around 60-75 (since C and B have the highest probabilities), with smaller peaks toward 90 and declining toward 30.</p>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Guided Practice Exercises</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(7)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="phase locked" id="phase8">
-  <div class="phase-header">
-    <div class="phase-num">Phase 8 of 8</div>
-    <div class="phase-title">Common Beginner Mistakes</div>
-    <div class="phase-check" id="chk8"></div>
-  </div>
-  <div class="phase-body">
-    <h3 class="v2-h3">Mistake 1 — Probabilities That Don't Sum to 1.0</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — probabilities sum to 0.9, not 1.0
+<hr class="v2-hr"></div><button class="ub" onclick="unlockNext(7)">Mark Complete — Unlock Next ✓</button></div></div>
+<div class="phase locked" id="phase8"><div class="ph"><div class="pn">Phase 8/8</div><div class="pt">Common Beginner Mistakes</div><div class="pc" id="chk8"></div></div><div class="pb2"><h3 class="v2-h3">Mistake 1 — Probabilities That Don't Sum to 1.0</h3>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — probabilities sum to 0.9, not 1.0
 x = random.choice([1, 2, 3], p=[0.2, 0.3, 0.4])  # Missing 0.1!</code></pre></div></div>
 <p class="v2-p"><strong>Error you will see:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>ValueError: probabilities do not sum to 1</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>ValueError: probabilities do not sum to 1</code></pre></div></div>
 <p class="v2-p"><strong>Correct version:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>x = random.choice([1, 2, 3], p=[0.2, 0.3, 0.5])  # 0.2+0.3+0.5 = 1.0 ✓</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>x = random.choice([1, 2, 3], p=[0.2, 0.3, 0.5])  # 0.2+0.3+0.5 = 1.0 ✓</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 2 — Assigning the Return Value of shuffle()</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — shuffle() returns None, not the shuffled array
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — shuffle() returns None, not the shuffled array
 arr = np.array([1, 2, 3, 4])
 shuffled = random.shuffle(arr)   # shuffled = None!
 print(shuffled)  # Prints: None</code></pre></div></div>
 <p class="v2-p"><strong>Correct version:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>arr = np.array([1, 2, 3, 4])
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>arr = np.array([1, 2, 3, 4])
 random.shuffle(arr)   # Modifies arr directly
 print(arr)            # Prints the shuffled array</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 3 — Wrong Number of Probabilities</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># WRONG — 4 values but only 3 probabilities
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># WRONG — 4 values but only 3 probabilities
 x = random.choice([3, 5, 7, 9], p=[0.1, 0.3, 0.6])</code></pre></div></div>
 <p class="v2-p"><strong>Error:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span></div><div class="v2-code-body"><pre><code>ValueError: &#x27;a&#x27; and &#x27;p&#x27; must have same size</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">code</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>ValueError: &#x27;a&#x27; and &#x27;p&#x27; must have same size</code></pre></div></div>
 <p class="v2-p"><strong>Correct version:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>x = random.choice([3, 5, 7, 9], p=[0.1, 0.3, 0.6, 0.0])  # One probability per value</code></pre></div></div>
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>x = random.choice([3, 5, 7, 9], p=[0.1, 0.3, 0.6, 0.0])  # One probability per value</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 4 — Forgetting plt.show() with Seaborn</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import seaborn as sns
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import seaborn as sns
 import matplotlib.pyplot as plt
 
 sns.displot([1, 2, 3, 4, 5])
 # Nothing appears! You forgot plt.show()</code></pre></div></div>
 <p class="v2-p"><strong>Correct version:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>sns.displot([1, 2, 3, 4, 5])
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>sns.displot([1, 2, 3, 4, 5])
 plt.show()  # This actually displays the chart</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 5 — Using a Python Loop Instead of a ufunc</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code># INEFFICIENT for large datasets
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code># INEFFICIENT for large datasets
 result = []
 for val in big_array:
     result.append(val * 2)</code></pre></div></div>
 <p class="v2-p"><strong>Better version:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>import numpy as np
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>import numpy as np
 result = np.multiply(big_array, 2)  # Faster and cleaner</code></pre></div></div>
 <hr class="v2-hr">
 <h3 class="v2-h3">Mistake 6 — Expecting shuffle() Not to Change the Original</h3>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>arr = np.array([1, 2, 3, 4, 5])
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>arr = np.array([1, 2, 3, 4, 5])
 random.shuffle(arr)
 # arr is NOW changed — you cannot get the original back!</code></pre></div></div>
 <p class="v2-p"><strong>Safe version if you need the original:</strong></p>
-<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span></div><div class="v2-code-body"><pre><code>arr = np.array([1, 2, 3, 4, 5])
+<div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">python</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>arr = np.array([1, 2, 3, 4, 5])
 arr_copy = arr.copy()    # Save a copy FIRST
 random.shuffle(arr)       # Now it&#x27;s safe — original is in arr_copy</code></pre></div></div>
-<hr class="v2-hr">
-    <div class="task-box">
-      <div class="task-label">✏️ Your Task</div>
-      <div class="task-body">Now practise what you just learned about <strong>Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, then modify them — change values, rename variables, and observe what happens. Active experimentation is how code sticks.</div>
-    </div>
-    <button class="unlock-btn" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button>
-  </div>
-</div>
-<div class="build-box" id="build-it">
-  <div class="build-label">🏗️ Build It</div>
-  <div class="build-name">Project Description</div>
-  <div class="build-desc">You work as a data analyst for a school. You need to:</div>
-  <div class="v2-code-wrap">
-    <div class="v2-code-bar">
-      <span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span>
-      <span class="v2-code-lang">starter.py</span>
-    </div>
-    <div class="v2-code-body"><pre><code>from numpy import random
+<hr class="v2-hr"><div class="task-box"><div class="task-lbl">✏️ Your Task</div><div class="task-body">Practise what you just learned about <strong>Common Beginner Mistakes</strong>. Open your editor, type the examples above by hand, modify them, and observe what changes.</div></div><button class="ub" onclick="unlockNext(8)">Phase Complete — Unlock Next ✓</button></div></div>
+<div class="build-box" id="build-it"><div class="build-lbl">🏗️ Build It — Mini Project</div><div class="build-name">Project Description</div><div class="build-req"><h3 class="v2-h3">Project Description</h3>
+<p class="v2-p">You work as a data analyst for a school. You need to:</p>
+<ol class="v2-ol"><li>Simulate exam scores for 200 students with a realistic distribution.</li><li>Randomly shuffle students to create fair seating groups.</li><li>Apply performance bonuses (ufunc operations).</li><li>Visualise the final distribution.</li></ol>
+<h3 class="v2-h3">Stage 1 — Setup</h3></div><button class="reveal-btn" onclick="toggleCode(this)">💻 Reveal Starter Code</button><div class="reveal-content"><div class="v2-code-wrap"><div class="v2-code-bar"><span class="v2-dot r"></span><span class="v2-dot y"></span><span class="v2-dot g"></span><span class="v2-code-lang">starter.py</span><button class="copy-btn" onclick="copyCode(this)">⎘ Copy</button></div><div class="v2-code-body"><pre><code>from numpy import random
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-print(&quot;=== Student Performance Analysis System ===\n&quot;)</code></pre></div>
-  </div>
-  <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
-    <button class="unlock-btn" onclick="downloadStarter(`from numpy import random
+print(&quot;=== Student Performance Analysis System ===\n&quot;)</code></pre></div></div><div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem"><button class="ub" onclick="downloadStarter(`from numpy import random
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-print("=== Student Performance Analysis System ===\\n")`)"
-      style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">
-      ⬇ Download starter.py
-    </button>
-    <button class="unlock-btn" onclick="showGithub()"
-      style="background:#0f172a;box-shadow:none">
-      🐙 Push to GitHub →
-    </button>
-  </div>
-</div>
+print("=== Student Performance Analysis System ===\\n")`)" style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,.3)">⬇ Download starter.py</button><button class="ub" onclick="showGithub()" style="background:#0f172a;box-shadow:none">🐙 Save to GitHub →</button></div></div></div>
 <div class="gh-acc" id="gh-steps" style="display:none">
-  <div class="gh-acc-head" onclick="toggleGh(this)">
-    🐙 Push Your Project to GitHub Pages &nbsp;<span>▼</span>
-  </div>
-  <div class="gh-acc-body">
-    <div class="gh-step"><div class="gh-step-n">1</div>
-    <p>Go to <strong>github.com</strong> → click <strong>New repository</strong> → name it <code>python-lesson-27-project-description</code>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">2</div>
-    <p>Set it to <strong>Public</strong>, tick <strong>Add a README</strong>, then click <strong>Create repository</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">3</div>
-    <p>Click <strong>Add file → Upload files</strong>. Upload your <code>starter.py</code> — rename it to <code>index.py</code> before uploading.</p></div>
-    <div class="gh-step"><div class="gh-step-n">4</div>
-    <p>Commit message: <em>"Add Python lesson 27 project"</em> → click <strong>Commit changes</strong>.</p></div>
-    <div class="gh-step"><div class="gh-step-n">5</div>
-    <p>Go to <strong>Settings → Pages</strong> → branch <strong>main</strong> → <strong>Save</strong>. Your project goes live at <code>https://YOUR-NAME.github.io/python-lesson-27-project-description/</code> in about 1 minute! 🎉</p></div>
-    <button class="unlock-btn" onclick="showEnd()" style="margin-top:.5rem">I've pushed to GitHub — Finish Session ✅</button>
-  </div>
-</div>
-<div class="session-end" id="session-end">
-  <h2>🎉 Lesson 27 complete!</h2>
-  <p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p>
-  <ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1 — Random Data Distribution</li><li>✅ Part 2 — Random Permutations</li><li>✅ Part 3 — Seaborn: Visualising Distributions</li><li>✅ Part 4 — NumPy Universal Functions (ufuncs)</li><li>✅ Guided Practice Exercises</li><li>✅ Common Beginner Mistakes</li></ul>
-  <div class="lesson-nav"><a href="lesson_26.html" class="ln-btn">← Lesson 26</a><a href="lesson_28.html" class="ln-btn primary">Lesson 28 →</a></div>
-</div>
+<div class="gh-hd" onclick="toggleGh(this)">🐙 Save Python Project to GitHub &nbsp;<span>▼</span></div>
+<div class="gh-bd">
+<div class="gh-nop"><strong>⚠️ Python cannot be hosted on GitHub Pages.</strong><br><br>GitHub Pages only serves static HTML/CSS/JS files. Python scripts need a server to run — you will learn deployment (Replit, PythonAnywhere, Heroku) later in the course. For now, save your code to GitHub as a portfolio entry.</div>
+<div class="gh-st"><div class="gh-n">1</div><p>Go to <strong>github.com → New repository</strong> → name it <code>python-lesson-27-project-description</code>. Set <strong>Public</strong>, tick <strong>Add README</strong>, click <strong>Create</strong>.</p></div>
+<div class="gh-st"><div class="gh-n">2</div><p>Click <strong>Add file → Upload files</strong> → upload your <code>.py</code> file.</p></div>
+<div class="gh-st"><div class="gh-n">3</div><p>Commit message: <em>"Add Python lesson 27 project"</em> → <strong>Commit changes</strong>. Your code is now part of your GitHub portfolio! 🐍</p></div>
+<button class="ub" onclick="showEnd()" style="background:#059669;margin-top:.5rem">Done — Finish Session ✅</button>
+</div></div>
+<div class="se" id="session-end"><h2>🎉 Lesson 27 complete!</h2><p style="margin-bottom:.8rem;font-size:.9rem;opacity:.9">You covered:</p><ul><li>✅ Lesson Introduction</li><li>✅ Prerequisite Concepts</li><li>✅ Part 1 — Random Data Distribution</li><li>✅ Part 2 — Random Permutations</li><li>✅ Part 3 — Seaborn: Visualising Distributions</li><li>✅ Part 4 — NumPy Universal Functions (ufuncs)</li><li>✅ Guided Practice Exercises</li><li>✅ Common Beginner Mistakes</li></ul><div class="ln"><a href="lesson_26.html" class="ln-btn">← Lesson 26</a><a href="lesson_28.html" class="ln-btn primary">Lesson 28 →</a></div></div>
 </main>
-
-<footer class="lesson-footer">
-  Techbase Code Coach · Python Course · Lesson 27 · © 2025 Techbase Consultant Services, Ibadan
-</footer>
+<footer class="lf">Techbase Code Coach &nbsp;·&nbsp; Python Course &nbsp;·&nbsp; Lesson 27 &nbsp;·&nbsp; © 2025 Techbase Consultant Services, Ibadan</footer>
+<div id="toast"></div>
+<button id="go-top" title="Back to top">↑</button>
+<canvas id="cc"></canvas>
 <script>
 const TOTAL=8,KEY='techbase_python_l27';
-let current=parseInt(localStorage.getItem(KEY)||'1');
-function init(){
-  for(let i=2;i<=current;i++) unlockPhase(i,false);
-  updateBar();
-}
+let cur=parseInt(localStorage.getItem(KEY)||'1');
+function init(){for(let i=2;i<=cur;i++)unlock(i,false);bar();}
 function unlockNext(n){
-  const chk=document.getElementById('chk'+n);
-  if(chk){chk.classList.add('done');chk.textContent='✓';}
-  localStorage.setItem(KEY,n+1); current=n+1;
+  const c=document.getElementById('chk'+n);
+  if(c){c.classList.add('done');c.textContent='✓';}
+  localStorage.setItem(KEY,n+1);cur=n+1;
   if(n===TOTAL){
-    document.getElementById('build-it').style.display='block';
-    updateBar(100);
+    document.getElementById('build-it').classList.add('visible');
+    bar(100);toast('🏗️ Build It unlocked!');
     setTimeout(()=>document.getElementById('build-it').scrollIntoView({behavior:'smooth'}),200);
-  }else{
-    unlockPhase(n+1,true); updateBar();
-  }
+    setTimeout(confetti,600);
+  }else{unlock(n+1,true);bar();toast(['✅ Phase complete!','🎯 Keep going!','💡 Nice work!','🚀 Nailed it!'][n%4]);}
 }
-function unlockPhase(n,scroll){
-  const el=document.getElementById('phase'+n);
-  if(el){el.classList.remove('locked');if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+function unlock(n,scroll){
+  const el=document.getElementById('phase'+n);if(!el)return;
+  el.classList.remove('locked');
+  if(scroll)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),180);
 }
-function updateBar(pct){
-  const p=pct!==undefined?pct:Math.round((current-1)/TOTAL*95);
-  document.getElementById('pbar').style.width=p+'%';
+function bar(p){document.getElementById('pbar').style.width=(p!==undefined?p:Math.round((cur-1)/TOTAL*95))+'%';}
+function toggleReveal(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Answer':'👁️ Reveal Answer';}
+function toggleCode(btn){const w=btn.nextElementSibling;const o=w.classList.toggle('open');btn.textContent=o?'🙈 Hide Starter Code':'💻 Reveal Starter Code';}
+function copyCode(btn){
+  const code=btn.closest('.v2-code-wrap').querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='✓ Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='⎘ Copy';btn.classList.remove('copied');},1800);}).catch(()=>{});
 }
-function showGithub(){
-  const g=document.getElementById('gh-steps');
-  if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}
-}
-function showEnd(){
-  const e=document.getElementById('session-end');
-  if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}
-}
+const tEl=document.getElementById('toast');let tT;
+function toast(msg){tEl.innerHTML=msg;tEl.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>tEl.classList.remove('show'),2400);}
+const gEl=document.getElementById('go-top');
+window.addEventListener('scroll',()=>gEl.classList.toggle('visible',scrollY>320),{passive:true});
+gEl.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 function toggleGh(el){el.nextElementSibling.classList.toggle('open');}
-function downloadStarter(code){
-  const a=document.createElement('a');
-  a.href='data:text/html;charset=utf-8,'+encodeURIComponent(code);
-  a.download='starter.html';a.click();
+function showGithub(){const g=document.getElementById('gh-steps');if(g){g.style.display='block';setTimeout(()=>g.scrollIntoView({behavior:'smooth'}),150);}}
+function showEnd(){const e=document.getElementById('session-end');if(e){e.classList.add('visible');setTimeout(()=>e.scrollIntoView({behavior:'smooth'}),150);}}
+function downloadStarter(code){const ext='python'==='python'?'py':'html';const a=document.createElement('a');a.href='data:text/'+(ext==='py'?'x-python':'html')+';charset=utf-8,'+encodeURIComponent(code);a.download='starter.'+ext;a.click();}
+function confetti(){
+  const cv=document.getElementById('cc');cv.style.display='block';const ctx=cv.getContext('2d');
+  cv.width=innerWidth;cv.height=innerHeight;
+  const ps=Array.from({length:130},()=>{return{x:Math.random()*cv.width,y:-10-Math.random()*120,r:4+Math.random()*6,d:2+Math.random()*3,c:['#e34c26','#0284c7','#d97706','#059669','#7c3aed','#ec4899'][Math.floor(Math.random()*6)],ta:0};}); 
+  let f=0;
+  function draw(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.ta+=.1;p.y+=p.d;p.x+=Math.sin(f/20);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.fill();});f++;if(f<200)requestAnimationFrame(draw);else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}}
+  draw();toast('🎉 All phases done! Build It awaits!');
 }
 init();
 </script>
-</body>
-</html>
+</body></html>
