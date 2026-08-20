@@ -5,6 +5,10 @@ title: Python Programming — Techbase STEM Academy
 
 # 🐍 Python Programming — Techbase STEM Academy
 
+**Live:** https://techbaseng.github.io/techbase-python/
+
+**Tech stack:** static HTML lessons (one file per lesson) + Jekyll (`minima` theme) for the course README page; `index.html` is a hand-built static homepage served as-is, outside Jekyll's layout system.
+
 > Free Python course · Techbase Consultant Services, Ibadan, Nigeria  
 > [← All Courses](https://techbaseng.github.io) | [GitHub Repo](https://github.com/techbaseng/techbase-python)
 
